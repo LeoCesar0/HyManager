@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--color-primary: theme('colors.teal.600');
+		--color-on-primary: theme('colors.zinc.400');
+		--color-primary-hover: theme('colors.teal.900');
+
+		--color-secondary: theme('colors.orange.600');
+		--color-on-secondary: theme('colors.zinc.400');
+		--color-secondary-hover: theme('colors.orange.900');
+
+		--color-background: theme('colors.neutral.800');
+		--color-on-background: theme('colors.neutral.200');
+
+		--color-surface: theme('colors.stone.600');
+		--color-on-surface: theme('colors.zinc.400');
+
+		--color-surface2: theme('colors.teal.100');
+		--color-on-surface2: theme('colors.stone.800');
+
+		--colors-hint: theme('colors.red.400');
+		--colors-disabled: theme('colors.zinc.300');
+	}
+
+	
+
+}
+
+@layer components{
+
+}
+
+/* ... */
