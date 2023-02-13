@@ -1,22 +1,17 @@
 import { ReactNode } from "react";
-import { cx } from "../../utils/misc";
-import styles from "./styles.module.scss";
+import Header from "../../components/Header";
 
 interface SiteLayoutProps {
   children: ReactNode;
-  header?: Boolean;
-  footer?: Boolean;
 }
 
 const SiteLayout: React.FC<SiteLayoutProps> = ({
-  header = true,
-  footer = true,
   children,
 }) => {
   return (
-    <div className="">
-      {/* {header && <Header />} */}
-      <div className="">{children}</div>
+    <div className="relative flex flex-col min-h-[100vh]">
+       <Header />
+      <div className="flex-1">{children}</div>
       {/* {footer && <Footer />} */}
     </div>
   );

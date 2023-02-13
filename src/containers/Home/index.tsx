@@ -1,15 +1,16 @@
-
-
-
+import { signIn, useSession } from "next-auth/react";
+import Header from "../../components/Header";
+import { debugLog } from "../../utils/misc";
 
 const Home = () => {
+  const { data: session } = useSession();
 
-    return(
+  return (
+    <>
+      <div className="container max-w-7xl">
+      </div>
+    </>
+  );
+};
 
-        <>
-            <h1>Hello!</h1>
-        </>
-    )
-}
-
-export default Home
+export default Home;

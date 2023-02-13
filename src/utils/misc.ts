@@ -18,3 +18,8 @@ export const cx = (arrayProps: CxPropsType): string => {
   }
   return finalClassName;
 };
+
+
+export const debugLog = (variable: any, name: string) => {
+  console.log(`${name} -->`, variable)
+} 

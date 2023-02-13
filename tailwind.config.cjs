@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-	content: ['./src/**/*.{html,js,svelte,ts}'],
+	content: ['./src/**/*.{html,js,jsx,tsx,ts}'],
 	theme: {
 		screens: {
 			sm: '480px',
@@ -17,7 +17,7 @@ module.exports = {
 			},
 			colors: (theme) => ({
 				'primary': 'var(--color-primary)',
-				'-on-primary': 'var(--color-on-primary)',
+				'on-primary': 'var(--color-on-primary)',
 				'primary-hover': 'var(--color-primary-hover)',
 				'secondary': 'var(--color-secondary)',
 				'on-secondary': 'var(--color-on-secondary)',

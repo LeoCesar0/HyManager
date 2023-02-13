@@ -1,15 +1,19 @@
-import "../styles/global.scss";
-import "../styles/tailwind.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "../lib/apollo";
 import { GlobalContextProvider } from "../contexts/GlobalContext";
-import { ReactElement, ReactNode, useEffect } from "react";
+import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
-import { APP_CONFIG } from "../static/Config";
+import { APP_CONFIG } from "../static/config";
 import SiteLayout from "../containers/SiteLayout";
+import { SessionProvider } from "next-auth/react"
+import { Session } from "next-auth";
 // import * as googleAnalytics from "../lib/gtag";
+
+import "../styles/global.scss";
+import "../styles/tailwind.css";
+import { debugLog } from "../utils/misc";
 
 // const trackingId = process.env.GA_TRACKING_ID;
 
@@ -18,6 +22,7 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 };
 
 type AppPropsWithLayout = AppProps & {
+  session: Session
   Component: NextPageWithLayout;
 };
 
@@ -25,9 +30,8 @@ const LayoutDefault = function getLayout(page: ReactElement) {
   return <SiteLayout>{page}</SiteLayout>;
 };
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+function MyApp({ Component, session, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => LayoutDefault(page));
-
 
   return (
     <>
@@ -37,9 +41,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ApolloProvider client={apolloClient}>
+        <SessionProvider session={session} >
         <GlobalContextProvider>
           {getLayout(<Component {...pageProps} />)}
         </GlobalContextProvider>
+        </SessionProvider>
       </ApolloProvider>
     </>
   );

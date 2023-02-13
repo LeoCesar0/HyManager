@@ -2,22 +2,22 @@ import NextAuth from 'next-auth';
 import GoogleProvider from "next-auth/providers/google";
 
 
-const GetNextAuthUserByEmail = gql`
-  query GetNextAuthUserByEmail($email: String!) {
-    user: nextAuthUser(where: { email: $email }, stage: DRAFT) {
-      id
-      password
-    }
-  }
-`;
+// const GetNextAuthUserByEmail = gql`
+//   query GetNextAuthUserByEmail($email: String!) {
+//     user: nextAuthUser(where: { email: $email }, stage: DRAFT) {
+//       id
+//       password
+//     }
+//   }
+// `;
 
-const CreateNextAuthUserByEmail = gql`
-  mutation CreateNextAuthUserByEmail($email: String!, $password: String!) {
-    newUser: createNextAuthUser(data: { email: $email, password: $password }) {
-      id
-    }
-  }
-`;
+// const CreateNextAuthUserByEmail = gql`
+//   mutation CreateNextAuthUserByEmail($email: String!, $password: String!) {
+//     newUser: createNextAuthUser(data: { email: $email, password: $password }) {
+//       id
+//     }
+//   }
+// `;
 
 export default NextAuth({
   // secret: process.env.NEXTAUTH_SECRET,
