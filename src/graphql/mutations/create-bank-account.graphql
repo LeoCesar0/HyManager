@@ -1,0 +1,5 @@
+mutation CreateBankAccount($title: String!, $slug: String!, $balance: Int = 0, $description: String, $userId: ID!) {
+  createBankAccount(data: {title: $title, slug: $slug, balance: $balance, description: $description, appUsers: {connect: {id: $userId}}}) {
+    id
+  }
+}

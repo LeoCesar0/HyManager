@@ -58,7 +58,6 @@ export type AppUser = Node & {
   updatedAt: Scalars['DateTime'];
   /** User that last updated this document */
   updatedBy?: Maybe<User>;
-  userId: Scalars['String'];
 };
 
 
@@ -158,7 +157,6 @@ export type AppUserCreateInput = {
   name: Scalars['String'];
   todos?: InputMaybe<TodoCreateManyInlineInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
-  userId: Scalars['String'];
 };
 
 export type AppUserCreateManyInlineInput = {
@@ -364,25 +362,6 @@ export type AppUserManyWhereInput = {
   /** All values that are not contained in given list. */
   updatedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   updatedBy?: InputMaybe<UserWhereInput>;
-  userId?: InputMaybe<Scalars['String']>;
-  /** All values containing the given string. */
-  userId_contains?: InputMaybe<Scalars['String']>;
-  /** All values ending with the given string. */
-  userId_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are contained in given list. */
-  userId_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values that are not equal to given value. */
-  userId_not?: InputMaybe<Scalars['String']>;
-  /** All values not containing the given string. */
-  userId_not_contains?: InputMaybe<Scalars['String']>;
-  /** All values not ending with the given string */
-  userId_not_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are not contained in given list. */
-  userId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values not starting with the given string. */
-  userId_not_starts_with?: InputMaybe<Scalars['String']>;
-  /** All values starting with the given string. */
-  userId_starts_with?: InputMaybe<Scalars['String']>;
 };
 
 export enum AppUserOrderByInput {
@@ -403,9 +382,7 @@ export enum AppUserOrderByInput {
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
-  UpdatedAtDesc = 'updatedAt_DESC',
-  UserIdAsc = 'userId_ASC',
-  UserIdDesc = 'userId_DESC'
+  UpdatedAtDesc = 'updatedAt_DESC'
 }
 
 export type AppUserUpdateInput = {
@@ -416,7 +393,6 @@ export type AppUserUpdateInput = {
   lastSignIn?: InputMaybe<Scalars['DateTime']>;
   name?: InputMaybe<Scalars['String']>;
   todos?: InputMaybe<TodoUpdateManyInlineInput>;
-  userId?: InputMaybe<Scalars['String']>;
 };
 
 export type AppUserUpdateManyInlineInput = {
@@ -672,25 +648,6 @@ export type AppUserWhereInput = {
   /** All values that are not contained in given list. */
   updatedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   updatedBy?: InputMaybe<UserWhereInput>;
-  userId?: InputMaybe<Scalars['String']>;
-  /** All values containing the given string. */
-  userId_contains?: InputMaybe<Scalars['String']>;
-  /** All values ending with the given string. */
-  userId_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are contained in given list. */
-  userId_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values that are not equal to given value. */
-  userId_not?: InputMaybe<Scalars['String']>;
-  /** All values not containing the given string. */
-  userId_not_contains?: InputMaybe<Scalars['String']>;
-  /** All values not ending with the given string */
-  userId_not_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are not contained in given list. */
-  userId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values not starting with the given string. */
-  userId_not_starts_with?: InputMaybe<Scalars['String']>;
-  /** All values starting with the given string. */
-  userId_starts_with?: InputMaybe<Scalars['String']>;
 };
 
 /** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
@@ -711,7 +668,6 @@ export type AppUserWhereStageInput = {
 export type AppUserWhereUniqueInput = {
   email?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
-  userId?: InputMaybe<Scalars['String']>;
 };
 
 /** Asset system model */
@@ -1396,6 +1352,7 @@ export type AssetWhereUniqueInput = {
 
 export type BankAccount = Node & {
   __typename?: 'BankAccount';
+  appUsers: Array<AppUser>;
   balance?: Maybe<Scalars['Int']>;
   cover?: Maybe<Asset>;
   /** The time the document was created */
@@ -1409,7 +1366,6 @@ export type BankAccount = Node & {
   history: Array<Version>;
   /** The unique identifier */
   id: Scalars['ID'];
-  nextAuthUser?: Maybe<AppUser>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
@@ -1424,6 +1380,19 @@ export type BankAccount = Node & {
   updatedAt: Scalars['DateTime'];
   /** User that last updated this document */
   updatedBy?: Maybe<User>;
+};
+
+
+export type BankAccountAppUsersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: InputMaybe<Array<Locale>>;
+  orderBy?: InputMaybe<AppUserOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<AppUserWhereInput>;
 };
 
 
@@ -1450,12 +1419,6 @@ export type BankAccountHistoryArgs = {
   limit?: Scalars['Int'];
   skip?: Scalars['Int'];
   stageOverride?: InputMaybe<Stage>;
-};
-
-
-export type BankAccountNextAuthUserArgs = {
-  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
-  locales?: InputMaybe<Array<Locale>>;
 };
 
 
@@ -1591,11 +1554,11 @@ export type BankAccountConnection = {
 };
 
 export type BankAccountCreateInput = {
+  appUsers?: InputMaybe<AppUserCreateManyInlineInput>;
   balance?: InputMaybe<Scalars['Int']>;
   cover?: InputMaybe<AssetCreateOneInlineInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
-  nextAuthUser?: InputMaybe<AppUserCreateOneInlineInput>;
   slug: Scalars['String'];
   title: Scalars['String'];
   transaction?: InputMaybe<BankAccountBankAccounts_TransactionsCreateManyInlineInput>;
@@ -1635,6 +1598,9 @@ export type BankAccountManyWhereInput = {
   OR?: InputMaybe<Array<BankAccountWhereInput>>;
   /** Contains search across all appropriate fields. */
   _search?: InputMaybe<Scalars['String']>;
+  appUsers_every?: InputMaybe<AppUserWhereInput>;
+  appUsers_none?: InputMaybe<AppUserWhereInput>;
+  appUsers_some?: InputMaybe<AppUserWhereInput>;
   balance?: InputMaybe<Scalars['Int']>;
   /** All values greater than the given value. */
   balance_gt?: InputMaybe<Scalars['Int']>;
@@ -1708,7 +1674,6 @@ export type BankAccountManyWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
-  nextAuthUser?: InputMaybe<AppUserWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -1804,10 +1769,10 @@ export enum BankAccountOrderByInput {
 }
 
 export type BankAccountUpdateInput = {
+  appUsers?: InputMaybe<AppUserUpdateManyInlineInput>;
   balance?: InputMaybe<Scalars['Int']>;
   cover?: InputMaybe<AssetUpdateOneInlineInput>;
   description?: InputMaybe<Scalars['String']>;
-  nextAuthUser?: InputMaybe<AppUserUpdateOneInlineInput>;
   slug?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
   transaction?: InputMaybe<BankAccountBankAccounts_TransactionsUpdateManyInlineInput>;
@@ -1895,6 +1860,9 @@ export type BankAccountWhereInput = {
   OR?: InputMaybe<Array<BankAccountWhereInput>>;
   /** Contains search across all appropriate fields. */
   _search?: InputMaybe<Scalars['String']>;
+  appUsers_every?: InputMaybe<AppUserWhereInput>;
+  appUsers_none?: InputMaybe<AppUserWhereInput>;
+  appUsers_some?: InputMaybe<AppUserWhereInput>;
   balance?: InputMaybe<Scalars['Int']>;
   /** All values greater than the given value. */
   balance_gt?: InputMaybe<Scalars['Int']>;
@@ -1968,7 +1936,6 @@ export type BankAccountWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
-  nextAuthUser?: InputMaybe<AppUserWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -4723,6 +4690,7 @@ export enum SystemDateTimeFieldVariation {
 
 export type Todo = Node & {
   __typename?: 'Todo';
+  appUser?: Maybe<AppUser>;
   completed?: Maybe<Scalars['Boolean']>;
   /** The time the document was created */
   createdAt: Scalars['DateTime'];
@@ -4735,7 +4703,6 @@ export type Todo = Node & {
   history: Array<Version>;
   /** The unique identifier */
   id: Scalars['ID'];
-  nextAuthUser?: Maybe<AppUser>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
@@ -4747,6 +4714,12 @@ export type Todo = Node & {
   updatedAt: Scalars['DateTime'];
   /** User that last updated this document */
   updatedBy?: Maybe<User>;
+};
+
+
+export type TodoAppUserArgs = {
+  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
+  locales?: InputMaybe<Array<Locale>>;
 };
 
 
@@ -4767,12 +4740,6 @@ export type TodoHistoryArgs = {
   limit?: Scalars['Int'];
   skip?: Scalars['Int'];
   stageOverride?: InputMaybe<Stage>;
-};
-
-
-export type TodoNextAuthUserArgs = {
-  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
-  locales?: InputMaybe<Array<Locale>>;
 };
 
 
@@ -4817,10 +4784,10 @@ export type TodoConnection = {
 };
 
 export type TodoCreateInput = {
+  appUser?: InputMaybe<AppUserCreateOneInlineInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description: Scalars['String'];
-  nextAuthUser?: InputMaybe<AppUserCreateOneInlineInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -4857,6 +4824,7 @@ export type TodoManyWhereInput = {
   OR?: InputMaybe<Array<TodoWhereInput>>;
   /** Contains search across all appropriate fields. */
   _search?: InputMaybe<Scalars['String']>;
+  appUser?: InputMaybe<AppUserWhereInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
   /** All values that are not equal to given value. */
   completed_not?: InputMaybe<Scalars['Boolean']>;
@@ -4917,7 +4885,6 @@ export type TodoManyWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
-  nextAuthUser?: InputMaybe<AppUserWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -4971,9 +4938,9 @@ export enum TodoOrderByInput {
 }
 
 export type TodoUpdateInput = {
+  appUser?: InputMaybe<AppUserUpdateOneInlineInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['String']>;
-  nextAuthUser?: InputMaybe<AppUserUpdateOneInlineInput>;
 };
 
 export type TodoUpdateManyInlineInput = {
@@ -5057,6 +5024,7 @@ export type TodoWhereInput = {
   OR?: InputMaybe<Array<TodoWhereInput>>;
   /** Contains search across all appropriate fields. */
   _search?: InputMaybe<Scalars['String']>;
+  appUser?: InputMaybe<AppUserWhereInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
   /** All values that are not equal to given value. */
   completed_not?: InputMaybe<Scalars['Boolean']>;
@@ -5117,7 +5085,6 @@ export type TodoWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
-  nextAuthUser?: InputMaybe<AppUserWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -5176,7 +5143,7 @@ export type TodoWhereUniqueInput = {
 
 export type Transaction = Node & {
   __typename?: 'Transaction';
-  amount?: Maybe<Scalars['Int']>;
+  amount: Scalars['Int'];
   bankAccount?: Maybe<BankAccount>;
   /** The time the document was created */
   createdAt: Scalars['DateTime'];
@@ -5271,7 +5238,7 @@ export type TransactionConnection = {
 };
 
 export type TransactionCreateInput = {
-  amount?: InputMaybe<Scalars['Int']>;
+  amount: Scalars['Int'];
   bankAccount?: InputMaybe<BankAccountCreateOneInlineInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
@@ -6656,7 +6623,6 @@ export enum _SystemDateTimeFieldVariation {
 export type CreateAppUserMutationVariables = Exact<{
   name: Scalars['String'];
   email: Scalars['String'];
-  userId: Scalars['String'];
   imageUrl?: InputMaybe<Scalars['String']>;
   bio?: InputMaybe<Scalars['String']>;
 }>;
@@ -6664,21 +6630,46 @@ export type CreateAppUserMutationVariables = Exact<{
 
 export type CreateAppUserMutation = { __typename?: 'Mutation', createAppUser?: { __typename?: 'AppUser', id: string, name: string, email: string, imageUrl?: string | null } | null };
 
+export type CreateBankAccountMutationVariables = Exact<{
+  title: Scalars['String'];
+  slug: Scalars['String'];
+  balance?: InputMaybe<Scalars['Int']>;
+  description?: InputMaybe<Scalars['String']>;
+  userId: Scalars['ID'];
+}>;
+
+
+export type CreateBankAccountMutation = { __typename?: 'Mutation', createBankAccount?: { __typename?: 'BankAccount', id: string } | null };
+
+export type PublishAppUserMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type PublishAppUserMutation = { __typename?: 'Mutation', publishAppUser?: { __typename?: 'AppUser', id: string } | null };
+
+export type PublishBankAccountMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type PublishBankAccountMutation = { __typename?: 'Mutation', publishBankAccount?: { __typename?: 'BankAccount', id: string } | null };
+
 export type GetAllAppUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllAppUsersQuery = { __typename?: 'Query', appUsers: Array<{ __typename?: 'AppUser', imageUrl?: string | null, name: string, id: string, email: string, userId: string, createdAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', balance?: number | null, id: string }> }> };
+export type GetAllAppUsersQuery = { __typename?: 'Query', appUsers: Array<{ __typename?: 'AppUser', imageUrl?: string | null, name: string, id: string, email: string, createdAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', balance?: number | null, id: string }> }> };
 
 export type GetAllBankAccountsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllBankAccountsQuery = { __typename?: 'Query', bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, balance?: number | null, transaction: Array<{ __typename?: 'Transaction', id: string, amount?: number | null, fromFile?: string | null, description?: string | null, createdAt: any }> }> };
+export type GetAllBankAccountsQuery = { __typename?: 'Query', bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, balance?: number | null, transaction: Array<{ __typename?: 'Transaction', id: string, amount: number, fromFile?: string | null, description?: string | null, createdAt: any }> }> };
 
 
 export const CreateAppUserDocument = gql`
-    mutation CreateAppUser($name: String!, $email: String!, $userId: String!, $imageUrl: String, $bio: String) {
+    mutation CreateAppUser($name: String!, $email: String!, $imageUrl: String, $bio: String) {
   createAppUser(
-    data: {name: $name, email: $email, userId: $userId, imageUrl: $imageUrl, bio: $bio}
+    data: {name: $name, email: $email, imageUrl: $imageUrl, bio: $bio}
   ) {
     id
     name
@@ -6704,7 +6695,6 @@ export type CreateAppUserMutationFn = Apollo.MutationFunction<CreateAppUserMutat
  *   variables: {
  *      name: // value for 'name'
  *      email: // value for 'email'
- *      userId: // value for 'userId'
  *      imageUrl: // value for 'imageUrl'
  *      bio: // value for 'bio'
  *   },
@@ -6717,6 +6707,111 @@ export function useCreateAppUserMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateAppUserMutationHookResult = ReturnType<typeof useCreateAppUserMutation>;
 export type CreateAppUserMutationResult = Apollo.MutationResult<CreateAppUserMutation>;
 export type CreateAppUserMutationOptions = Apollo.BaseMutationOptions<CreateAppUserMutation, CreateAppUserMutationVariables>;
+export const CreateBankAccountDocument = gql`
+    mutation CreateBankAccount($title: String!, $slug: String!, $balance: Int = 0, $description: String, $userId: ID!) {
+  createBankAccount(
+    data: {title: $title, slug: $slug, balance: $balance, description: $description, appUsers: {connect: {id: $userId}}}
+  ) {
+    id
+  }
+}
+    `;
+export type CreateBankAccountMutationFn = Apollo.MutationFunction<CreateBankAccountMutation, CreateBankAccountMutationVariables>;
+
+/**
+ * __useCreateBankAccountMutation__
+ *
+ * To run a mutation, you first call `useCreateBankAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBankAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBankAccountMutation, { data, loading, error }] = useCreateBankAccountMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      slug: // value for 'slug'
+ *      balance: // value for 'balance'
+ *      description: // value for 'description'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useCreateBankAccountMutation(baseOptions?: Apollo.MutationHookOptions<CreateBankAccountMutation, CreateBankAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateBankAccountMutation, CreateBankAccountMutationVariables>(CreateBankAccountDocument, options);
+      }
+export type CreateBankAccountMutationHookResult = ReturnType<typeof useCreateBankAccountMutation>;
+export type CreateBankAccountMutationResult = Apollo.MutationResult<CreateBankAccountMutation>;
+export type CreateBankAccountMutationOptions = Apollo.BaseMutationOptions<CreateBankAccountMutation, CreateBankAccountMutationVariables>;
+export const PublishAppUserDocument = gql`
+    mutation PublishAppUser($id: ID!) {
+  publishAppUser(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type PublishAppUserMutationFn = Apollo.MutationFunction<PublishAppUserMutation, PublishAppUserMutationVariables>;
+
+/**
+ * __usePublishAppUserMutation__
+ *
+ * To run a mutation, you first call `usePublishAppUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishAppUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishAppUserMutation, { data, loading, error }] = usePublishAppUserMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePublishAppUserMutation(baseOptions?: Apollo.MutationHookOptions<PublishAppUserMutation, PublishAppUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PublishAppUserMutation, PublishAppUserMutationVariables>(PublishAppUserDocument, options);
+      }
+export type PublishAppUserMutationHookResult = ReturnType<typeof usePublishAppUserMutation>;
+export type PublishAppUserMutationResult = Apollo.MutationResult<PublishAppUserMutation>;
+export type PublishAppUserMutationOptions = Apollo.BaseMutationOptions<PublishAppUserMutation, PublishAppUserMutationVariables>;
+export const PublishBankAccountDocument = gql`
+    mutation PublishBankAccount($id: ID!) {
+  publishBankAccount(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type PublishBankAccountMutationFn = Apollo.MutationFunction<PublishBankAccountMutation, PublishBankAccountMutationVariables>;
+
+/**
+ * __usePublishBankAccountMutation__
+ *
+ * To run a mutation, you first call `usePublishBankAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishBankAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishBankAccountMutation, { data, loading, error }] = usePublishBankAccountMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePublishBankAccountMutation(baseOptions?: Apollo.MutationHookOptions<PublishBankAccountMutation, PublishBankAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PublishBankAccountMutation, PublishBankAccountMutationVariables>(PublishBankAccountDocument, options);
+      }
+export type PublishBankAccountMutationHookResult = ReturnType<typeof usePublishBankAccountMutation>;
+export type PublishBankAccountMutationResult = Apollo.MutationResult<PublishBankAccountMutation>;
+export type PublishBankAccountMutationOptions = Apollo.BaseMutationOptions<PublishBankAccountMutation, PublishBankAccountMutationVariables>;
 export const GetAllAppUsersDocument = gql`
     query GetAllAppUsers {
   appUsers(orderBy: name_ASC) {
@@ -6730,7 +6825,6 @@ export const GetAllAppUsersDocument = gql`
     name
     id
     email
-    userId
     createdAt
   }
 }

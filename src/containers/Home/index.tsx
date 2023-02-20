@@ -15,7 +15,6 @@ const Home = () => {
   const [values, setValues] = useState<CreateAppUserMutationVariables>({
     name: "",
     email: "",
-    userId: uuidv4(),
   });
 
   const handleSubmit = async (e: FormEvent) => {

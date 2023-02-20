@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/router";
 import React, {
   createContext,
@@ -14,7 +16,7 @@ interface GlobalContextProps {
   setState: Dispatch<SetStateAction<GlobalContextProps>>;
   handleSetState: (newValues: {}) => void;
   toggleMenu: () => void;
-  setLanguage: (lang: Locale) => void
+  setLanguage: (lang: Locale) => void;
 }
 const initialValues = {
   currentLanguage: "en",
@@ -54,7 +56,7 @@ export const GlobalContextProvider: React.FC<{ children: React.ReactNode }> = ({
         setState,
         handleSetState,
         toggleMenu,
-        setLanguage
+        setLanguage,
       }}
     >
       {children}

@@ -1,5 +1,5 @@
-mutation CreateAppUser($name: String!, $email: String!, $userId: String!, $imageUrl: String, $bio: String) {
-    createAppUser(data: { name: $name, email: $email, userId: $userId, imageUrl: $imageUrl, bio: $bio }) {
+mutation CreateAppUser($name: String!, $email: String!, $imageUrl: String, $bio: String) {
+    createAppUser(data: { name: $name, email: $email, imageUrl: $imageUrl, bio: $bio }) {
       id,
       name,
       email,

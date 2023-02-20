@@ -10,7 +10,6 @@ query GetAllAppUsers {
     name
     id
     email
-    userId
     createdAt
   }
 }
