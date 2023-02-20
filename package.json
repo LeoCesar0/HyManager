@@ -10,10 +10,11 @@
     "generate": "graphql-codegen"
   },
   "dependencies": {
-    "@apollo/client": "^v3.6.8",
+    "@apollo/client": "^3.7.7",
     "@radix-ui/react-accordion": "^1.0.1",
     "@radix-ui/react-dialog": "^1.0.2",
     "@types/react-icons": "^3.0.0",
+    "@types/uuid": "^9.0.0",
     "dotenv": "^16.0.1",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
@@ -27,7 +28,9 @@
     "react-dom": "18.1.0",
     "react-icons": "^4.3.1",
     "sass": "^1.51.0",
-    "scss": "^0.2.4"
+    "scss": "^0.2.4",
+    "uuid": "^9.0.0",
+    "zod": "^3.20.6"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.11.3",

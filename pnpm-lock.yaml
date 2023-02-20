@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@apollo/client': ^v3.6.8
+  '@apollo/client': ^3.7.7
   '@graphql-codegen/cli': ^2.11.3
   '@graphql-codegen/typescript': ^2.7.2
   '@graphql-codegen/typescript-operations': ^2.5.2
@@ -15,6 +15,7 @@ specifiers:
   '@types/react-css-collapse': ^3.6.2
   '@types/react-dom': 18.0.0
   '@types/react-icons': ^3.0.0
+  '@types/uuid': ^9.0.0
   autoprefixer: ^10.4.13
   dotenv: ^16.0.1
   eslint: 8.14.0
@@ -35,12 +36,15 @@ specifiers:
   scss: ^0.2.4
   tailwindcss: ^3.2.6
   typescript: 4.6.3
+  uuid: ^9.0.0
+  zod: ^3.20.6
 
 dependencies:
-  '@apollo/client': 3.7.6_tlq3524jpsy5qsxmlglhyg4wdu
+  '@apollo/client': 3.7.7_tlq3524jpsy5qsxmlglhyg4wdu
   '@radix-ui/react-accordion': 1.1.0_ef5jwxihqo6n7gxfmzogljlgcm
   '@radix-ui/react-dialog': 1.0.2_i6xcbgvvylvakhe2evaee3dlf4
   '@types/react-icons': 3.0.0_react@18.1.0
+  '@types/uuid': 9.0.0
   dotenv: 16.0.3
   graphql: 16.6.0
   graphql-tag: 2.12.6_graphql@16.6.0
@@ -55,6 +59,8 @@ dependencies:
   react-icons: 4.7.1_react@18.1.0
   sass: 1.57.1
   scss: 0.2.4
+  uuid: 9.0.0
+  zod: 3.20.6
 
 devDependencies:
   '@graphql-codegen/cli': 2.16.5_dil5ydimyh54prlvznjd2rcoaq
@@ -84,8 +90,8 @@ packages:
       '@jridgewell/trace-mapping': 0.3.17
     dev: true
 
-  /@apollo/client/3.7.6_tlq3524jpsy5qsxmlglhyg4wdu:
-    resolution: {integrity: sha512-K0l8+wgcdVDjdgI8O2YuhX1CiQlavGuBp8HR/+PEbc2+jqM/BaVpL0g7YAuXrTW20np/MXHNRDxK20/ujF9hjA==}
+  /@apollo/client/3.7.7_tlq3524jpsy5qsxmlglhyg4wdu:
+    resolution: {integrity: sha512-Rp/pCWuJSjLN7Xl5Qi2NoeURmZYEU/TIUz0n/LOwEo1tGdU2W7/fGVZ8+5um58JeVYq4UoTGBKFxSVeG4s411A==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
@@ -1878,6 +1884,10 @@ packages:
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
+
+  /@types/uuid/9.0.0:
+    resolution: {integrity: sha512-kr90f+ERiQtKWMz5rP32ltJ/BtULDI5RVO0uavn1HQUOwjx0R1h0rnDYNL0CepF1zL5bSY6FISAfd9tOdDhU5Q==}
+    dev: false
 
   /@types/ws/8.5.4:
     resolution: {integrity: sha512-zdQDHKUgcX/zBc4GrwsE/7dVdAD8JR4EuiAXiiUhhfyIJXXb2+PrGshFyeXWQPMmmZ2XxgaqclgpIC7eTXc1mg==}
@@ -5473,6 +5483,11 @@ packages:
     hasBin: true
     dev: false
 
+  /uuid/9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: false
+
   /v8-compile-cache-lib/3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
     dev: true
@@ -5687,4 +5702,8 @@ packages:
 
   /zen-observable/0.8.15:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
+    dev: false
+
+  /zod/3.20.6:
+    resolution: {integrity: sha512-oyu0m54SGCtzh6EClBVqDDlAYRz4jrVtKwQ7ZnsEmMI9HnzuZFj8QFwAY1M5uniIYACdGvv0PBWPF2kO0aNofA==}
     dev: false

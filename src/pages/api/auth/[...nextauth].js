@@ -20,13 +20,13 @@ import GoogleProvider from "next-auth/providers/google";
 // `;
 
 export default NextAuth({
-  // secret: process.env.NEXTAUTH_SECRET,
-  // jwt: {
-  //   secret: process.env.NEXTAUTH_SECRET,
-  // },
-  // session: {
-  //   strategy: 'jwt',
-  // },
+  secret: process.env.NEXT_AUTH_SECRET,
+  jwt: {
+    secret: process.env.NEXT_AUTH_SECRET,
+  },
+  session: {
+    strategy: 'jwt',
+  },
   debug: process.env.NODE_ENV === 'development',
   providers: [
     GoogleProvider({

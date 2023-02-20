@@ -5,12 +5,10 @@ interface SiteLayoutProps {
   children: ReactNode;
 }
 
-const SiteLayout: React.FC<SiteLayoutProps> = ({
-  children,
-}) => {
+const SiteLayout: React.FC<SiteLayoutProps> = ({ children }) => {
   return (
-    <div className="relative flex flex-col min-h-[100vh]">
-       <Header />
+    <div className="relative flex flex-col min-h-[100vh]" id="app">
+      <Header />
       <div className="flex-1">{children}</div>
       {/* {footer && <Footer />} */}
     </div>
@@ -18,4 +16,3 @@ const SiteLayout: React.FC<SiteLayoutProps> = ({
 };
 
 export default SiteLayout;
-

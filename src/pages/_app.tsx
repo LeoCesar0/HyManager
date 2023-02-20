@@ -11,8 +11,8 @@ import { SessionProvider } from "next-auth/react"
 import { Session } from "next-auth";
 // import * as googleAnalytics from "../lib/gtag";
 
-import "../styles/global.scss";
 import "../styles/tailwind.css";
+import "../styles/global.scss";
 import { debugLog } from "../utils/misc";
 
 // const trackingId = process.env.GA_TRACKING_ID;

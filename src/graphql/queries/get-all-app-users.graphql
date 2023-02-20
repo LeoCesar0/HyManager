@@ -1,0 +1,16 @@
+query GetAllAppUsers {
+  appUsers(orderBy: name_ASC) {
+    bankAccounts {
+      ... on BankAccount {
+        balance
+        id
+      }
+    }
+    imageUrl
+    name
+    id
+    email
+    userId
+    createdAt
+  }
+}

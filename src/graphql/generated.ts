@@ -28,6 +28,692 @@ export type Aggregate = {
   count: Scalars['Int'];
 };
 
+export type AppUser = Node & {
+  __typename?: 'AppUser';
+  bankAccounts: Array<BankAccount>;
+  bio?: Maybe<Scalars['String']>;
+  /** The time the document was created */
+  createdAt: Scalars['DateTime'];
+  /** User that created this document */
+  createdBy?: Maybe<User>;
+  /** Get the document in other stages */
+  documentInStages: Array<AppUser>;
+  email: Scalars['String'];
+  /** List of AppUser versions */
+  history: Array<Version>;
+  /** The unique identifier */
+  id: Scalars['ID'];
+  imageUrl?: Maybe<Scalars['String']>;
+  lastSignIn?: Maybe<Scalars['DateTime']>;
+  name: Scalars['String'];
+  /** The time the document was published. Null on documents in draft stage. */
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  /** User that last published this document */
+  publishedBy?: Maybe<User>;
+  scheduledIn: Array<ScheduledOperation>;
+  /** System stage field */
+  stage: Stage;
+  todos: Array<Todo>;
+  /** The time the document was updated */
+  updatedAt: Scalars['DateTime'];
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>;
+  userId: Scalars['String'];
+};
+
+
+export type AppUserBankAccountsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: InputMaybe<Array<Locale>>;
+  orderBy?: InputMaybe<BankAccountOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BankAccountWhereInput>;
+};
+
+
+export type AppUserCreatedByArgs = {
+  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
+  locales?: InputMaybe<Array<Locale>>;
+};
+
+
+export type AppUserDocumentInStagesArgs = {
+  includeCurrent?: Scalars['Boolean'];
+  inheritLocale?: Scalars['Boolean'];
+  stages?: Array<Stage>;
+};
+
+
+export type AppUserHistoryArgs = {
+  limit?: Scalars['Int'];
+  skip?: Scalars['Int'];
+  stageOverride?: InputMaybe<Stage>;
+};
+
+
+export type AppUserPublishedByArgs = {
+  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
+  locales?: InputMaybe<Array<Locale>>;
+};
+
+
+export type AppUserScheduledInArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: InputMaybe<Array<Locale>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ScheduledOperationWhereInput>;
+};
+
+
+export type AppUserTodosArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: InputMaybe<Array<Locale>>;
+  orderBy?: InputMaybe<TodoOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TodoWhereInput>;
+};
+
+
+export type AppUserUpdatedByArgs = {
+  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
+  locales?: InputMaybe<Array<Locale>>;
+};
+
+export type AppUserConnectInput = {
+  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
+  position?: InputMaybe<ConnectPositionInput>;
+  /** Document to connect */
+  where: AppUserWhereUniqueInput;
+};
+
+/** A connection to a list of items. */
+export type AppUserConnection = {
+  __typename?: 'AppUserConnection';
+  aggregate: Aggregate;
+  /** A list of edges. */
+  edges: Array<AppUserEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+export type AppUserCreateInput = {
+  bankAccounts?: InputMaybe<BankAccountCreateManyInlineInput>;
+  bio?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  email: Scalars['String'];
+  imageUrl?: InputMaybe<Scalars['String']>;
+  lastSignIn?: InputMaybe<Scalars['DateTime']>;
+  name: Scalars['String'];
+  todos?: InputMaybe<TodoCreateManyInlineInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  userId: Scalars['String'];
+};
+
+export type AppUserCreateManyInlineInput = {
+  /** Connect multiple existing AppUser documents */
+  connect?: InputMaybe<Array<AppUserWhereUniqueInput>>;
+  /** Create and connect multiple existing AppUser documents */
+  create?: InputMaybe<Array<AppUserCreateInput>>;
+};
+
+export type AppUserCreateOneInlineInput = {
+  /** Connect one existing AppUser document */
+  connect?: InputMaybe<AppUserWhereUniqueInput>;
+  /** Create and connect one AppUser document */
+  create?: InputMaybe<AppUserCreateInput>;
+};
+
+/** An edge in a connection. */
+export type AppUserEdge = {
+  __typename?: 'AppUserEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: AppUser;
+};
+
+/** Identifies documents */
+export type AppUserManyWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: InputMaybe<Array<AppUserWhereInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: InputMaybe<Array<AppUserWhereInput>>;
+  /** Logical OR on all given filters. */
+  OR?: InputMaybe<Array<AppUserWhereInput>>;
+  /** Contains search across all appropriate fields. */
+  _search?: InputMaybe<Scalars['String']>;
+  bankAccounts_every?: InputMaybe<BankAccountWhereInput>;
+  bankAccounts_none?: InputMaybe<BankAccountWhereInput>;
+  bankAccounts_some?: InputMaybe<BankAccountWhereInput>;
+  bio?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  bio_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  bio_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  bio_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  bio_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  bio_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  bio_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  bio_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  bio_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  bio_starts_with?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  createdAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  createdAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  createdAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  createdAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  documentInStages_every?: InputMaybe<AppUserWhereStageInput>;
+  documentInStages_none?: InputMaybe<AppUserWhereStageInput>;
+  documentInStages_some?: InputMaybe<AppUserWhereStageInput>;
+  email?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  email_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  email_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  email_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  email_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  email_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  email_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  email_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  email_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  email_starts_with?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  /** All values containing the given string. */
+  id_contains?: InputMaybe<Scalars['ID']>;
+  /** All values ending with the given string. */
+  id_ends_with?: InputMaybe<Scalars['ID']>;
+  /** All values that are contained in given list. */
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** All values that are not equal to given value. */
+  id_not?: InputMaybe<Scalars['ID']>;
+  /** All values not containing the given string. */
+  id_not_contains?: InputMaybe<Scalars['ID']>;
+  /** All values not ending with the given string */
+  id_not_ends_with?: InputMaybe<Scalars['ID']>;
+  /** All values that are not contained in given list. */
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** All values not starting with the given string. */
+  id_not_starts_with?: InputMaybe<Scalars['ID']>;
+  /** All values starting with the given string. */
+  id_starts_with?: InputMaybe<Scalars['ID']>;
+  imageUrl?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  imageUrl_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  imageUrl_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  imageUrl_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  imageUrl_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  imageUrl_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  imageUrl_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  imageUrl_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  imageUrl_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  imageUrl_starts_with?: InputMaybe<Scalars['String']>;
+  lastSignIn?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  lastSignIn_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  lastSignIn_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  lastSignIn_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  lastSignIn_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  lastSignIn_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  lastSignIn_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  lastSignIn_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  name?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  name_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  name_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  name_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  name_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  name_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  name_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  name_starts_with?: InputMaybe<Scalars['String']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  publishedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  publishedAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  publishedAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  publishedBy?: InputMaybe<UserWhereInput>;
+  scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  todos_every?: InputMaybe<TodoWhereInput>;
+  todos_none?: InputMaybe<TodoWhereInput>;
+  todos_some?: InputMaybe<TodoWhereInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  updatedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  updatedAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  updatedBy?: InputMaybe<UserWhereInput>;
+  userId?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  userId_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  userId_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  userId_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  userId_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  userId_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  userId_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  userId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  userId_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  userId_starts_with?: InputMaybe<Scalars['String']>;
+};
+
+export enum AppUserOrderByInput {
+  BioAsc = 'bio_ASC',
+  BioDesc = 'bio_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  EmailAsc = 'email_ASC',
+  EmailDesc = 'email_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  ImageUrlAsc = 'imageUrl_ASC',
+  ImageUrlDesc = 'imageUrl_DESC',
+  LastSignInAsc = 'lastSignIn_ASC',
+  LastSignInDesc = 'lastSignIn_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  PublishedAtAsc = 'publishedAt_ASC',
+  PublishedAtDesc = 'publishedAt_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  UserIdAsc = 'userId_ASC',
+  UserIdDesc = 'userId_DESC'
+}
+
+export type AppUserUpdateInput = {
+  bankAccounts?: InputMaybe<BankAccountUpdateManyInlineInput>;
+  bio?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  imageUrl?: InputMaybe<Scalars['String']>;
+  lastSignIn?: InputMaybe<Scalars['DateTime']>;
+  name?: InputMaybe<Scalars['String']>;
+  todos?: InputMaybe<TodoUpdateManyInlineInput>;
+  userId?: InputMaybe<Scalars['String']>;
+};
+
+export type AppUserUpdateManyInlineInput = {
+  /** Connect multiple existing AppUser documents */
+  connect?: InputMaybe<Array<AppUserConnectInput>>;
+  /** Create and connect multiple AppUser documents */
+  create?: InputMaybe<Array<AppUserCreateInput>>;
+  /** Delete multiple AppUser documents */
+  delete?: InputMaybe<Array<AppUserWhereUniqueInput>>;
+  /** Disconnect multiple AppUser documents */
+  disconnect?: InputMaybe<Array<AppUserWhereUniqueInput>>;
+  /** Override currently-connected documents with multiple existing AppUser documents */
+  set?: InputMaybe<Array<AppUserWhereUniqueInput>>;
+  /** Update multiple AppUser documents */
+  update?: InputMaybe<Array<AppUserUpdateWithNestedWhereUniqueInput>>;
+  /** Upsert multiple AppUser documents */
+  upsert?: InputMaybe<Array<AppUserUpsertWithNestedWhereUniqueInput>>;
+};
+
+export type AppUserUpdateManyInput = {
+  bio?: InputMaybe<Scalars['String']>;
+  imageUrl?: InputMaybe<Scalars['String']>;
+  lastSignIn?: InputMaybe<Scalars['DateTime']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type AppUserUpdateManyWithNestedWhereInput = {
+  /** Update many input */
+  data: AppUserUpdateManyInput;
+  /** Document search */
+  where: AppUserWhereInput;
+};
+
+export type AppUserUpdateOneInlineInput = {
+  /** Connect existing AppUser document */
+  connect?: InputMaybe<AppUserWhereUniqueInput>;
+  /** Create and connect one AppUser document */
+  create?: InputMaybe<AppUserCreateInput>;
+  /** Delete currently connected AppUser document */
+  delete?: InputMaybe<Scalars['Boolean']>;
+  /** Disconnect currently connected AppUser document */
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  /** Update single AppUser document */
+  update?: InputMaybe<AppUserUpdateWithNestedWhereUniqueInput>;
+  /** Upsert single AppUser document */
+  upsert?: InputMaybe<AppUserUpsertWithNestedWhereUniqueInput>;
+};
+
+export type AppUserUpdateWithNestedWhereUniqueInput = {
+  /** Document to update */
+  data: AppUserUpdateInput;
+  /** Unique document search */
+  where: AppUserWhereUniqueInput;
+};
+
+export type AppUserUpsertInput = {
+  /** Create document if it didn't exist */
+  create: AppUserCreateInput;
+  /** Update document if it exists */
+  update: AppUserUpdateInput;
+};
+
+export type AppUserUpsertWithNestedWhereUniqueInput = {
+  /** Upsert data */
+  data: AppUserUpsertInput;
+  /** Unique document search */
+  where: AppUserWhereUniqueInput;
+};
+
+/** This contains a set of filters that can be used to compare values internally */
+export type AppUserWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Identifies documents */
+export type AppUserWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: InputMaybe<Array<AppUserWhereInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: InputMaybe<Array<AppUserWhereInput>>;
+  /** Logical OR on all given filters. */
+  OR?: InputMaybe<Array<AppUserWhereInput>>;
+  /** Contains search across all appropriate fields. */
+  _search?: InputMaybe<Scalars['String']>;
+  bankAccounts_every?: InputMaybe<BankAccountWhereInput>;
+  bankAccounts_none?: InputMaybe<BankAccountWhereInput>;
+  bankAccounts_some?: InputMaybe<BankAccountWhereInput>;
+  bio?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  bio_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  bio_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  bio_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  bio_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  bio_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  bio_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  bio_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  bio_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  bio_starts_with?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  createdAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  createdAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  createdAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  createdAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  documentInStages_every?: InputMaybe<AppUserWhereStageInput>;
+  documentInStages_none?: InputMaybe<AppUserWhereStageInput>;
+  documentInStages_some?: InputMaybe<AppUserWhereStageInput>;
+  email?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  email_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  email_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  email_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  email_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  email_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  email_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  email_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  email_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  email_starts_with?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  /** All values containing the given string. */
+  id_contains?: InputMaybe<Scalars['ID']>;
+  /** All values ending with the given string. */
+  id_ends_with?: InputMaybe<Scalars['ID']>;
+  /** All values that are contained in given list. */
+  id_in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** All values that are not equal to given value. */
+  id_not?: InputMaybe<Scalars['ID']>;
+  /** All values not containing the given string. */
+  id_not_contains?: InputMaybe<Scalars['ID']>;
+  /** All values not ending with the given string */
+  id_not_ends_with?: InputMaybe<Scalars['ID']>;
+  /** All values that are not contained in given list. */
+  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** All values not starting with the given string. */
+  id_not_starts_with?: InputMaybe<Scalars['ID']>;
+  /** All values starting with the given string. */
+  id_starts_with?: InputMaybe<Scalars['ID']>;
+  imageUrl?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  imageUrl_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  imageUrl_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  imageUrl_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  imageUrl_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  imageUrl_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  imageUrl_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  imageUrl_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  imageUrl_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  imageUrl_starts_with?: InputMaybe<Scalars['String']>;
+  lastSignIn?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  lastSignIn_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  lastSignIn_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  lastSignIn_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  lastSignIn_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  lastSignIn_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  lastSignIn_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  lastSignIn_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  name?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  name_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  name_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  name_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  name_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  name_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  name_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  name_starts_with?: InputMaybe<Scalars['String']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  publishedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  publishedAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  publishedAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  publishedBy?: InputMaybe<UserWhereInput>;
+  scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  todos_every?: InputMaybe<TodoWhereInput>;
+  todos_none?: InputMaybe<TodoWhereInput>;
+  todos_some?: InputMaybe<TodoWhereInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  updatedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  updatedAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  updatedBy?: InputMaybe<UserWhereInput>;
+  userId?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  userId_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  userId_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  userId_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  userId_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  userId_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  userId_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  userId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  userId_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  userId_starts_with?: InputMaybe<Scalars['String']>;
+};
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type AppUserWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: InputMaybe<Array<AppUserWhereStageInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: InputMaybe<Array<AppUserWhereStageInput>>;
+  /** Logical OR on all given filters. */
+  OR?: InputMaybe<Array<AppUserWhereStageInput>>;
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: InputMaybe<AppUserWhereComparatorInput>;
+  /** Specify the stage to compare with */
+  stage?: InputMaybe<Stage>;
+};
+
+/** References AppUser record uniquely */
+export type AppUserWhereUniqueInput = {
+  email?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  userId?: InputMaybe<Scalars['String']>;
+};
+
 /** Asset system model */
 export type Asset = Node & {
   __typename?: 'Asset';
@@ -723,7 +1409,7 @@ export type BankAccount = Node & {
   history: Array<Version>;
   /** The unique identifier */
   id: Scalars['ID'];
-  nextAuthUser?: Maybe<NextAuthUser>;
+  nextAuthUser?: Maybe<AppUser>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
@@ -909,7 +1595,7 @@ export type BankAccountCreateInput = {
   cover?: InputMaybe<AssetCreateOneInlineInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
-  nextAuthUser?: InputMaybe<NextAuthUserCreateOneInlineInput>;
+  nextAuthUser?: InputMaybe<AppUserCreateOneInlineInput>;
   slug: Scalars['String'];
   title: Scalars['String'];
   transaction?: InputMaybe<BankAccountBankAccounts_TransactionsCreateManyInlineInput>;
@@ -1022,7 +1708,7 @@ export type BankAccountManyWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
-  nextAuthUser?: InputMaybe<NextAuthUserWhereInput>;
+  nextAuthUser?: InputMaybe<AppUserWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -1121,7 +1807,7 @@ export type BankAccountUpdateInput = {
   balance?: InputMaybe<Scalars['Int']>;
   cover?: InputMaybe<AssetUpdateOneInlineInput>;
   description?: InputMaybe<Scalars['String']>;
-  nextAuthUser?: InputMaybe<NextAuthUserUpdateOneInlineInput>;
+  nextAuthUser?: InputMaybe<AppUserUpdateOneInlineInput>;
   slug?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
   transaction?: InputMaybe<BankAccountBankAccounts_TransactionsUpdateManyInlineInput>;
@@ -1282,7 +1968,7 @@ export type BankAccountWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
-  nextAuthUser?: InputMaybe<NextAuthUserWhereInput>;
+  nextAuthUser?: InputMaybe<AppUserWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -1528,6 +2214,8 @@ export type LocationInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Create one appUser */
+  createAppUser?: Maybe<AppUser>;
   /**
    * Create one asset
    * @deprecated Asset mutations will be overhauled soon
@@ -1535,8 +2223,6 @@ export type Mutation = {
   createAsset?: Maybe<Asset>;
   /** Create one bankAccount */
   createBankAccount?: Maybe<BankAccount>;
-  /** Create one nextAuthUser */
-  createNextAuthUser?: Maybe<NextAuthUser>;
   /** Create one scheduledRelease */
   createScheduledRelease?: Maybe<ScheduledRelease>;
   /** Create one todo */
@@ -1545,10 +2231,19 @@ export type Mutation = {
   createTransaction?: Maybe<Transaction>;
   /** Create one transactionFile */
   createTransactionFile?: Maybe<TransactionFile>;
+  /** Delete one appUser from _all_ existing stages. Returns deleted document. */
+  deleteAppUser?: Maybe<AppUser>;
   /** Delete one asset from _all_ existing stages. Returns deleted document. */
   deleteAsset?: Maybe<Asset>;
   /** Delete one bankAccount from _all_ existing stages. Returns deleted document. */
   deleteBankAccount?: Maybe<BankAccount>;
+  /**
+   * Delete many AppUser documents
+   * @deprecated Please use the new paginated many mutation (deleteManyAppUsersConnection)
+   */
+  deleteManyAppUsers: BatchPayload;
+  /** Delete many AppUser documents, return deleted documents */
+  deleteManyAppUsersConnection: AppUserConnection;
   /**
    * Delete many Asset documents
    * @deprecated Please use the new paginated many mutation (deleteManyAssetsConnection)
@@ -1563,13 +2258,6 @@ export type Mutation = {
   deleteManyBankAccounts: BatchPayload;
   /** Delete many BankAccount documents, return deleted documents */
   deleteManyBankAccountsConnection: BankAccountConnection;
-  /**
-   * Delete many NextAuthUser documents
-   * @deprecated Please use the new paginated many mutation (deleteManyNextAuthUsersConnection)
-   */
-  deleteManyNextAuthUsers: BatchPayload;
-  /** Delete many NextAuthUser documents, return deleted documents */
-  deleteManyNextAuthUsersConnection: NextAuthUserConnection;
   /**
    * Delete many Todo documents
    * @deprecated Please use the new paginated many mutation (deleteManyTodosConnection)
@@ -1591,8 +2279,6 @@ export type Mutation = {
   deleteManyTransactions: BatchPayload;
   /** Delete many Transaction documents, return deleted documents */
   deleteManyTransactionsConnection: TransactionConnection;
-  /** Delete one nextAuthUser from _all_ existing stages. Returns deleted document. */
-  deleteNextAuthUser?: Maybe<NextAuthUser>;
   /** Delete and return scheduled operation */
   deleteScheduledOperation?: Maybe<ScheduledOperation>;
   /** Delete one scheduledRelease from _all_ existing stages. Returns deleted document. */
@@ -1603,10 +2289,19 @@ export type Mutation = {
   deleteTransaction?: Maybe<Transaction>;
   /** Delete one transactionFile from _all_ existing stages. Returns deleted document. */
   deleteTransactionFile?: Maybe<TransactionFile>;
+  /** Publish one appUser */
+  publishAppUser?: Maybe<AppUser>;
   /** Publish one asset */
   publishAsset?: Maybe<Asset>;
   /** Publish one bankAccount */
   publishBankAccount?: Maybe<BankAccount>;
+  /**
+   * Publish many AppUser documents
+   * @deprecated Please use the new paginated many mutation (publishManyAppUsersConnection)
+   */
+  publishManyAppUsers: BatchPayload;
+  /** Publish many AppUser documents */
+  publishManyAppUsersConnection: AppUserConnection;
   /**
    * Publish many Asset documents
    * @deprecated Please use the new paginated many mutation (publishManyAssetsConnection)
@@ -1621,13 +2316,6 @@ export type Mutation = {
   publishManyBankAccounts: BatchPayload;
   /** Publish many BankAccount documents */
   publishManyBankAccountsConnection: BankAccountConnection;
-  /**
-   * Publish many NextAuthUser documents
-   * @deprecated Please use the new paginated many mutation (publishManyNextAuthUsersConnection)
-   */
-  publishManyNextAuthUsers: BatchPayload;
-  /** Publish many NextAuthUser documents */
-  publishManyNextAuthUsersConnection: NextAuthUserConnection;
   /**
    * Publish many Todo documents
    * @deprecated Please use the new paginated many mutation (publishManyTodosConnection)
@@ -1649,42 +2337,49 @@ export type Mutation = {
   publishManyTransactions: BatchPayload;
   /** Publish many Transaction documents */
   publishManyTransactionsConnection: TransactionConnection;
-  /** Publish one nextAuthUser */
-  publishNextAuthUser?: Maybe<NextAuthUser>;
   /** Publish one todo */
   publishTodo?: Maybe<Todo>;
   /** Publish one transaction */
   publishTransaction?: Maybe<Transaction>;
   /** Publish one transactionFile */
   publishTransactionFile?: Maybe<TransactionFile>;
+  /** Schedule to publish one appUser */
+  schedulePublishAppUser?: Maybe<AppUser>;
   /** Schedule to publish one asset */
   schedulePublishAsset?: Maybe<Asset>;
   /** Schedule to publish one bankAccount */
   schedulePublishBankAccount?: Maybe<BankAccount>;
-  /** Schedule to publish one nextAuthUser */
-  schedulePublishNextAuthUser?: Maybe<NextAuthUser>;
   /** Schedule to publish one todo */
   schedulePublishTodo?: Maybe<Todo>;
   /** Schedule to publish one transaction */
   schedulePublishTransaction?: Maybe<Transaction>;
   /** Schedule to publish one transactionFile */
   schedulePublishTransactionFile?: Maybe<TransactionFile>;
+  /** Unpublish one appUser from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
+  scheduleUnpublishAppUser?: Maybe<AppUser>;
   /** Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishAsset?: Maybe<Asset>;
   /** Unpublish one bankAccount from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishBankAccount?: Maybe<BankAccount>;
-  /** Unpublish one nextAuthUser from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
-  scheduleUnpublishNextAuthUser?: Maybe<NextAuthUser>;
   /** Unpublish one todo from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishTodo?: Maybe<Todo>;
   /** Unpublish one transaction from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishTransaction?: Maybe<Transaction>;
   /** Unpublish one transactionFile from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishTransactionFile?: Maybe<TransactionFile>;
+  /** Unpublish one appUser from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
+  unpublishAppUser?: Maybe<AppUser>;
   /** Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishAsset?: Maybe<Asset>;
   /** Unpublish one bankAccount from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishBankAccount?: Maybe<BankAccount>;
+  /**
+   * Unpublish many AppUser documents
+   * @deprecated Please use the new paginated many mutation (unpublishManyAppUsersConnection)
+   */
+  unpublishManyAppUsers: BatchPayload;
+  /** Find many AppUser documents that match criteria in specified stage and unpublish from target stages */
+  unpublishManyAppUsersConnection: AppUserConnection;
   /**
    * Unpublish many Asset documents
    * @deprecated Please use the new paginated many mutation (unpublishManyAssetsConnection)
@@ -1699,13 +2394,6 @@ export type Mutation = {
   unpublishManyBankAccounts: BatchPayload;
   /** Find many BankAccount documents that match criteria in specified stage and unpublish from target stages */
   unpublishManyBankAccountsConnection: BankAccountConnection;
-  /**
-   * Unpublish many NextAuthUser documents
-   * @deprecated Please use the new paginated many mutation (unpublishManyNextAuthUsersConnection)
-   */
-  unpublishManyNextAuthUsers: BatchPayload;
-  /** Find many NextAuthUser documents that match criteria in specified stage and unpublish from target stages */
-  unpublishManyNextAuthUsersConnection: NextAuthUserConnection;
   /**
    * Unpublish many Todo documents
    * @deprecated Please use the new paginated many mutation (unpublishManyTodosConnection)
@@ -1727,18 +2415,25 @@ export type Mutation = {
   unpublishManyTransactions: BatchPayload;
   /** Find many Transaction documents that match criteria in specified stage and unpublish from target stages */
   unpublishManyTransactionsConnection: TransactionConnection;
-  /** Unpublish one nextAuthUser from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
-  unpublishNextAuthUser?: Maybe<NextAuthUser>;
   /** Unpublish one todo from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishTodo?: Maybe<Todo>;
   /** Unpublish one transaction from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishTransaction?: Maybe<Transaction>;
   /** Unpublish one transactionFile from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishTransactionFile?: Maybe<TransactionFile>;
+  /** Update one appUser */
+  updateAppUser?: Maybe<AppUser>;
   /** Update one asset */
   updateAsset?: Maybe<Asset>;
   /** Update one bankAccount */
   updateBankAccount?: Maybe<BankAccount>;
+  /**
+   * Update many appUsers
+   * @deprecated Please use the new paginated many mutation (updateManyAppUsersConnection)
+   */
+  updateManyAppUsers: BatchPayload;
+  /** Update many AppUser documents */
+  updateManyAppUsersConnection: AppUserConnection;
   /**
    * Update many assets
    * @deprecated Please use the new paginated many mutation (updateManyAssetsConnection)
@@ -1753,13 +2448,6 @@ export type Mutation = {
   updateManyBankAccounts: BatchPayload;
   /** Update many BankAccount documents */
   updateManyBankAccountsConnection: BankAccountConnection;
-  /**
-   * Update many nextAuthUsers
-   * @deprecated Please use the new paginated many mutation (updateManyNextAuthUsersConnection)
-   */
-  updateManyNextAuthUsers: BatchPayload;
-  /** Update many NextAuthUser documents */
-  updateManyNextAuthUsersConnection: NextAuthUserConnection;
   /**
    * Update many todos
    * @deprecated Please use the new paginated many mutation (updateManyTodosConnection)
@@ -1781,8 +2469,6 @@ export type Mutation = {
   updateManyTransactions: BatchPayload;
   /** Update many Transaction documents */
   updateManyTransactionsConnection: TransactionConnection;
-  /** Update one nextAuthUser */
-  updateNextAuthUser?: Maybe<NextAuthUser>;
   /** Update one scheduledRelease */
   updateScheduledRelease?: Maybe<ScheduledRelease>;
   /** Update one todo */
@@ -1791,18 +2477,23 @@ export type Mutation = {
   updateTransaction?: Maybe<Transaction>;
   /** Update one transactionFile */
   updateTransactionFile?: Maybe<TransactionFile>;
+  /** Upsert one appUser */
+  upsertAppUser?: Maybe<AppUser>;
   /** Upsert one asset */
   upsertAsset?: Maybe<Asset>;
   /** Upsert one bankAccount */
   upsertBankAccount?: Maybe<BankAccount>;
-  /** Upsert one nextAuthUser */
-  upsertNextAuthUser?: Maybe<NextAuthUser>;
   /** Upsert one todo */
   upsertTodo?: Maybe<Todo>;
   /** Upsert one transaction */
   upsertTransaction?: Maybe<Transaction>;
   /** Upsert one transactionFile */
   upsertTransactionFile?: Maybe<TransactionFile>;
+};
+
+
+export type MutationCreateAppUserArgs = {
+  data: AppUserCreateInput;
 };
 
 
@@ -1813,11 +2504,6 @@ export type MutationCreateAssetArgs = {
 
 export type MutationCreateBankAccountArgs = {
   data: BankAccountCreateInput;
-};
-
-
-export type MutationCreateNextAuthUserArgs = {
-  data: NextAuthUserCreateInput;
 };
 
 
@@ -1841,6 +2527,11 @@ export type MutationCreateTransactionFileArgs = {
 };
 
 
+export type MutationDeleteAppUserArgs = {
+  where: AppUserWhereUniqueInput;
+};
+
+
 export type MutationDeleteAssetArgs = {
   where: AssetWhereUniqueInput;
 };
@@ -1848,6 +2539,21 @@ export type MutationDeleteAssetArgs = {
 
 export type MutationDeleteBankAccountArgs = {
   where: BankAccountWhereUniqueInput;
+};
+
+
+export type MutationDeleteManyAppUsersArgs = {
+  where?: InputMaybe<AppUserManyWhereInput>;
+};
+
+
+export type MutationDeleteManyAppUsersConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']>;
+  before?: InputMaybe<Scalars['ID']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<AppUserManyWhereInput>;
 };
 
 
@@ -1878,21 +2584,6 @@ export type MutationDeleteManyBankAccountsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BankAccountManyWhereInput>;
-};
-
-
-export type MutationDeleteManyNextAuthUsersArgs = {
-  where?: InputMaybe<NextAuthUserManyWhereInput>;
-};
-
-
-export type MutationDeleteManyNextAuthUsersConnectionArgs = {
-  after?: InputMaybe<Scalars['ID']>;
-  before?: InputMaybe<Scalars['ID']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<NextAuthUserManyWhereInput>;
 };
 
 
@@ -1941,11 +2632,6 @@ export type MutationDeleteManyTransactionsConnectionArgs = {
 };
 
 
-export type MutationDeleteNextAuthUserArgs = {
-  where: NextAuthUserWhereUniqueInput;
-};
-
-
 export type MutationDeleteScheduledOperationArgs = {
   where: ScheduledOperationWhereUniqueInput;
 };
@@ -1971,6 +2657,12 @@ export type MutationDeleteTransactionFileArgs = {
 };
 
 
+export type MutationPublishAppUserArgs = {
+  to?: Array<Stage>;
+  where: AppUserWhereUniqueInput;
+};
+
+
 export type MutationPublishAssetArgs = {
   locales?: InputMaybe<Array<Locale>>;
   publishBase?: InputMaybe<Scalars['Boolean']>;
@@ -1983,6 +2675,24 @@ export type MutationPublishAssetArgs = {
 export type MutationPublishBankAccountArgs = {
   to?: Array<Stage>;
   where: BankAccountWhereUniqueInput;
+};
+
+
+export type MutationPublishManyAppUsersArgs = {
+  to?: Array<Stage>;
+  where?: InputMaybe<AppUserManyWhereInput>;
+};
+
+
+export type MutationPublishManyAppUsersConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']>;
+  before?: InputMaybe<Scalars['ID']>;
+  first?: InputMaybe<Scalars['Int']>;
+  from?: InputMaybe<Stage>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  to?: Array<Stage>;
+  where?: InputMaybe<AppUserManyWhereInput>;
 };
 
 
@@ -2025,24 +2735,6 @@ export type MutationPublishManyBankAccountsConnectionArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   to?: Array<Stage>;
   where?: InputMaybe<BankAccountManyWhereInput>;
-};
-
-
-export type MutationPublishManyNextAuthUsersArgs = {
-  to?: Array<Stage>;
-  where?: InputMaybe<NextAuthUserManyWhereInput>;
-};
-
-
-export type MutationPublishManyNextAuthUsersConnectionArgs = {
-  after?: InputMaybe<Scalars['ID']>;
-  before?: InputMaybe<Scalars['ID']>;
-  first?: InputMaybe<Scalars['Int']>;
-  from?: InputMaybe<Stage>;
-  last?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  to?: Array<Stage>;
-  where?: InputMaybe<NextAuthUserManyWhereInput>;
 };
 
 
@@ -2100,12 +2792,6 @@ export type MutationPublishManyTransactionsConnectionArgs = {
 };
 
 
-export type MutationPublishNextAuthUserArgs = {
-  to?: Array<Stage>;
-  where: NextAuthUserWhereUniqueInput;
-};
-
-
 export type MutationPublishTodoArgs = {
   to?: Array<Stage>;
   where: TodoWhereUniqueInput;
@@ -2121,6 +2807,14 @@ export type MutationPublishTransactionArgs = {
 export type MutationPublishTransactionFileArgs = {
   to?: Array<Stage>;
   where: TransactionFileWhereUniqueInput;
+};
+
+
+export type MutationSchedulePublishAppUserArgs = {
+  releaseAt?: InputMaybe<Scalars['DateTime']>;
+  releaseId?: InputMaybe<Scalars['String']>;
+  to?: Array<Stage>;
+  where: AppUserWhereUniqueInput;
 };
 
 
@@ -2140,14 +2834,6 @@ export type MutationSchedulePublishBankAccountArgs = {
   releaseId?: InputMaybe<Scalars['String']>;
   to?: Array<Stage>;
   where: BankAccountWhereUniqueInput;
-};
-
-
-export type MutationSchedulePublishNextAuthUserArgs = {
-  releaseAt?: InputMaybe<Scalars['DateTime']>;
-  releaseId?: InputMaybe<Scalars['String']>;
-  to?: Array<Stage>;
-  where: NextAuthUserWhereUniqueInput;
 };
 
 
@@ -2175,6 +2861,14 @@ export type MutationSchedulePublishTransactionFileArgs = {
 };
 
 
+export type MutationScheduleUnpublishAppUserArgs = {
+  from?: Array<Stage>;
+  releaseAt?: InputMaybe<Scalars['DateTime']>;
+  releaseId?: InputMaybe<Scalars['String']>;
+  where: AppUserWhereUniqueInput;
+};
+
+
 export type MutationScheduleUnpublishAssetArgs = {
   from?: Array<Stage>;
   locales?: InputMaybe<Array<Locale>>;
@@ -2190,14 +2884,6 @@ export type MutationScheduleUnpublishBankAccountArgs = {
   releaseAt?: InputMaybe<Scalars['DateTime']>;
   releaseId?: InputMaybe<Scalars['String']>;
   where: BankAccountWhereUniqueInput;
-};
-
-
-export type MutationScheduleUnpublishNextAuthUserArgs = {
-  from?: Array<Stage>;
-  releaseAt?: InputMaybe<Scalars['DateTime']>;
-  releaseId?: InputMaybe<Scalars['String']>;
-  where: NextAuthUserWhereUniqueInput;
 };
 
 
@@ -2225,6 +2911,12 @@ export type MutationScheduleUnpublishTransactionFileArgs = {
 };
 
 
+export type MutationUnpublishAppUserArgs = {
+  from?: Array<Stage>;
+  where: AppUserWhereUniqueInput;
+};
+
+
 export type MutationUnpublishAssetArgs = {
   from?: Array<Stage>;
   locales?: InputMaybe<Array<Locale>>;
@@ -2236,6 +2928,24 @@ export type MutationUnpublishAssetArgs = {
 export type MutationUnpublishBankAccountArgs = {
   from?: Array<Stage>;
   where: BankAccountWhereUniqueInput;
+};
+
+
+export type MutationUnpublishManyAppUsersArgs = {
+  from?: Array<Stage>;
+  where?: InputMaybe<AppUserManyWhereInput>;
+};
+
+
+export type MutationUnpublishManyAppUsersConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']>;
+  before?: InputMaybe<Scalars['ID']>;
+  first?: InputMaybe<Scalars['Int']>;
+  from?: Array<Stage>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  stage?: InputMaybe<Stage>;
+  where?: InputMaybe<AppUserManyWhereInput>;
 };
 
 
@@ -2276,24 +2986,6 @@ export type MutationUnpublishManyBankAccountsConnectionArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   stage?: InputMaybe<Stage>;
   where?: InputMaybe<BankAccountManyWhereInput>;
-};
-
-
-export type MutationUnpublishManyNextAuthUsersArgs = {
-  from?: Array<Stage>;
-  where?: InputMaybe<NextAuthUserManyWhereInput>;
-};
-
-
-export type MutationUnpublishManyNextAuthUsersConnectionArgs = {
-  after?: InputMaybe<Scalars['ID']>;
-  before?: InputMaybe<Scalars['ID']>;
-  first?: InputMaybe<Scalars['Int']>;
-  from?: Array<Stage>;
-  last?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  stage?: InputMaybe<Stage>;
-  where?: InputMaybe<NextAuthUserManyWhereInput>;
 };
 
 
@@ -2351,12 +3043,6 @@ export type MutationUnpublishManyTransactionsConnectionArgs = {
 };
 
 
-export type MutationUnpublishNextAuthUserArgs = {
-  from?: Array<Stage>;
-  where: NextAuthUserWhereUniqueInput;
-};
-
-
 export type MutationUnpublishTodoArgs = {
   from?: Array<Stage>;
   where: TodoWhereUniqueInput;
@@ -2375,6 +3061,12 @@ export type MutationUnpublishTransactionFileArgs = {
 };
 
 
+export type MutationUpdateAppUserArgs = {
+  data: AppUserUpdateInput;
+  where: AppUserWhereUniqueInput;
+};
+
+
 export type MutationUpdateAssetArgs = {
   data: AssetUpdateInput;
   where: AssetWhereUniqueInput;
@@ -2384,6 +3076,23 @@ export type MutationUpdateAssetArgs = {
 export type MutationUpdateBankAccountArgs = {
   data: BankAccountUpdateInput;
   where: BankAccountWhereUniqueInput;
+};
+
+
+export type MutationUpdateManyAppUsersArgs = {
+  data: AppUserUpdateManyInput;
+  where?: InputMaybe<AppUserManyWhereInput>;
+};
+
+
+export type MutationUpdateManyAppUsersConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']>;
+  before?: InputMaybe<Scalars['ID']>;
+  data: AppUserUpdateManyInput;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<AppUserManyWhereInput>;
 };
 
 
@@ -2418,23 +3127,6 @@ export type MutationUpdateManyBankAccountsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BankAccountManyWhereInput>;
-};
-
-
-export type MutationUpdateManyNextAuthUsersArgs = {
-  data: NextAuthUserUpdateManyInput;
-  where?: InputMaybe<NextAuthUserManyWhereInput>;
-};
-
-
-export type MutationUpdateManyNextAuthUsersConnectionArgs = {
-  after?: InputMaybe<Scalars['ID']>;
-  before?: InputMaybe<Scalars['ID']>;
-  data: NextAuthUserUpdateManyInput;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<NextAuthUserManyWhereInput>;
 };
 
 
@@ -2489,12 +3181,6 @@ export type MutationUpdateManyTransactionsConnectionArgs = {
 };
 
 
-export type MutationUpdateNextAuthUserArgs = {
-  data: NextAuthUserUpdateInput;
-  where: NextAuthUserWhereUniqueInput;
-};
-
-
 export type MutationUpdateScheduledReleaseArgs = {
   data: ScheduledReleaseUpdateInput;
   where: ScheduledReleaseWhereUniqueInput;
@@ -2519,6 +3205,12 @@ export type MutationUpdateTransactionFileArgs = {
 };
 
 
+export type MutationUpsertAppUserArgs = {
+  upsert: AppUserUpsertInput;
+  where: AppUserWhereUniqueInput;
+};
+
+
 export type MutationUpsertAssetArgs = {
   upsert: AssetUpsertInput;
   where: AssetWhereUniqueInput;
@@ -2528,12 +3220,6 @@ export type MutationUpsertAssetArgs = {
 export type MutationUpsertBankAccountArgs = {
   upsert: BankAccountUpsertInput;
   where: BankAccountWhereUniqueInput;
-};
-
-
-export type MutationUpsertNextAuthUserArgs = {
-  upsert: NextAuthUserUpsertInput;
-  where: NextAuthUserWhereUniqueInput;
 };
 
 
@@ -2552,524 +3238,6 @@ export type MutationUpsertTransactionArgs = {
 export type MutationUpsertTransactionFileArgs = {
   upsert: TransactionFileUpsertInput;
   where: TransactionFileWhereUniqueInput;
-};
-
-export type NextAuthUser = Node & {
-  __typename?: 'NextAuthUser';
-  bankAccounts: Array<BankAccount>;
-  bio?: Maybe<Scalars['String']>;
-  /** The time the document was created */
-  createdAt: Scalars['DateTime'];
-  /** User that created this document */
-  createdBy?: Maybe<User>;
-  /** Get the document in other stages */
-  documentInStages: Array<NextAuthUser>;
-  email: Scalars['String'];
-  /** List of NextAuthUser versions */
-  history: Array<Version>;
-  /** The unique identifier */
-  id: Scalars['ID'];
-  /** The time the document was published. Null on documents in draft stage. */
-  publishedAt?: Maybe<Scalars['DateTime']>;
-  /** User that last published this document */
-  publishedBy?: Maybe<User>;
-  scheduledIn: Array<ScheduledOperation>;
-  /** System stage field */
-  stage: Stage;
-  todos: Array<Todo>;
-  /** The time the document was updated */
-  updatedAt: Scalars['DateTime'];
-  /** User that last updated this document */
-  updatedBy?: Maybe<User>;
-};
-
-
-export type NextAuthUserBankAccountsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
-  last?: InputMaybe<Scalars['Int']>;
-  locales?: InputMaybe<Array<Locale>>;
-  orderBy?: InputMaybe<BankAccountOrderByInput>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<BankAccountWhereInput>;
-};
-
-
-export type NextAuthUserCreatedByArgs = {
-  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
-  locales?: InputMaybe<Array<Locale>>;
-};
-
-
-export type NextAuthUserDocumentInStagesArgs = {
-  includeCurrent?: Scalars['Boolean'];
-  inheritLocale?: Scalars['Boolean'];
-  stages?: Array<Stage>;
-};
-
-
-export type NextAuthUserHistoryArgs = {
-  limit?: Scalars['Int'];
-  skip?: Scalars['Int'];
-  stageOverride?: InputMaybe<Stage>;
-};
-
-
-export type NextAuthUserPublishedByArgs = {
-  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
-  locales?: InputMaybe<Array<Locale>>;
-};
-
-
-export type NextAuthUserScheduledInArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
-  last?: InputMaybe<Scalars['Int']>;
-  locales?: InputMaybe<Array<Locale>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ScheduledOperationWhereInput>;
-};
-
-
-export type NextAuthUserTodosArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
-  last?: InputMaybe<Scalars['Int']>;
-  locales?: InputMaybe<Array<Locale>>;
-  orderBy?: InputMaybe<TodoOrderByInput>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<TodoWhereInput>;
-};
-
-
-export type NextAuthUserUpdatedByArgs = {
-  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
-  locales?: InputMaybe<Array<Locale>>;
-};
-
-export type NextAuthUserConnectInput = {
-  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
-  position?: InputMaybe<ConnectPositionInput>;
-  /** Document to connect */
-  where: NextAuthUserWhereUniqueInput;
-};
-
-/** A connection to a list of items. */
-export type NextAuthUserConnection = {
-  __typename?: 'NextAuthUserConnection';
-  aggregate: Aggregate;
-  /** A list of edges. */
-  edges: Array<NextAuthUserEdge>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-export type NextAuthUserCreateInput = {
-  bankAccounts?: InputMaybe<BankAccountCreateManyInlineInput>;
-  bio?: InputMaybe<Scalars['String']>;
-  createdAt?: InputMaybe<Scalars['DateTime']>;
-  email: Scalars['String'];
-  todos?: InputMaybe<TodoCreateManyInlineInput>;
-  updatedAt?: InputMaybe<Scalars['DateTime']>;
-};
-
-export type NextAuthUserCreateManyInlineInput = {
-  /** Connect multiple existing NextAuthUser documents */
-  connect?: InputMaybe<Array<NextAuthUserWhereUniqueInput>>;
-  /** Create and connect multiple existing NextAuthUser documents */
-  create?: InputMaybe<Array<NextAuthUserCreateInput>>;
-};
-
-export type NextAuthUserCreateOneInlineInput = {
-  /** Connect one existing NextAuthUser document */
-  connect?: InputMaybe<NextAuthUserWhereUniqueInput>;
-  /** Create and connect one NextAuthUser document */
-  create?: InputMaybe<NextAuthUserCreateInput>;
-};
-
-/** An edge in a connection. */
-export type NextAuthUserEdge = {
-  __typename?: 'NextAuthUserEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: NextAuthUser;
-};
-
-/** Identifies documents */
-export type NextAuthUserManyWhereInput = {
-  /** Logical AND on all given filters. */
-  AND?: InputMaybe<Array<NextAuthUserWhereInput>>;
-  /** Logical NOT on all given filters combined by AND. */
-  NOT?: InputMaybe<Array<NextAuthUserWhereInput>>;
-  /** Logical OR on all given filters. */
-  OR?: InputMaybe<Array<NextAuthUserWhereInput>>;
-  /** Contains search across all appropriate fields. */
-  _search?: InputMaybe<Scalars['String']>;
-  bankAccounts_every?: InputMaybe<BankAccountWhereInput>;
-  bankAccounts_none?: InputMaybe<BankAccountWhereInput>;
-  bankAccounts_some?: InputMaybe<BankAccountWhereInput>;
-  bio?: InputMaybe<Scalars['String']>;
-  /** All values containing the given string. */
-  bio_contains?: InputMaybe<Scalars['String']>;
-  /** All values ending with the given string. */
-  bio_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are contained in given list. */
-  bio_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values that are not equal to given value. */
-  bio_not?: InputMaybe<Scalars['String']>;
-  /** All values not containing the given string. */
-  bio_not_contains?: InputMaybe<Scalars['String']>;
-  /** All values not ending with the given string */
-  bio_not_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are not contained in given list. */
-  bio_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values not starting with the given string. */
-  bio_not_starts_with?: InputMaybe<Scalars['String']>;
-  /** All values starting with the given string. */
-  bio_starts_with?: InputMaybe<Scalars['String']>;
-  createdAt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than the given value. */
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than or equal the given value. */
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are contained in given list. */
-  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  /** All values less than the given value. */
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>;
-  /** All values less than or equal the given value. */
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
-  createdAt_not?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not contained in given list. */
-  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  createdBy?: InputMaybe<UserWhereInput>;
-  documentInStages_every?: InputMaybe<NextAuthUserWhereStageInput>;
-  documentInStages_none?: InputMaybe<NextAuthUserWhereStageInput>;
-  documentInStages_some?: InputMaybe<NextAuthUserWhereStageInput>;
-  email?: InputMaybe<Scalars['String']>;
-  /** All values containing the given string. */
-  email_contains?: InputMaybe<Scalars['String']>;
-  /** All values ending with the given string. */
-  email_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are contained in given list. */
-  email_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values that are not equal to given value. */
-  email_not?: InputMaybe<Scalars['String']>;
-  /** All values not containing the given string. */
-  email_not_contains?: InputMaybe<Scalars['String']>;
-  /** All values not ending with the given string */
-  email_not_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are not contained in given list. */
-  email_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values not starting with the given string. */
-  email_not_starts_with?: InputMaybe<Scalars['String']>;
-  /** All values starting with the given string. */
-  email_starts_with?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['ID']>;
-  /** All values containing the given string. */
-  id_contains?: InputMaybe<Scalars['ID']>;
-  /** All values ending with the given string. */
-  id_ends_with?: InputMaybe<Scalars['ID']>;
-  /** All values that are contained in given list. */
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** All values that are not equal to given value. */
-  id_not?: InputMaybe<Scalars['ID']>;
-  /** All values not containing the given string. */
-  id_not_contains?: InputMaybe<Scalars['ID']>;
-  /** All values not ending with the given string */
-  id_not_ends_with?: InputMaybe<Scalars['ID']>;
-  /** All values that are not contained in given list. */
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** All values not starting with the given string. */
-  id_not_starts_with?: InputMaybe<Scalars['ID']>;
-  /** All values starting with the given string. */
-  id_starts_with?: InputMaybe<Scalars['ID']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than the given value. */
-  publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than or equal the given value. */
-  publishedAt_gte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are contained in given list. */
-  publishedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  /** All values less than the given value. */
-  publishedAt_lt?: InputMaybe<Scalars['DateTime']>;
-  /** All values less than or equal the given value. */
-  publishedAt_lte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
-  publishedAt_not?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not contained in given list. */
-  publishedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  publishedBy?: InputMaybe<UserWhereInput>;
-  scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
-  scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
-  scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
-  todos_every?: InputMaybe<TodoWhereInput>;
-  todos_none?: InputMaybe<TodoWhereInput>;
-  todos_some?: InputMaybe<TodoWhereInput>;
-  updatedAt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than the given value. */
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than or equal the given value. */
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are contained in given list. */
-  updatedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  /** All values less than the given value. */
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>;
-  /** All values less than or equal the given value. */
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
-  updatedAt_not?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not contained in given list. */
-  updatedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  updatedBy?: InputMaybe<UserWhereInput>;
-};
-
-export enum NextAuthUserOrderByInput {
-  BioAsc = 'bio_ASC',
-  BioDesc = 'bio_DESC',
-  CreatedAtAsc = 'createdAt_ASC',
-  CreatedAtDesc = 'createdAt_DESC',
-  EmailAsc = 'email_ASC',
-  EmailDesc = 'email_DESC',
-  IdAsc = 'id_ASC',
-  IdDesc = 'id_DESC',
-  PublishedAtAsc = 'publishedAt_ASC',
-  PublishedAtDesc = 'publishedAt_DESC',
-  UpdatedAtAsc = 'updatedAt_ASC',
-  UpdatedAtDesc = 'updatedAt_DESC'
-}
-
-export type NextAuthUserUpdateInput = {
-  bankAccounts?: InputMaybe<BankAccountUpdateManyInlineInput>;
-  bio?: InputMaybe<Scalars['String']>;
-  email?: InputMaybe<Scalars['String']>;
-  todos?: InputMaybe<TodoUpdateManyInlineInput>;
-};
-
-export type NextAuthUserUpdateManyInlineInput = {
-  /** Connect multiple existing NextAuthUser documents */
-  connect?: InputMaybe<Array<NextAuthUserConnectInput>>;
-  /** Create and connect multiple NextAuthUser documents */
-  create?: InputMaybe<Array<NextAuthUserCreateInput>>;
-  /** Delete multiple NextAuthUser documents */
-  delete?: InputMaybe<Array<NextAuthUserWhereUniqueInput>>;
-  /** Disconnect multiple NextAuthUser documents */
-  disconnect?: InputMaybe<Array<NextAuthUserWhereUniqueInput>>;
-  /** Override currently-connected documents with multiple existing NextAuthUser documents */
-  set?: InputMaybe<Array<NextAuthUserWhereUniqueInput>>;
-  /** Update multiple NextAuthUser documents */
-  update?: InputMaybe<Array<NextAuthUserUpdateWithNestedWhereUniqueInput>>;
-  /** Upsert multiple NextAuthUser documents */
-  upsert?: InputMaybe<Array<NextAuthUserUpsertWithNestedWhereUniqueInput>>;
-};
-
-export type NextAuthUserUpdateManyInput = {
-  bio?: InputMaybe<Scalars['String']>;
-};
-
-export type NextAuthUserUpdateManyWithNestedWhereInput = {
-  /** Update many input */
-  data: NextAuthUserUpdateManyInput;
-  /** Document search */
-  where: NextAuthUserWhereInput;
-};
-
-export type NextAuthUserUpdateOneInlineInput = {
-  /** Connect existing NextAuthUser document */
-  connect?: InputMaybe<NextAuthUserWhereUniqueInput>;
-  /** Create and connect one NextAuthUser document */
-  create?: InputMaybe<NextAuthUserCreateInput>;
-  /** Delete currently connected NextAuthUser document */
-  delete?: InputMaybe<Scalars['Boolean']>;
-  /** Disconnect currently connected NextAuthUser document */
-  disconnect?: InputMaybe<Scalars['Boolean']>;
-  /** Update single NextAuthUser document */
-  update?: InputMaybe<NextAuthUserUpdateWithNestedWhereUniqueInput>;
-  /** Upsert single NextAuthUser document */
-  upsert?: InputMaybe<NextAuthUserUpsertWithNestedWhereUniqueInput>;
-};
-
-export type NextAuthUserUpdateWithNestedWhereUniqueInput = {
-  /** Document to update */
-  data: NextAuthUserUpdateInput;
-  /** Unique document search */
-  where: NextAuthUserWhereUniqueInput;
-};
-
-export type NextAuthUserUpsertInput = {
-  /** Create document if it didn't exist */
-  create: NextAuthUserCreateInput;
-  /** Update document if it exists */
-  update: NextAuthUserUpdateInput;
-};
-
-export type NextAuthUserUpsertWithNestedWhereUniqueInput = {
-  /** Upsert data */
-  data: NextAuthUserUpsertInput;
-  /** Unique document search */
-  where: NextAuthUserWhereUniqueInput;
-};
-
-/** This contains a set of filters that can be used to compare values internally */
-export type NextAuthUserWhereComparatorInput = {
-  /** This field can be used to request to check if the entry is outdated by internal comparison */
-  outdated_to?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** Identifies documents */
-export type NextAuthUserWhereInput = {
-  /** Logical AND on all given filters. */
-  AND?: InputMaybe<Array<NextAuthUserWhereInput>>;
-  /** Logical NOT on all given filters combined by AND. */
-  NOT?: InputMaybe<Array<NextAuthUserWhereInput>>;
-  /** Logical OR on all given filters. */
-  OR?: InputMaybe<Array<NextAuthUserWhereInput>>;
-  /** Contains search across all appropriate fields. */
-  _search?: InputMaybe<Scalars['String']>;
-  bankAccounts_every?: InputMaybe<BankAccountWhereInput>;
-  bankAccounts_none?: InputMaybe<BankAccountWhereInput>;
-  bankAccounts_some?: InputMaybe<BankAccountWhereInput>;
-  bio?: InputMaybe<Scalars['String']>;
-  /** All values containing the given string. */
-  bio_contains?: InputMaybe<Scalars['String']>;
-  /** All values ending with the given string. */
-  bio_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are contained in given list. */
-  bio_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values that are not equal to given value. */
-  bio_not?: InputMaybe<Scalars['String']>;
-  /** All values not containing the given string. */
-  bio_not_contains?: InputMaybe<Scalars['String']>;
-  /** All values not ending with the given string */
-  bio_not_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are not contained in given list. */
-  bio_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values not starting with the given string. */
-  bio_not_starts_with?: InputMaybe<Scalars['String']>;
-  /** All values starting with the given string. */
-  bio_starts_with?: InputMaybe<Scalars['String']>;
-  createdAt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than the given value. */
-  createdAt_gt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than or equal the given value. */
-  createdAt_gte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are contained in given list. */
-  createdAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  /** All values less than the given value. */
-  createdAt_lt?: InputMaybe<Scalars['DateTime']>;
-  /** All values less than or equal the given value. */
-  createdAt_lte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
-  createdAt_not?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not contained in given list. */
-  createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  createdBy?: InputMaybe<UserWhereInput>;
-  documentInStages_every?: InputMaybe<NextAuthUserWhereStageInput>;
-  documentInStages_none?: InputMaybe<NextAuthUserWhereStageInput>;
-  documentInStages_some?: InputMaybe<NextAuthUserWhereStageInput>;
-  email?: InputMaybe<Scalars['String']>;
-  /** All values containing the given string. */
-  email_contains?: InputMaybe<Scalars['String']>;
-  /** All values ending with the given string. */
-  email_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are contained in given list. */
-  email_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values that are not equal to given value. */
-  email_not?: InputMaybe<Scalars['String']>;
-  /** All values not containing the given string. */
-  email_not_contains?: InputMaybe<Scalars['String']>;
-  /** All values not ending with the given string */
-  email_not_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are not contained in given list. */
-  email_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values not starting with the given string. */
-  email_not_starts_with?: InputMaybe<Scalars['String']>;
-  /** All values starting with the given string. */
-  email_starts_with?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['ID']>;
-  /** All values containing the given string. */
-  id_contains?: InputMaybe<Scalars['ID']>;
-  /** All values ending with the given string. */
-  id_ends_with?: InputMaybe<Scalars['ID']>;
-  /** All values that are contained in given list. */
-  id_in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** All values that are not equal to given value. */
-  id_not?: InputMaybe<Scalars['ID']>;
-  /** All values not containing the given string. */
-  id_not_contains?: InputMaybe<Scalars['ID']>;
-  /** All values not ending with the given string */
-  id_not_ends_with?: InputMaybe<Scalars['ID']>;
-  /** All values that are not contained in given list. */
-  id_not_in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** All values not starting with the given string. */
-  id_not_starts_with?: InputMaybe<Scalars['ID']>;
-  /** All values starting with the given string. */
-  id_starts_with?: InputMaybe<Scalars['ID']>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than the given value. */
-  publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than or equal the given value. */
-  publishedAt_gte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are contained in given list. */
-  publishedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  /** All values less than the given value. */
-  publishedAt_lt?: InputMaybe<Scalars['DateTime']>;
-  /** All values less than or equal the given value. */
-  publishedAt_lte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
-  publishedAt_not?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not contained in given list. */
-  publishedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  publishedBy?: InputMaybe<UserWhereInput>;
-  scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
-  scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
-  scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
-  todos_every?: InputMaybe<TodoWhereInput>;
-  todos_none?: InputMaybe<TodoWhereInput>;
-  todos_some?: InputMaybe<TodoWhereInput>;
-  updatedAt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than the given value. */
-  updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
-  /** All values greater than or equal the given value. */
-  updatedAt_gte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are contained in given list. */
-  updatedAt_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  /** All values less than the given value. */
-  updatedAt_lt?: InputMaybe<Scalars['DateTime']>;
-  /** All values less than or equal the given value. */
-  updatedAt_lte?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
-  updatedAt_not?: InputMaybe<Scalars['DateTime']>;
-  /** All values that are not contained in given list. */
-  updatedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  updatedBy?: InputMaybe<UserWhereInput>;
-};
-
-/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
-export type NextAuthUserWhereStageInput = {
-  /** Logical AND on all given filters. */
-  AND?: InputMaybe<Array<NextAuthUserWhereStageInput>>;
-  /** Logical NOT on all given filters combined by AND. */
-  NOT?: InputMaybe<Array<NextAuthUserWhereStageInput>>;
-  /** Logical OR on all given filters. */
-  OR?: InputMaybe<Array<NextAuthUserWhereStageInput>>;
-  /** This field contains fields which can be set as true or false to specify an internal comparison */
-  compareWithParent?: InputMaybe<NextAuthUserWhereComparatorInput>;
-  /** Specify the stage to compare with */
-  stage?: InputMaybe<Stage>;
-};
-
-/** References NextAuthUser record uniquely */
-export type NextAuthUserWhereUniqueInput = {
-  email?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['ID']>;
 };
 
 /** An object with an ID */
@@ -3104,6 +3272,14 @@ export type PublishLocaleInput = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Retrieve a single appUser */
+  appUser?: Maybe<AppUser>;
+  /** Retrieve document version */
+  appUserVersion?: Maybe<DocumentVersion>;
+  /** Retrieve multiple appUsers */
+  appUsers: Array<AppUser>;
+  /** Retrieve multiple appUsers using the Relay connection interface */
+  appUsersConnection: AppUserConnection;
   /** Retrieve a single asset */
   asset?: Maybe<Asset>;
   /** Retrieve document version */
@@ -3120,14 +3296,6 @@ export type Query = {
   bankAccounts: Array<BankAccount>;
   /** Retrieve multiple bankAccounts using the Relay connection interface */
   bankAccountsConnection: BankAccountConnection;
-  /** Retrieve a single nextAuthUser */
-  nextAuthUser?: Maybe<NextAuthUser>;
-  /** Retrieve document version */
-  nextAuthUserVersion?: Maybe<DocumentVersion>;
-  /** Retrieve multiple nextAuthUsers */
-  nextAuthUsers: Array<NextAuthUser>;
-  /** Retrieve multiple nextAuthUsers using the Relay connection interface */
-  nextAuthUsersConnection: NextAuthUserConnection;
   /** Fetches an object given its ID */
   node?: Maybe<Node>;
   /** Retrieve a single scheduledOperation */
@@ -3172,6 +3340,44 @@ export type Query = {
   users: Array<User>;
   /** Retrieve multiple users using the Relay connection interface */
   usersConnection: UserConnection;
+};
+
+
+export type QueryAppUserArgs = {
+  locales?: Array<Locale>;
+  stage?: Stage;
+  where: AppUserWhereUniqueInput;
+};
+
+
+export type QueryAppUserVersionArgs = {
+  where: VersionWhereInput;
+};
+
+
+export type QueryAppUsersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: Array<Locale>;
+  orderBy?: InputMaybe<AppUserOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  stage?: Stage;
+  where?: InputMaybe<AppUserWhereInput>;
+};
+
+
+export type QueryAppUsersConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: Array<Locale>;
+  orderBy?: InputMaybe<AppUserOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  stage?: Stage;
+  where?: InputMaybe<AppUserWhereInput>;
 };
 
 
@@ -3248,44 +3454,6 @@ export type QueryBankAccountsConnectionArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   stage?: Stage;
   where?: InputMaybe<BankAccountWhereInput>;
-};
-
-
-export type QueryNextAuthUserArgs = {
-  locales?: Array<Locale>;
-  stage?: Stage;
-  where: NextAuthUserWhereUniqueInput;
-};
-
-
-export type QueryNextAuthUserVersionArgs = {
-  where: VersionWhereInput;
-};
-
-
-export type QueryNextAuthUsersArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  locales?: Array<Locale>;
-  orderBy?: InputMaybe<NextAuthUserOrderByInput>;
-  skip?: InputMaybe<Scalars['Int']>;
-  stage?: Stage;
-  where?: InputMaybe<NextAuthUserWhereInput>;
-};
-
-
-export type QueryNextAuthUsersConnectionArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  locales?: Array<Locale>;
-  orderBy?: InputMaybe<NextAuthUserOrderByInput>;
-  skip?: InputMaybe<Scalars['Int']>;
-  stage?: Stage;
-  where?: InputMaybe<NextAuthUserWhereInput>;
 };
 
 
@@ -3620,7 +3788,7 @@ export type ScheduledOperationUpdatedByArgs = {
   locales?: InputMaybe<Array<Locale>>;
 };
 
-export type ScheduledOperationAffectedDocument = Asset | BankAccount | NextAuthUser | Todo | Transaction | TransactionFile;
+export type ScheduledOperationAffectedDocument = AppUser | Asset | BankAccount | Todo | Transaction | TransactionFile;
 
 export type ScheduledOperationConnectInput = {
   /** Allow to specify document position in list of connected documents, will default to appending at end of list */
@@ -3757,6 +3925,8 @@ export type ScheduledOperationManyWhereInput = {
   /** All values that are not contained in given list. */
   publishedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   publishedBy?: InputMaybe<UserWhereInput>;
+  /** All values containing the given json path. */
+  rawPayload_json_path_exists?: InputMaybe<Scalars['String']>;
   release?: InputMaybe<ScheduledReleaseWhereInput>;
   status?: InputMaybe<ScheduledOperationStatus>;
   /** All values that are contained in given list. */
@@ -3924,6 +4094,8 @@ export type ScheduledOperationWhereInput = {
   /** All values that are not contained in given list. */
   publishedAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   publishedBy?: InputMaybe<UserWhereInput>;
+  /** All values containing the given json path. */
+  rawPayload_json_path_exists?: InputMaybe<Scalars['String']>;
   release?: InputMaybe<ScheduledReleaseWhereInput>;
   status?: InputMaybe<ScheduledOperationStatus>;
   /** All values that are contained in given list. */
@@ -4563,7 +4735,7 @@ export type Todo = Node & {
   history: Array<Version>;
   /** The unique identifier */
   id: Scalars['ID'];
-  nextAuthUser?: Maybe<NextAuthUser>;
+  nextAuthUser?: Maybe<AppUser>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
@@ -4648,7 +4820,7 @@ export type TodoCreateInput = {
   completed?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description: Scalars['String'];
-  nextAuthUser?: InputMaybe<NextAuthUserCreateOneInlineInput>;
+  nextAuthUser?: InputMaybe<AppUserCreateOneInlineInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -4745,7 +4917,7 @@ export type TodoManyWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
-  nextAuthUser?: InputMaybe<NextAuthUserWhereInput>;
+  nextAuthUser?: InputMaybe<AppUserWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -4801,7 +4973,7 @@ export enum TodoOrderByInput {
 export type TodoUpdateInput = {
   completed?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['String']>;
-  nextAuthUser?: InputMaybe<NextAuthUserUpdateOneInlineInput>;
+  nextAuthUser?: InputMaybe<AppUserUpdateOneInlineInput>;
 };
 
 export type TodoUpdateManyInlineInput = {
@@ -4945,7 +5117,7 @@ export type TodoWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
-  nextAuthUser?: InputMaybe<NextAuthUserWhereInput>;
+  nextAuthUser?: InputMaybe<AppUserWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -6415,6 +6587,7 @@ export enum _FilterKind {
   Gt = 'gt',
   Gte = 'gte',
   In = 'in',
+  JsonPathExists = 'json_path_exists',
   Lt = 'lt',
   Lte = 'lte',
   NotContains = 'not_contains',
@@ -6480,12 +6653,115 @@ export enum _SystemDateTimeFieldVariation {
   Localization = 'localization'
 }
 
+export type CreateAppUserMutationVariables = Exact<{
+  name: Scalars['String'];
+  email: Scalars['String'];
+  userId: Scalars['String'];
+  imageUrl?: InputMaybe<Scalars['String']>;
+  bio?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreateAppUserMutation = { __typename?: 'Mutation', createAppUser?: { __typename?: 'AppUser', id: string, name: string, email: string, imageUrl?: string | null } | null };
+
+export type GetAllAppUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllAppUsersQuery = { __typename?: 'Query', appUsers: Array<{ __typename?: 'AppUser', imageUrl?: string | null, name: string, id: string, email: string, userId: string, createdAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', balance?: number | null, id: string }> }> };
+
 export type GetAllBankAccountsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllBankAccountsQuery = { __typename?: 'Query', bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, balance?: number | null, transaction: Array<{ __typename?: 'Transaction', id: string, amount?: number | null, fromFile?: string | null, description?: string | null, createdAt: any }> }> };
 
 
+export const CreateAppUserDocument = gql`
+    mutation CreateAppUser($name: String!, $email: String!, $userId: String!, $imageUrl: String, $bio: String) {
+  createAppUser(
+    data: {name: $name, email: $email, userId: $userId, imageUrl: $imageUrl, bio: $bio}
+  ) {
+    id
+    name
+    email
+    imageUrl
+  }
+}
+    `;
+export type CreateAppUserMutationFn = Apollo.MutationFunction<CreateAppUserMutation, CreateAppUserMutationVariables>;
+
+/**
+ * __useCreateAppUserMutation__
+ *
+ * To run a mutation, you first call `useCreateAppUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAppUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAppUserMutation, { data, loading, error }] = useCreateAppUserMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      email: // value for 'email'
+ *      userId: // value for 'userId'
+ *      imageUrl: // value for 'imageUrl'
+ *      bio: // value for 'bio'
+ *   },
+ * });
+ */
+export function useCreateAppUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateAppUserMutation, CreateAppUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAppUserMutation, CreateAppUserMutationVariables>(CreateAppUserDocument, options);
+      }
+export type CreateAppUserMutationHookResult = ReturnType<typeof useCreateAppUserMutation>;
+export type CreateAppUserMutationResult = Apollo.MutationResult<CreateAppUserMutation>;
+export type CreateAppUserMutationOptions = Apollo.BaseMutationOptions<CreateAppUserMutation, CreateAppUserMutationVariables>;
+export const GetAllAppUsersDocument = gql`
+    query GetAllAppUsers {
+  appUsers(orderBy: name_ASC) {
+    bankAccounts {
+      ... on BankAccount {
+        balance
+        id
+      }
+    }
+    imageUrl
+    name
+    id
+    email
+    userId
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetAllAppUsersQuery__
+ *
+ * To run a query within a React component, call `useGetAllAppUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllAppUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllAppUsersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllAppUsersQuery(baseOptions?: Apollo.QueryHookOptions<GetAllAppUsersQuery, GetAllAppUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllAppUsersQuery, GetAllAppUsersQueryVariables>(GetAllAppUsersDocument, options);
+      }
+export function useGetAllAppUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllAppUsersQuery, GetAllAppUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllAppUsersQuery, GetAllAppUsersQueryVariables>(GetAllAppUsersDocument, options);
+        }
+export type GetAllAppUsersQueryHookResult = ReturnType<typeof useGetAllAppUsersQuery>;
+export type GetAllAppUsersLazyQueryHookResult = ReturnType<typeof useGetAllAppUsersLazyQuery>;
+export type GetAllAppUsersQueryResult = Apollo.QueryResult<GetAllAppUsersQuery, GetAllAppUsersQueryVariables>;
 export const GetAllBankAccountsDocument = gql`
     query GetAllBankAccounts {
   bankAccounts {

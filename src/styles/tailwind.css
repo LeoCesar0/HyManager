@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
 	:root {
 		--color-primary: theme('colors.teal.600');
-		--color-on-primary: theme('colors.zinc.400');
+		--color-on-primary: theme('colors.zinc.100');
 		--color-primary-hover: theme('colors.teal.900');
 
 		--color-secondary: theme('colors.orange.600');
