@@ -1,0 +1,19 @@
+query GetAppUserById($id: ID!) {
+  appUser(where: {id: $id}) {
+    id
+    name
+    email
+    bio
+    imageUrl
+    lastSignIn
+    createdAt
+    updatedAt
+    bankAccounts(orderBy: updatedAt_DESC) {
+      id
+      title
+      slug
+      balance
+      description
+    }
+  }
+}

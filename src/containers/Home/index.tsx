@@ -1,27 +1,30 @@
-import { signIn, useSession } from "next-auth/react";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { debugLog } from "../../utils/misc";
 import { v4 as uuidv4 } from "uuid";
 import {
   CreateAppUserMutationVariables,
+  useGetAllAppUsersLazyQuery,
   useGetAllAppUsersQuery,
 } from "../../graphql/generated";
-import { createNewUser } from "../../models/Users";
+import { ShowErrorToast } from "../../utils/app";
 
 const Home = () => {
-  const { data: session } = useSession();
-  const { data, loading, error, refetch } = useGetAllAppUsersQuery({});
   const [values, setValues] = useState<CreateAppUserMutationVariables>({
+    uid: uuidv4(),
     name: "",
     email: "",
   });
+  const { data, loading, error, refetch } = useGetAllAppUsersQuery({});
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // console.log("values -->", values);
-    const results = await createNewUser(values);
-    if (results?.id) refetch();
+  };
+
+  const test = async () => {
+    ShowErrorToast({
+      message: "Test message",
+    });
   };
 
   return (
@@ -59,6 +62,14 @@ const Home = () => {
             <button type={"submit"}>Submit</button>
           </div>
         </form>
+
+        <button
+          onClick={() => {
+            test();
+          }}
+        >
+          Test Button
+        </button>
       </div>
 
       <div>
@@ -70,6 +81,7 @@ const Home = () => {
                 return (
                   <li key={user.id} className="mb-4">
                     <p>Id: {user.id}</p>
+                    <p>UId: {user.uid}</p>
                     <p>Name: {user.name}</p>
                     <p>Email: {user.email}</p>
                   </li>

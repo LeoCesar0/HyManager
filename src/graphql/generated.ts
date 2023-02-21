@@ -54,6 +54,7 @@ export type AppUser = Node & {
   /** System stage field */
   stage: Stage;
   todos: Array<Todo>;
+  uid: Scalars['String'];
   /** The time the document was updated */
   updatedAt: Scalars['DateTime'];
   /** User that last updated this document */
@@ -156,6 +157,7 @@ export type AppUserCreateInput = {
   lastSignIn?: InputMaybe<Scalars['DateTime']>;
   name: Scalars['String'];
   todos?: InputMaybe<TodoCreateManyInlineInput>;
+  uid: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -346,6 +348,25 @@ export type AppUserManyWhereInput = {
   todos_every?: InputMaybe<TodoWhereInput>;
   todos_none?: InputMaybe<TodoWhereInput>;
   todos_some?: InputMaybe<TodoWhereInput>;
+  uid?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  uid_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  uid_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  uid_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  uid_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  uid_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  uid_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  uid_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  uid_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  uid_starts_with?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -381,6 +402,8 @@ export enum AppUserOrderByInput {
   NameDesc = 'name_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
+  UidAsc = 'uid_ASC',
+  UidDesc = 'uid_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC'
 }
@@ -393,6 +416,7 @@ export type AppUserUpdateInput = {
   lastSignIn?: InputMaybe<Scalars['DateTime']>;
   name?: InputMaybe<Scalars['String']>;
   todos?: InputMaybe<TodoUpdateManyInlineInput>;
+  uid?: InputMaybe<Scalars['String']>;
 };
 
 export type AppUserUpdateManyInlineInput = {
@@ -632,6 +656,25 @@ export type AppUserWhereInput = {
   todos_every?: InputMaybe<TodoWhereInput>;
   todos_none?: InputMaybe<TodoWhereInput>;
   todos_some?: InputMaybe<TodoWhereInput>;
+  uid?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  uid_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  uid_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  uid_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  uid_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  uid_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  uid_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  uid_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  uid_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  uid_starts_with?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -668,6 +711,7 @@ export type AppUserWhereStageInput = {
 export type AppUserWhereUniqueInput = {
   email?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
+  uid?: InputMaybe<Scalars['String']>;
 };
 
 /** Asset system model */
@@ -6621,6 +6665,7 @@ export enum _SystemDateTimeFieldVariation {
 }
 
 export type CreateAppUserMutationVariables = Exact<{
+  uid: Scalars['String'];
   name: Scalars['String'];
   email: Scalars['String'];
   imageUrl?: InputMaybe<Scalars['String']>;
@@ -6628,25 +6673,25 @@ export type CreateAppUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateAppUserMutation = { __typename?: 'Mutation', createAppUser?: { __typename?: 'AppUser', id: string, name: string, email: string, imageUrl?: string | null } | null };
+export type CreateAppUserMutation = { __typename?: 'Mutation', createAppUser?: { __typename?: 'AppUser', uid: string, id: string, name: string, email: string, bio?: string | null, imageUrl?: string | null, lastSignIn?: any | null, createdAt: any, updatedAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, slug: string, balance?: number | null, description?: string | null }> } | null };
 
 export type CreateBankAccountMutationVariables = Exact<{
   title: Scalars['String'];
   slug: Scalars['String'];
   balance?: InputMaybe<Scalars['Int']>;
   description?: InputMaybe<Scalars['String']>;
-  userId: Scalars['ID'];
+  userUid: Scalars['String'];
 }>;
 
 
-export type CreateBankAccountMutation = { __typename?: 'Mutation', createBankAccount?: { __typename?: 'BankAccount', id: string } | null };
+export type CreateBankAccountMutation = { __typename?: 'Mutation', createBankAccount?: { __typename?: 'BankAccount', id: string, title: string, description?: string | null } | null };
 
 export type PublishAppUserMutationVariables = Exact<{
-  id: Scalars['ID'];
+  uid: Scalars['String'];
 }>;
 
 
-export type PublishAppUserMutation = { __typename?: 'Mutation', publishAppUser?: { __typename?: 'AppUser', id: string } | null };
+export type PublishAppUserMutation = { __typename?: 'Mutation', publishAppUser?: { __typename?: 'AppUser', uid: string } | null };
 
 export type PublishBankAccountMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -6658,23 +6703,49 @@ export type PublishBankAccountMutation = { __typename?: 'Mutation', publishBankA
 export type GetAllAppUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllAppUsersQuery = { __typename?: 'Query', appUsers: Array<{ __typename?: 'AppUser', imageUrl?: string | null, name: string, id: string, email: string, createdAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', balance?: number | null, id: string }> }> };
+export type GetAllAppUsersQuery = { __typename?: 'Query', appUsers: Array<{ __typename?: 'AppUser', imageUrl?: string | null, name: string, id: string, uid: string, email: string, createdAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', balance?: number | null, id: string }> }> };
 
 export type GetAllBankAccountsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllBankAccountsQuery = { __typename?: 'Query', bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, balance?: number | null, transaction: Array<{ __typename?: 'Transaction', id: string, amount: number, fromFile?: string | null, description?: string | null, createdAt: any }> }> };
 
+export type GetAppUserByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetAppUserByIdQuery = { __typename?: 'Query', appUser?: { __typename?: 'AppUser', id: string, name: string, email: string, bio?: string | null, imageUrl?: string | null, lastSignIn?: any | null, createdAt: any, updatedAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, slug: string, balance?: number | null, description?: string | null }> } | null };
+
+export type GetAppUserByUIdQueryVariables = Exact<{
+  uid: Scalars['String'];
+}>;
+
+
+export type GetAppUserByUIdQuery = { __typename?: 'Query', appUser?: { __typename?: 'AppUser', uid: string, id: string, name: string, email: string, bio?: string | null, imageUrl?: string | null, lastSignIn?: any | null, createdAt: any, updatedAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, slug: string, balance?: number | null, description?: string | null }> } | null };
+
 
 export const CreateAppUserDocument = gql`
-    mutation CreateAppUser($name: String!, $email: String!, $imageUrl: String, $bio: String) {
+    mutation CreateAppUser($uid: String!, $name: String!, $email: String!, $imageUrl: String, $bio: String) {
   createAppUser(
-    data: {name: $name, email: $email, imageUrl: $imageUrl, bio: $bio}
+    data: {uid: $uid, name: $name, email: $email, imageUrl: $imageUrl, bio: $bio}
   ) {
+    uid
     id
     name
     email
+    bio
     imageUrl
+    lastSignIn
+    createdAt
+    updatedAt
+    bankAccounts(orderBy: updatedAt_DESC) {
+      id
+      title
+      slug
+      balance
+      description
+    }
   }
 }
     `;
@@ -6693,6 +6764,7 @@ export type CreateAppUserMutationFn = Apollo.MutationFunction<CreateAppUserMutat
  * @example
  * const [createAppUserMutation, { data, loading, error }] = useCreateAppUserMutation({
  *   variables: {
+ *      uid: // value for 'uid'
  *      name: // value for 'name'
  *      email: // value for 'email'
  *      imageUrl: // value for 'imageUrl'
@@ -6708,11 +6780,13 @@ export type CreateAppUserMutationHookResult = ReturnType<typeof useCreateAppUser
 export type CreateAppUserMutationResult = Apollo.MutationResult<CreateAppUserMutation>;
 export type CreateAppUserMutationOptions = Apollo.BaseMutationOptions<CreateAppUserMutation, CreateAppUserMutationVariables>;
 export const CreateBankAccountDocument = gql`
-    mutation CreateBankAccount($title: String!, $slug: String!, $balance: Int = 0, $description: String, $userId: ID!) {
+    mutation CreateBankAccount($title: String!, $slug: String!, $balance: Int = 0, $description: String, $userUid: String!) {
   createBankAccount(
-    data: {title: $title, slug: $slug, balance: $balance, description: $description, appUsers: {connect: {id: $userId}}}
+    data: {title: $title, slug: $slug, balance: $balance, description: $description, appUsers: {connect: {uid: $userUid}}}
   ) {
     id
+    title
+    description
   }
 }
     `;
@@ -6735,7 +6809,7 @@ export type CreateBankAccountMutationFn = Apollo.MutationFunction<CreateBankAcco
  *      slug: // value for 'slug'
  *      balance: // value for 'balance'
  *      description: // value for 'description'
- *      userId: // value for 'userId'
+ *      userUid: // value for 'userUid'
  *   },
  * });
  */
@@ -6747,9 +6821,9 @@ export type CreateBankAccountMutationHookResult = ReturnType<typeof useCreateBan
 export type CreateBankAccountMutationResult = Apollo.MutationResult<CreateBankAccountMutation>;
 export type CreateBankAccountMutationOptions = Apollo.BaseMutationOptions<CreateBankAccountMutation, CreateBankAccountMutationVariables>;
 export const PublishAppUserDocument = gql`
-    mutation PublishAppUser($id: ID!) {
-  publishAppUser(where: {id: $id}) {
-    id
+    mutation PublishAppUser($uid: String!) {
+  publishAppUser(where: {uid: $uid}) {
+    uid
   }
 }
     `;
@@ -6768,7 +6842,7 @@ export type PublishAppUserMutationFn = Apollo.MutationFunction<PublishAppUserMut
  * @example
  * const [publishAppUserMutation, { data, loading, error }] = usePublishAppUserMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      uid: // value for 'uid'
  *   },
  * });
  */
@@ -6824,6 +6898,7 @@ export const GetAllAppUsersDocument = gql`
     imageUrl
     name
     id
+    uid
     email
     createdAt
   }
@@ -6901,3 +6976,102 @@ export function useGetAllBankAccountsLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetAllBankAccountsQueryHookResult = ReturnType<typeof useGetAllBankAccountsQuery>;
 export type GetAllBankAccountsLazyQueryHookResult = ReturnType<typeof useGetAllBankAccountsLazyQuery>;
 export type GetAllBankAccountsQueryResult = Apollo.QueryResult<GetAllBankAccountsQuery, GetAllBankAccountsQueryVariables>;
+export const GetAppUserByIdDocument = gql`
+    query GetAppUserById($id: ID!) {
+  appUser(where: {id: $id}) {
+    id
+    name
+    email
+    bio
+    imageUrl
+    lastSignIn
+    createdAt
+    updatedAt
+    bankAccounts(orderBy: updatedAt_DESC) {
+      id
+      title
+      slug
+      balance
+      description
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAppUserByIdQuery__
+ *
+ * To run a query within a React component, call `useGetAppUserByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAppUserByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAppUserByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetAppUserByIdQuery(baseOptions: Apollo.QueryHookOptions<GetAppUserByIdQuery, GetAppUserByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAppUserByIdQuery, GetAppUserByIdQueryVariables>(GetAppUserByIdDocument, options);
+      }
+export function useGetAppUserByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAppUserByIdQuery, GetAppUserByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAppUserByIdQuery, GetAppUserByIdQueryVariables>(GetAppUserByIdDocument, options);
+        }
+export type GetAppUserByIdQueryHookResult = ReturnType<typeof useGetAppUserByIdQuery>;
+export type GetAppUserByIdLazyQueryHookResult = ReturnType<typeof useGetAppUserByIdLazyQuery>;
+export type GetAppUserByIdQueryResult = Apollo.QueryResult<GetAppUserByIdQuery, GetAppUserByIdQueryVariables>;
+export const GetAppUserByUIdDocument = gql`
+    query GetAppUserByUId($uid: String!) {
+  appUser(where: {uid: $uid}) {
+    uid
+    id
+    name
+    email
+    bio
+    imageUrl
+    lastSignIn
+    createdAt
+    updatedAt
+    bankAccounts(orderBy: updatedAt_DESC) {
+      id
+      title
+      slug
+      balance
+      description
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAppUserByUIdQuery__
+ *
+ * To run a query within a React component, call `useGetAppUserByUIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAppUserByUIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAppUserByUIdQuery({
+ *   variables: {
+ *      uid: // value for 'uid'
+ *   },
+ * });
+ */
+export function useGetAppUserByUIdQuery(baseOptions: Apollo.QueryHookOptions<GetAppUserByUIdQuery, GetAppUserByUIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAppUserByUIdQuery, GetAppUserByUIdQueryVariables>(GetAppUserByUIdDocument, options);
+      }
+export function useGetAppUserByUIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAppUserByUIdQuery, GetAppUserByUIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAppUserByUIdQuery, GetAppUserByUIdQueryVariables>(GetAppUserByUIdDocument, options);
+        }
+export type GetAppUserByUIdQueryHookResult = ReturnType<typeof useGetAppUserByUIdQuery>;
+export type GetAppUserByUIdLazyQueryHookResult = ReturnType<typeof useGetAppUserByUIdLazyQuery>;
+export type GetAppUserByUIdQueryResult = Apollo.QueryResult<GetAppUserByUIdQuery, GetAppUserByUIdQueryVariables>;
