@@ -5,7 +5,8 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { signIn, signOut } from "../services/firebase";
+import { getUserByUid } from "../models/AppUser/query";
+import { firebaseAuth, signIn, signOut } from "../services/firebase";
 import { CurrentUser } from "../types/models/AppUser";
 import { ShowErrorToast } from "../utils/app";
 
@@ -32,6 +33,29 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     initialValues as GlobalAuthProps
   );
 
+  const { currentUser } = state;
+
+  firebaseAuth.onAuthStateChanged((user) => {
+    if (user === null) {
+      setState((prev) => ({ ...prev, currentUser: user }));
+      return;
+    }
+    if (user.uid !== currentUser?.uid) {
+      getUserByUid({
+        uid: user.uid,
+      })
+        .then((foundUserResponse) => {
+          setState((prev) => ({
+            ...prev,
+            currentUser: foundUserResponse.data,
+          }));
+        })
+        .catch((err) => {
+          setState((prev) => ({ ...prev, currentUser: null }));
+        });
+    }
+  });
+
   const handleSignOut = async () => {
     setState((prev) => ({
       ...prev,
@@ -44,8 +68,6 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const { data, error } = await signIn();
 
     if (error) ShowErrorToast(error);
-
-    console.log("handleSignIn data -->", data);
 
     setState((prev) => ({
       ...prev,

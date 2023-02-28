@@ -13,9 +13,11 @@ import SiteLayout from "../containers/SiteLayout";
 
 import "../styles/tailwind.css";
 import "../styles/global.scss";
+import "../styles/tailwindComponents.css";
 import "react-toastify/dist/ReactToastify.css";
 import { GlobalAuthProvider } from "../contexts/GlobalAuth";
 import { ToastContainer } from "react-toastify";
+import { GlobalModalProvider } from "../contexts/GlobalModal";
 
 // const trackingId = process.env.GA_TRACKING_ID;
 
@@ -58,7 +60,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         {/* </SessionProvider> */}
         <GlobalAuthProvider>
           <GlobalContextProvider>
-            {getLayout(<Component {...pageProps} />)}
+            <GlobalModalProvider>
+              {getLayout(<Component {...pageProps} />)}
+            </GlobalModalProvider>
           </GlobalContextProvider>
         </GlobalAuthProvider>
       </ApolloProvider>

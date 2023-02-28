@@ -23,15 +23,3 @@ body {
   color: var(--color-on-background);
 }
 
-#app {
-  input {
-    background: var(--color-surface);
-    color: var(--color--on-surface);
-    border-radius: 4px;
-    @apply px-2 py-1 bg-surface text-on-surface rounded-md transition-colors;
-  }
-
-  button {
-    @apply px-2 py-1 rounded-md bg-primary text-on-primary transition-colors;
-  }
-}

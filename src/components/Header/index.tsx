@@ -1,12 +1,25 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useGlobalAuth } from "../../contexts/GlobalAuth";
 import { firebaseAuth } from "../../services/firebase";
+import { cx } from "../../utils/misc";
+import Button from "../Button/Button";
+
+const links = [
+  {
+    label: "Home",
+    link: "/",
+  },
+  {
+    label: "Dashboard",
+    link: "/dashboard",
+  },
+];
 
 const Header = () => {
   // const { data: session } = useSession();
   const { currentUser, handleSignOut, handleSignIn } = useGlobalAuth();
-
-  console.log("header currentUser -->", currentUser);
-  console.log("header firebaseAuth.currentUser -->", firebaseAuth.currentUser);
+  const router = useRouter();
 
   return (
     <header className="">
@@ -15,30 +28,35 @@ const Header = () => {
         <div className="flex-1 flex items-center">
           {currentUser && <h1>Hello {currentUser.name}!</h1>}
         </div>
+        <nav className="flex gap-4 items-center justify-between px-4">
+          {links.map((item) => {
+            const isSelected = router.pathname == item.link;
+            return (
+              <Link key={item.label} href={item.link}>
+                <span className={cx(['transition-colors',["text-primary", isSelected], 'hover:text-primary-hover'])}>
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
         <div className="flex-center">
-          <button
-            onClick={() => {
-              handleSignOut();
-            }}
-          >
-            FORCED Sign out
-          </button>
           {currentUser ? (
-            <button
+            <Button
               onClick={() => {
                 handleSignOut();
               }}
             >
               Sign out
-            </button>
+            </Button>
           ) : (
-            <button
+            <Button
               onClick={() => {
                 handleSignIn();
               }}
             >
               Sign In
-            </button>
+            </Button>
           )}
         </div>
       </div>

@@ -9,6 +9,7 @@ import {
   setPersistence,
   browserSessionPersistence,
   inMemoryPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
 import { debugDev } from "../utils/dev";
@@ -35,16 +36,19 @@ const firebaseConfig = {
 // Initialize Firebase
 export const firebaseApp = initializeApp(firebaseConfig);
 export const firebaseAuth = getAuth(firebaseApp);
-// setPersistence(firebaseAuth, inMemoryPersistence)
-const googleProvider = new GoogleAuthProvider();
+// setPersistence(firebaseAuth, browserLocalPersistence);
 // const analytics = getAnalytics(app);
 
 export const signOut = async () => {
   await firebaseSignOut(firebaseAuth);
 };
 
+
+
 export type SignIn = AppModelResponse<CurrentUser>;
 export const signIn = async (): Promise<SignIn> => {
+  const googleProvider = new GoogleAuthProvider();
+  setPersistence(firebaseAuth, browserLocalPersistence);
   return signInWithPopup(firebaseAuth, googleProvider)
     .then(async (result) => {
       let error = null;
