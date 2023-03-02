@@ -19,6 +19,11 @@ export const getUserByUid = async (
   values: GetAppUserByUIdQueryVariables
 ): Promise<IGetUserByUid> => {
   const funcName = "getUserById";
+
+  console.log("GETTING NEW USER");
+  console.log("values -->", values);
+  console.log("----------------------------");
+
   return apolloClient
     .query<GetAppUserByUIdQuery>({
       query: GetAppUserByUIdDocument,

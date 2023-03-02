@@ -1,8 +1,10 @@
+import { debounce } from "lodash";
 import React, {
   createContext,
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { getUserByUid } from "../models/AppUser/query";
@@ -16,15 +18,60 @@ interface GlobalAuthProps {
   setState: Dispatch<SetStateAction<GlobalAuthProps>>;
   handleSignIn: () => void;
   handleSignOut: () => void;
+  loading: boolean;
 }
 
 const initialValues = {
   currentUser: null,
   menuIsOpen: false,
+  loading: false,
 };
 const GlobalAuth = createContext<GlobalAuthProps>(
   initialValues as GlobalAuthProps
 );
+
+const handleGetUserByUID = (
+  uid: string,
+  setState: Dispatch<SetStateAction<GlobalAuthProps>>
+) => {
+  setState((prev) => ({ ...prev, loading: true }));
+  getUserByUid({
+    uid: uid,
+  })
+    .then((foundUserResponse) => {
+      setState((prev) => ({
+        ...prev,
+        currentUser: foundUserResponse.data,
+      }));
+    })
+    .catch((err) => {
+      setState((prev) => ({ ...prev, currentUser: null }));
+    })
+    .finally(() => {
+      setState((prev) => ({ ...prev, loading: false }));
+    });
+};
+
+// const debouceGetUserById = debounce(
+//   (uid: string, setState: Dispatch<SetStateAction<GlobalAuthProps>>) => {
+//     setState((prev) => ({ ...prev, loading: true }));
+//     getUserByUid({
+//       uid: uid,
+//     })
+//       .then((foundUserResponse) => {
+//         setState((prev) => ({
+//           ...prev,
+//           currentUser: foundUserResponse.data,
+//         }));
+//       })
+//       .catch((err) => {
+//         setState((prev) => ({ ...prev, currentUser: null }));
+//       })
+//       .finally(() => {
+//         setState((prev) => ({ ...prev, loading: false }));
+//       });
+//   }
+// );
 
 export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -33,38 +80,30 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     initialValues as GlobalAuthProps
   );
 
-  const { currentUser } = state;
+  const { currentUser, loading } = state;
 
+  /* --------------------------- onAuthStateChanged --------------------------- */
   firebaseAuth.onAuthStateChanged((user) => {
-    if (user === null) {
-      setState((prev) => ({ ...prev, currentUser: user }));
+    // RETURN WHEN NOTHING WOULD CHANGE
+    if (!user && !currentUser) return;
+    if (user && user.uid === currentUser?.uid) return;
+
+    if (!user) {
+      setState((prev) => ({ ...prev, currentUser: null, loading: false }));
       return;
     }
-    if (user.uid !== currentUser?.uid) {
-      getUserByUid({
-        uid: user.uid,
-      })
-        .then((foundUserResponse) => {
-          setState((prev) => ({
-            ...prev,
-            currentUser: foundUserResponse.data,
-          }));
-        })
-        .catch((err) => {
-          setState((prev) => ({ ...prev, currentUser: null }));
-        });
+    if (!loading && user && user.uid !== currentUser?.uid) {
+      handleGetUserByUID(user.uid, setState);
     }
   });
 
+  /* ------------------------------ handleSignOut ----------------------------- */
   const handleSignOut = async () => {
-    setState((prev) => ({
-      ...prev,
-      currentUser: null,
-    }));
     await signOut();
   };
-
+  /* ------------------------------ handleSignIn ------------------------------ */
   const handleSignIn = async () => {
+    setState((prev) => ({ ...prev, loading: true }));
     const { data, error } = await signIn();
 
     if (error) ShowErrorToast(error);
@@ -72,6 +111,7 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setState((prev) => ({
       ...prev,
       currentUser: data,
+      loading: false,
     }));
   };
 

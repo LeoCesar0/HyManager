@@ -31,11 +31,17 @@ const InputField: React.FC<IInputField> = ({
       )}
       <input
         // className="bg-surface text-on-surface shadow-inner rounded-md px-2 text-base"
+        // className={cx([
+        //   "transition-border-text transition-text block w-full px-3 py-2 bg-surface/30 border border-neutral-300 rounded-md text-sm shadow-sm placeholder-slate-400",
+        //   "focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary",
+        //   "disabled:bg-surface/5 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none",
+        //   "invalid:border-hint invalid:text-hint focus:invalid:border-hint focus:invalid:ring-hint",
+        // ])}
         className={cx([
           "transition-border-text transition-text block w-full px-3 py-2 bg-surface/30 border border-neutral-300 rounded-md text-sm shadow-sm placeholder-slate-400",
           "focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary",
-          "disabled:bg-surface/5 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none",
-          "invalid:border-hint invalid:text-hint focus:invalid:border-hint focus:invalid:ring-hint",
+          "disabled:bg-disabled disabled:text-disabled-text disabled:border-disabled-border disabled:shadow-none",
+          "invalid:border-error invalid:text-error focus:invalid:border-error focus:invalid:ring-error",
         ])}
         {...formik.getFieldProps(name)}
         {...rest}

@@ -18,8 +18,14 @@ const links = [
 
 const Header = () => {
   // const { data: session } = useSession();
-  const { currentUser, handleSignOut, handleSignIn } = useGlobalAuth();
+  const {
+    currentUser,
+    handleSignOut,
+    handleSignIn,
+    loading: loadingUser,
+  } = useGlobalAuth();
   const router = useRouter();
+
 
   return (
     <header className="">
@@ -33,7 +39,13 @@ const Header = () => {
             const isSelected = router.pathname == item.link;
             return (
               <Link key={item.label} href={item.link}>
-                <span className={cx(['transition-colors',["text-primary", isSelected], 'hover:text-primary-hover'])}>
+                <span
+                  className={cx([
+                    "transition-colors",
+                    ["text-primary", isSelected],
+                    "hover:text-primary-hover",
+                  ])}
+                >
                   {item.label}
                 </span>
               </Link>
@@ -41,23 +53,17 @@ const Header = () => {
           })}
         </nav>
         <div className="flex-center">
-          {currentUser ? (
-            <Button
-              onClick={() => {
+          <Button
+            onClick={() => {
+              if (currentUser) {
                 handleSignOut();
-              }}
-            >
-              Sign out
-            </Button>
-          ) : (
-            <Button
-              onClick={() => {
+              } else {
                 handleSignIn();
-              }}
-            >
-              Sign In
-            </Button>
-          )}
+              }
+            }}
+          >
+            {currentUser ? "Sign Out" : "Sign In"}
+          </Button>
         </div>
       </div>
     </header>

@@ -30,6 +30,7 @@ const Button: React.FC<IButton> = ({
             "text-on-secondary bg-secondary hover:bg-secondary-hover",
             theme === "secondary",
           ],
+          'disabled:bg-disabled disabled:border-disabled-border disabled:text-disabled-text disabled:cursor-not-allowed',
           classes,
         ])}
         {...rest}

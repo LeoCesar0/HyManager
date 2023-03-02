@@ -10,8 +10,6 @@ interface IModal {
 }
 
 function Modal({ isOpen, setIsOpen, children, title, description }: IModal) {
-  console.log("isOpen -->", isOpen);
-  console.log("title -->", title);
 
   // return (
   //   <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
