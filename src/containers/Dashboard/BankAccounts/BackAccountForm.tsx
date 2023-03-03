@@ -27,7 +27,7 @@ const BankAccountForm = () => {
             label="Description"
           />
         </FormControl>
-        <div className="mt-auto flex gap-2 items-center justify-end ">
+        <div className="mt-auto flex gap-2 items-center justify-end">
           <Button type="submit">Submit</Button>
           <Button theme="secondary" type="button">Cancel</Button>
         </div>
