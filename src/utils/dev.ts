@@ -14,6 +14,6 @@ export function debugDev({ type, name, value }: IDebugDev): string {
     value = value.join("; ");
   }
   console.log(`${typeLabel} ${name} -->`, value);
-  const debugString = `${typeLabel} ${name} -->, ${value}`;
+  const debugString = `Error: ${value}`;
   return debugString;
 }

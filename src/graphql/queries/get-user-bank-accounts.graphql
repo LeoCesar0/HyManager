@@ -1,8 +1,11 @@
-query GetAllBankAccounts {
-  bankAccounts {
+query GetUserBankAccounts($uid: String!) {
+  bankAccounts(where: {appUsers_some: {uid: $uid}}) {
     id
     title
     balance
+    description
+    createdAt
+    updatedAt
     transaction {
       ... on Transaction {
         id

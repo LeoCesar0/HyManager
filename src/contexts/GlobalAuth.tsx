@@ -1,4 +1,5 @@
 import { debounce } from "lodash";
+import { useRouter } from "next/router";
 import React, {
   createContext,
   Dispatch,
@@ -8,8 +9,10 @@ import React, {
   useState,
 } from "react";
 import { getUserByUid } from "../models/AppUser/query";
+import { getUserBankAccounts } from "../models/BankAccount/query";
 import { firebaseAuth, signIn, signOut } from "../services/firebase";
 import { CurrentUser } from "../types/models/AppUser";
+import { BankAccount } from "../types/models/BankAccount";
 import { ShowErrorToast } from "../utils/app";
 
 interface GlobalAuthProps {
@@ -19,12 +22,14 @@ interface GlobalAuthProps {
   handleSignIn: () => void;
   handleSignOut: () => void;
   loading: boolean;
+  userBankAccounts: BankAccount[] | [];
 }
 
 const initialValues = {
   currentUser: null,
   menuIsOpen: false,
   loading: false,
+  userBankAccounts: []
 };
 const GlobalAuth = createContext<GlobalAuthProps>(
   initialValues as GlobalAuthProps
@@ -52,26 +57,7 @@ const handleGetUserByUID = (
     });
 };
 
-// const debouceGetUserById = debounce(
-//   (uid: string, setState: Dispatch<SetStateAction<GlobalAuthProps>>) => {
-//     setState((prev) => ({ ...prev, loading: true }));
-//     getUserByUid({
-//       uid: uid,
-//     })
-//       .then((foundUserResponse) => {
-//         setState((prev) => ({
-//           ...prev,
-//           currentUser: foundUserResponse.data,
-//         }));
-//       })
-//       .catch((err) => {
-//         setState((prev) => ({ ...prev, currentUser: null }));
-//       })
-//       .finally(() => {
-//         setState((prev) => ({ ...prev, loading: false }));
-//       });
-//   }
-// );
+/* -------------------------------- PROVIDER -------------------------------- */
 
 export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -79,6 +65,7 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [state, setState] = useState<GlobalAuthProps>(
     initialValues as GlobalAuthProps
   );
+  const router = useRouter()
 
   const { currentUser, loading } = state;
 
@@ -100,6 +87,7 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   /* ------------------------------ handleSignOut ----------------------------- */
   const handleSignOut = async () => {
     await signOut();
+    router.push('/')
   };
   /* ------------------------------ handleSignIn ------------------------------ */
   const handleSignIn = async () => {
@@ -114,6 +102,29 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
       loading: false,
     }));
   };
+
+  /* ---------------------------------- USER ---------------------------------- */
+  const handleGetUserBankAccounts = () => {
+    if (currentUser) {
+      getUserBankAccounts({
+        uid: currentUser.uid,
+      }).then((results) => {
+        setState((prev) => ({
+          ...prev,
+          userBankAccounts: results.data || [],
+        }));
+      });
+    } else {
+      setState((prev) => ({
+        ...prev,
+        userBankAccounts: [],
+      }));
+    }
+  };
+
+  useEffect(() => {
+    handleGetUserBankAccounts();
+  }, [currentUser?.uid]);
 
   return (
     <GlobalAuth.Provider

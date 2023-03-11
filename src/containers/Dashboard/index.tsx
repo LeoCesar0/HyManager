@@ -3,7 +3,7 @@ import BankAccounts from "./BankAccounts";
 const Dashboard = () => {
   return (
     <>
-      <div className="container max-w-7xl mx-auto py-8">
+      <div className="page-container">
        <BankAccounts />
       </div>
     </>

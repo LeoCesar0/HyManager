@@ -1397,7 +1397,7 @@ export type AssetWhereUniqueInput = {
 export type BankAccount = Node & {
   __typename?: 'BankAccount';
   appUsers: Array<AppUser>;
-  balance?: Maybe<Scalars['Int']>;
+  balance: Scalars['Int'];
   cover?: Maybe<Asset>;
   /** The time the document was created */
   createdAt: Scalars['DateTime'];
@@ -1599,7 +1599,7 @@ export type BankAccountConnection = {
 
 export type BankAccountCreateInput = {
   appUsers?: InputMaybe<AppUserCreateManyInlineInput>;
-  balance?: InputMaybe<Scalars['Int']>;
+  balance: Scalars['Int'];
   cover?: InputMaybe<AssetCreateOneInlineInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
@@ -3938,6 +3938,13 @@ export type ScheduledOperationManyWhereInput = {
   publishedBy?: InputMaybe<UserWhereInput>;
   /** All values containing the given json path. */
   rawPayload_json_path_exists?: InputMaybe<Scalars['String']>;
+  /**
+   * Recursively tries to find the provided JSON scalar value inside the field.
+   * It does use an exact match when comparing values.
+   * If you pass `null` as value the filter will be ignored.
+   * Note: This filter fails if you try to look for a non scalar JSON value!
+   */
+  rawPayload_value_recursive?: InputMaybe<Scalars['Json']>;
   release?: InputMaybe<ScheduledReleaseWhereInput>;
   status?: InputMaybe<ScheduledOperationStatus>;
   /** All values that are contained in given list. */
@@ -4107,6 +4114,13 @@ export type ScheduledOperationWhereInput = {
   publishedBy?: InputMaybe<UserWhereInput>;
   /** All values containing the given json path. */
   rawPayload_json_path_exists?: InputMaybe<Scalars['String']>;
+  /**
+   * Recursively tries to find the provided JSON scalar value inside the field.
+   * It does use an exact match when comparing values.
+   * If you pass `null` as value the filter will be ignored.
+   * Note: This filter fails if you try to look for a non scalar JSON value!
+   */
+  rawPayload_value_recursive?: InputMaybe<Scalars['Json']>;
   release?: InputMaybe<ScheduledReleaseWhereInput>;
   status?: InputMaybe<ScheduledOperationStatus>;
   /** All values that are contained in given list. */
@@ -6599,6 +6613,7 @@ export enum _FilterKind {
   Gte = 'gte',
   In = 'in',
   JsonPathExists = 'json_path_exists',
+  JsonValueRecursive = 'json_value_recursive',
   Lt = 'lt',
   Lte = 'lte',
   NotContains = 'not_contains',
@@ -6673,7 +6688,7 @@ export type CreateAppUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateAppUserMutation = { __typename?: 'Mutation', createAppUser?: { __typename?: 'AppUser', uid: string, id: string, name: string, email: string, bio?: string | null, imageUrl?: string | null, lastSignIn?: any | null, createdAt: any, updatedAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, slug: string, balance?: number | null, description?: string | null }> } | null };
+export type CreateAppUserMutation = { __typename?: 'Mutation', createAppUser?: { __typename?: 'AppUser', uid: string, id: string, name: string, email: string, bio?: string | null, imageUrl?: string | null, lastSignIn?: any | null, createdAt: any, updatedAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, slug: string, balance: number, description?: string | null }> } | null };
 
 export type CreateBankAccountMutationVariables = Exact<{
   title: Scalars['String'];
@@ -6703,26 +6718,28 @@ export type PublishBankAccountMutation = { __typename?: 'Mutation', publishBankA
 export type GetAllAppUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllAppUsersQuery = { __typename?: 'Query', appUsers: Array<{ __typename?: 'AppUser', imageUrl?: string | null, name: string, id: string, uid: string, email: string, createdAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', balance?: number | null, id: string }> }> };
-
-export type GetAllBankAccountsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAllBankAccountsQuery = { __typename?: 'Query', bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, balance?: number | null, transaction: Array<{ __typename?: 'Transaction', id: string, amount: number, fromFile?: string | null, description?: string | null, createdAt: any }> }> };
+export type GetAllAppUsersQuery = { __typename?: 'Query', appUsers: Array<{ __typename?: 'AppUser', imageUrl?: string | null, name: string, id: string, uid: string, email: string, createdAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', balance: number, id: string }> }> };
 
 export type GetAppUserByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetAppUserByIdQuery = { __typename?: 'Query', appUser?: { __typename?: 'AppUser', id: string, name: string, email: string, bio?: string | null, imageUrl?: string | null, lastSignIn?: any | null, createdAt: any, updatedAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, slug: string, balance?: number | null, description?: string | null }> } | null };
+export type GetAppUserByIdQuery = { __typename?: 'Query', appUser?: { __typename?: 'AppUser', id: string, name: string, email: string, bio?: string | null, imageUrl?: string | null, lastSignIn?: any | null, createdAt: any, updatedAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, slug: string, balance: number, description?: string | null }> } | null };
 
 export type GetAppUserByUIdQueryVariables = Exact<{
   uid: Scalars['String'];
 }>;
 
 
-export type GetAppUserByUIdQuery = { __typename?: 'Query', appUser?: { __typename?: 'AppUser', uid: string, id: string, name: string, email: string, bio?: string | null, imageUrl?: string | null, lastSignIn?: any | null, createdAt: any, updatedAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, slug: string, balance?: number | null, description?: string | null }> } | null };
+export type GetAppUserByUIdQuery = { __typename?: 'Query', appUser?: { __typename?: 'AppUser', uid: string, id: string, name: string, email: string, bio?: string | null, imageUrl?: string | null, lastSignIn?: any | null, createdAt: any, updatedAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, slug: string, balance: number, description?: string | null }> } | null };
+
+export type GetUserBankAccountsQueryVariables = Exact<{
+  uid: Scalars['String'];
+}>;
+
+
+export type GetUserBankAccountsQuery = { __typename?: 'Query', bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, balance: number, description?: string | null, createdAt: any, updatedAt: any, transaction: Array<{ __typename?: 'Transaction', id: string, amount: number, fromFile?: string | null, description?: string | null, createdAt: any }> }> };
 
 
 export const CreateAppUserDocument = gql`
@@ -6931,51 +6948,6 @@ export function useGetAllAppUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetAllAppUsersQueryHookResult = ReturnType<typeof useGetAllAppUsersQuery>;
 export type GetAllAppUsersLazyQueryHookResult = ReturnType<typeof useGetAllAppUsersLazyQuery>;
 export type GetAllAppUsersQueryResult = Apollo.QueryResult<GetAllAppUsersQuery, GetAllAppUsersQueryVariables>;
-export const GetAllBankAccountsDocument = gql`
-    query GetAllBankAccounts {
-  bankAccounts {
-    id
-    title
-    balance
-    transaction {
-      ... on Transaction {
-        id
-        amount
-        fromFile
-        description
-        createdAt
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetAllBankAccountsQuery__
- *
- * To run a query within a React component, call `useGetAllBankAccountsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllBankAccountsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAllBankAccountsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAllBankAccountsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllBankAccountsQuery, GetAllBankAccountsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAllBankAccountsQuery, GetAllBankAccountsQueryVariables>(GetAllBankAccountsDocument, options);
-      }
-export function useGetAllBankAccountsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllBankAccountsQuery, GetAllBankAccountsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAllBankAccountsQuery, GetAllBankAccountsQueryVariables>(GetAllBankAccountsDocument, options);
-        }
-export type GetAllBankAccountsQueryHookResult = ReturnType<typeof useGetAllBankAccountsQuery>;
-export type GetAllBankAccountsLazyQueryHookResult = ReturnType<typeof useGetAllBankAccountsLazyQuery>;
-export type GetAllBankAccountsQueryResult = Apollo.QueryResult<GetAllBankAccountsQuery, GetAllBankAccountsQueryVariables>;
 export const GetAppUserByIdDocument = gql`
     query GetAppUserById($id: ID!) {
   appUser(where: {id: $id}) {
@@ -7075,3 +7047,52 @@ export function useGetAppUserByUIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetAppUserByUIdQueryHookResult = ReturnType<typeof useGetAppUserByUIdQuery>;
 export type GetAppUserByUIdLazyQueryHookResult = ReturnType<typeof useGetAppUserByUIdLazyQuery>;
 export type GetAppUserByUIdQueryResult = Apollo.QueryResult<GetAppUserByUIdQuery, GetAppUserByUIdQueryVariables>;
+export const GetUserBankAccountsDocument = gql`
+    query GetUserBankAccounts($uid: String!) {
+  bankAccounts(where: {appUsers_some: {uid: $uid}}) {
+    id
+    title
+    balance
+    description
+    createdAt
+    updatedAt
+    transaction {
+      ... on Transaction {
+        id
+        amount
+        fromFile
+        description
+        createdAt
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserBankAccountsQuery__
+ *
+ * To run a query within a React component, call `useGetUserBankAccountsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserBankAccountsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserBankAccountsQuery({
+ *   variables: {
+ *      uid: // value for 'uid'
+ *   },
+ * });
+ */
+export function useGetUserBankAccountsQuery(baseOptions: Apollo.QueryHookOptions<GetUserBankAccountsQuery, GetUserBankAccountsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserBankAccountsQuery, GetUserBankAccountsQueryVariables>(GetUserBankAccountsDocument, options);
+      }
+export function useGetUserBankAccountsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserBankAccountsQuery, GetUserBankAccountsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserBankAccountsQuery, GetUserBankAccountsQueryVariables>(GetUserBankAccountsDocument, options);
+        }
+export type GetUserBankAccountsQueryHookResult = ReturnType<typeof useGetUserBankAccountsQuery>;
+export type GetUserBankAccountsLazyQueryHookResult = ReturnType<typeof useGetUserBankAccountsLazyQuery>;
+export type GetUserBankAccountsQueryResult = Apollo.QueryResult<GetUserBankAccountsQuery, GetUserBankAccountsQueryVariables>;

@@ -1,4 +1,4 @@
-import { GetAllBankAccountsQuery } from "../../graphql/generated";
+import { GetUserBankAccountsQuery } from "../../graphql/generated";
 
 
-export type BankAccount = GetAllBankAccountsQuery['bankAccounts'][number]
+export type BankAccount = GetUserBankAccountsQuery['bankAccounts'][number]

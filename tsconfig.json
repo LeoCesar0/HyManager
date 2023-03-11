@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "es5",
     "lib": [
       "dom",
@@ -22,7 +23,18 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@containers/*": ["src/containers/*"],
+      "@types-folder/*": ["src/types/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@styles/*": ["src/styles/*"],
+      "@graphql-folder/*": ["src/graphql/*"],
+      "@contexts/*": ["src/contexts/*"],
+      "@constants": ["src/assets/constants"],
+      "@assets": ["src/constants"],
+    }
   },
   "include": [
     "next-env.d.ts",

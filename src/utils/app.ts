@@ -18,3 +18,15 @@ export const ShowErrorToast = (error: AppError) => {
     if (error) console.log("ShowErrorToast -->", error);
   }
 };
+
+export const slugify = (string: string) => {
+  if (!string) return "";
+  const newText = string
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "");
+
+  return newText;
+};

@@ -1,5 +1,6 @@
 import {
   CreateAppUserDocument,
+  CreateBankAccountDocument,
   CreateBankAccountMutation,
   CreateBankAccountMutationVariables,
   PublishBankAccountDocument,
@@ -51,21 +52,23 @@ export const createBankAccount = async (
 ): Promise<CreateNewUser> => {
   const funcName = "createBankAccount";
 
+  console.log("values -->", values);
+
   try {
     const { data, errors } =
       await apolloClient.mutate<CreateBankAccountMutation>({
-        mutation: CreateAppUserDocument,
+        mutation: CreateBankAccountDocument,
         variables: values,
       });
     let error = null;
-    const results = data?.createBankAccount;
+    const createdItem = data?.createBankAccount;
 
     if ((errors?.length || 0) > 0) {
       error = debugDev({ type: "error", name: funcName, value: errors });
 
       return {
-        data: results,
-        done: !!results,
+        data: createdItem,
+        done: !!createdItem,
         error: {
           message: error,
         },
@@ -75,20 +78,20 @@ export const createBankAccount = async (
     debugDev({
       type: "success",
       name: funcName,
-      value: results,
+      value: createdItem,
     });
 
-    if (results?.id) {
-      const published = await publishBankAccount({ id: results.id });
+    if (createdItem?.id) {
+      const published = await publishBankAccount({ id: createdItem.id });
 
       if (!published) {
         error = {
-          message: `Error ${funcName} --> Item not published!`,
+          message: `Error: Could not publish bank account`,
         };
       }
 
       return {
-        data: published ? results : null,
+        data: published ? createdItem : null,
         done: !!published,
         error: error,
       };

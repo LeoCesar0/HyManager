@@ -26,17 +26,17 @@ const Header = () => {
   } = useGlobalAuth();
   const router = useRouter();
 
-
   return (
     <header className="">
       <div className="max-w-7xl mx-auto flex gap-2 py-2 px-4">
         <div className="bg-primary h-16 w-16 rounded-full"></div>
-        <div className="flex-1 flex items-center">
+        <div className="flex-1 flex items-center px-4">
           {currentUser && <h1>Hello {currentUser.name}!</h1>}
         </div>
         <nav className="flex gap-4 items-center justify-between px-4">
           {links.map((item) => {
-            const isSelected = router.pathname == item.link;
+            let isSelected = router.pathname.includes(item.link);
+            if (item.link === "/") isSelected = router.pathname === "/";
             return (
               <Link key={item.label} href={item.link}>
                 <span
@@ -61,6 +61,7 @@ const Header = () => {
                 handleSignIn();
               }
             }}
+            disabled={loadingUser}
           >
             {currentUser ? "Sign Out" : "Sign In"}
           </Button>

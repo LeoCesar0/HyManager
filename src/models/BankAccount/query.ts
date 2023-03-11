@@ -1,6 +1,8 @@
 import {
-  GetAllBankAccountsDocument,
-  GetAllBankAccountsQuery,
+  GetUserBankAccountsDocument,
+  GetUserBankAccountsQuery,
+  GetUserBankAccountsQueryResult,
+  GetUserBankAccountsQueryVariables,
 } from "../../graphql/generated";
 import { apolloClient } from "../../lib/apollo";
 import { AppModelResponse } from "../../types";
@@ -9,17 +11,13 @@ import { debugDev } from "../../utils/dev";
 
 type GetAllBankAccounts = AppModelResponse<BankAccount[]>;
 
-// interface GetAllBankAccounts {
-//   data: BankAccount[];
-//   done: boolean;
-//   error: { message: string } | null;
-// }
-export const getAllBankAccounts = async (): Promise<GetAllBankAccounts> => {
-  const funcName = "getAllBankAccounts";
+export const getUserBankAccounts = async (values: GetUserBankAccountsQueryVariables): Promise<GetAllBankAccounts> => {
+  const funcName = "getUserBankAccounts";
 
   return apolloClient
-    .query<GetAllBankAccountsQuery>({
-      query: GetAllBankAccountsDocument,
+    .query<GetUserBankAccountsQuery>({
+      query: GetUserBankAccountsDocument,
+      variables: values
     })
     .then(({ data, error, errors }) => {
       const dataValue = data.bankAccounts || [];
@@ -55,3 +53,4 @@ export const getAllBankAccounts = async (): Promise<GetAllBankAccounts> => {
       };
     });
 };
+
