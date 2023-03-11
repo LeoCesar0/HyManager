@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useGlobalAuth } from "../../contexts/GlobalAuth";
 import { firebaseAuth } from "../../services/firebase";
 import { cx } from "../../utils/misc";
-import Button from "../Button/Button";
+import Button from "../Button";
 
 const links = [
   {

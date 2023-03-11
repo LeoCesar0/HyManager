@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import Button from "../../../components/Button/Button";
+import Button from "../../../components/Button";
 import FormControl from "../../../components/FormControl/FormControl";
 import InputField from "../../../components/InputField/InputField";
 import { useGlobalAuth } from "../../../contexts/GlobalAuth";
@@ -45,7 +45,7 @@ const BankAccountForm = () => {
   });
 
   return (
-    <div className="max-w-2xl w-[42rem]">
+    <div className="global_modal-form">
       <form onSubmit={formik.handleSubmit} className="w-full">
         <FormControl>
           <InputField formik={formik} name={"title"} label="Title" />

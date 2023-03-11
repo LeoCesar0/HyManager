@@ -2,10 +2,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useGlobalAuth } from "@contexts/GlobalAuth";
 import { BankAccount } from "@types-folder/models/BankAccount";
+import BankHeader from "./BankHeader";
 
-const BankAccount = ({}) => {
-  const [currentBank, setCurrentBank] = useState<BankAccount>();
-  const { currentUser, userBankAccounts } = useGlobalAuth();
+const BankAccountPage = ({}) => {
+  const [currentBank, setCurrentBank] = useState<BankAccount | null>(null);
+  const { userBankAccounts } = useGlobalAuth();
   const router = useRouter();
   const { id } = router.query;
 
@@ -19,10 +20,10 @@ const BankAccount = ({}) => {
   }, []);
 
   return (
-    <div className="page-container">
-      <h1 className="text-xl border-b-primary border-b-2 py-2">{currentBank?.title}</h1>
+    <div className="global_page-container">
+      <BankHeader currentBank={currentBank} />
     </div>
   );
 };
 
-export default BankAccount;
+export default BankAccountPage;

@@ -15,8 +15,8 @@
 		--color-on-secondary: theme('colors.zinc.100');
 		--color-secondary-hover: theme('colors.pink.500');
 
-		--color-background: theme('colors.neutral.600');
-		--color-on-background: theme('colors.neutral.200');
+		--color-background: theme('colors.neutral.700');
+		--color-on-background: theme('colors.neutral.300');
 
 		--color-surface: theme('colors.stone.100');
 		--color-on-surface: theme('colors.slate.700');
