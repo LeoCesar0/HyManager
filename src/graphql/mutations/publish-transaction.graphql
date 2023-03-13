@@ -1,0 +1,5 @@
+mutation PublishTransaction($id: ID!) {
+  publishTransaction(where: {id: $id}){
+    id
+  }
+}

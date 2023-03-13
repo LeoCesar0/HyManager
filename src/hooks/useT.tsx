@@ -6,9 +6,8 @@ type IUseT = {
 };
 
 const useT = (langObject: IUseT) => {
-  if (!langObject) return "";
-
   const router = useRouter();
+  if (!langObject) return "";
 
   const currentLanguage: Locale = (router.locale || Locale.En) as Locale;
 

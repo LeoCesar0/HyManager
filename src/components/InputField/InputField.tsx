@@ -1,6 +1,7 @@
 import { FormikProps } from "formik";
 import { InputHTMLAttributes } from "react";
 import { cx } from "../../utils/misc";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface IInputField extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -42,13 +43,25 @@ const InputField: React.FC<IInputField> = ({
           "focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary",
           "disabled:bg-disabled disabled:text-disabled-text disabled:border-disabled-border disabled:shadow-none",
           "invalid:border-error invalid:text-error focus:invalid:border-error focus:invalid:ring-error",
+          [
+            "border-error text-error focus:border-error focus:ring-error",
+            !!error,
+          ],
         ])}
         {...formik.getFieldProps(name)}
         {...rest}
       />
       <div className="transition">
         {!!error && typeof error === "string" && (
-          <span className="text-hint px-2 py-1">{error as string}</span>
+          <motion.span
+            initial={{ opacity: 0, scaleY: 0 }}
+            animate={{ opacity: 1, scaleY: 1 }}
+            exit={{ opacity: 0, scaleY: 0 }}
+            transition={{ type: "spring", duration: 0.25 }}
+            className="text-hint block px-2 py-1"
+          >
+            {error as string}
+          </motion.span>
         )}
       </div>
     </label>

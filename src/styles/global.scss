@@ -23,3 +23,16 @@ body {
   color: var(--color-on-background);
 }
 
+
+
+
+/* ---------------------------------- RESET --------------------------------- */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+input[type=number] {
+  -moz-appearance: textfield !important;
+}
+

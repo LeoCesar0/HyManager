@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { BankAccount } from "@types-folder/models/BankAccount";
 import Button from "@components/Button";
 import { useGlobalModal } from "@contexts/GlobalModal";
@@ -11,7 +10,6 @@ interface IBankHeader {
 }
 
 const BankHeader: React.FC<IBankHeader> = ({ currentBank }) => {
-  const router = useRouter();
   const { setModalProps } = useGlobalModal();
 
   return (
@@ -30,19 +28,22 @@ const BankHeader: React.FC<IBankHeader> = ({ currentBank }) => {
         </span>
       </div>
       <div className="flex items-center gap-2">
+        <Button theme="secondary">Transactions</Button>
+
         <Button
           theme="primary"
           onClick={() => {
             setModalProps({
               isOpen: true,
-              children: <TransactionForm />,
+              children: (
+                <TransactionForm bankAccountId={currentBank?.id || ""} />
+              ),
               title: "Add new Transaction",
             });
           }}
         >
           New Transaction
         </Button>
-        <Button theme="secondary">Transactions</Button>
       </div>
     </div>
   );

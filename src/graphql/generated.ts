@@ -5203,10 +5203,12 @@ export type Transaction = Node & {
   __typename?: 'Transaction';
   amount: Scalars['Int'];
   bankAccount?: Maybe<BankAccount>;
+  color?: Maybe<Color>;
   /** The time the document was created */
   createdAt: Scalars['DateTime'];
   /** User that created this document */
   createdBy?: Maybe<User>;
+  date: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   /** Get the document in other stages */
   documentInStages: Array<Transaction>;
@@ -5298,7 +5300,9 @@ export type TransactionConnection = {
 export type TransactionCreateInput = {
   amount: Scalars['Int'];
   bankAccount?: InputMaybe<BankAccountCreateOneInlineInput>;
+  color?: InputMaybe<ColorInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  date: Scalars['DateTime'];
   description?: InputMaybe<Scalars['String']>;
   fromFile?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -5835,6 +5839,21 @@ export type TransactionManyWhereInput = {
   /** All values that are not contained in given list. */
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   createdBy?: InputMaybe<UserWhereInput>;
+  date?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  date_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  date_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  date_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  date_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  date_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  date_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  date_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   description?: InputMaybe<Scalars['String']>;
   /** All values containing the given string. */
   description_contains?: InputMaybe<Scalars['String']>;
@@ -5937,6 +5956,8 @@ export enum TransactionOrderByInput {
   AmountDesc = 'amount_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
+  DateAsc = 'date_ASC',
+  DateDesc = 'date_DESC',
   DescriptionAsc = 'description_ASC',
   DescriptionDesc = 'description_DESC',
   FromFileAsc = 'fromFile_ASC',
@@ -5952,6 +5973,8 @@ export enum TransactionOrderByInput {
 export type TransactionUpdateInput = {
   amount?: InputMaybe<Scalars['Int']>;
   bankAccount?: InputMaybe<BankAccountUpdateOneInlineInput>;
+  color?: InputMaybe<ColorInput>;
+  date?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   fromFile?: InputMaybe<Scalars['String']>;
 };
@@ -5975,6 +5998,8 @@ export type TransactionUpdateManyInlineInput = {
 
 export type TransactionUpdateManyInput = {
   amount?: InputMaybe<Scalars['Int']>;
+  color?: InputMaybe<ColorInput>;
+  date?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   fromFile?: InputMaybe<Scalars['String']>;
 };
@@ -6070,6 +6095,21 @@ export type TransactionWhereInput = {
   /** All values that are not contained in given list. */
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   createdBy?: InputMaybe<UserWhereInput>;
+  date?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  date_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  date_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  date_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  date_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  date_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  date_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  date_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   description?: InputMaybe<Scalars['String']>;
   /** All values containing the given string. */
   description_contains?: InputMaybe<Scalars['String']>;
@@ -6701,6 +6741,17 @@ export type CreateBankAccountMutationVariables = Exact<{
 
 export type CreateBankAccountMutation = { __typename?: 'Mutation', createBankAccount?: { __typename?: 'BankAccount', id: string, title: string, description?: string | null } | null };
 
+export type CreateTransactionMutationVariables = Exact<{
+  amount: Scalars['Int'];
+  description?: InputMaybe<Scalars['String']>;
+  bankAccountId: Scalars['ID'];
+  color?: InputMaybe<ColorInput>;
+  date: Scalars['DateTime'];
+}>;
+
+
+export type CreateTransactionMutation = { __typename?: 'Mutation', createTransaction?: { __typename?: 'Transaction', id: string, amount: number } | null };
+
 export type PublishAppUserMutationVariables = Exact<{
   uid: Scalars['String'];
 }>;
@@ -6714,6 +6765,13 @@ export type PublishBankAccountMutationVariables = Exact<{
 
 
 export type PublishBankAccountMutation = { __typename?: 'Mutation', publishBankAccount?: { __typename?: 'BankAccount', id: string } | null };
+
+export type PublishTransactionMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type PublishTransactionMutation = { __typename?: 'Mutation', publishTransaction?: { __typename?: 'Transaction', id: string } | null };
 
 export type GetAllAppUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -6837,6 +6895,46 @@ export function useCreateBankAccountMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateBankAccountMutationHookResult = ReturnType<typeof useCreateBankAccountMutation>;
 export type CreateBankAccountMutationResult = Apollo.MutationResult<CreateBankAccountMutation>;
 export type CreateBankAccountMutationOptions = Apollo.BaseMutationOptions<CreateBankAccountMutation, CreateBankAccountMutationVariables>;
+export const CreateTransactionDocument = gql`
+    mutation CreateTransaction($amount: Int!, $description: String, $bankAccountId: ID!, $color: ColorInput, $date: DateTime!) {
+  createTransaction(
+    data: {amount: $amount, description: $description, color: $color, date: $date, bankAccount: {connect: {id: $bankAccountId}}}
+  ) {
+    id
+    amount
+  }
+}
+    `;
+export type CreateTransactionMutationFn = Apollo.MutationFunction<CreateTransactionMutation, CreateTransactionMutationVariables>;
+
+/**
+ * __useCreateTransactionMutation__
+ *
+ * To run a mutation, you first call `useCreateTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTransactionMutation, { data, loading, error }] = useCreateTransactionMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *      description: // value for 'description'
+ *      bankAccountId: // value for 'bankAccountId'
+ *      color: // value for 'color'
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useCreateTransactionMutation(baseOptions?: Apollo.MutationHookOptions<CreateTransactionMutation, CreateTransactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTransactionMutation, CreateTransactionMutationVariables>(CreateTransactionDocument, options);
+      }
+export type CreateTransactionMutationHookResult = ReturnType<typeof useCreateTransactionMutation>;
+export type CreateTransactionMutationResult = Apollo.MutationResult<CreateTransactionMutation>;
+export type CreateTransactionMutationOptions = Apollo.BaseMutationOptions<CreateTransactionMutation, CreateTransactionMutationVariables>;
 export const PublishAppUserDocument = gql`
     mutation PublishAppUser($uid: String!) {
   publishAppUser(where: {uid: $uid}) {
@@ -6903,6 +7001,39 @@ export function usePublishBankAccountMutation(baseOptions?: Apollo.MutationHookO
 export type PublishBankAccountMutationHookResult = ReturnType<typeof usePublishBankAccountMutation>;
 export type PublishBankAccountMutationResult = Apollo.MutationResult<PublishBankAccountMutation>;
 export type PublishBankAccountMutationOptions = Apollo.BaseMutationOptions<PublishBankAccountMutation, PublishBankAccountMutationVariables>;
+export const PublishTransactionDocument = gql`
+    mutation PublishTransaction($id: ID!) {
+  publishTransaction(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type PublishTransactionMutationFn = Apollo.MutationFunction<PublishTransactionMutation, PublishTransactionMutationVariables>;
+
+/**
+ * __usePublishTransactionMutation__
+ *
+ * To run a mutation, you first call `usePublishTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishTransactionMutation, { data, loading, error }] = usePublishTransactionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePublishTransactionMutation(baseOptions?: Apollo.MutationHookOptions<PublishTransactionMutation, PublishTransactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PublishTransactionMutation, PublishTransactionMutationVariables>(PublishTransactionDocument, options);
+      }
+export type PublishTransactionMutationHookResult = ReturnType<typeof usePublishTransactionMutation>;
+export type PublishTransactionMutationResult = Apollo.MutationResult<PublishTransactionMutation>;
+export type PublishTransactionMutationOptions = Apollo.BaseMutationOptions<PublishTransactionMutation, PublishTransactionMutationVariables>;
 export const GetAllAppUsersDocument = gql`
     query GetAllAppUsers {
   appUsers(orderBy: name_ASC) {

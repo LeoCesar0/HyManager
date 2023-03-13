@@ -1,23 +1,22 @@
 import {
-  CreateAppUserDocument,
-  CreateBankAccountDocument,
-  CreateBankAccountMutation,
-  CreateBankAccountMutationVariables,
-  PublishBankAccountDocument,
-  PublishBankAccountMutation,
-  PublishBankAccountMutationVariables,
+  CreateTransactionDocument,
+  CreateTransactionMutation,
+  CreateTransactionMutationVariables,
+  PublishTransactionDocument,
+  PublishTransactionMutation,
+  PublishTransactionMutationVariables,
 } from "../../graphql/generated";
 import { apolloClient } from "../../lib/apollo";
 import { debugDev } from "../../utils/dev";
 
-export const publishBankAccount = async (
-  values: PublishBankAccountMutationVariables
+export const publishTransaction = async (
+  values: PublishTransactionMutationVariables
 ) => {
-  const funcName = "publishBankAccount";
+  const funcName = "publishTransaction";
   try {
     const { data, errors } =
-      await apolloClient.mutate<PublishBankAccountMutation>({
-        mutation: PublishBankAccountDocument,
+      await apolloClient.mutate<PublishTransactionMutation>({
+        mutation: PublishTransactionDocument,
         variables: values,
       });
 
@@ -26,7 +25,7 @@ export const publishBankAccount = async (
       return null;
     }
 
-    const results = data?.publishBankAccount;
+    const results = data?.publishTransaction;
     debugDev({
       type: "success",
       name: funcName,
@@ -40,26 +39,28 @@ export const publishBankAccount = async (
   }
 };
 
-interface CreateBankAccount {
+interface CreateTransaction {
   done: boolean;
-  data: CreateBankAccountMutation["createBankAccount"] | null;
+  data: CreateTransactionMutation["createTransaction"] | null;
   error: {
     message: string;
   } | null;
 }
-export const createBankAccount = async (
-  values: CreateBankAccountMutationVariables
-): Promise<CreateBankAccount> => {
-  const funcName = "createBankAccount";
+export const createTransaction = async (
+  values: CreateTransactionMutationVariables
+): Promise<CreateTransaction> => {
+  const funcName = "createTransaction";
+
+  console.log("values -->", values);
 
   try {
     const { data, errors } =
-      await apolloClient.mutate<CreateBankAccountMutation>({
-        mutation: CreateBankAccountDocument,
+      await apolloClient.mutate<CreateTransactionMutation>({
+        mutation: CreateTransactionDocument,
         variables: values,
       });
     let error = null;
-    const createdItem = data?.createBankAccount;
+    const createdItem = data?.createTransaction;
 
     if ((errors?.length || 0) > 0) {
       error = debugDev({ type: "error", name: funcName, value: errors });
@@ -80,11 +81,11 @@ export const createBankAccount = async (
     });
 
     if (createdItem?.id) {
-      const published = await publishBankAccount({ id: createdItem.id });
+      const published = await publishTransaction({ id: createdItem.id });
 
       if (!published) {
         error = {
-          message: `Error: Could not publish bank account`,
+          message: `Error: Could not publish transaction`,
         };
       }
 
