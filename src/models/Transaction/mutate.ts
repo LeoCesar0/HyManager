@@ -51,8 +51,6 @@ export const createTransaction = async (
 ): Promise<CreateTransaction> => {
   const funcName = "createTransaction";
 
-  console.log("values -->", values);
-
   try {
     const { data, errors } =
       await apolloClient.mutate<CreateTransactionMutation>({

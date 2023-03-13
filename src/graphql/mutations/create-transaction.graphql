@@ -1,5 +1,5 @@
-mutation CreateTransaction($amount: Int!, $description: String, $bankAccountId: ID!, $color: ColorInput, $date: DateTime!) {
-  createTransaction(data: {amount: $amount, description: $description, color: $color, date: $date, bankAccount: {connect: {id: $bankAccountId}}}){
+mutation CreateTransaction($amount: Int!, $description: String, $bankAccountId: ID!, $color: ColorInput, $date: DateTime!, $type: TransactionType!) {
+  createTransaction(data: {amount: $amount, description: $description, type: $type, color: $color, date: $date, bankAccount: {connect: {id: $bankAccountId}}}){
     id,
     amount
   }

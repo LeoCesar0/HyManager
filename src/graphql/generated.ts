@@ -5224,6 +5224,7 @@ export type Transaction = Node & {
   scheduledIn: Array<ScheduledOperation>;
   /** System stage field */
   stage: Stage;
+  type: TransactionType;
   /** The time the document was updated */
   updatedAt: Scalars['DateTime'];
   /** User that last updated this document */
@@ -5305,6 +5306,7 @@ export type TransactionCreateInput = {
   date: Scalars['DateTime'];
   description?: InputMaybe<Scalars['String']>;
   fromFile?: InputMaybe<Scalars['String']>;
+  type: TransactionType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -5933,6 +5935,13 @@ export type TransactionManyWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  type?: InputMaybe<TransactionType>;
+  /** All values that are contained in given list. */
+  type_in?: InputMaybe<Array<InputMaybe<TransactionType>>>;
+  /** All values that are not equal to given value. */
+  type_not?: InputMaybe<TransactionType>;
+  /** All values that are not contained in given list. */
+  type_not_in?: InputMaybe<Array<InputMaybe<TransactionType>>>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -5966,8 +5975,15 @@ export enum TransactionOrderByInput {
   IdDesc = 'id_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
+  TypeAsc = 'type_ASC',
+  TypeDesc = 'type_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC'
+}
+
+export enum TransactionType {
+  Credit = 'credit',
+  Debit = 'debit'
 }
 
 export type TransactionUpdateInput = {
@@ -5977,6 +5993,7 @@ export type TransactionUpdateInput = {
   date?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   fromFile?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<TransactionType>;
 };
 
 export type TransactionUpdateManyInlineInput = {
@@ -6002,6 +6019,7 @@ export type TransactionUpdateManyInput = {
   date?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   fromFile?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<TransactionType>;
 };
 
 export type TransactionUpdateManyWithNestedWhereInput = {
@@ -6189,6 +6207,13 @@ export type TransactionWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  type?: InputMaybe<TransactionType>;
+  /** All values that are contained in given list. */
+  type_in?: InputMaybe<Array<InputMaybe<TransactionType>>>;
+  /** All values that are not equal to given value. */
+  type_not?: InputMaybe<TransactionType>;
+  /** All values that are not contained in given list. */
+  type_not_in?: InputMaybe<Array<InputMaybe<TransactionType>>>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -6747,6 +6772,7 @@ export type CreateTransactionMutationVariables = Exact<{
   bankAccountId: Scalars['ID'];
   color?: InputMaybe<ColorInput>;
   date: Scalars['DateTime'];
+  type: TransactionType;
 }>;
 
 
@@ -6791,6 +6817,13 @@ export type GetAppUserByUIdQueryVariables = Exact<{
 
 
 export type GetAppUserByUIdQuery = { __typename?: 'Query', appUser?: { __typename?: 'AppUser', uid: string, id: string, name: string, email: string, bio?: string | null, imageUrl?: string | null, lastSignIn?: any | null, createdAt: any, updatedAt: any, bankAccounts: Array<{ __typename?: 'BankAccount', id: string, title: string, slug: string, balance: number, description?: string | null }> } | null };
+
+export type GetTransactionsByBankQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetTransactionsByBankQuery = { __typename?: 'Query', transactions: Array<{ __typename?: 'Transaction', id: string, description?: string | null, amount: number, type: TransactionType, date: any, createdAt: any, updatedAt: any, color?: { __typename?: 'Color', hex: any, css: string, rgba: { __typename?: 'RGBA', g: any, r: any, b: any, a: any } } | null, bankAccount?: { __typename?: 'BankAccount', id: string } | null }> };
 
 export type GetUserBankAccountsQueryVariables = Exact<{
   uid: Scalars['String'];
@@ -6896,9 +6929,9 @@ export type CreateBankAccountMutationHookResult = ReturnType<typeof useCreateBan
 export type CreateBankAccountMutationResult = Apollo.MutationResult<CreateBankAccountMutation>;
 export type CreateBankAccountMutationOptions = Apollo.BaseMutationOptions<CreateBankAccountMutation, CreateBankAccountMutationVariables>;
 export const CreateTransactionDocument = gql`
-    mutation CreateTransaction($amount: Int!, $description: String, $bankAccountId: ID!, $color: ColorInput, $date: DateTime!) {
+    mutation CreateTransaction($amount: Int!, $description: String, $bankAccountId: ID!, $color: ColorInput, $date: DateTime!, $type: TransactionType!) {
   createTransaction(
-    data: {amount: $amount, description: $description, color: $color, date: $date, bankAccount: {connect: {id: $bankAccountId}}}
+    data: {amount: $amount, description: $description, type: $type, color: $color, date: $date, bankAccount: {connect: {id: $bankAccountId}}}
   ) {
     id
     amount
@@ -6925,6 +6958,7 @@ export type CreateTransactionMutationFn = Apollo.MutationFunction<CreateTransact
  *      bankAccountId: // value for 'bankAccountId'
  *      color: // value for 'color'
  *      date: // value for 'date'
+ *      type: // value for 'type'
  *   },
  * });
  */
@@ -7178,6 +7212,63 @@ export function useGetAppUserByUIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetAppUserByUIdQueryHookResult = ReturnType<typeof useGetAppUserByUIdQuery>;
 export type GetAppUserByUIdLazyQueryHookResult = ReturnType<typeof useGetAppUserByUIdLazyQuery>;
 export type GetAppUserByUIdQueryResult = Apollo.QueryResult<GetAppUserByUIdQuery, GetAppUserByUIdQueryVariables>;
+export const GetTransactionsByBankDocument = gql`
+    query GetTransactionsByBank($id: ID!) {
+  transactions(where: {bankAccount: {id: $id}}) {
+    id
+    description
+    amount
+    type
+    date
+    createdAt
+    updatedAt
+    color {
+      ... on Color {
+        hex
+        rgba {
+          g
+          r
+          g
+          b
+          a
+        }
+        css
+      }
+    }
+    bankAccount {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetTransactionsByBankQuery__
+ *
+ * To run a query within a React component, call `useGetTransactionsByBankQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTransactionsByBankQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTransactionsByBankQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetTransactionsByBankQuery(baseOptions: Apollo.QueryHookOptions<GetTransactionsByBankQuery, GetTransactionsByBankQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTransactionsByBankQuery, GetTransactionsByBankQueryVariables>(GetTransactionsByBankDocument, options);
+      }
+export function useGetTransactionsByBankLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTransactionsByBankQuery, GetTransactionsByBankQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTransactionsByBankQuery, GetTransactionsByBankQueryVariables>(GetTransactionsByBankDocument, options);
+        }
+export type GetTransactionsByBankQueryHookResult = ReturnType<typeof useGetTransactionsByBankQuery>;
+export type GetTransactionsByBankLazyQueryHookResult = ReturnType<typeof useGetTransactionsByBankLazyQuery>;
+export type GetTransactionsByBankQueryResult = Apollo.QueryResult<GetTransactionsByBankQuery, GetTransactionsByBankQueryVariables>;
 export const GetUserBankAccountsDocument = gql`
     query GetUserBankAccounts($uid: String!) {
   bankAccounts(where: {appUsers_some: {uid: $uid}}) {

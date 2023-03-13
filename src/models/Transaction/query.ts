@@ -1,26 +1,27 @@
+import { Transaction } from "@types-folder/models/Transaction";
 import {
-  GetUserBankAccountsDocument,
-  GetUserBankAccountsQuery,
-  GetUserBankAccountsQueryResult,
-  GetUserBankAccountsQueryVariables,
+  GetTransactionsByBankDocument,
+  GetTransactionsByBankQuery,
+  GetTransactionsByBankQueryVariables,
 } from "../../graphql/generated";
 import { apolloClient } from "../../lib/apollo";
 import { AppModelResponse } from "../../types";
-import { BankAccount } from "../../types/models/BankAccount";
 import { debugDev } from "../../utils/dev";
 
-type GetAllBankAccounts = AppModelResponse<BankAccount[]>;
+type GetAllBankAccounts = AppModelResponse<Transaction[]>;
 
-export const getUserBankAccounts = async (values: GetUserBankAccountsQueryVariables): Promise<GetAllBankAccounts> => {
-  const funcName = "getUserBankAccounts";
+export const GetTransactionsByBank = async (
+  values: GetTransactionsByBankQueryVariables
+): Promise<GetAllBankAccounts> => {
+  const funcName = "GetTransactionsByBank";
 
   return apolloClient
-    .query<GetUserBankAccountsQuery>({
-      query: GetUserBankAccountsDocument,
-      variables: values
+    .query<GetTransactionsByBankQuery>({
+      query: GetTransactionsByBankDocument,
+      variables: values,
     })
     .then(({ data, error, errors }) => {
-      const dataValue = data.bankAccounts || [];
+      const dataValue = data.transactions || [];
       if (data) {
         debugDev({
           type: "success",
@@ -38,7 +39,7 @@ export const getUserBankAccounts = async (values: GetUserBankAccountsQueryVariab
         return {
           data: null,
           error: {
-            message: "No bank account found",
+            message: "No Transaction",
           },
           done: false,
         };
@@ -53,4 +54,3 @@ export const getUserBankAccounts = async (values: GetUserBankAccountsQueryVariab
       };
     });
 };
-

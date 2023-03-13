@@ -1,0 +1,27 @@
+query GetTransactionsByBank($id: ID!) {
+  transactions(where: {bankAccount: {id: $id}}) {
+    id
+    description
+    amount
+    type
+    date
+    createdAt
+    updatedAt
+    color {
+      ... on Color {
+        hex
+        rgba {
+          g
+          r
+          g
+          b
+          a
+        }
+        css
+      }
+    }
+    bankAccount {
+      id
+    }
+  }
+}
