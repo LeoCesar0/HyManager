@@ -7214,7 +7214,7 @@ export type GetAppUserByUIdLazyQueryHookResult = ReturnType<typeof useGetAppUser
 export type GetAppUserByUIdQueryResult = Apollo.QueryResult<GetAppUserByUIdQuery, GetAppUserByUIdQueryVariables>;
 export const GetTransactionsByBankDocument = gql`
     query GetTransactionsByBank($id: ID!) {
-  transactions(where: {bankAccount: {id: $id}}) {
+  transactions(where: {bankAccount: {id: $id}}, orderBy: date_ASC) {
     id
     description
     amount

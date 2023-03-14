@@ -1,5 +1,5 @@
 query GetTransactionsByBank($id: ID!) {
-  transactions(where: {bankAccount: {id: $id}}) {
+  transactions(where: {bankAccount: {id: $id}}, orderBy: date_ASC) {
     id
     description
     amount

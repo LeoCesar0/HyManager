@@ -4,6 +4,7 @@ import { useGlobalModal } from "@contexts/GlobalModal";
 import IconButton from "@components/IconButton";
 import { HiArrowLeft } from "react-icons/hi";
 import TransactionForm from "./TransactionForm";
+import { useRouter } from "next/router";
 
 interface IBankHeader {
   currentBank: BankAccount | null;
@@ -11,11 +12,17 @@ interface IBankHeader {
 
 const BankHeader: React.FC<IBankHeader> = ({ currentBank }) => {
   const { setModalProps } = useGlobalModal();
+  const router = useRouter();
 
   return (
     <div className="border-b-primary border-b-2 py-2 mb-8 flex justify-between">
       <div className="flex gap-1 items-end">
-        <IconButton classes="mr-4">
+        <IconButton
+          classes="mr-4"
+          onClick={() => {
+            router.back();
+          }}
+        >
           <HiArrowLeft />
         </IconButton>
         <h1 className="text-2xl mr-6">{currentBank?.title}</h1>

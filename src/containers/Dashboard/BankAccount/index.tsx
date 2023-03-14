@@ -5,6 +5,7 @@ import { BankAccount } from "@types-folder/models/BankAccount";
 import BankHeader from "./BankHeader";
 import { useGetTransactionsByBankQuery } from "@graphql-folder/generated";
 import TransactionList from "./TransactionList";
+import BalanceChart from "./BalanceChart";
 
 const BankAccountPage = ({}) => {
   const [currentBank, setCurrentBank] = useState<BankAccount | null>(null);

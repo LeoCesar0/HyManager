@@ -29,7 +29,9 @@ const validationSchema = z.object({
     invalid_type_error: "Insert a date",
     required_error: "This field is required!",
   }),
-  description: z.string({required_error:'Insert a description'}).min(4, 'Min 4 characters')
+  description: z
+    .string({ required_error: "Insert a description" })
+    .min(4, "Min 4 characters"),
 });
 
 export const TransactionForm: React.FC<ITransactionForm> = ({
@@ -53,6 +55,7 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
         ...inputs,
         bankAccountId: bankAccountId,
         date: new Date(inputs.date),
+        amount: Math.round(inputs.amount * 100),
       };
       const toastId = toast.loading("Creating Transaction");
       const results = await createTransaction(values);
@@ -133,7 +136,7 @@ interface ITypeButtons {
 }
 const TypeButtons = ({ formik }: ITypeButtons) => {
   const currentType = formik.values.type;
-  console.log('currentType -->', currentType)
+  console.log("currentType -->", currentType);
   return (
     <div>
       <button
