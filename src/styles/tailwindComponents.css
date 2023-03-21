@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 @layer components {
-  .global_page-container {
+  .component__page-container {
     @apply container max-w-7xl mx-auto py-8;
   }
-  .global_modal-form{
+  .component__modal-form{
     @apply max-w-2xl w-[42rem]
   }
 }

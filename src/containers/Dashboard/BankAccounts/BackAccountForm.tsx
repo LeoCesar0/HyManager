@@ -45,7 +45,7 @@ const BankAccountForm = () => {
   });
 
   return (
-    <div className="global_modal-form">
+    <div className="component__modal-form">
       <form onSubmit={formik.handleSubmit} className="w-full">
         <FormControl>
           <InputField formik={formik} name={"title"} label="Title" />

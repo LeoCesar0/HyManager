@@ -11,23 +11,6 @@ interface IModal {
 
 function Modal({ isOpen, setIsOpen, children, title, description }: IModal) {
 
-  // return (
-  //   <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-  //     <div className="fixed inset-0 flex items-center justify-center p-4">
-  //       <Dialog.Panel
-  //         className={"container max-w-xl w-full bg-white text-black"}
-  //       >
-  //         <Dialog.Title>Deactivate account</Dialog.Title>
-  //         <Dialog.Description>
-  //           This will permanently deactivate your account
-  //         </Dialog.Description>
-  //         <p>SOMETHING HERE</p>
-  //         {children}
-  //       </Dialog.Panel>
-  //     </div>
-  //   </Dialog>
-  // );
-
   return (
     <Transition show={isOpen} as={Fragment}>
       <Dialog onClose={() => setIsOpen(false)}>

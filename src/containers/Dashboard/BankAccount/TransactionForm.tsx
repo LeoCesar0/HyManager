@@ -10,6 +10,7 @@ import {
 import { FormikProps, useFormik } from "formik";
 import { toast } from "react-toastify";
 import { createTransaction } from "src/models/Transaction/mutate";
+import { makeTransactionSlug } from "src/utils/app";
 import { cx, toISOStringWithTimezone } from "src/utils/misc";
 import z from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -43,19 +44,26 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
     initialValues: {
       amount: 1,
       description: "",
+      creditor: "",
       type: TransactionType.Credit,
       date: toISOStringWithTimezone(new Date()),
       color: {
         hex: "#ffffff",
       },
+      slug: "",
     },
     onSubmit: async (inputs) => {
       if (!bankAccountId) return;
+      const amount = Math.round(inputs.amount * 100);
       const values: CreateTransactionMutationVariables = {
         ...inputs,
         bankAccountId: bankAccountId,
         date: new Date(inputs.date),
-        amount: Math.round(inputs.amount * 100),
+        amount: amount,
+        slug: makeTransactionSlug({
+          date: inputs.date,
+          amount: amount.toString(),
+        }),
       };
       const toastId = toast.loading("Creating Transaction");
       const results = await createTransaction(values);
@@ -79,7 +87,10 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
   });
 
   return (
-    <div className="global_modal-form">
+    <div className="component__modal-form">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Add New Transaction</h2>
+      </div>
       <form onSubmit={formik.handleSubmit} className="w-full">
         <FormControl>
           <InputField
@@ -87,6 +98,14 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
             type="number"
             name={"amount"}
             label="Amount"
+          />
+        </FormControl>
+        <FormControl>
+          <InputField
+            formik={formik}
+            type="text"
+            name={"creditor"}
+            label="Creditor"
           />
         </FormControl>
         <FormControl>

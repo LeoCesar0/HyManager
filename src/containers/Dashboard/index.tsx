@@ -3,7 +3,7 @@ import BankAccounts from "./BankAccounts";
 const Dashboard = () => {
   return (
     <>
-      <div className="global_page-container">
+      <div className="component__page-container">
        <BankAccounts />
       </div>
     </>

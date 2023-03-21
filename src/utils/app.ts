@@ -1,3 +1,5 @@
+import { CreateTransactionMutationVariables } from "@graphql-folder/generated";
+import { Transaction } from "@types-folder/models/Transaction";
 import { toast } from "react-toastify";
 import { AppError } from "../types";
 
@@ -29,4 +31,16 @@ export const slugify = (string: string) => {
     .replace(/[^\w-]+/g, "");
 
   return newText;
+};
+
+interface IMakeTransactionSlug {
+  amount: string;
+  date: string;
+}
+export const makeTransactionSlug = ({ amount, date }: IMakeTransactionSlug) => {
+  return `${slugify(amount)}@${slugify(date.slice(0, 10))}`;
+};
+
+export const parseAmount = (amount: number) => {
+  return Math.round(Math.abs(amount) * 100);
 };

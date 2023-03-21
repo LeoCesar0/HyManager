@@ -2,9 +2,11 @@ import { BankAccount } from "@types-folder/models/BankAccount";
 import Button from "@components/Button";
 import { useGlobalModal } from "@contexts/GlobalModal";
 import IconButton from "@components/IconButton";
-import { HiArrowLeft } from "react-icons/hi";
+import { HiArrowLeft, HiDotsVertical } from "react-icons/hi";
 import TransactionForm from "./TransactionForm";
 import { useRouter } from "next/router";
+import Dropdown, { IDropdown } from "@components/Dropdown";
+import { useMemo } from "react";
 
 interface IBankHeader {
   currentBank: BankAccount | null;
@@ -13,6 +15,23 @@ interface IBankHeader {
 const BankHeader: React.FC<IBankHeader> = ({ currentBank }) => {
   const { setModalProps } = useGlobalModal();
   const router = useRouter();
+
+  const dropDownItems: IDropdown["items"] = useMemo(() => {
+    return [
+      {
+        label: "New Transaction",
+        onClick: () => {},
+      },
+      {
+        label: "All Transactions",
+        onClick: () => {},
+      },
+      {
+        label: "Import CSV",
+        onClick: () => {},
+      },
+    ];
+  }, []);
 
   return (
     <div className="border-b-primary border-b-2 py-2 mb-8 flex justify-between">
@@ -45,12 +64,21 @@ const BankHeader: React.FC<IBankHeader> = ({ currentBank }) => {
               children: (
                 <TransactionForm bankAccountId={currentBank?.id || ""} />
               ),
-              title: "Add new Transaction",
             });
           }}
         >
           New Transaction
         </Button>
+        <Dropdown items={dropDownItems}>
+          <IconButton>
+            <HiDotsVertical />
+          </IconButton>
+        </Dropdown>
+        {/* <IconButton
+
+        >
+          <HiDotsVertical />
+        </IconButton> */}
       </div>
     </div>
   );

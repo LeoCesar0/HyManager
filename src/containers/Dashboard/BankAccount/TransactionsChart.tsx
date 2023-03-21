@@ -9,16 +9,7 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 const COLORS = TAILWIND_CONFIG.theme?.colors;
 const primaryColors = [COLORS!.primary, COLORS!.secondary] as string[];
 
-const defaultOptions: ApexOptions = {
-  colors: primaryColors,
-  xaxis: {
-    labels: {
-      style: {
-        colors: "#393939",
-      },
-    },
-  },
-};
+
 
 interface ITransactionsChart {
   transactions: Transaction[];
@@ -30,6 +21,20 @@ export const TransactionsChart: React.FC<ITransactionsChart> = ({
   type = TransactionType.Credit,
 }) => {
   const colors = type === "credit" ? [COLORS!.credit] : [COLORS!.debit];
+
+  const defaultOptions: ApexOptions = {
+    colors: primaryColors,
+    xaxis: {
+      labels: {
+        style: {
+          colors: "#393939",
+        },
+      },
+    },
+    title: {
+      text: type === TransactionType.Credit ? 'Credit' : 'Debit'
+    }
+  };
 
   const { series, options } = useMemo(() => {
     const filteredTransactions = transactions.filter(

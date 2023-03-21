@@ -5208,6 +5208,7 @@ export type Transaction = Node & {
   createdAt: Scalars['DateTime'];
   /** User that created this document */
   createdBy?: Maybe<User>;
+  creditor?: Maybe<Scalars['String']>;
   date: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   /** Get the document in other stages */
@@ -5217,11 +5218,13 @@ export type Transaction = Node & {
   history: Array<Version>;
   /** The unique identifier */
   id: Scalars['ID'];
+  idFromBankTransaction?: Maybe<Scalars['String']>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
   publishedBy?: Maybe<User>;
   scheduledIn: Array<ScheduledOperation>;
+  slug?: Maybe<Scalars['String']>;
   /** System stage field */
   stage: Stage;
   type: TransactionType;
@@ -5303,9 +5306,12 @@ export type TransactionCreateInput = {
   bankAccount?: InputMaybe<BankAccountCreateOneInlineInput>;
   color?: InputMaybe<ColorInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  creditor?: InputMaybe<Scalars['String']>;
   date: Scalars['DateTime'];
   description?: InputMaybe<Scalars['String']>;
   fromFile?: InputMaybe<Scalars['String']>;
+  idFromBankTransaction?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
   type: TransactionType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -5841,6 +5847,25 @@ export type TransactionManyWhereInput = {
   /** All values that are not contained in given list. */
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   createdBy?: InputMaybe<UserWhereInput>;
+  creditor?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  creditor_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  creditor_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  creditor_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  creditor_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  creditor_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  creditor_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  creditor_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  creditor_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  creditor_starts_with?: InputMaybe<Scalars['String']>;
   date?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   date_gt?: InputMaybe<Scalars['DateTime']>;
@@ -5898,6 +5923,25 @@ export type TransactionManyWhereInput = {
   /** All values starting with the given string. */
   fromFile_starts_with?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
+  idFromBankTransaction?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  idFromBankTransaction_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  idFromBankTransaction_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  idFromBankTransaction_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  idFromBankTransaction_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  idFromBankTransaction_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  idFromBankTransaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  idFromBankTransaction_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  idFromBankTransaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  idFromBankTransaction_starts_with?: InputMaybe<Scalars['String']>;
   /** All values containing the given string. */
   id_contains?: InputMaybe<Scalars['ID']>;
   /** All values ending with the given string. */
@@ -5935,6 +5979,25 @@ export type TransactionManyWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  slug?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  slug_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  slug_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  slug_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  slug_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  slug_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  slug_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  slug_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  slug_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  slug_starts_with?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<TransactionType>;
   /** All values that are contained in given list. */
   type_in?: InputMaybe<Array<InputMaybe<TransactionType>>>;
@@ -5965,16 +6028,22 @@ export enum TransactionOrderByInput {
   AmountDesc = 'amount_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
+  CreditorAsc = 'creditor_ASC',
+  CreditorDesc = 'creditor_DESC',
   DateAsc = 'date_ASC',
   DateDesc = 'date_DESC',
   DescriptionAsc = 'description_ASC',
   DescriptionDesc = 'description_DESC',
   FromFileAsc = 'fromFile_ASC',
   FromFileDesc = 'fromFile_DESC',
+  IdFromBankTransactionAsc = 'idFromBankTransaction_ASC',
+  IdFromBankTransactionDesc = 'idFromBankTransaction_DESC',
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
+  SlugAsc = 'slug_ASC',
+  SlugDesc = 'slug_DESC',
   TypeAsc = 'type_ASC',
   TypeDesc = 'type_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
@@ -5990,9 +6059,12 @@ export type TransactionUpdateInput = {
   amount?: InputMaybe<Scalars['Int']>;
   bankAccount?: InputMaybe<BankAccountUpdateOneInlineInput>;
   color?: InputMaybe<ColorInput>;
+  creditor?: InputMaybe<Scalars['String']>;
   date?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   fromFile?: InputMaybe<Scalars['String']>;
+  idFromBankTransaction?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<TransactionType>;
 };
 
@@ -6016,9 +6088,12 @@ export type TransactionUpdateManyInlineInput = {
 export type TransactionUpdateManyInput = {
   amount?: InputMaybe<Scalars['Int']>;
   color?: InputMaybe<ColorInput>;
+  creditor?: InputMaybe<Scalars['String']>;
   date?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   fromFile?: InputMaybe<Scalars['String']>;
+  idFromBankTransaction?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<TransactionType>;
 };
 
@@ -6113,6 +6188,25 @@ export type TransactionWhereInput = {
   /** All values that are not contained in given list. */
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   createdBy?: InputMaybe<UserWhereInput>;
+  creditor?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  creditor_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  creditor_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  creditor_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  creditor_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  creditor_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  creditor_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  creditor_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  creditor_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  creditor_starts_with?: InputMaybe<Scalars['String']>;
   date?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   date_gt?: InputMaybe<Scalars['DateTime']>;
@@ -6170,6 +6264,25 @@ export type TransactionWhereInput = {
   /** All values starting with the given string. */
   fromFile_starts_with?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
+  idFromBankTransaction?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  idFromBankTransaction_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  idFromBankTransaction_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  idFromBankTransaction_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  idFromBankTransaction_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  idFromBankTransaction_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  idFromBankTransaction_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  idFromBankTransaction_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  idFromBankTransaction_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  idFromBankTransaction_starts_with?: InputMaybe<Scalars['String']>;
   /** All values containing the given string. */
   id_contains?: InputMaybe<Scalars['ID']>;
   /** All values ending with the given string. */
@@ -6207,6 +6320,25 @@ export type TransactionWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  slug?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  slug_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  slug_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  slug_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  slug_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  slug_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  slug_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  slug_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  slug_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  slug_starts_with?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<TransactionType>;
   /** All values that are contained in given list. */
   type_in?: InputMaybe<Array<InputMaybe<TransactionType>>>;
@@ -6773,6 +6905,9 @@ export type CreateTransactionMutationVariables = Exact<{
   color?: InputMaybe<ColorInput>;
   date: Scalars['DateTime'];
   type: TransactionType;
+  slug?: InputMaybe<Scalars['String']>;
+  creditor?: InputMaybe<Scalars['String']>;
+  idFromBankTransaction?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -6823,7 +6958,7 @@ export type GetTransactionsByBankQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactionsByBankQuery = { __typename?: 'Query', transactions: Array<{ __typename?: 'Transaction', id: string, description?: string | null, amount: number, type: TransactionType, date: any, createdAt: any, updatedAt: any, color?: { __typename?: 'Color', hex: any, css: string, rgba: { __typename?: 'RGBA', g: any, r: any, b: any, a: any } } | null, bankAccount?: { __typename?: 'BankAccount', id: string } | null }> };
+export type GetTransactionsByBankQuery = { __typename?: 'Query', transactions: Array<{ __typename?: 'Transaction', id: string, idFromBankTransaction?: string | null, description?: string | null, amount: number, type: TransactionType, date: any, createdAt: any, updatedAt: any, color?: { __typename?: 'Color', hex: any, css: string, rgba: { __typename?: 'RGBA', g: any, r: any, b: any, a: any } } | null, bankAccount?: { __typename?: 'BankAccount', id: string } | null }> };
 
 export type GetUserBankAccountsQueryVariables = Exact<{
   uid: Scalars['String'];
@@ -6929,9 +7064,9 @@ export type CreateBankAccountMutationHookResult = ReturnType<typeof useCreateBan
 export type CreateBankAccountMutationResult = Apollo.MutationResult<CreateBankAccountMutation>;
 export type CreateBankAccountMutationOptions = Apollo.BaseMutationOptions<CreateBankAccountMutation, CreateBankAccountMutationVariables>;
 export const CreateTransactionDocument = gql`
-    mutation CreateTransaction($amount: Int!, $description: String, $bankAccountId: ID!, $color: ColorInput, $date: DateTime!, $type: TransactionType!) {
+    mutation CreateTransaction($amount: Int!, $description: String, $bankAccountId: ID!, $color: ColorInput, $date: DateTime!, $type: TransactionType!, $slug: String, $creditor: String, $idFromBankTransaction: String) {
   createTransaction(
-    data: {amount: $amount, description: $description, type: $type, color: $color, date: $date, bankAccount: {connect: {id: $bankAccountId}}}
+    data: {idFromBankTransaction: $idFromBankTransaction, amount: $amount, description: $description, type: $type, color: $color, date: $date, slug: $slug, creditor: $creditor, bankAccount: {connect: {id: $bankAccountId}}}
   ) {
     id
     amount
@@ -6959,6 +7094,9 @@ export type CreateTransactionMutationFn = Apollo.MutationFunction<CreateTransact
  *      color: // value for 'color'
  *      date: // value for 'date'
  *      type: // value for 'type'
+ *      slug: // value for 'slug'
+ *      creditor: // value for 'creditor'
+ *      idFromBankTransaction: // value for 'idFromBankTransaction'
  *   },
  * });
  */
@@ -7216,6 +7354,7 @@ export const GetTransactionsByBankDocument = gql`
     query GetTransactionsByBank($id: ID!) {
   transactions(where: {bankAccount: {id: $id}}, orderBy: date_ASC) {
     id
+    idFromBankTransaction
     description
     amount
     type

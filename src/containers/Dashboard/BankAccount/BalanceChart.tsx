@@ -22,15 +22,15 @@ export const BalanceChart: React.FC<IBalanceChart> = ({ transactions }) => {
         amount = type === TransactionType.Debit ? -amount : amount;
         const prevBalance = acc.balances.at(-1) || 0;
 
-        console.log("prevBalance -->", prevBalance);
-        console.log("amount -->", amount);
-        console.log("type -->", type);
+        // console.log("prevBalance -->", prevBalance);
+        // console.log("amount -->", amount);
+        // console.log("type -->", type);
 
         acc.balances = [...acc.balances, prevBalance + amount];
         acc.dates = [...acc.dates, date];
 
-        console.log("acc.balances -->", acc.balances);
-        console.log("------------------------");
+        // console.log("acc.balances -->", acc.balances);
+        // console.log("------------------------");
 
         return acc;
       },
@@ -52,6 +52,9 @@ export const BalanceChart: React.FC<IBalanceChart> = ({ transactions }) => {
       },
       xaxis:{
         categories: dates
+      },
+      title: {
+        text:'Balance Chart'
       }
     };
 
@@ -66,8 +69,8 @@ export const BalanceChart: React.FC<IBalanceChart> = ({ transactions }) => {
     };
   }, [transactions]);
 
-  console.log('options -->', options)
-  console.log('series -->', series)
+  // console.log('options -->', options)
+  // console.log('series -->', series)
 
   return (
     <div className="bg-surface shadow-md rounded-md p-6 mt-4 mb-4 text-on-surface">
