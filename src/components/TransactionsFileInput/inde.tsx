@@ -1,10 +1,9 @@
 import { CreateTransactionMutationVariables } from "@graphql-folder/generated";
 import { CSVData } from "@types-folder/index";
 import { ChangeEvent, InputHTMLAttributes, useRef, useState } from "react";
-import CSVReader, { IFileInfo } from "react-csv-reader";
 import { createManyTransactions } from "src/models/Transaction/mutateMany";
 import { extractTransactionsFromCSVData } from "src/models/Transaction/utils";
-import { handleToastPromise, showErrorToast } from "src/utils/app";
+import { handleToastPromise } from "src/utils/app";
 
 interface ITransactionsFileInput extends InputHTMLAttributes<HTMLInputElement> {
   currentBankId: string;

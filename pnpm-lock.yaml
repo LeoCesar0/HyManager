@@ -40,7 +40,6 @@ specifiers:
   postcss: ^8.4.21
   react: 18.2.0
   react-apexcharts: ^1.4.0
-  react-csv-reader: ^3.5.2
   react-dom: 18.2.0
   react-icons: ^4.3.1
   react-toastify: ^9.1.1
@@ -78,7 +77,6 @@ dependencies:
   phosphor-react: 1.4.1_react@18.2.0
   react: 18.2.0
   react-apexcharts: 1.4.0_l2rd6y5gjgpeiojdskdkjkna3y
-  react-csv-reader: 3.5.2_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.7.1_react@18.2.0
   react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
@@ -5764,10 +5762,6 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /papaparse/5.4.0:
-    resolution: {integrity: sha512-ZBQABWG09p+u8rFoJVl/GhgxZ5zy9Zh1Lu/LVc7VX5T4nljjC14/YTcpebYwqP218B9X307eBOP7Tuhoqv7v7w==}
-    dev: false
-
   /param-case/3.0.4:
     resolution: {integrity: sha512-RXlj7zCYokReqWpOPH9oYivUzLYZ5vAPIfEmCTNViosC78F8F0H9y7T7gG2M39ymgutxF5gcFEsyZQSph9Bp3A==}
     dependencies:
@@ -6059,18 +6053,6 @@ packages:
       apexcharts: 3.37.1
       prop-types: 15.8.1
       react: 18.2.0
-    dev: false
-
-  /react-csv-reader/3.5.2_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-SRjVAHaLOFy3s7R8iJdN0PHcIdLs+8MHy97fsZeSPD1feB/Fg2qidgALmu9DUHneMa0rkNDG/qeFp//r7HWH8Q==}
-    peerDependencies:
-      prop-types: ^15.7.2
-      react: ^16.0.0 || ^17.0.0
-      react-dom: ^16.0.0 || ^17.0.0
-    dependencies:
-      papaparse: 5.4.0
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react-dom/18.2.0_react@18.2.0:
