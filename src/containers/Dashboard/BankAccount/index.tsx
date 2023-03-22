@@ -4,7 +4,6 @@ import { useGlobalAuth } from "@contexts/GlobalAuth";
 import { BankAccount } from "@types-folder/models/BankAccount";
 import BankHeader from "./BankHeader";
 import TransactionList from "./TransactionList";
-import CSVReader, { IFileInfo } from "react-csv-reader";
 import { extractTransactionsFromCSVData } from "src/models/Transaction/utils";
 import { createManyTransactions } from "src/models/Transaction/mutateMany";
 import { handleToastPromise, showErrorToast } from "src/utils/app";
