@@ -5,7 +5,7 @@ mutation CreateTransaction(
   $color: ColorInput
   $date: DateTime!
   $type: TransactionType!
-  $slug: String
+  $slug: String!
   $creditor: String
   $idFromBankTransaction: String
 ) {
@@ -23,6 +23,7 @@ mutation CreateTransaction(
     }
   ) {
     id
+    slug
     amount
   }
 }

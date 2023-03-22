@@ -13,7 +13,7 @@ import { getUserBankAccounts } from "../models/BankAccount/query";
 import { firebaseAuth, signIn, signOut } from "../services/firebase";
 import { CurrentUser } from "../types/models/AppUser";
 import { BankAccount } from "../types/models/BankAccount";
-import { ShowErrorToast } from "../utils/app";
+import { showErrorToast } from "../utils/app";
 
 interface GlobalAuthProps {
   currentUser: CurrentUser | null;
@@ -95,7 +95,7 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setState((prev) => ({ ...prev, loading: true }));
     const { data, error } = await signIn();
 
-    if (error) ShowErrorToast(error);
+    if (error) showErrorToast(error);
 
     setState((prev) => ({
       ...prev,

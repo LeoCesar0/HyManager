@@ -5,8 +5,10 @@ import { BankAccount } from "@types-folder/models/BankAccount";
 import BankHeader from "./BankHeader";
 import TransactionList from "./TransactionList";
 import CSVReader, { IFileInfo } from "react-csv-reader";
-import { importTransactionsFromDoc } from "src/models/Transaction/utils";
+import { extractTransactionsFromCSVData } from "src/models/Transaction/utils";
 import { createManyTransactions } from "src/models/Transaction/mutateMany";
+import { handleToastPromise, showErrorToast } from "src/utils/app";
+import TransactionsFileInput from "@components/TransactionsFileInput/inde";
 
 const BankAccountPage = ({}) => {
   const [currentBank, setCurrentBank] = useState<BankAccount | null>(null);
@@ -27,37 +29,13 @@ const BankAccountPage = ({}) => {
     }
   }, [userBankAccounts, bankAccountId]);
 
-  const onFileLoaded = async (
-    data: Array<any>,
-    fileInfo: IFileInfo,
-    originalFile: File | undefined
-  ) => {
-    if (currentBank?.id) {
-      const results = importTransactionsFromDoc({
-        data: data,
-        bankAccountId: currentBank.id,
-      });
-      const inputs = results.data;
-      if (inputs) {
-        try {
-          const results = await createManyTransactions({
-            transactionsValues: inputs,
-          });
-          console.log("Final Results -->", results);
-        } catch (e) {
-          console.log("createManyTransactions ERROR -->", e);
-        }
-      }
-    }
-  };
-
   return (
     <div className="component__page-container">
       {currentBank && (
         <>
           <BankHeader currentBank={currentBank} />
           <div>
-            <CSVReader onFileLoaded={onFileLoaded} />
+            <TransactionsFileInput currentBankId={currentBank.id} />
           </div>
           <div>
             {!!bankAccountId && (

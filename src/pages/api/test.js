@@ -1,10 +1,8 @@
-
-
 export const test = (req, res) => {
+  const data = {};
 
   res.status(200).json({ data: data });
 
-  // console.log("backend file -->", file);
 
   return res;
 };

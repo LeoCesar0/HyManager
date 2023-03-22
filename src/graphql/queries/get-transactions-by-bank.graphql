@@ -1,6 +1,7 @@
 query GetTransactionsByBank($id: ID!) {
   transactions(where: {bankAccount: {id: $id}}, orderBy: date_ASC) {
     id
+    slug
     idFromBankTransaction
     description
     amount

@@ -5232,7 +5232,7 @@ export type Transaction = Node & {
   /** User that last published this document */
   publishedBy?: Maybe<User>;
   scheduledIn: Array<ScheduledOperation>;
-  slug?: Maybe<Scalars['String']>;
+  slug: Scalars['String'];
   /** System stage field */
   stage: Stage;
   type: TransactionType;
@@ -5319,7 +5319,7 @@ export type TransactionCreateInput = {
   description?: InputMaybe<Scalars['String']>;
   fromFile?: InputMaybe<Scalars['String']>;
   idFromBankTransaction?: InputMaybe<Scalars['String']>;
-  slug?: InputMaybe<Scalars['String']>;
+  slug: Scalars['String'];
   type: TransactionType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -6918,13 +6918,13 @@ export type CreateTransactionMutationVariables = Exact<{
   color?: InputMaybe<ColorInput>;
   date: Scalars['DateTime'];
   type: TransactionType;
-  slug?: InputMaybe<Scalars['String']>;
+  slug: Scalars['String'];
   creditor?: InputMaybe<Scalars['String']>;
   idFromBankTransaction?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type CreateTransactionMutation = { __typename?: 'Mutation', createTransaction?: { __typename?: 'Transaction', id: string, amount: number } | null };
+export type CreateTransactionMutation = { __typename?: 'Mutation', createTransaction?: { __typename?: 'Transaction', id: string, slug: string, amount: number } | null };
 
 export type PublishAppUserMutationVariables = Exact<{
   uid: Scalars['String'];
@@ -6978,7 +6978,7 @@ export type GetTransactionsByBankQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactionsByBankQuery = { __typename?: 'Query', transactions: Array<{ __typename?: 'Transaction', id: string, idFromBankTransaction?: string | null, description?: string | null, amount: number, type: TransactionType, date: any, createdAt: any, updatedAt: any, color?: { __typename?: 'Color', hex: any, css: string, rgba: { __typename?: 'RGBA', g: any, r: any, b: any, a: any } } | null, bankAccount?: { __typename?: 'BankAccount', id: string } | null }> };
+export type GetTransactionsByBankQuery = { __typename?: 'Query', transactions: Array<{ __typename?: 'Transaction', id: string, slug: string, idFromBankTransaction?: string | null, description?: string | null, amount: number, type: TransactionType, date: any, createdAt: any, updatedAt: any, color?: { __typename?: 'Color', hex: any, css: string, rgba: { __typename?: 'RGBA', g: any, r: any, b: any, a: any } } | null, bankAccount?: { __typename?: 'BankAccount', id: string } | null }> };
 
 export type GetUserBankAccountsQueryVariables = Exact<{
   uid: Scalars['String'];
@@ -7084,11 +7084,12 @@ export type CreateBankAccountMutationHookResult = ReturnType<typeof useCreateBan
 export type CreateBankAccountMutationResult = Apollo.MutationResult<CreateBankAccountMutation>;
 export type CreateBankAccountMutationOptions = Apollo.BaseMutationOptions<CreateBankAccountMutation, CreateBankAccountMutationVariables>;
 export const CreateTransactionDocument = gql`
-    mutation CreateTransaction($amount: Int!, $description: String, $bankAccountId: ID!, $color: ColorInput, $date: DateTime!, $type: TransactionType!, $slug: String, $creditor: String, $idFromBankTransaction: String) {
+    mutation CreateTransaction($amount: Int!, $description: String, $bankAccountId: ID!, $color: ColorInput, $date: DateTime!, $type: TransactionType!, $slug: String!, $creditor: String, $idFromBankTransaction: String) {
   createTransaction(
     data: {idFromBankTransaction: $idFromBankTransaction, amount: $amount, description: $description, type: $type, color: $color, date: $date, slug: $slug, creditor: $creditor, bankAccount: {connect: {id: $bankAccountId}}}
   ) {
     id
+    slug
     amount
   }
 }
@@ -7412,6 +7413,7 @@ export const GetTransactionsByBankDocument = gql`
     query GetTransactionsByBank($id: ID!) {
   transactions(where: {bankAccount: {id: $id}}, orderBy: date_ASC) {
     id
+    slug
     idFromBankTransaction
     description
     amount

@@ -7,3 +7,6 @@ export type AppModelResponse<T> = {
   done: boolean;
   data: T | null;
 };
+
+
+export type CSVData = string[][]

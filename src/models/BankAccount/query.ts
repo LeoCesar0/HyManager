@@ -11,17 +11,19 @@ import { debugDev } from "../../utils/dev";
 
 type GetAllBankAccounts = AppModelResponse<BankAccount[]>;
 
-export const getUserBankAccounts = async (values: GetUserBankAccountsQueryVariables): Promise<GetAllBankAccounts> => {
+export const getUserBankAccounts = async (
+  values: GetUserBankAccountsQueryVariables
+): Promise<GetAllBankAccounts> => {
   const funcName = "getUserBankAccounts";
 
   return apolloClient
     .query<GetUserBankAccountsQuery>({
       query: GetUserBankAccountsDocument,
-      variables: values
+      variables: values,
     })
     .then(({ data, error, errors }) => {
-      const dataValue = data.bankAccounts || [];
-      if (data) {
+      if (data.bankAccounts) {
+        const dataValue = data.bankAccounts || [];
         debugDev({
           type: "success",
           name: funcName,
@@ -53,4 +55,3 @@ export const getUserBankAccounts = async (values: GetUserBankAccountsQueryVariab
       };
     });
 };
-

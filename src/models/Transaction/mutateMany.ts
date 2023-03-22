@@ -1,8 +1,10 @@
 import { gql } from "@apollo/client";
 import {
   CreateTransactionMutationVariables,
+  GetTransactionsByBankDocument,
   PublishManyTransactionsDocument,
   PublishManyTransactionsMutation,
+  GetTransactionsByBankQuery,
 } from "@graphql-folder/generated";
 import { apolloClient } from "src/lib/apollo";
 import { makeTransactionSlug } from "src/utils/app";
@@ -10,10 +12,12 @@ import { debugDev } from "src/utils/dev";
 
 interface ICreateTransactions {
   transactionsValues: CreateTransactionMutationVariables[];
+  bankAccountId: string;
 }
 
 export const createManyTransactions = async ({
   transactionsValues,
+  bankAccountId,
 }: ICreateTransactions) => {
   if (transactionsValues.length <= 0) {
     return {
@@ -24,8 +28,32 @@ export const createManyTransactions = async ({
       data: null,
     };
   }
+  const existingTransactionsResponse =
+    await apolloClient.query<GetTransactionsByBankQuery>({
+      query: GetTransactionsByBankDocument,
+      variables: {
+        id: bankAccountId,
+      },
+    });
+
+  const existingTransactions =
+    existingTransactionsResponse.data?.transactions || [];
+
   const transactionSlugsToPublish: string[] = [];
-  let bankId = "";
+  const transactionsRemoved: typeof transactionsValues = [];
+
+  transactionsValues = transactionsValues.filter((transaction) => {
+    const alreadyExist = existingTransactions.find(
+      (item) => item.slug === transaction.slug
+    );
+    if (alreadyExist) {
+      console.log("// alreadyExist transaction //");
+      console.log("Removing transaction -->", transaction);
+      console.log("alreadyExist -->", alreadyExist);
+      transactionsRemoved.push(transaction);
+    }
+    return !alreadyExist;
+  });
 
   const mutationString = transactionsValues
     .map((transaction) => {
@@ -37,19 +65,12 @@ export const createManyTransactions = async ({
         type,
         creditor,
         idFromBankTransaction,
-        bankAccountId,
+        slug,
       } = transaction;
-      bankId = bankAccountId;
-      const slug =
-        transaction.slug ||
-        makeTransactionSlug({
-          amount: amount.toString(),
-          date,
-        });
       transactionSlugsToPublish.push(slug);
 
       let stringValues = `idFromBankTransaction: "${idFromBankTransaction}", amount: ${amount}, description: "${description}", type: ${type}, date: "${date}"`;
-      if (slug) stringValues += `slug: "${slug}"`;
+      stringValues += `slug: "${slug}"`;
       if (color) stringValues += `color: ${JSON.stringify(color)},`;
       if (creditor) stringValues += `creditor: "${creditor}"`;
 
@@ -63,12 +84,14 @@ export const createManyTransactions = async ({
     }
   `;
 
+  console.log("transactionsRemoved.length -->", transactionsRemoved.length);
+
   return apolloClient
     .mutate({ mutation })
     .then(async (result) => {
       if (result.data) {
         const { data, done, error } = await publishManyTransactionsByBankId({
-          bankAccountId: bankId,
+          bankAccountId: bankAccountId,
         });
         return {
           done: done,
@@ -120,6 +143,12 @@ const publishManyTransactionsByBankId = async ({
       variables: {
         bankAccountId: bankAccountId,
       },
+      refetchQueries: [
+        {
+          query: GetTransactionsByBankDocument,
+          variables: { id: bankAccountId },
+        },
+      ],
     })
     .then((result) => {
       if (result.data?.publishManyTransactions) {

@@ -2,13 +2,14 @@ import {
   CreateTransactionMutationVariables,
   TransactionType,
 } from "@graphql-folder/generated";
+import { CSVData } from "@types-folder/index";
 import { createTransactionSchema } from "@types-folder/models/Transaction";
 import { parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { makeTransactionSlug, parseAmount } from "src/utils/app";
 
-interface IImportTransactionsFromDoc {
-  data: Array<any>;
+interface IExtractTransactionsFromCSVData {
+  data: CSVData;
   bankAccountId: string;
 }
 interface RawTransaction {
@@ -17,10 +18,10 @@ interface RawTransaction {
   description: string;
   idFromBankTransaction: string;
 }
-export const importTransactionsFromDoc = ({
+export const extractTransactionsFromCSVData = ({
   data,
   bankAccountId,
-}: IImportTransactionsFromDoc) => {
+}: IExtractTransactionsFromCSVData) => {
   const headersSettings = [
     {
       expected: "Identificador",
@@ -52,7 +53,7 @@ export const importTransactionsFromDoc = ({
 
   if (!isValid) {
     error = {
-      message: "Doc is not valid",
+      message: "CSV is not valid",
     };
     return {
       data: null,
@@ -62,18 +63,17 @@ export const importTransactionsFromDoc = ({
   }
 
   const rawTransactions: RawTransaction[] = data.reduce((acc, entry) => {
-    const transaction: { [key: string]: string } = {};
+    const transaction: RawTransaction = {} as RawTransaction;
     headers.forEach((key, index) => {
-      const parsedKey = headersSettings.find(
-        (item) => item.expected == key
-      )?.parsed;
+      const parsedKey = headersSettings.find((item) => item.expected == key)
+        ?.parsed as keyof RawTransaction;
       if (parsedKey) transaction[parsedKey] = entry[index];
     });
-    acc.push(transaction);
+    if (transaction.amount && transaction.date) {
+      acc.push(transaction);
+    }
     return acc;
   }, [] as RawTransaction[]);
-
-  console.log("rawTransactions -->", rawTransactions);
 
   const parsedTransactions: CreateTransactionMutationVariables[] =
     parseTransactions(rawTransactions, bankAccountId);
@@ -103,8 +103,9 @@ const parseTransactions = (
       const dateIso = dateObject.toISOString();
       const description = item["description"] || "";
       const creditor = (description.split("-")[1] || "").trim();
+      const idFromBankTransaction = item["idFromBankTransaction"];
       const transaction: CreateTransactionMutationVariables = {
-        idFromBankTransaction: item["idFromBankTransaction"],
+        idFromBankTransaction: idFromBankTransaction,
         bankAccountId: bankAccountId,
         amount: amount,
         type: type,
@@ -114,14 +115,18 @@ const parseTransactions = (
         slug: makeTransactionSlug({
           date: dateIso,
           amount: amount.toString(),
+          idFromBankTransaction,
         }),
       };
       const validation = createTransactionSchema.safeParse(transaction);
       if (validation.success) {
         acc.push(transaction);
       } else {
-        console.log("Validation Error, transaction -->", transaction);
-        console.log("validation -->", validation.error);
+        console.log(
+          "Validation Error, transaction skipped -->",
+          transaction,
+          validation.error
+        );
       }
 
       return acc;
