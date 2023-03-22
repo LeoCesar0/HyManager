@@ -46,6 +46,7 @@ interface CreateTransaction {
     message: string;
   } | null;
 }
+
 export const createTransaction = async (
   values: CreateTransactionMutationVariables
 ): Promise<CreateTransaction> => {
@@ -110,3 +111,5 @@ export const createTransaction = async (
     };
   }
 };
+
+/* -------------------------------- MULTIPLE -------------------------------- */

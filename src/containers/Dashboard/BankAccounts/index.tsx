@@ -12,7 +12,7 @@ import {
 import BankAccountForm from "./BackAccountForm";
 
 const BankAccounts = () => {
-  const { currentUser, userBankAccounts } = useGlobalAuth();
+  const { userBankAccounts } = useGlobalAuth();
 
   return (
     <>
@@ -21,7 +21,7 @@ const BankAccounts = () => {
       </div>
       <div className="py-8 flex gap-4">
         <Card isAddMore />
-        {userBankAccounts.map((item) => {
+        {userBankAccounts && userBankAccounts.map((item) => {
           return (
             <Link key={item.id} href={`dashboard/bank/${item.id}`}>
               <Card

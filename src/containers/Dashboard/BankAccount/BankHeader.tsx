@@ -44,13 +44,15 @@ const BankHeader: React.FC<IBankHeader> = ({ currentBank }) => {
         >
           <HiArrowLeft />
         </IconButton>
-        <h1 className="text-2xl mr-6">{currentBank?.title}</h1>
+        <h1 className="text-2xl mr-6">{currentBank?.title || ""}</h1>
         <span>
           Balance{" "}
-          {currentBank?.balance.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-          })}
+          {currentBank
+            ? currentBank.balance.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })
+            : ""}
         </span>
       </div>
       <div className="flex items-center gap-2">

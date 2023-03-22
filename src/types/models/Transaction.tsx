@@ -1,3 +1,4 @@
+import { isValid } from "date-fns";
 import { z } from "zod";
 import {
   CreateTransactionMutationVariables,
@@ -27,7 +28,9 @@ export const createTransactionSchema = z.object({
   type: z.enum([TransactionType.Credit, TransactionType.Debit], {
     invalid_type_error: "Type Error",
   }),
-  date: z.date({ invalid_type_error: "Date error" }),
+  date: z
+    .string({ invalid_type_error: "Date type error" })
+    .refine((date) => isValid(new Date(date)), { message: "Invalid date" }),
   creditor: z.string({ invalid_type_error: "Creditor error" }).optional(),
   description: z.string({ invalid_type_error: "Description error" }).optional(),
   slug: z.string({ invalid_type_error: "Slug error" }),

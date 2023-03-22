@@ -6,7 +6,6 @@ import { createTransactionSchema } from "@types-folder/models/Transaction";
 import { parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { makeTransactionSlug, parseAmount } from "src/utils/app";
-import { z } from "zod";
 
 interface IImportTransactionsFromDoc {
   data: Array<any>;
@@ -74,57 +73,61 @@ export const importTransactionsFromDoc = ({
     return acc;
   }, [] as RawTransaction[]);
 
-  const itemsRemove = [];
-
   console.log("rawTransactions -->", rawTransactions);
 
   const parsedTransactions: CreateTransactionMutationVariables[] =
-    rawTransactions.reduce((acc, item) => {
-      try {
-        const amount = parseAmount(parseFloat(item["amount"]));
-        const type =
-          Number(item["amount"]) > 0
-            ? TransactionType.Credit
-            : TransactionType.Debit;
-        const dateAsLocaleString = item["date"];
-        const date = parse(dateAsLocaleString, "P", new Date(), {
-          locale: ptBR,
-        });
-        const description = item["description"] || "";
-        const creditor = (description.split("-")[1] || "").trim();
-        const transaction: CreateTransactionMutationVariables = {
-          idFromBankTransaction: item["idFromBankTransaction"],
-          bankAccountId: bankAccountId,
-          amount: amount,
-          type: type,
-          date: date,
-          creditor: creditor,
-          description: description,
-          slug: makeTransactionSlug({
-            date: date.toISOString(),
-            amount: amount.toString(),
-          }),
-        };
-        const validation = createTransactionSchema.safeParse(transaction);
-        if (validation.success) {
-          acc.push(transaction);
-        } else {
-          itemsRemove.push(item);
-          console.log("Validation Error, transaction -->", transaction);
-          console.log("validation -->", validation.error);
-        }
-
-        return acc;
-      } catch (e) {
-        itemsRemove.push(item);
-        console.log("parsedTransactions catch error, item -->", e, item);
-        return acc;
-      }
-    }, [] as CreateTransactionMutationVariables[]);
+    parseTransactions(rawTransactions, bankAccountId);
 
   return {
     data: parsedTransactions,
     error: null,
     done: true,
   };
+};
+
+const parseTransactions = (
+  rawTransactions: RawTransaction[],
+  bankAccountId: string
+) => {
+  return rawTransactions.reduce((acc, item) => {
+    try {
+      const amount = parseAmount(parseFloat(item["amount"]));
+      const type =
+        Number(item["amount"]) > 0
+          ? TransactionType.Credit
+          : TransactionType.Debit;
+      const dateAsLocaleString = item["date"];
+      const dateObject = parse(dateAsLocaleString, "P", new Date(), {
+        locale: ptBR,
+      });
+      const dateIso = dateObject.toISOString();
+      const description = item["description"] || "";
+      const creditor = (description.split("-")[1] || "").trim();
+      const transaction: CreateTransactionMutationVariables = {
+        idFromBankTransaction: item["idFromBankTransaction"],
+        bankAccountId: bankAccountId,
+        amount: amount,
+        type: type,
+        date: dateIso,
+        creditor: creditor,
+        description: description,
+        slug: makeTransactionSlug({
+          date: dateIso,
+          amount: amount.toString(),
+        }),
+      };
+      const validation = createTransactionSchema.safeParse(transaction);
+      if (validation.success) {
+        acc.push(transaction);
+      } else {
+        console.log("Validation Error, transaction -->", transaction);
+        console.log("validation -->", validation.error);
+      }
+
+      return acc;
+    } catch (e) {
+      console.log("parsedTransactions catch error, item -->", e, item);
+      return acc;
+    }
+  }, [] as CreateTransactionMutationVariables[]);
 };

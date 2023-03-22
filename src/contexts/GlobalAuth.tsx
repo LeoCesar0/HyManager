@@ -21,15 +21,16 @@ interface GlobalAuthProps {
   setState: Dispatch<SetStateAction<GlobalAuthProps>>;
   handleSignIn: () => void;
   handleSignOut: () => void;
+  handleGetUserBankAccounts: () => void;
   loading: boolean;
-  userBankAccounts: BankAccount[] | [];
+  userBankAccounts: BankAccount[] | null;
 }
 
 const initialValues = {
   currentUser: null,
   menuIsOpen: false,
   loading: false,
-  userBankAccounts: []
+  userBankAccounts: null,
 };
 const GlobalAuth = createContext<GlobalAuthProps>(
   initialValues as GlobalAuthProps
@@ -65,7 +66,7 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [state, setState] = useState<GlobalAuthProps>(
     initialValues as GlobalAuthProps
   );
-  const router = useRouter()
+  const router = useRouter();
 
   const { currentUser, loading } = state;
 
@@ -87,7 +88,7 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   /* ------------------------------ handleSignOut ----------------------------- */
   const handleSignOut = async () => {
     await signOut();
-    router.push('/')
+    router.push("/");
   };
   /* ------------------------------ handleSignIn ------------------------------ */
   const handleSignIn = async () => {
@@ -106,18 +107,24 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   /* ---------------------------------- USER ---------------------------------- */
   const handleGetUserBankAccounts = () => {
     if (currentUser) {
+      setState((prev) => ({
+        ...prev,
+        loading: true,
+      }));
       getUserBankAccounts({
         uid: currentUser.uid,
       }).then((results) => {
         setState((prev) => ({
           ...prev,
           userBankAccounts: results.data || [],
+          loading: false,
         }));
       });
     } else {
       setState((prev) => ({
         ...prev,
-        userBankAccounts: [],
+        userBankAccounts: null,
+        loading: false,
       }));
     }
   };
@@ -133,6 +140,7 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setState,
         handleSignOut,
         handleSignIn,
+        handleGetUserBankAccounts,
       }}
     >
       {children}

@@ -11,7 +11,7 @@ import { FormikProps, useFormik } from "formik";
 import { toast } from "react-toastify";
 import { createTransaction } from "src/models/Transaction/mutate";
 import { makeTransactionSlug } from "src/utils/app";
-import { cx, toISOStringWithTimezone } from "src/utils/misc";
+import { cx, dateToIsoString } from "src/utils/misc";
 import z from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -46,7 +46,7 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
       description: "",
       creditor: "",
       type: TransactionType.Credit,
-      date: toISOStringWithTimezone(new Date()),
+      date: dateToIsoString(new Date(), { withTimeZone: false }),
       color: {
         hex: "#ffffff",
       },
