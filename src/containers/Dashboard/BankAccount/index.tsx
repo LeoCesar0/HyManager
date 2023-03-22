@@ -6,7 +6,7 @@ import BankHeader from "./BankHeader";
 import TransactionList from "./TransactionList";
 import CSVReader, { IFileInfo } from "react-csv-reader";
 import { importTransactionsFromDoc } from "src/models/Transaction/utils";
-import {createManyTransactions} from "src/models/Transaction/mutateMany";
+import { createManyTransactions } from "src/models/Transaction/mutateMany";
 
 const BankAccountPage = ({}) => {
   const [currentBank, setCurrentBank] = useState<BankAccount | null>(null);
@@ -39,17 +39,14 @@ const BankAccountPage = ({}) => {
       });
       const inputs = results.data;
       if (inputs) {
-        createManyTransactions({
-          transactionsValues: inputs,
-        });
-        // const { data, done, errors, missingItems } =
-        //   await createManyTransactions(results.data);
-        // console.group("createManyTransactions");
-        // console.log("data -->", data);
-        // console.log("done -->", done);
-        // console.log("errors -->", errors);
-        // console.log("missingItems -->", missingItems);
-        // console.groupEnd();
+        try {
+          const results = await createManyTransactions({
+            transactionsValues: inputs,
+          });
+          console.log("Final Results -->", results);
+        } catch (e) {
+          console.log("createManyTransactions ERROR -->", e);
+        }
       }
     }
   };

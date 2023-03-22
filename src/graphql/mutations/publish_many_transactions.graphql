@@ -1,0 +1,10 @@
+mutation PublishManyTransactions($bankAccountId: ID!) {
+  publishManyTransactions(
+    where: { bankAccount: { id: $bankAccountId } }
+    to: PUBLISHED
+  ) {
+    ... {
+      count
+    }
+  }
+}

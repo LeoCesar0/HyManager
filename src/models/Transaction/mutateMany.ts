@@ -1,6 +1,11 @@
 import { gql } from "@apollo/client";
-import { CreateTransactionMutationVariables } from "@graphql-folder/generated";
+import {
+  CreateTransactionMutationVariables,
+  PublishManyTransactionsDocument,
+  PublishManyTransactionsMutation,
+} from "@graphql-folder/generated";
 import { apolloClient } from "src/lib/apollo";
+import { makeTransactionSlug } from "src/utils/app";
 import { debugDev } from "src/utils/dev";
 
 interface ICreateTransactions {
@@ -19,6 +24,8 @@ export const createManyTransactions = async ({
       data: null,
     };
   }
+  const transactionSlugsToPublish: string[] = [];
+  let bankId = "";
 
   const mutationString = transactionsValues
     .map((transaction) => {
@@ -28,13 +35,18 @@ export const createManyTransactions = async ({
         color,
         date,
         type,
-        slug,
         creditor,
         idFromBankTransaction,
         bankAccountId,
       } = transaction;
-
-      console.log("DATE -->", date);
+      bankId = bankAccountId;
+      const slug =
+        transaction.slug ||
+        makeTransactionSlug({
+          amount: amount.toString(),
+          date,
+        });
+      transactionSlugsToPublish.push(slug);
 
       let stringValues = `idFromBankTransaction: "${idFromBankTransaction}", amount: ${amount}, description: "${description}", type: ${type}, date: "${date}"`;
       if (slug) stringValues += `slug: "${slug}"`;
@@ -50,16 +62,18 @@ export const createManyTransactions = async ({
       ${mutationString}
     }
   `;
-  apolloClient
+
+  return apolloClient
     .mutate({ mutation })
-    .then((result) => {
-      // handle success
-      console.log("CREATE TRANSACTIONS DATA -->", result);
+    .then(async (result) => {
       if (result.data) {
+        const { data, done, error } = await publishManyTransactionsByBankId({
+          bankAccountId: bankId,
+        });
         return {
-          done: true,
-          error: null,
-          data: result.data,
+          done: done,
+          error: error,
+          data: data,
         };
       } else {
         const errorMessage = debugDev({
@@ -93,73 +107,131 @@ export const createManyTransactions = async ({
     });
 };
 
-interface IPublishManyTransactions {
-  transactionsIds: string[];
+interface IPublishManyTransactionsByBankId {
+  bankAccountId: string;
 }
-const publishManyTransactions = async ({
-  transactionsIds,
-}: IPublishManyTransactions) => {
-  const mutationString = transactionsIds
-    .map((id) => {
-      return `publishTransaction(where: {id: ${id}}){
-        id
-      }`;
-    })
-    .join("\n");
 
-  const mutation = gql`
-    mutation {
-      ${mutationString}
-    }
-  `;
-  if (mutationString.length > 0) {
-    apolloClient
-      .mutate({ mutation })
-      .then((result) => {
-        // handle success
-        if (result.data) {
-          return {
-            done: true,
-            error: null,
-            data: result.data,
-          };
-        } else {
-          const errorMessage = debugDev({
-            type: "error",
-            name: "publishManyTransactions",
-            value: result.errors,
-          });
-          return {
-            done: false,
-            error: {
-              message: errorMessage,
-            },
-            data: null,
-          };
-        }
-      })
-      .catch((error) => {
-        // Handle network errors
-        debugDev({
-          type: "error",
-          name: "publishManyTransactions",
-          value: error,
-        });
-        return {
-          done: false,
-          error: {
-            message: "Error when publishing transactions",
-          },
-          data: null,
-        };
-      });
-  } else {
-    return {
-      done: false,
-      error: {
-        message: "Not a single transaction",
+const publishManyTransactionsByBankId = async ({
+  bankAccountId,
+}: IPublishManyTransactionsByBankId) => {
+  return apolloClient
+    .mutate<PublishManyTransactionsMutation>({
+      mutation: PublishManyTransactionsDocument,
+      variables: {
+        bankAccountId: bankAccountId,
       },
-      data: null,
-    };
-  }
+    })
+    .then((result) => {
+      if (result.data?.publishManyTransactions) {
+        return {
+          done: true,
+          error: null,
+          data: result.data.publishManyTransactions,
+        };
+      }
+      const errorMessage = debugDev({
+        type: "error",
+        name: "publishManyTransactionsByBankId",
+        value: result.errors,
+      });
+      return {
+        done: false,
+        error: {
+          message: errorMessage,
+        },
+        data: null,
+      };
+    })
+    .catch((error) => {
+      debugDev({
+        type: "error",
+        name: "publishManyTransactionsByBankId",
+        value: error,
+      });
+      return {
+        done: false,
+        error: {
+          message: "Error when publishing transactions",
+        },
+        data: null,
+      };
+    });
 };
+
+/* ----------------------------------- OLD ---------------------------------- */
+
+// interface IPublishManyTransactions {
+//   transactionsSlugs: string[];
+//   bankAccountId: string;
+// }
+
+// const publishManyTransactions = async ({
+//   transactionsSlugs,
+//   bankAccountId,
+// }: IPublishManyTransactions) => {
+//   if (transactionsSlugs.length <= 0) {
+//     return {
+//       done: false,
+//       error: {
+//         message: "Error on publishing transactions, no transaction slugs",
+//       },
+//       data: null,
+//     };
+//   }
+
+//   const mutationString = transactionsSlugs
+//     .map((slug) => {
+//       return `publishTransaction(where: {bankAccount: {id: "${bankAccountId}"}, AND: {slug: "${slug}"}}, to: PUBLISHED){
+//         id
+//         slug
+//       }`;
+//     })
+//     .join("\n");
+
+//   const mutation = gql`
+//     mutation {
+//       ${mutationString}
+//     }
+//   `;
+
+//   return apolloClient
+//     .mutate({ mutation })
+//     .then((result) => {
+//       // handle success
+//       if (result.data) {
+//         return {
+//           done: true,
+//           error: null,
+//           data: result.data,
+//         };
+//       } else {
+//         const errorMessage = debugDev({
+//           type: "error",
+//           name: "publishManyTransactions",
+//           value: result.errors,
+//         });
+//         return {
+//           done: false,
+//           error: {
+//             message: errorMessage,
+//           },
+//           data: null,
+//         };
+//       }
+//     })
+//     .catch((error) => {
+//       // Handle network errors
+//       debugDev({
+//         type: "error",
+//         name: "publishManyTransactions",
+//         value: error,
+//       });
+//       return {
+//         done: false,
+//         error: {
+//           message: "Error when publishing transactions",
+//         },
+//         data: null,
+//       };
+//     });
+// };
