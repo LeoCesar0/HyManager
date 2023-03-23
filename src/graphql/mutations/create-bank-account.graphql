@@ -1,7 +1,0 @@
-mutation CreateBankAccount($title: String!, $slug: String!, $balance: Int = 0, $description: String, $userUid: String!) {
-  createBankAccount(data: {title: $title, slug: $slug, balance: $balance, description: $description, appUsers: {connect: {uid: $userUid}}}) {
-    id
-    title
-    description
-  }
-}

@@ -1,0 +1,34 @@
+import { AppModelResponse } from "@types-folder/index";
+import { debugDev } from "src/utils/dev";
+import { FirebaseCollection, firebaseCreate } from "..";
+import { CreateUser, User } from "./schema";
+
+interface ICreateUser {
+  values: CreateUser;
+}
+
+export const createUser = async ({
+  values,
+}: ICreateUser): Promise<AppModelResponse<User>> => {
+  const funcName = "getUserById";
+  try {
+    const result = await firebaseCreate<User>({
+      collection: FirebaseCollection.users,
+      data: values,
+    });
+    return result;
+  } catch (error) {
+    const errorMessage = debugDev({
+      type: "error",
+      name: funcName,
+      value: error,
+    });
+    return {
+      data: null,
+      done: false,
+      error: {
+        message: errorMessage,
+      },
+    };
+  }
+};

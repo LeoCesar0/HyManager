@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -36,6 +37,7 @@ const firebaseConfig = {
 // Initialize Firebase
 export const firebaseApp = initializeApp(firebaseConfig);
 export const firebaseAuth = getAuth(firebaseApp);
+export const firebaseDB = getFirestore(firebaseApp);
 // setPersistence(firebaseAuth, browserLocalPersistence);
 // const analytics = getAnalytics(app);
 
@@ -43,9 +45,8 @@ export const signOut = async () => {
   await firebaseSignOut(firebaseAuth);
 };
 
-
-
 export type SignIn = AppModelResponse<CurrentUser>;
+
 export const signIn = async (): Promise<SignIn> => {
   const googleProvider = new GoogleAuthProvider();
   setPersistence(firebaseAuth, browserLocalPersistence);

@@ -36,7 +36,7 @@ const GlobalAuth = createContext<GlobalAuthProps>(
   initialValues as GlobalAuthProps
 );
 
-const handleGetUserByUID = (
+const handleGetUserByUid = (
   uid: string,
   setState: Dispatch<SetStateAction<GlobalAuthProps>>
 ) => {
@@ -81,7 +81,7 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
     if (!loading && user && user.uid !== currentUser?.uid) {
-      handleGetUserByUID(user.uid, setState);
+      handleGetUserByUid(user.uid, setState);
     }
   });
 

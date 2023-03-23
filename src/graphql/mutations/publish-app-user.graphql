@@ -1,5 +1,0 @@
-mutation PublishAppUser($uid: String!) {
-  publishAppUser(where: {uid: $uid}){
-    uid
-  }
-}

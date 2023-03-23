@@ -6,6 +6,7 @@ import {
   GetAppUserByUIdQuery,
   GetAppUserByUIdQueryVariables,
 } from "../../graphql/generated";
+
 import { apolloClient } from "../../lib/apollo";
 import { CurrentUser } from "../../types/models/AppUser";
 import { debugDev } from "../../utils/dev";
@@ -19,45 +20,7 @@ export const getUserByUid = async (
   values: GetAppUserByUIdQueryVariables
 ): Promise<IGetUserByUid> => {
   const funcName = "getUserById";
-
-  return apolloClient
-    .query<GetAppUserByUIdQuery>({
-      query: GetAppUserByUIdDocument,
-      variables: values,
-    })
-    .then(({ data, error, errors }) => {
-      const dataValue = data.appUser || null;
-      if (data.appUser) {
-        debugDev({
-          type: "success",
-          name: funcName,
-          value: dataValue,
-        });
-        return {
-          data: dataValue,
-          error: null,
-          done: true,
-        };
-      } else {
-        debugDev({ type: "error", name: funcName, value: errors });
-        debugDev({ type: "error", name: funcName, value: error });
-        return {
-          data: null,
-          error: {
-            message: "User not found",
-          },
-          done: false,
-        };
-      }
-    })
-    .catch((error) => {
-      debugDev({ type: "error", name: funcName, value: error });
-      return {
-        data: null,
-        error: error,
-        done: false,
-      };
-    });
+  
 };
 
 interface IGetUserById {

@@ -1,5 +1,0 @@
-mutation PublishBankAccount($id: ID!) {
-  publishBankAccount(where: {id: $id}){
-    id
-  }
-}
