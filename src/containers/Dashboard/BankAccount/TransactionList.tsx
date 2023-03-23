@@ -19,6 +19,8 @@ export const TransactionList: React.FC<ITransactionList> = ({
     },
   });
 
+  
+
   const transactions = data?.transactions || [];
 
   return (
