@@ -21,11 +21,18 @@ export const TransactionList: React.FC<ITransactionList> = ({
 
   const transactions = data?.transactions || [];
 
+  console.log("transactions.length -->", transactions.length);
+
   return (
     <div className="">
-      {transactions.map((item) => {
-        return <div key={item.id}>Transação de: {item.amount/100} | Tipo: {item.type} | Data: {new Date(item.date).toLocaleDateString()}</div>;
-      })}
+      {/* {transactions.map((item) => {
+        return (
+          <div key={item.id}>
+            Transação de: {item.amount / 100} | Tipo: {item.type} | Data:{" "}
+            {new Date(item.date).toLocaleDateString()}
+          </div>
+        );
+      })} */}
 
       <div>
         <BalanceChart transactions={transactions} />

@@ -12,13 +12,14 @@ interface IBalanceChart {
 
 export const BalanceChart: React.FC<IBalanceChart> = ({ transactions }) => {
   //
-
   const { series, options } = useMemo(() => {
     const { dates, balances } = transactions.reduce(
       (acc, entry) => {
-        const date = new Date(entry.date).toLocaleDateString();
+        // const date = new Date(entry.date).toLocaleDateString();
+        const date = entry.date;
         const type = entry.type;
         let amount = entry.amount / 100;
+        amount = Number(amount.toFixed(2));
         amount = type === TransactionType.Debit ? -amount : amount;
         const prevBalance = acc.balances.at(-1) || 0;
 
@@ -44,18 +45,28 @@ export const BalanceChart: React.FC<IBalanceChart> = ({ transactions }) => {
     );
 
     const options_: ApexOptions = {
-      ...APEX_DEFAULT_OPTIONS,
+      colors: PRIMARY_COLORS,
+
       // labels: dates,
       markers: {
         size: 4,
         colors: PRIMARY_COLORS,
       },
-      xaxis:{
-        categories: dates
+      xaxis: {
+        categories: dates,
+        type: "datetime",
+        labels: {
+          style: {
+            colors: "#393939",
+          },
+        },
+      },
+      yaxis: {
+        decimalsInFloat: 2,
       },
       title: {
-        text:'Balance Chart'
-      }
+        text: "Balance Chart",
+      },
     };
 
     return {
