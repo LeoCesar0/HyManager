@@ -16,8 +16,8 @@ import { v4 as uuidv4 } from "uuid";
 import { debugDev } from "../utils/dev";
 import { AppModelResponse } from "../types";
 import { CurrentUser } from "../types/models/AppUser";
-import { getUserByUid } from "../models/AppUser/query";
-import { createNewUser } from "../models/AppUser/mutate";
+import { getUserById } from "src/models/User/read";
+import { createUser } from "src/models/User/create";
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -78,8 +78,8 @@ export const signIn = async (): Promise<SignIn> => {
 
       const userByFirebase = result.user;
 
-      const foundUserResponse = await getUserByUid({
-        uid: userByFirebase.uid,
+      const foundUserResponse = await getUserById({
+        id: userByFirebase.uid,
       });
       console.log("foundUserResponse -->", foundUserResponse);
 
@@ -90,12 +90,13 @@ export const signIn = async (): Promise<SignIn> => {
           done: foundUserResponse.done,
         };
       } else {
-        const newUserResponse = await createNewUser({
-          email: userByFirebase.email || "",
-          name: userByFirebase.displayName || `User-${uuidv4().slice(0, 5)}`,
-          uid: userByFirebase.uid,
-          bio: "",
-          imageUrl: userByFirebase.photoURL,
+        const newUserResponse = await createUser({
+          values: {
+            email: userByFirebase.email || "",
+            name: userByFirebase.displayName || `User-${uuidv4().slice(0, 5)}`,
+            id: userByFirebase.uid,
+            imageUrl: userByFirebase.photoURL,
+          },
         });
         const newUser = (newUserResponse.data || null) as CurrentUser | null;
 

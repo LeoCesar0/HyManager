@@ -1,20 +1,21 @@
 import { AppModelResponse } from "@types-folder/index";
 import { debugDev } from "src/utils/dev";
-import { FirebaseCollection, firebaseCreate } from "..";
-import { CreateUser, User } from "./schema";
+import { FirebaseCollection, firebaseGet } from "..";
+import { User } from "./schema";
 
-interface ICreateUser {
-  values: CreateUser;
+interface IGetUserById {
+  id: string;
 }
 
-export const createUser = async ({
-  values,
-}: ICreateUser): Promise<AppModelResponse<User>> => {
+export const getUserById = async ({
+  id,
+}: IGetUserById): Promise<AppModelResponse<User>> => {
   const funcName = "getUserById";
+
   try {
-    const result = await firebaseCreate<User>({
+    const result = await firebaseGet<User>({
       collection: FirebaseCollection.users,
-      data: values,
+      id: id,
     });
     return result;
   } catch (error) {

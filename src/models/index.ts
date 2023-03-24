@@ -6,9 +6,15 @@ import {
   doc,
   setDoc,
   deleteDoc,
+  Timestamp,
 } from "firebase/firestore";
 import { firebaseDB } from "src/services/firebase";
 import { debugDev } from "src/utils/dev";
+import { z } from "zod";
+
+export const timestampSchema = z.custom<Timestamp>((value: any) => {
+  return value instanceof Timestamp;
+});
 
 export enum FirebaseCollection {
   users = "users",
@@ -85,7 +91,7 @@ export const firebaseCreate = async <T>({
 
 type IFirebaseUpdate<T> = {
   collection: FirebaseCollection;
-  data: T;
+  data: Partial<T> & Partial<{ id: string; createdAt: Timestamp }>;
   id: string;
 };
 export const firebaseUpdate = async <T>({
@@ -94,6 +100,9 @@ export const firebaseUpdate = async <T>({
   id,
 }: IFirebaseUpdate<T>): Promise<AppModelResponse<T>> => {
   const funcName = "firebaseUpdate";
+
+  if (data?.id) delete data.id;
+  if (data?.createdAt) delete data.createdAt;
 
   try {
     updateData(collectionName, data, id);
@@ -188,7 +197,9 @@ export const firebaseDelete = async ({
     const docRef = doc(firebaseDB, collectionName, id);
     await deleteDoc(docRef);
     return {
-      data: id,
+      data: {
+        id,
+      },
       done: true,
       error: null,
     };

@@ -8,7 +8,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { getUserByUid } from "../models/AppUser/query";
+import { getUserById } from "src/models/User/read";
 import { getUserBankAccounts } from "../models/BankAccount/query";
 import { firebaseAuth, signIn, signOut } from "../services/firebase";
 import { CurrentUser } from "../types/models/AppUser";
@@ -36,13 +36,13 @@ const GlobalAuth = createContext<GlobalAuthProps>(
   initialValues as GlobalAuthProps
 );
 
-const handleGetUserByUid = (
+const handleGetUserById = (
   uid: string,
   setState: Dispatch<SetStateAction<GlobalAuthProps>>
 ) => {
   setState((prev) => ({ ...prev, loading: true }));
-  getUserByUid({
-    uid: uid,
+  getUserById({
+    id: uid,
   })
     .then((foundUserResponse) => {
       setState((prev) => ({
@@ -81,7 +81,7 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
     if (!loading && user && user.uid !== currentUser?.uid) {
-      handleGetUserByUid(user.uid, setState);
+      handleGetUserById(user.uid, setState);
     }
   });
 
