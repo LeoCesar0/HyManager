@@ -1,4 +1,3 @@
-import { Timestamp } from "firebase/firestore";
 import { z } from "zod";
 import { timestampSchema } from "..";
 
@@ -12,7 +11,6 @@ export const userSchema = z.object({
 });
 
 export const createUserSchema = z.object({
-  id: z.string(),
   name: z.string(),
   email: z.string(),
   imageUrl: z.string().nullable(),

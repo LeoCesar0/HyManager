@@ -2,17 +2,17 @@ import { AppModelResponse } from "@types-folder/index";
 import { debugDev } from "src/utils/dev";
 import {  FirebaseCollection, firebaseDelete } from "..";
 
-interface IDeleteUser {
+interface IDeleteTransaction {
   id: string;
 }
 
-export const deleteUser = async ({
+export const deleteTransaction = async ({
   id,
-}: IDeleteUser): Promise<AppModelResponse<{ id: string }>> => {
-  const funcName = "deleteUser";
+}: IDeleteTransaction): Promise<AppModelResponse<{ id: string }>> => {
+  const funcName = "deleteTransaction";
   try {
     const result = await firebaseDelete({
-      collection: FirebaseCollection.users,
+      collection: FirebaseCollection.transactions,
       id: id,
     });
     return result;

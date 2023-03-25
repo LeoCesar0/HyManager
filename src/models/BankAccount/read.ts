@@ -1,18 +1,20 @@
 import { AppModelResponse } from "@types-folder/index";
 import { debugDev } from "src/utils/dev";
-import {  FirebaseCollection, firebaseDelete } from "..";
+import { FirebaseCollection, firebaseGet } from "..";
+import { BankAccount } from "./schema";
 
-interface IDeleteUser {
+interface IGetBankAccountById {
   id: string;
 }
 
-export const deleteUser = async ({
+export const getBankAccountById = async ({
   id,
-}: IDeleteUser): Promise<AppModelResponse<{ id: string }>> => {
-  const funcName = "deleteUser";
+}: IGetBankAccountById): Promise<AppModelResponse<BankAccount>> => {
+  const funcName = "getBankAccountById";
+
   try {
-    const result = await firebaseDelete({
-      collection: FirebaseCollection.users,
+    const result = await firebaseGet<BankAccount>({
+      collection: FirebaseCollection.bankAccounts,
       id: id,
     });
     return result;

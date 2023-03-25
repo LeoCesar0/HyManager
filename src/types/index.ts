@@ -8,5 +8,4 @@ export type AppModelResponse<T> = {
   data: T | null;
 };
 
-
 export type CSVData = string[][]
