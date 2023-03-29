@@ -42,6 +42,8 @@ export const listTransactionsByBankId = async ({
 }: IListTransactionByBankId): Promise<AppModelResponse<Transaction[]>> => {
   const funcName = "getTransactionById";
 
+  console.log("Calling listTransactionsByBankId");
+
   try {
     const result = await firebaseList<Transaction>({
       collection: FirebaseCollection.transactions,

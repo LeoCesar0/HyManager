@@ -1,4 +1,3 @@
-import { debounce } from "lodash";
 import { useRouter } from "next/router";
 import React, {
   createContext,
@@ -8,20 +7,20 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { listBankAccountByUserId } from "src/models/BankAccount/read";
+import { BankAccount } from "src/models/BankAccount/schema";
 import { getUserById } from "src/models/User/read";
-import { getUserBankAccounts } from "../models/BankAccount/query";
+import { User } from "src/models/User/schema";
 import { firebaseAuth, signIn, signOut } from "../services/firebase";
-import { CurrentUser } from "../types/models/AppUser";
-import { BankAccount } from "../types/models/BankAccount";
 import { showErrorToast } from "../utils/app";
 
 interface GlobalAuthProps {
-  currentUser: CurrentUser | null;
+  currentUser: User | null;
   menuIsOpen: boolean;
   setState: Dispatch<SetStateAction<GlobalAuthProps>>;
   handleSignIn: () => void;
   handleSignOut: () => void;
-  handleGetUserBankAccounts: () => void;
+  getUserBankAccounts: () => void;
   loading: boolean;
   userBankAccounts: BankAccount[] | null;
 }
@@ -74,13 +73,13 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   firebaseAuth.onAuthStateChanged((user) => {
     // RETURN WHEN NOTHING WOULD CHANGE
     if (!user && !currentUser) return;
-    if (user && user.uid === currentUser?.uid) return;
+    if (user && user.uid === currentUser?.id) return;
 
     if (!user) {
       setState((prev) => ({ ...prev, currentUser: null, loading: false }));
       return;
     }
-    if (!loading && user && user.uid !== currentUser?.uid) {
+    if (!loading && user && user.uid !== currentUser?.id) {
       handleGetUserById(user.uid, setState);
     }
   });
@@ -105,14 +104,14 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   /* ---------------------------------- USER ---------------------------------- */
-  const handleGetUserBankAccounts = () => {
+  const getUserBankAccounts = () => {
     if (currentUser) {
       setState((prev) => ({
         ...prev,
         loading: true,
       }));
-      getUserBankAccounts({
-        uid: currentUser.uid,
+      listBankAccountByUserId({
+        id: currentUser.id,
       }).then((results) => {
         setState((prev) => ({
           ...prev,
@@ -130,8 +129,8 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    handleGetUserBankAccounts();
-  }, [currentUser?.uid]);
+    getUserBankAccounts();
+  }, [currentUser?.id]);
 
   return (
     <GlobalAuth.Provider
@@ -140,7 +139,7 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setState,
         handleSignOut,
         handleSignIn,
-        handleGetUserBankAccounts,
+        getUserBankAccounts,
       }}
     >
       {children}

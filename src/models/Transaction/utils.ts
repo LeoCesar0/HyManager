@@ -94,8 +94,8 @@ const parseTransactions = (
       const amount = parseAmount(parseFloat(item["amount"]));
       const type =
         Number(item["amount"]) > 0
-          ? TransactionType.Credit
-          : TransactionType.Debit;
+          ? TransactionType.credit
+          : TransactionType.debit;
       const dateAsLocaleString = item["date"];
       const dateObject = parse(dateAsLocaleString, "P", new Date(), {
         locale: ptBR,

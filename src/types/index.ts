@@ -9,3 +9,8 @@ export type AppModelResponse<T> = {
 };
 
 export type CSVData = string[][]
+
+export enum Locale {
+  en = 'en',
+  pt = 'pt'
+}

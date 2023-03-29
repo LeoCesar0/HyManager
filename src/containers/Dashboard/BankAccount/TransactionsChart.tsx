@@ -1,14 +1,12 @@
-import { TransactionType } from "@graphql-folder/generated";
-import { Transaction } from "@types-folder/models/Transaction";
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
+import { Transaction, TransactionType } from "src/models/Transaction/schema";
 import { TAILWIND_CONFIG } from "src/static/config";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const COLORS = TAILWIND_CONFIG.theme?.colors;
 const primaryColors = [COLORS!.primary, COLORS!.secondary] as string[];
-
 
 
 interface ITransactionsChart {
@@ -18,7 +16,7 @@ interface ITransactionsChart {
 
 export const TransactionsChart: React.FC<ITransactionsChart> = ({
   transactions,
-  type = TransactionType.Credit,
+  type = TransactionType.credit,
 }) => {
   const colors = type === "credit" ? [COLORS!.credit] : [COLORS!.debit];
 
@@ -32,7 +30,7 @@ export const TransactionsChart: React.FC<ITransactionsChart> = ({
       },
     },
     title: {
-      text: type === TransactionType.Credit ? 'Credit' : 'Debit'
+      text: type === TransactionType.credit ? 'Credit' : 'Debit'
     }
   };
 
@@ -42,7 +40,7 @@ export const TransactionsChart: React.FC<ITransactionsChart> = ({
     );
     const amounts = filteredTransactions.map((item) => item.amount / 100);
     const labels = filteredTransactions.map((item) =>
-      new Date(item.date).toLocaleDateString()
+      new Date(item.date.seconds).toLocaleDateString()
     );
     // console.log("type -->", type);
     // console.log("filteredTransactions -->", filteredTransactions);

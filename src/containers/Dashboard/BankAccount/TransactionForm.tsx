@@ -1,16 +1,16 @@
 import Button from "@components/Button";
 import FormControl from "@components/FormControl/FormControl";
 import InputField from "@components/InputField/InputField";
-import { useGlobalAuth } from "@contexts/GlobalAuth";
 import { useGlobalModal } from "@contexts/GlobalModal";
-import {
-  CreateTransactionMutationVariables,
-  TransactionType,
-} from "@graphql-folder/generated";
+import { Timestamp } from "firebase/firestore";
+
 import { FormikProps, useFormik } from "formik";
 import { toast } from "react-toastify";
-import { createTransaction } from "src/models/Transaction/mutate";
-import { makeTransactionSlug } from "src/utils/app";
+import { createTransaction } from "src/models/Transaction/create";
+import {
+  CreateTransaction,
+  TransactionType,
+} from "src/models/Transaction/schema";
 import { cx, dateToIsoString } from "src/utils/misc";
 import z from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -45,7 +45,7 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
       amount: 1,
       description: "",
       creditor: "",
-      type: TransactionType.Credit,
+      type: TransactionType.credit,
       date: dateToIsoString(new Date(), { withTimeZone: false }),
       color: {
         hex: "#ffffff",
@@ -55,18 +55,16 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
     onSubmit: async (inputs) => {
       if (!bankAccountId) return;
       const amount = Math.round(inputs.amount * 100);
-      const values: CreateTransactionMutationVariables = {
+      const date = new Date(inputs.date);
+      const firebaseTimestamp = Timestamp.fromDate(date);
+      const values: CreateTransaction = {
         ...inputs,
         bankAccountId: bankAccountId,
-        date: new Date(inputs.date),
+        date: firebaseTimestamp,
         amount: amount,
-        slug: makeTransactionSlug({
-          date: inputs.date,
-          amount: amount.toString(),
-        }),
       };
       const toastId = toast.loading("Creating Transaction");
-      const results = await createTransaction(values);
+      const results = await createTransaction({ values: values });
       if (results.done) {
         toast.update(toastId, {
           render: "Success!",

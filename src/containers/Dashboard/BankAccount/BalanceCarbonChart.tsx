@@ -1,5 +1,5 @@
 import { LineChart } from "@carbon/charts-react";
-import { Transaction } from "@types-folder/models/Transaction";
+import { Transaction } from "src/models/Transaction/schema";
 
 interface IBalanceCarbonChart {
   transactions: Transaction[];

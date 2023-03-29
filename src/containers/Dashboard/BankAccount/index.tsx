@@ -1,13 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useGlobalAuth } from "@contexts/GlobalAuth";
-import { BankAccount } from "@types-folder/models/BankAccount";
 import BankHeader from "./BankHeader";
 import TransactionList from "./TransactionList";
 import { extractTransactionsFromCSVData } from "src/models/Transaction/utils";
-import { createManyTransactions } from "src/models/Transaction/mutateMany";
 import { handleToastPromise, showErrorToast } from "src/utils/app";
 import TransactionsFileInput from "@components/TransactionsFileInput/inde";
+import { BankAccount } from "src/models/BankAccount/schema";
 
 const BankAccountPage = ({}) => {
   const [currentBank, setCurrentBank] = useState<BankAccount | null>(null);

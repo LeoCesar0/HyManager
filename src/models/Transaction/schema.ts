@@ -29,7 +29,6 @@ export const transactionSchema = z.object({
 });
 
 export const createTransactionSchema = z.object({
-  id: z.string(),
   idFromBank: z.string().optional(),
   bankAccountId: z.string(),
   amount: z.number(),

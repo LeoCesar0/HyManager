@@ -1,5 +1,3 @@
-import { CreateTransactionMutationVariables } from "@graphql-folder/generated";
-import { Transaction } from "@types-folder/models/Transaction";
 import { toast } from "react-toastify";
 import { AppError } from "../types";
 

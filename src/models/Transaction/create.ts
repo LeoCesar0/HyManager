@@ -1,7 +1,7 @@
 import { AppModelResponse } from "@types-folder/index";
 import { debugDev } from "src/utils/dev";
 import { FirebaseCollection, firebaseCreate } from "..";
-import { CreateTransaction, Transaction } from "./schema";
+import { CreateTransaction, Transaction, transactionSchema } from "./schema";
 import { v4 as uuid } from "uuid";
 import { serverTimestamp, Timestamp } from "firebase/firestore";
 
@@ -20,6 +20,8 @@ export const createTransaction = async ({
     updatedAt: serverTimestamp() as Timestamp,
   };
   try {
+    transactionSchema.parse(item)
+    
     const result = await firebaseCreate<Transaction>({
       collection: FirebaseCollection.transactions,
       data: item,

@@ -1,8 +1,7 @@
-import { TransactionType } from "@graphql-folder/generated";
-import { Transaction } from "@types-folder/models/Transaction";
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
+import { Transaction, TransactionType } from "src/models/Transaction/schema";
 import { APEX_DEFAULT_OPTIONS, PRIMARY_COLORS } from "src/static/config";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -16,10 +15,10 @@ export const BalanceChart: React.FC<IBalanceChart> = ({ transactions }) => {
   const { series, options } = useMemo(() => {
     const { dates, balances } = transactions.reduce(
       (acc, entry) => {
-        const date = new Date(entry.date).toLocaleDateString();
+        const date = new Date(entry.date.seconds).toLocaleDateString();
         const type = entry.type;
         let amount = entry.amount / 100;
-        amount = type === TransactionType.Debit ? -amount : amount;
+        amount = type === TransactionType.debit ? -amount : amount;
         const prevBalance = acc.balances.at(-1) || 0;
 
         // console.log("prevBalance -->", prevBalance);

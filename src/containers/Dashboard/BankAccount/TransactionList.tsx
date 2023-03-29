@@ -1,8 +1,6 @@
-import {
-  TransactionType,
-  useGetTransactionsByBankQuery,
-} from "@graphql-folder/generated";
-import BalanceCarbonChart from "./BalanceCarbonChart";
+import { useEffect, useState } from "react";
+import { listTransactionsByBankId } from "src/models/Transaction/read";
+import { Transaction, TransactionType } from "src/models/Transaction/schema";
 import BalanceChart from "./BalanceChart";
 import TransactionsChart from "./TransactionsChart";
 
@@ -13,20 +11,23 @@ interface ITransactionList {
 export const TransactionList: React.FC<ITransactionList> = ({
   bankAccountId,
 }) => {
-  const { data } = useGetTransactionsByBankQuery({
-    variables: {
-      id: bankAccountId,
-    },
-  });
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  
-
-  const transactions = data?.transactions || [];
+  useEffect(() => {
+    listTransactionsByBankId({ id: bankAccountId }).then((result) => {
+      if (result.data) setTransactions(result.data);
+    });
+  }, [bankAccountId]);
 
   return (
     <div className="">
       {transactions.map((item) => {
-        return <div key={item.id}>Transação de: {item.amount/100} | Tipo: {item.type} | Data: {new Date(item.date).toLocaleDateString()}</div>;
+        return (
+          <div key={item.id}>
+            Transação de: {item.amount / 100} | Tipo: {item.type} | Data:{" "}
+            {new Date(item.date.seconds).toLocaleDateString()}
+          </div>
+        );
       })}
 
       <div>
@@ -35,11 +36,11 @@ export const TransactionList: React.FC<ITransactionList> = ({
       <div className="flex items-center gap-4">
         <TransactionsChart
           transactions={transactions}
-          type={TransactionType.Credit}
+          type={TransactionType.credit}
         />
         <TransactionsChart
           transactions={transactions}
-          type={TransactionType.Debit}
+          type={TransactionType.debit}
         />
       </div>
       {/* <div>

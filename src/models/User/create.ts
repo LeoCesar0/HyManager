@@ -15,7 +15,6 @@ export const createUser = async ({
   const funcName = "getUserById";
   const item: User = {
     ...values,
-    id: uuid(),
     createdAt: serverTimestamp() as Timestamp,
     updatedAt: serverTimestamp() as Timestamp,
   };

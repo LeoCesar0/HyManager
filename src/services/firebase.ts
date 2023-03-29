@@ -15,9 +15,9 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { debugDev } from "../utils/dev";
 import { AppModelResponse } from "../types";
-import { CurrentUser } from "../types/models/AppUser";
 import { getUserById } from "src/models/User/read";
 import { createUser } from "src/models/User/create";
+import { User } from "src/models/User/schema";
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -45,7 +45,7 @@ export const signOut = async () => {
   await firebaseSignOut(firebaseAuth);
 };
 
-export type SignIn = AppModelResponse<CurrentUser>;
+export type SignIn = AppModelResponse<User>;
 
 export const signIn = async (): Promise<SignIn> => {
   const googleProvider = new GoogleAuthProvider();
@@ -98,7 +98,7 @@ export const signIn = async (): Promise<SignIn> => {
             imageUrl: userByFirebase.photoURL,
           },
         });
-        const newUser = (newUserResponse.data || null) as CurrentUser | null;
+        const newUser = (newUserResponse.data || null) as User | null;
 
         return {
           data: newUser,

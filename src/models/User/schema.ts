@@ -11,6 +11,7 @@ export const userSchema = z.object({
 });
 
 export const createUserSchema = z.object({
+  id: z.string(),
   name: z.string(),
   email: z.string(),
   imageUrl: z.string().nullable(),

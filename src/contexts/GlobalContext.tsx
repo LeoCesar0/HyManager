@@ -1,5 +1,6 @@
 "use client";
 
+import { Locale } from "@types-folder/index";
 import { useRouter } from "next/router";
 import React, {
   createContext,
@@ -8,7 +9,6 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { Locale } from "../graphql/generated";
 
 interface GlobalContextProps {
   currentLanguage: Locale;
@@ -34,7 +34,7 @@ export const GlobalContextProvider: React.FC<{ children: React.ReactNode }> = ({
     initialValues as GlobalContextProps
   );
 
-  const currentLanguage = (router.locale ?? Locale.En) as Locale;
+  const currentLanguage = (router.locale || Locale.en) as Locale;
 
   const handleSetState = (newValues: {}) => {
     setState((prev) => ({ ...prev, ...newValues }));

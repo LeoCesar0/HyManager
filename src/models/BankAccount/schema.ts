@@ -4,6 +4,7 @@ import { timestampSchema } from "..";
 export const bankAccountSchema = z.object({
   id: z.string(),
   name: z.string(),
+  description: z.string(),
   imageUrl: z.string().nullable(),
   balance: z.string(),
   users: z.array(z.object({ id: z.string() })),
@@ -13,6 +14,7 @@ export const bankAccountSchema = z.object({
 
 export const createBankAccountSchema = z.object({
   name: z.string(),
+  description: z.string(),
   imageUrl: z.string().nullable(),
   balance: z.string(),
   users: z.array(z.object({ id: z.string() })),

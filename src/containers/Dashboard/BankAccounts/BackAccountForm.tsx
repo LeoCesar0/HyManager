@@ -1,11 +1,11 @@
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
+import { createBankAccount } from "src/models/BankAccount/create";
+import { CreateBankAccount } from "src/models/BankAccount/schema";
 import Button from "../../../components/Button";
 import FormControl from "../../../components/FormControl/FormControl";
 import InputField from "../../../components/InputField/InputField";
 import { useGlobalAuth } from "../../../contexts/GlobalAuth";
-import { CreateBankAccountMutationVariables } from "../../../graphql/generated";
-import { createBankAccount } from "../../../models/BankAccount/mutate";
 import { slugify } from "../../../utils/app";
 
 const BankAccountForm = () => {
@@ -13,32 +13,32 @@ const BankAccountForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      title: "",
+      name: "",
       description: "",
     },
     onSubmit: async (inputs) => {
-      if (!currentUser?.uid) return;
-      const values: CreateBankAccountMutationVariables = {
+      if (!currentUser?.id) return;
+      const values: CreateBankAccount = {
         ...inputs,
-        balance: 0,
-        userUid: currentUser!.uid,
-        slug: slugify(inputs.title),
+        users: [{ id: currentUser!.id }],
+        balance: "0",
+        imageUrl: null,
       };
       const toastId = toast.loading("Creating Bank Count");
-      const results = await createBankAccount(values);
+      const results = await createBankAccount({ values: values });
       if (results.done) {
         toast.update(toastId, {
           render: "Success!",
           type: "success",
           isLoading: false,
-          autoClose: 5000
+          autoClose: 5000,
         });
       } else {
         toast.update(toastId, {
-          render: 'Error: Something went wrong',
+          render: "Error: Something went wrong",
           type: "error",
           isLoading: false,
-          autoClose: 5000
+          autoClose: 5000,
         });
       }
     },

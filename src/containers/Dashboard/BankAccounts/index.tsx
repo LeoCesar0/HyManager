@@ -1,14 +1,8 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
-import Modal from "../../../components/Modal";
 import { useGlobalAuth } from "../../../contexts/GlobalAuth";
 import { useGlobalModal } from "../../../contexts/GlobalModal";
-import {
-  useGetUserBankAccountsLazyQuery,
-  useGetUserBankAccountsQuery,
-} from "../../../graphql/generated";
+
 import BankAccountForm from "./BackAccountForm";
 
 const BankAccounts = () => {
@@ -21,17 +15,18 @@ const BankAccounts = () => {
       </div>
       <div className="py-8 flex gap-4">
         <Card isAddMore />
-        {userBankAccounts && userBankAccounts.map((item) => {
-          return (
-            <Link key={item.id} href={`dashboard/bank/${item.id}`}>
-              <Card
-                isAddMore={false}
-                title={item.title}
-                description={item.description || ""}
-              />
-            </Link>
-          );
-        })}
+        {userBankAccounts &&
+          userBankAccounts.map((item) => {
+            return (
+              <Link key={item.id} href={`dashboard/bank/${item.id}`}>
+                <Card
+                  isAddMore={false}
+                  title={item.name}
+                  description={item.description || ""}
+                />
+              </Link>
+            );
+          })}
       </div>
     </>
   );
