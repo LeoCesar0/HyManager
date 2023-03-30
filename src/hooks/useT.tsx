@@ -9,7 +9,7 @@ const useT = (langObject: IUseT) => {
   const router = useRouter();
   if (!langObject) return "";
 
-  const currentLanguage: Locale = (router.locale || Locale.En) as Locale;
+  const currentLanguage: Locale = (router.locale || Locale.en) as Locale;
 
   const text = langObject[currentLanguage] || "";
 
