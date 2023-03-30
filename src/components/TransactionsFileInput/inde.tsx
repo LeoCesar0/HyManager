@@ -1,7 +1,6 @@
-import { CreateTransactionMutationVariables } from "@graphql-folder/generated";
 import { CSVData } from "@types-folder/index";
 import { ChangeEvent, InputHTMLAttributes, useRef, useState } from "react";
-import { createManyTransactions } from "src/models/Transaction/mutateMany";
+import { CreateTransaction } from "src/models/Transaction/schema";
 import { extractTransactionsFromCSVData } from "src/models/Transaction/utils";
 import { handleToastPromise } from "src/utils/app";
 
@@ -22,7 +21,7 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const onFilesCSVDataReady = async (csvDataArray: CSVData[]) => {
-    const transactionsForEveryFile: CreateTransactionMutationVariables[] = [];
+    const transactionsForEveryFile: CreateTransaction[] = [];
     if (currentBankId) {
       for (const csvData of csvDataArray) {
         const results = extractTransactionsFromCSVData({
@@ -35,14 +34,14 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
       }
       /* ------------------------- createManyTransactions ------------------------- */
       try {
-        const results = await handleToastPromise(
-          createManyTransactions({
-            transactionsValues: transactionsForEveryFile,
-            bankAccountId: currentBankId,
-          }),
-          { loadingMessage: "Inserting Transactions" }
-        );
-        console.log("Final Results -->", results);
+        // const results = await handleToastPromise(
+        //   createManyTransactions({
+        //     transactionsValues: transactionsForEveryFile,
+        //     bankAccountId: currentBankId,
+        //   }),
+        //   { loadingMessage: "Inserting Transactions" }
+        // );
+        // console.log("Final Results -->", results);
       } catch (e) {
         console.log("createManyTransactions ERROR -->", e);
       }

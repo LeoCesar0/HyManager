@@ -19,6 +19,7 @@ export const getUserById = async ({
     });
     return result;
   } catch (error) {
+    console.log('Catch error -->', error)
     const errorMessage = debugDev({
       type: "error",
       name: funcName,

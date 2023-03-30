@@ -8,14 +8,19 @@ import InputField from "../../../components/InputField/InputField";
 import { useGlobalAuth } from "../../../contexts/GlobalAuth";
 import { slugify } from "../../../utils/app";
 
+const initialValues: CreateBankAccount = {
+  balance: "0",
+  description: "",
+  name: "",
+  users: [],
+  imageUrl: "",
+};
+
 const BankAccountForm = () => {
   const { currentUser } = useGlobalAuth();
 
   const formik = useFormik({
-    initialValues: {
-      name: "",
-      description: "",
-    },
+    initialValues: initialValues,
     onSubmit: async (inputs) => {
       if (!currentUser?.id) return;
       const values: CreateBankAccount = {
@@ -48,7 +53,7 @@ const BankAccountForm = () => {
     <div className="component__modal-form">
       <form onSubmit={formik.handleSubmit} className="w-full">
         <FormControl>
-          <InputField formik={formik} name={"title"} label="Title" />
+          <InputField formik={formik} name={"name"} label="Title" />
         </FormControl>
         <FormControl>
           <InputField

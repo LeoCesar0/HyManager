@@ -14,3 +14,7 @@ export enum Locale {
   en = 'en',
   pt = 'pt'
 }
+
+export type AnyObject = {
+  [key: string | number | symbol]: any
+}

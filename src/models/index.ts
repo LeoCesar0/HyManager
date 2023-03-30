@@ -1,9 +1,8 @@
-import { AppModelResponse } from "@types-folder/index";
+import { AnyObject, AppModelResponse } from "@types-folder/index";
 import {
   collection,
   addDoc,
   getDoc,
-  doc,
   setDoc,
   deleteDoc,
   Timestamp,
@@ -11,10 +10,12 @@ import {
   where,
   getDocs,
   WhereFilterOp,
+  doc,
 } from "firebase/firestore";
 import { firebaseDB } from "src/services/firebase";
 import { debugDev } from "src/utils/dev";
 import { z } from "zod";
+import { v4 as uuid } from "uuid";
 
 export const timestampSchema = z.custom<Timestamp>((value: any) => {
   return value instanceof Timestamp;
@@ -28,9 +29,9 @@ export enum FirebaseCollection {
 
 export const firebaseCollections = Object.values(FirebaseCollection);
 
-const addData = <T>(collectionName: FirebaseCollection, data: T) => {
-  const docRef = collection(firebaseDB, collectionName);
-  return addDoc(docRef, data);
+const addData = (collectionName: FirebaseCollection, data: any, id: string) => {
+  const docRef = doc(firebaseDB, collectionName, id);
+  return setDoc(docRef, data);
 };
 
 const updateData = (
@@ -42,7 +43,7 @@ const updateData = (
   return setDoc(docRef, data, { merge: true });
 };
 
-const getDataById = <T>(collectionName: FirebaseCollection, id: string) => {
+const getDataById = (collectionName: FirebaseCollection, id: string) => {
   const docRef = doc(firebaseDB, collectionName, id);
   return getDoc(docRef);
 };
@@ -51,16 +52,18 @@ const getDataById = <T>(collectionName: FirebaseCollection, id: string) => {
 
 type IFirebaseCreate = {
   collection: FirebaseCollection;
-  data: any;
+  data: AnyObject & { id: string };
 };
-export const firebaseCreate = async <T>({
+export const firebaseCreate = async <T extends { id: string }>({
   collection: collectionName,
   data,
 }: IFirebaseCreate): Promise<AppModelResponse<T>> => {
   const funcName = "firebaseCreate";
+  debugDev({ name: funcName, type: "call", value: data });
   try {
-    const docRef = await addData<T>(collectionName, data);
-    const snapShot = await getDataById<T>(collectionName, docRef.id);
+    const id = data.id || uuid();
+    await addData(collectionName, data, id);
+    const snapShot = await getDataById(collectionName, id);
     const updatedData = snapShot.data() as T | undefined;
     return {
       data: updatedData || null,
@@ -104,13 +107,14 @@ export const firebaseUpdate = async <T>({
   id,
 }: IFirebaseUpdate<T>): Promise<AppModelResponse<T>> => {
   const funcName = "firebaseUpdate";
+  debugDev({ name: funcName, type: "call", value: data });
 
   if (data?.id) delete data.id;
   if (data?.createdAt) delete data.createdAt;
 
   try {
     updateData(collectionName, data, id);
-    const snapShot = await getDataById<T>(collectionName, id);
+    const snapShot = await getDataById(collectionName, id);
     const updatedData = snapShot.data() as T | undefined;
     return {
       data: updatedData || null,
@@ -147,44 +151,73 @@ type IFirebaseGet = {
   collection: FirebaseCollection;
   id: string;
 };
+// export const firebaseGet = async <T>({
+//   collection: collectionName,
+//   id,
+// }: IFirebaseGet): Promise<AppModelResponse<T>> => {
+//   const funcName = "firebaseGet";
+
+//   try {
+//     const snapShot = await getDataById<T>(collectionName, id);
+//     const data = snapShot.data() as T | undefined;
+//     return {
+//       data: data || null,
+//       done: !!data,
+//       error: data
+//         ? null
+//         : {
+//             message: debugDev({
+//               type: "error",
+//               name: funcName,
+//               value: "Error",
+//             }),
+//           },
+//     };
+//   } catch (error) {
+//     const errorMessage = debugDev({
+//       type: "error",
+//       name: funcName,
+//       value: error,
+//     });
+//     return {
+//       data: null,
+//       done: false,
+//       error: {
+//         message: errorMessage,
+//       },
+//     };
+//   }
+// };
 export const firebaseGet = async <T>({
   collection: collectionName,
   id,
 }: IFirebaseGet): Promise<AppModelResponse<T>> => {
   const funcName = "firebaseGet";
+  debugDev({
+    name: funcName,
+    type: "call",
+    value: {
+      id,
+      collectionName,
+    },
+  });
 
-  try {
-    const snapShot = await getDataById<T>(collectionName, id);
-    const data = snapShot.data() as T | undefined;
-    return {
-      data: data || null,
-      done: !!data,
-      error: data
-        ? null
-        : {
-            message: debugDev({
-              type: "error",
-              name: funcName,
-              value: "Error",
-            }),
-          },
-    };
-  } catch (error) {
-    const errorMessage = debugDev({
-      type: "error",
-      name: funcName,
-      value: error,
-    });
-    return {
-      data: null,
-      done: false,
-      error: {
-        message: errorMessage,
-      },
-    };
-  }
+  const snapShot = await getDataById(collectionName, id);
+  const data = snapShot.data() as T | undefined;
+  return {
+    data: data || null,
+    done: !!data,
+    error: data
+      ? null
+      : {
+          message: debugDev({
+            type: "error",
+            name: funcName,
+            value: "Error",
+          }),
+        },
+  };
 };
-
 /* --------------------------------- DELETE --------------------------------- */
 
 type IFirebaseDelete = {
@@ -196,7 +229,14 @@ export const firebaseDelete = async ({
   id,
 }: IFirebaseDelete) => {
   const funcName = "firebaseDelete";
-
+  debugDev({
+    name: funcName,
+    type: "call",
+    value: {
+      id,
+      collectionName,
+    },
+  });
   try {
     const docRef = doc(firebaseDB, collectionName, id);
     await deleteDoc(docRef);
@@ -238,7 +278,13 @@ export const firebaseList = async <T>({
   filters = [],
 }: IFirebaseList<T>): Promise<AppModelResponse<T[]>> => {
   const funcName = "firebaseList";
-
+  debugDev({
+    name: funcName,
+    type: "call",
+    value: {
+      collectionName,
+    },
+  });
   try {
     const ref = collection(firebaseDB, collectionName);
     let whereList = filters.map(({ field, operator = "==", value }) =>

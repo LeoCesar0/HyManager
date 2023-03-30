@@ -23,6 +23,7 @@ interface GlobalAuthProps {
   getUserBankAccounts: () => void;
   loading: boolean;
   userBankAccounts: BankAccount[] | null;
+  error: { message: string } | null;
 }
 
 const initialValues = {
@@ -30,31 +31,43 @@ const initialValues = {
   menuIsOpen: false,
   loading: false,
   userBankAccounts: null,
+  error: null,
 };
 const GlobalAuth = createContext<GlobalAuthProps>(
   initialValues as GlobalAuthProps
 );
 
-const handleGetUserById = (
+const handleGetUserById = async (
   uid: string,
   setState: Dispatch<SetStateAction<GlobalAuthProps>>
 ) => {
   setState((prev) => ({ ...prev, loading: true }));
-  getUserById({
-    id: uid,
-  })
-    .then((foundUserResponse) => {
-      setState((prev) => ({
-        ...prev,
-        currentUser: foundUserResponse.data,
-      }));
-    })
-    .catch((err) => {
-      setState((prev) => ({ ...prev, currentUser: null }));
-    })
-    .finally(() => {
-      setState((prev) => ({ ...prev, loading: false }));
-    });
+  const result = await getUserById({ id: uid });
+
+  console.log("result -->", result);
+  setState((prev) => ({
+    ...prev,
+    currentUser: result.data,
+    loading: false,
+    error: result.error,
+  }));
+
+  // getUserById({
+  //   id: uid,
+  // })
+  //   .then((foundUserResponse) => {
+  //     setState((prev) => ({
+  //       ...prev,
+  //       currentUser: foundUserResponse.data,
+  //     }));
+  //   })
+  //   .catch((err) => {
+  //     console.log('ERR getUserById -->', err)
+  //     setState((prev) => ({ ...prev, currentUser: null }));
+  //   })
+  //   .finally(() => {
+  //     setState((prev) => ({ ...prev, loading: false }));
+  //   });
 };
 
 /* -------------------------------- PROVIDER -------------------------------- */
@@ -71,9 +84,15 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   /* --------------------------- onAuthStateChanged --------------------------- */
   firebaseAuth.onAuthStateChanged((user) => {
+    console.log("-- onAuthStateChanged --");
+    console.log("state -->", state);
     // RETURN WHEN NOTHING WOULD CHANGE
     if (!user && !currentUser) return;
     if (user && user.uid === currentUser?.id) return;
+    if (state.error) {
+      console.log("Auth error -->", state.error);
+      return;
+    }
 
     if (!user) {
       setState((prev) => ({ ...prev, currentUser: null, loading: false }));

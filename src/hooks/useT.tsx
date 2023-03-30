@@ -1,5 +1,5 @@
+import { Locale } from "@types-folder/index";
 import { useRouter } from "next/router";
-import { Locale } from "../graphql/generated";
 
 type IUseT = {
   [key in Locale]: string;

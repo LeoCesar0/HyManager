@@ -98,6 +98,7 @@ export const signIn = async (): Promise<SignIn> => {
             imageUrl: userByFirebase.photoURL,
           },
         });
+        console.log('--> newUserResponse -->', newUserResponse)
         const newUser = (newUserResponse.data || null) as User | null;
 
         return {

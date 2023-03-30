@@ -1,5 +1,5 @@
 interface IDebugDev {
-  type: "error" | "success";
+  type: "error" | "success" | "call";
   name: string;
   value: any;
 }
@@ -7,6 +7,7 @@ interface IDebugDev {
 export function debugDev({ type, name, value }: IDebugDev): string {
   let typeLabel = "Success";
   if (type === "error") typeLabel = "Error";
+  if (type === "call") typeLabel = "Calling";
   if (type === "error" && typeof value !== "string" && !!value) {
     value = value?.message || value;
   }
