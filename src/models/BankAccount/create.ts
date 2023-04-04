@@ -3,7 +3,7 @@ import { debugDev } from "src/utils/dev";
 import { FirebaseCollection, firebaseCreate } from "..";
 import { CreateBankAccount, BankAccount } from "./schema";
 import { v4 as uuid } from "uuid";
-import { serverTimestamp, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 interface ICreateBankAccount {
   values: CreateBankAccount;
@@ -16,8 +16,8 @@ export const createBankAccount = async ({
   const item: BankAccount = {
     ...values,
     id: uuid(),
-    createdAt: serverTimestamp() as Timestamp,
-    updatedAt: serverTimestamp() as Timestamp,
+    createdAt: Timestamp.fromDate(new Date()),
+    updatedAt: Timestamp.fromDate(new Date()),
   };
   try {
     const result = await firebaseCreate<BankAccount>({

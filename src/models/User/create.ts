@@ -3,7 +3,7 @@ import { debugDev } from "src/utils/dev";
 import { FirebaseCollection, firebaseCreate } from "..";
 import { CreateUser, User } from "./schema";
 import { v4 as uuid } from "uuid";
-import { serverTimestamp, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 interface ICreateUser {
   values: CreateUser;
@@ -15,8 +15,8 @@ export const createUser = async ({
   const funcName = "getUserById";
   const item: User = {
     ...values,
-    createdAt: serverTimestamp() as Timestamp,
-    updatedAt: serverTimestamp() as Timestamp,
+    createdAt: Timestamp.fromDate(new Date()),
+    updatedAt: Timestamp.fromDate(new Date()),
   };
   try {
     const result = await firebaseCreate<User>({

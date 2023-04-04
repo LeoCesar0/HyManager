@@ -62,6 +62,9 @@ export const firebaseCreate = async <T extends { id: string }>({
   debugDev({ name: funcName, type: "call", value: data });
   try {
     const id = data.id || uuid();
+    console.log('collectionName -->', collectionName)
+    console.log('data -->', data)
+    console.log('id -->', id)
     await addData(collectionName, data, id);
     const snapShot = await getDataById(collectionName, id);
     const updatedData = snapShot.data() as T | undefined;

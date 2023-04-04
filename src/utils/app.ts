@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+import { Timestamp } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { AppError } from "../types";
 
@@ -78,17 +80,21 @@ export const slugify = (string: string) => {
 interface IMakeTransactionSlug {
   amount: string;
   date: string;
-  idFromBankTransaction?: string;
+  idFromBank?: string;
 }
-export const makeTransactionSlug = ({ amount, date,idFromBankTransaction }: IMakeTransactionSlug) => {
-  let slug = slugify(amount)
-  slug += '@@'
-  slug += slugify(date.slice(0, 10))
-  slug += '&&'
-  slug += idFromBankTransaction ? idFromBankTransaction : 'manual'
-  return slug
+export const makeTransactionSlug = ({
+  amount,
+  date,
+  idFromBank,
+}: IMakeTransactionSlug) => {
+  let slug = slugify(amount);
+  slug += "@@";
+  slug += slugify(date.slice(0, 10));
+  slug += "&&";
+  slug += idFromBank ? idFromBank : "manual";
+  return slug;
 };
 
 export const parseAmount = (amount: number) => {
-  return Math.round(Math.abs(amount) * 100);
+  return Math.round(Math.abs(amount));
 };

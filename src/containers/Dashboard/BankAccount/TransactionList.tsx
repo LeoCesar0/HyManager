@@ -24,7 +24,7 @@ export const TransactionList: React.FC<ITransactionList> = ({
       {transactions.map((item) => {
         return (
           <div key={item.id}>
-            Transação de: {item.amount / 100} | Tipo: {item.type} | Data:{" "}
+            Transação de: {item.amount} | Tipo: {item.type} | Data:{" "}
             {new Date(item.date.seconds).toLocaleDateString()}
           </div>
         );

@@ -38,7 +38,7 @@ export const TransactionsChart: React.FC<ITransactionsChart> = ({
     const filteredTransactions = transactions.filter(
       (item) => item.type === type
     );
-    const amounts = filteredTransactions.map((item) => item.amount / 100);
+    const amounts = filteredTransactions.map((item) => item.amount);
     const labels = filteredTransactions.map((item) =>
       new Date(item.date.seconds).toLocaleDateString()
     );

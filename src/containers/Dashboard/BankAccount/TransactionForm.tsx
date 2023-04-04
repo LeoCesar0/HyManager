@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { createTransaction } from "src/models/Transaction/create";
 import {
   CreateTransaction,
+  createTransactionSchema,
   TransactionType,
 } from "src/models/Transaction/schema";
 import { cx, dateToIsoString } from "src/utils/misc";
@@ -19,52 +20,29 @@ interface ITransactionForm {
   bankAccountId: string;
 }
 
-const validationSchema = z.object({
-  amount: z
-    .number({
-      invalid_type_error: "Insert a number",
-      required_error: "This field is required!",
-    })
-    .positive("Insert a number above zero"),
-  date: z.string({
-    invalid_type_error: "Insert a date",
-    required_error: "This field is required!",
-  }),
-  description: z
-    .string({ required_error: "Insert a description" })
-    .min(4, "Min 4 characters"),
-});
+const initialValues: CreateTransaction = {
+  amount: 1,
+  description: "",
+  creditor: "",
+  type: TransactionType.credit,
+  date: dateToIsoString(new Date(), { withTimeZone: false }),
+  color: "#ffffff",
+  slug: "",
+  bankAccountId: "",
+};
 
 export const TransactionForm: React.FC<ITransactionForm> = ({
   bankAccountId,
 }) => {
   const { setModalProps } = useGlobalModal();
   const formik = useFormik({
-    validationSchema: toFormikValidationSchema(validationSchema),
-    initialValues: {
-      amount: 1,
-      description: "",
-      creditor: "",
-      type: TransactionType.credit,
-      date: dateToIsoString(new Date(), { withTimeZone: false }),
-      color: {
-        hex: "#ffffff",
-      },
-      slug: "",
-    },
+    validationSchema: toFormikValidationSchema(createTransactionSchema),
+    initialValues: initialValues,
     onSubmit: async (inputs) => {
       if (!bankAccountId) return;
-      const amount = Math.round(inputs.amount * 100);
-      const date = new Date(inputs.date);
-      const firebaseTimestamp = Timestamp.fromDate(date);
-      const values: CreateTransaction = {
-        ...inputs,
-        bankAccountId: bankAccountId,
-        date: firebaseTimestamp,
-        amount: amount,
-      };
+      
       const toastId = toast.loading("Creating Transaction");
-      const results = await createTransaction({ values: values });
+      const results = await createTransaction({ values: inputs, bankAccountId });
       if (results.done) {
         toast.update(toastId, {
           render: "Success!",
@@ -83,6 +61,7 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
       }
     },
   });
+  console.log('formik.errors -->', formik.errors)
 
   return (
     <div className="component__modal-form">

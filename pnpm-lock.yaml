@@ -22,6 +22,7 @@ specifiers:
   '@types/uuid': ^9.0.0
   apexcharts: ^3.37.1
   autoprefixer: ^10.4.13
+  currency.js: ^2.0.4
   d3: ^7.8.2
   date-fns: ^2.29.3
   dotenv: ^16.0.1
@@ -63,6 +64,7 @@ dependencies:
   '@types/react-icons': 3.0.0_react@18.2.0
   '@types/uuid': 9.0.0
   apexcharts: 3.37.1
+  currency.js: 2.0.4
   d3: 7.8.2
   date-fns: 2.29.3
   dotenv: 16.0.3
@@ -3457,6 +3459,11 @@ packages:
 
   /csstype/3.1.1:
     resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==}
+
+  /currency.js/2.0.4:
+    resolution: {integrity: sha512-6/OplJYgJ0RUlli74d93HJ/OsKVBi8lB1+Z6eJYS1YZzBuIp4qKKHpJ7ad+GvTlWmLR/hLJOWTykN5Nm8NJ7+w==}
+    engines: {node: '>=4'}
+    dev: false
 
   /d3-array/2.12.1:
     resolution: {integrity: sha512-B0ErZK/66mHtEsR1TkPEEkwdy+WDesimkM5gpZr5Dsg54BiTA5RXtYW5qTLIAcekaS9xfZrzBLF/OAkB3Qn1YQ==}

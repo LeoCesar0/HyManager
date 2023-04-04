@@ -1,12 +1,13 @@
-import {
-  CreateTransactionMutationVariables,
-  TransactionType,
-} from "@graphql-folder/generated";
 import { CSVData } from "@types-folder/index";
-import { createTransactionSchema } from "@types-folder/models/Transaction";
 import { parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { Timestamp } from "firebase/firestore";
 import { makeTransactionSlug, parseAmount } from "src/utils/app";
+import {
+  CreateTransaction,
+  createTransactionSchema,
+  TransactionType,
+} from "./schema";
 
 interface IExtractTransactionsFromCSVData {
   data: CSVData;
@@ -16,7 +17,7 @@ interface RawTransaction {
   amount: string;
   date: string;
   description: string;
-  idFromBankTransaction: string;
+  idFromBank: string;
 }
 export const extractTransactionsFromCSVData = ({
   data,
@@ -25,7 +26,7 @@ export const extractTransactionsFromCSVData = ({
   const headersSettings = [
     {
       expected: "Identificador",
-      parsed: "idFromBankTransaction",
+      parsed: "idFromBank",
     },
     {
       expected: "Data",
@@ -75,8 +76,10 @@ export const extractTransactionsFromCSVData = ({
     return acc;
   }, [] as RawTransaction[]);
 
-  const parsedTransactions: CreateTransactionMutationVariables[] =
-    parseTransactions(rawTransactions, bankAccountId);
+  const parsedTransactions: CreateTransaction[] = parseTransactions(
+    rawTransactions,
+    bankAccountId
+  );
 
   return {
     data: parsedTransactions,
@@ -103,9 +106,9 @@ const parseTransactions = (
       const dateIso = dateObject.toISOString();
       const description = item["description"] || "";
       const creditor = (description.split("-")[1] || "").trim();
-      const idFromBankTransaction = item["idFromBankTransaction"];
-      const transaction: CreateTransactionMutationVariables = {
-        idFromBankTransaction: idFromBankTransaction,
+      const idFromBank = item["idFromBank"];
+      const transaction: CreateTransaction = {
+        idFromBank: idFromBank,
         bankAccountId: bankAccountId,
         amount: amount,
         type: type,
@@ -115,7 +118,7 @@ const parseTransactions = (
         slug: makeTransactionSlug({
           date: dateIso,
           amount: amount.toString(),
-          idFromBankTransaction,
+          idFromBank,
         }),
       };
       const validation = createTransactionSchema.safeParse(transaction);
@@ -134,5 +137,5 @@ const parseTransactions = (
       console.log("parsedTransactions catch error, item -->", e, item);
       return acc;
     }
-  }, [] as CreateTransactionMutationVariables[]);
+  }, [] as CreateTransaction[]);
 };
