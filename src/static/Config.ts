@@ -1,6 +1,8 @@
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "tailwind.config.cjs";
 import { ApexOptions } from "apexcharts";
+import en from './ApexLocales/en.json'
+import ptBr from './ApexLocales/pt-br.json'
 
 
 export const APP_CONFIG = {
@@ -21,3 +23,6 @@ export const APEX_DEFAULT_OPTIONS: ApexOptions = {
     },
   },
 };
+
+
+export const APEX_LOCALES = [ptBr, en]

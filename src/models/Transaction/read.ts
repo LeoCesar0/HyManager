@@ -1,4 +1,5 @@
-import { AppModelResponse } from "@types-folder/index";
+import { useGlobalCache } from "@contexts/GlobalCache";
+import { AppModelResponse, FirebaseFilterFor } from "@types-folder/index";
 import { debugDev } from "src/utils/dev";
 import { FirebaseCollection, firebaseGet, firebaseList } from "..";
 import { Transaction } from "./schema";
@@ -36,18 +37,21 @@ export const getTransactionById = async ({
 
 interface IListTransactionByBankId {
   id: string;
+  filters?: FirebaseFilterFor<Transaction>[];
 }
 export const listTransactionsByBankId = async ({
   id,
+  filters = [],
 }: IListTransactionByBankId): Promise<AppModelResponse<Transaction[]>> => {
   const funcName = "getTransactionById";
-
-  console.log("Calling listTransactionsByBankId");
 
   try {
     const result = await firebaseList<Transaction>({
       collection: FirebaseCollection.transactions,
-      filters: [{ field: "bankAccountId", operator: "==", value: id }],
+      filters: [
+        { field: "bankAccountId", operator: "==", value: id },
+        ...filters,
+      ],
     });
     return result;
   } catch (error) {

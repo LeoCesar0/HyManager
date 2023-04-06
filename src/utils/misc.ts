@@ -1,3 +1,6 @@
+import { format } from "date-fns";
+import { Timestamp } from "firebase/firestore";
+
 type CxItemType = undefined | string | [string, boolean];
 type CxPropsType = CxItemType[];
 
@@ -26,7 +29,7 @@ export const debugLog = (variable: any, name: string) => {
 export const dateToIsoString = (date: Date, { withTimeZone = true }) => {
   const tzOffset = -date.getTimezoneOffset();
   const diff = tzOffset >= 0 ? "+" : "-";
-  const pad = (n) => `${Math.floor(Math.abs(n))}`.padStart(2, "0");
+  const pad = (n: number) => `${Math.floor(Math.abs(n))}`.padStart(2, "0");
 
   let isoString =
     date.getFullYear() +
@@ -64,3 +67,51 @@ export function getTimezoneOffset() {
     .toString()
     .padStart(2, "0")}`;
 }
+
+export const timestampToDate = (unix: Timestamp) => {
+  const date = new Date(unix.seconds * 1000);
+  return date;
+};
+
+export const valueToCurrency = (value: number) => {
+  const formatter = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+  });
+  return formatter.format(value);
+};
+
+export const formatAnyDate = (
+  date: string | number | Date | Timestamp,
+  dateFormat: string = "dd/MM/yyyy"
+) => {
+  try {
+    if (typeof date === "string") {
+      const isUnix = /^\d+$/.test(date);
+      if (isUnix) {
+        date = Number(date);
+        return format(date, dateFormat);
+      }
+      date = new Date(date);
+      return format(date, dateFormat);
+    }
+    if (typeof date === "number") {
+      return format(date, dateFormat);
+    }
+    if (date instanceof Date) {
+      return format(date, dateFormat);
+    }
+
+    if (date instanceof Timestamp) {
+      date = timestampToDate(date);
+      return format(date, dateFormat);
+    }
+
+    return "";
+  } catch (err) {
+    console.log("formatAnyDate err -->", err);
+    return "";
+  }
+};

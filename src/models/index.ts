@@ -1,4 +1,8 @@
-import { AnyObject, AppModelResponse } from "@types-folder/index";
+import {
+  AnyObject,
+  AppModelResponse,
+  FirebaseFilterFor,
+} from "@types-folder/index";
 import {
   collection,
   addDoc,
@@ -62,9 +66,9 @@ export const firebaseCreate = async <T extends { id: string }>({
   debugDev({ name: funcName, type: "call", value: data });
   try {
     const id = data.id || uuid();
-    console.log('collectionName -->', collectionName)
-    console.log('data -->', data)
-    console.log('id -->', id)
+    console.log("collectionName -->", collectionName);
+    console.log("data -->", data);
+    console.log("id -->", id);
     await addData(collectionName, data, id);
     const snapShot = await getDataById(collectionName, id);
     const updatedData = snapShot.data() as T | undefined;
@@ -270,11 +274,7 @@ export const firebaseDelete = async ({
 
 type IFirebaseList<T> = {
   collection: FirebaseCollection;
-  filters?: {
-    field: keyof T;
-    operator: WhereFilterOp;
-    value: any;
-  }[];
+  filters?: FirebaseFilterFor<T>[];
 };
 export const firebaseList = async <T>({
   collection: collectionName,

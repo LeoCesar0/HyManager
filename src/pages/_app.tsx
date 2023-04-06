@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { GlobalAuthProvider } from "../contexts/GlobalAuth";
 import { ToastContainer } from "react-toastify";
 import { GlobalModalProvider } from "../contexts/GlobalModal";
+import { GlobalCacheProvider } from "@contexts/GlobalCache";
 
 // const trackingId = process.env.GA_TRACKING_ID;
 
@@ -60,9 +61,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         {/* </SessionProvider> */}
         <GlobalAuthProvider>
           <GlobalContextProvider>
-            <GlobalModalProvider>
-              {getLayout(<Component {...pageProps} />)}
-            </GlobalModalProvider>
+            <GlobalCacheProvider>
+              <GlobalModalProvider>
+                {getLayout(<Component {...pageProps} />)}
+              </GlobalModalProvider>
+            </GlobalCacheProvider>
           </GlobalContextProvider>
         </GlobalAuthProvider>
       </ApolloProvider>

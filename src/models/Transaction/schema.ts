@@ -28,8 +28,11 @@ export const transactionSchema = z.object({
   createdAt: timestampSchema,
   updatedAt: timestampSchema,
   color: z.string().optional(),
+  dateDay: z.string(),
+  dateMonth: z.string(),
+  dateYear: z.string(),
+  dateWeek: z.string(),
 });
-
 
 export const createTransactionSchema = z.object({
   slug: z.string().optional(),
@@ -62,5 +65,3 @@ export const createTransactionSchema = z.object({
 
 export type Transaction = z.infer<typeof transactionSchema>;
 export type CreateTransaction = z.infer<typeof createTransactionSchema>;
-
-

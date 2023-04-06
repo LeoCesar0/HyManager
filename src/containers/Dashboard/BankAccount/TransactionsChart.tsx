@@ -3,11 +3,11 @@ import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import { Transaction, TransactionType } from "src/models/Transaction/schema";
 import { TAILWIND_CONFIG } from "src/static/config";
+import { timestampToDate } from "src/utils/misc";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const COLORS = TAILWIND_CONFIG.theme?.colors;
 const primaryColors = [COLORS!.primary, COLORS!.secondary] as string[];
-
 
 interface ITransactionsChart {
   transactions: Transaction[];
@@ -30,8 +30,8 @@ export const TransactionsChart: React.FC<ITransactionsChart> = ({
       },
     },
     title: {
-      text: type === TransactionType.credit ? 'Credit' : 'Debit'
-    }
+      text: type === TransactionType.credit ? "Credit" : "Debit",
+    },
   };
 
   const { series, options } = useMemo(() => {
@@ -40,7 +40,7 @@ export const TransactionsChart: React.FC<ITransactionsChart> = ({
     );
     const amounts = filteredTransactions.map((item) => item.amount);
     const labels = filteredTransactions.map((item) =>
-      new Date(item.date.seconds).toLocaleDateString()
+      timestampToDate(item.date).toLocaleDateString()
     );
     // console.log("type -->", type);
     // console.log("filteredTransactions -->", filteredTransactions);

@@ -44,30 +44,12 @@ const handleGetUserById = async (
   setState((prev) => ({ ...prev, loading: true }));
   const result = await getUserById({ id: uid });
 
-  console.log("result -->", result);
   setState((prev) => ({
     ...prev,
     currentUser: result.data,
     loading: false,
     error: result.error,
   }));
-
-  // getUserById({
-  //   id: uid,
-  // })
-  //   .then((foundUserResponse) => {
-  //     setState((prev) => ({
-  //       ...prev,
-  //       currentUser: foundUserResponse.data,
-  //     }));
-  //   })
-  //   .catch((err) => {
-  //     console.log('ERR getUserById -->', err)
-  //     setState((prev) => ({ ...prev, currentUser: null }));
-  //   })
-  //   .finally(() => {
-  //     setState((prev) => ({ ...prev, loading: false }));
-  //   });
 };
 
 /* -------------------------------- PROVIDER -------------------------------- */
