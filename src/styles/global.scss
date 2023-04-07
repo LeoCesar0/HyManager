@@ -3,12 +3,14 @@
 *,
 *::after,
 *::before {
-  outline: none;
   margin: 0;
   padding: 0;
   border: 0;
   box-sizing: border-box;
+  @apply outline-1 outline-primary outline-offset-2
 }
+
+
 
 .flex-center {
   display: flex;

@@ -16,23 +16,23 @@ export const TransactionList: React.FC<ITransactionList> = ({
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const { cache, setCache } = useGlobalCache();
 
-  useEffect(() => {
-    if (!bankAccountId) return;
-    const key = `CachedYearTransactions-${bankAccountId}`;
-    const cachedTransactions = cache[key];
-    if (cachedTransactions) {
-      setTransactions(cachedTransactions);
-    } else {
-      listTransactionsByBankId({
-        id: bankAccountId,
-      }).then((result) => {
-        if (result.data) {
-          setCache(key, result.data);
-          setTransactions(result.data);
-        }
-      });
-    }
-  }, [bankAccountId]);
+  // useEffect(() => {
+  //   if (!bankAccountId) return;
+  //   const key = `CachedYearTransactions-${bankAccountId}`;
+  //   const cachedTransactions = cache[key];
+  //   if (cachedTransactions) {
+  //     setTransactions(cachedTransactions);
+  //   } else {
+  //     listTransactionsByBankId({
+  //       id: bankAccountId,
+  //     }).then((result) => {
+  //       if (result.data) {
+  //         setCache(key, result.data);
+  //         setTransactions(result.data);
+  //       }
+  //     });
+  //   }
+  // }, [bankAccountId]);
 
   return (
     <div>

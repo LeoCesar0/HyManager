@@ -3,7 +3,7 @@ import currency from "currency.js";
 import { parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Timestamp } from "firebase/firestore";
-import { makeTransactionSlug, parseAmount } from "src/utils/app";
+import { makeTransactionSlug } from "src/utils/app";
 import {
   CreateTransaction,
   createTransactionSchema,
@@ -95,9 +95,11 @@ const parseTransactions = (
 ) => {
   return rawTransactions.reduce((acc, item) => {
     try {
-      // const amount = parseAmount(parseFloat(item["amount"]));
-      const amount = currency(item.amount).value
-      const type = amount > 0 ? TransactionType.credit : TransactionType.debit;
+      const type =
+        Number(item.amount) > 0
+          ? TransactionType.credit
+          : TransactionType.debit;
+      const amount = currency(item.amount).value;
       const dateAsLocaleString = item["date"];
       const dateObject = parse(dateAsLocaleString, "P", new Date(), {
         locale: ptBR,

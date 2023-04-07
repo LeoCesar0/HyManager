@@ -14,34 +14,33 @@ import {
 
 export interface IFilterDate {
   label: string;
-  format: string;
-  field: keyof Transaction;
+  days: number;
 }
 
 export const dateOptions: IFilterDate[] = [
   {
-    label: "Today",
-    format: "dd",
-    field: "dateDay",
+    label: "Last 7 days",
+    days: 7,
   },
   {
-    label: "Week",
-    format: "Q",
-    field: "dateWeek",
+    label: "Last 30 days",
+    days: 30,
   },
   {
-    label: "Month",
-    format: "MM",
-    field: "dateMonth",
+    label: "Last 60 days",
+    days: 60,
   },
   {
-    label: "Year",
-    format: "yyyy",
-    field: "dateYear",
+    label: "Last 12 months",
+    days: 30 * 12,
   },
 ];
 
-export const makeBalanceChartData = ({ transactions }: { transactions: Transaction[] }) => {
+export const makeBalanceChartData = ({
+  transactions,
+}: {
+  transactions: Transaction[];
+}) => {
   const { dates, balances } = transactions.reduce(
     (acc, entry) => {
       const date = timestampToDate(entry.date).getTime();

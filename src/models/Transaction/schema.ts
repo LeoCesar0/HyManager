@@ -54,12 +54,10 @@ export const createTransactionSchema = z.object({
     invalid_type_error: "Insert a date",
     required_error: "This field is required!",
   }),
-  amount: z
-    .number({
-      invalid_type_error: "Insert a number",
-      required_error: "This field is required!",
-    })
-    .positive("Insert a number above zero"),
+  amount: z.number({
+    invalid_type_error: "Insert a number",
+    required_error: "This field is required!",
+  }),
   color: z.string().optional(),
 });
 

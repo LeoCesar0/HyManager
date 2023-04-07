@@ -91,13 +91,11 @@ export const makeTransactionSlug = ({
   slug += "@@";
   slug += slugify(date.slice(0, 10));
   slug += "&&";
-  slug += idFromBank ? idFromBank : "manual";
+  const idFromBank_ = idFromBank ? idFromBank : "manual";
+  slug += idFromBank_;
   return slug;
 };
 
-export const parseAmount = (amount: number) => {
-  return Math.round(Math.abs(amount));
-};
 
 export const makeCreatedAtFields = (
   date: Date

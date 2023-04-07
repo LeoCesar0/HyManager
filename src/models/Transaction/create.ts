@@ -27,6 +27,7 @@ export const createTransaction = async ({
     slug: makeTransactionSlug({
       date: values.date,
       amount: values.amount.toString(),
+      idFromBank: values.idFromBank,
     }),
     date: firebaseTimestamp,
     createdAt: Timestamp.fromDate(now),
@@ -71,18 +72,19 @@ export const createManyTransactions = async ({
   try {
     const batch = writeBatch(firebaseDB);
     const createdTransactionsIds: { id: string }[] = [];
-    values.forEach((transaction) => {
-      const date = new Date(transaction.date);
+    values.forEach((transactionInputs) => {
+      const date = new Date(transactionInputs.date);
       const firebaseTimestamp = Timestamp.fromDate(date);
       const id = uuid();
       const now = new Date();
       const item: Transaction = {
-        ...transaction,
+        ...transactionInputs,
         bankAccountId: bankAccountId,
         id: id,
         slug: makeTransactionSlug({
-          date: transaction.date,
-          amount: transaction.amount.toString(),
+          date: transactionInputs.date,
+          amount: transactionInputs.amount.toString(),
+          idFromBank: transactionInputs.idFromBank,
         }),
         date: firebaseTimestamp,
         createdAt: Timestamp.fromDate(now),

@@ -1,7 +1,7 @@
 import Button from "@components/Button";
 import { useGlobalCache } from "@contexts/GlobalCache";
 import { FirebaseFilterFor } from "@types-folder/index";
-import { format } from "date-fns";
+import { format, sub } from "date-fns";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -17,16 +17,20 @@ interface IBalanceChart {
 
 export const BalanceChart: React.FC<IBalanceChart> = (props) => {
   const router = useRouter();
-  const [dateFilter, setDateFilter] = useState<IFilterDate>(dateOptions[3]);
+  const [loading, setLoading] = useState(false);
+  const [dateFilter, setDateFilter] = useState<IFilterDate>(
+    dateOptions[dateOptions.length - 1]
+  );
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const { cache, setCache } = useGlobalCache();
   const bankAccountId = props.bankAccountId || (router.query.id as string);
 
   useEffect(() => {
     if (!bankAccountId) return;
-    const key = `balanceChart-${dateFilter}-${bankAccountId}`;
+    const key = `balanceChart-last-${dateFilter.days}-${bankAccountId}`;
     const cachedTransactions = cache[key];
 
+    console.log("cache -->", cache);
     console.log("dateFilter -->", dateFilter);
     console.log("cachedTransactions -->", cachedTransactions);
 
@@ -34,26 +38,33 @@ export const BalanceChart: React.FC<IBalanceChart> = (props) => {
       setTransactions(cachedTransactions);
     } else {
       const now = new Date();
-      const filterValue = format(now, dateFilter.format);
+      const lastDaysValue = dateFilter.days;
+      const pastDate = sub(now, {
+        days: lastDaysValue,
+      });
       const filters: FirebaseFilterFor<Transaction>[] = [
-        { field: dateFilter.field, operator: "==", value: filterValue },
+        { field: "date", operator: ">=", value: pastDate },
       ];
-
+      setLoading(true);
       listTransactionsByBankId({
         id: bankAccountId,
         filters: filters,
-      }).then((result) => {
-        if (result.data) {
-          setCache(key, result.data);
-          setTransactions(result.data);
-        }
-      });
+      })
+        .then((result) => {
+          if (result.data) {
+            setCache(key, result.data);
+            setTransactions(result.data);
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, [bankAccountId, dateFilter]);
 
   const { series, options } = useMemo(() => {
     return makeBalanceChartData({ transactions });
-  }, [transactions]);
+  }, [transactions, dateFilter]);
 
   if (!bankAccountId) return null;
 
@@ -63,10 +74,16 @@ export const BalanceChart: React.FC<IBalanceChart> = (props) => {
         <>
           <div className="flex gap-4 mb-4">
             {dateOptions.map((item) => {
-              const isSelected = dateFilter.format === item.format;
-              console.log(`${item.label} is selected -->`, isSelected);
+              const isSelected = dateFilter.days === item.days;
               return (
-                <Button selected={isSelected} key={item.format}>
+                <Button
+                  selected={isSelected}
+                  key={item.days}
+                  onClick={() => {
+                    setDateFilter(item);
+                  }}
+                  disabled={loading}
+                >
                   {item.label}
                 </Button>
               );

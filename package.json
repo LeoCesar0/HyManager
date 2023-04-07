@@ -43,6 +43,7 @@
     "sass": "^1.51.0",
     "scss": "^0.2.4",
     "uuid": "^9.0.0",
+    "windstitch": "^0.3.0",
     "zod": "^3.20.6",
     "zod-formik-adapter": "^1.2.0"
   },
