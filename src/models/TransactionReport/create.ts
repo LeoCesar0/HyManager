@@ -7,54 +7,15 @@ import { firebaseDB } from "src/services/firebase";
 import { Transaction } from "../Transaction/schema";
 import { makeDateFields } from "src/utils/app";
 import { timestampToDate } from "src/utils/misc";
+import {
+  makeTransactionReportFields,
+  makeTransactionReportSlugId,
+} from "./utils";
 
 interface ICreateTransactionReport {
   transaction: Transaction;
   type: TransactionReport["type"];
 }
-
-const makeTransactionReportSlugId = ({
-  date,
-  backAccountId,
-  type,
-}: {
-  backAccountId: string;
-  date: Date;
-  type: TransactionReport["type"];
-}) => {
-  const dateParams = makeDateFields(date);
-  let string = `${dateParams.dateYear}-${dateParams.dateMonth}`;
-  if (type === "day") string += `-${dateParams.dateDay}`;
-  string += `-${backAccountId}`;
-  return string;
-};
-
-export const makeTransactionReportFields = (
-  transaction: Transaction,
-  type: TransactionReport["type"]
-): TransactionReport => {
-  const now = new Date();
-  const nowTimestamp = Timestamp.fromDate(now);
-
-  let date = timestampToDate(transaction.date); // if type === day
-  let dateTimestamp = transaction.date;
-
-  const newTransactionReport: TransactionReport = {
-    id: makeTransactionReportSlugId({
-      backAccountId: transaction.bankAccountId,
-      date: date,
-      type,
-    }),
-    amount: transaction.amount,
-    bankAccountId: transaction.bankAccountId,
-    createdAt: nowTimestamp,
-    updatedAt: nowTimestamp,
-    date: dateTimestamp,
-    type: type,
-    ...makeDateFields(date),
-  };
-  return newTransactionReport;
-};
 
 export const createTransactionReport = async ({
   transaction,

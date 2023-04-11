@@ -1,6 +1,9 @@
 import { AppModelResponse } from "@types-folder/index";
 import currency from "currency.js";
+import { Timestamp } from "firebase/firestore";
+import { makeDateFields } from "src/utils/app";
 import { debugDev } from "src/utils/dev";
+import { timestampToDate } from "src/utils/misc";
 import { Transaction } from "../Transaction/schema";
 import { createTransactionReport } from "../TransactionReport/create";
 import { listTransactionReportByTransaction } from "../TransactionReport/read";
@@ -66,3 +69,46 @@ export const makeTransactionReport = async ({
     };
   }
 };
+
+export const makeTransactionReportSlugId = ({
+    date,
+    backAccountId,
+    type,
+  }: {
+    backAccountId: string;
+    date: Date;
+    type: TransactionReport["type"];
+  }) => {
+    const dateParams = makeDateFields(date);
+    let string = `${dateParams.dateYear}-${dateParams.dateMonth}`;
+    if (type === "day") string += `-${dateParams.dateDay}`;
+    string += `&&${backAccountId}`;
+    return string;
+  };
+  
+  export const makeTransactionReportFields = (
+    transaction: Transaction,
+    type: TransactionReport["type"]
+  ): TransactionReport => {
+    const now = new Date();
+    const nowTimestamp = Timestamp.fromDate(now);
+  
+    let date = timestampToDate(transaction.date); // if type === day
+    let dateTimestamp = transaction.date;
+  
+    const newTransactionReport: TransactionReport = {
+      id: makeTransactionReportSlugId({
+        backAccountId: transaction.bankAccountId,
+        date: date,
+        type,
+      }),
+      amount: transaction.amount,
+      bankAccountId: transaction.bankAccountId,
+      createdAt: nowTimestamp,
+      updatedAt: nowTimestamp,
+      date: dateTimestamp,
+      type: type,
+      ...makeDateFields(date),
+    };
+    return newTransactionReport;
+  };

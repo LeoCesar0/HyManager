@@ -12,9 +12,8 @@ import {
 import { makeDateFields, makeTransactionSlug } from "src/utils/app";
 import { firebaseDB } from "src/services/firebase";
 import { TransactionReport } from "../TransactionReport/schema";
-
 import { getTransactionById } from "./read";
-import { makeTransactionReportFields } from "../TransactionReport/create";
+import { makeTransactionReportFields } from "../TransactionReport/utils";
 import currency from "currency.js";
 import { listTransactionReportsBy } from "../TransactionReport/read";
 import { makeTransactionReport } from "../TransactionReport/utils";
