@@ -1,142 +1,76 @@
-import { CSVData } from "@types-folder/index";
+import { AppModelResponse } from "@types-folder/index";
 import currency from "currency.js";
-import { parse } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Timestamp } from "firebase/firestore";
-import { makeTransactionSlug } from "src/utils/app";
-import {
-  CreateTransaction,
-  createTransactionSchema,
-  TransactionType,
-} from "./schema";
+import { debugDev } from "src/utils/dev";
+import { FirebaseCollection, firebaseList } from "..";
+import { createTransactionReport } from "../TransactionReport/create";
+import { TransactionReport } from "../TransactionReport/schema";
+import { updateTransactionReport } from "../TransactionReport/update";
+import { Transaction } from "./schema";
 
-interface IExtractTransactionsFromCSVData {
-  data: CSVData;
-  bankAccountId: string;
+interface IMakeTransactionReport {
+  type?: TransactionReport["type"];
+  transaction: Transaction;
 }
-interface RawTransaction {
-  amount: string;
-  date: string;
-  description: string;
-  idFromBank: string;
-}
-export const extractTransactionsFromCSVData = ({
-  data,
-  bankAccountId,
-}: IExtractTransactionsFromCSVData) => {
-  const headersSettings = [
-    {
-      expected: "Identificador",
-      parsed: "idFromBank",
-    },
-    {
-      expected: "Data",
-      parsed: "date",
-    },
-    {
-      expected: "Valor",
-      parsed: "amount",
-    },
-    {
-      expected: "Descrição",
-      parsed: "description",
-    },
-    {
-      expected: "Data",
-      parsed: "date",
-    },
-  ];
-  let error = null;
 
-  const headers: string[] = data.shift() as string[];
-  const isValid = headersSettings.every((item) =>
-    headers.includes(item.expected)
-  );
+export const makeTransactionReport = async ({
+  type = "month",
+  transaction,
+}: IMakeTransactionReport): Promise<AppModelResponse<TransactionReport>> => {
+  const funcName = "makeTransactionReport";
+  try {
+    const listResult = await firebaseList<TransactionReport>({
+      collection: FirebaseCollection.transactionReports,
+      filters: [
+        { field: "type", operator: "==", value: type },
+        { field: "dateMonth", operator: "==", value: transaction.dateMonth },
+        { field: "dateYear", operator: "==", value: transaction.dateYear },
+        {
+          field: "bankAccountId",
+          operator: "==",
+          value: transaction.bankAccountId,
+        },
+      ],
+    });
+    const existingMonthlyReport = (listResult.data || [])[0];
+    /* ---------------------------- UPDATE IF EXISTS ---------------------------- */
+    if (existingMonthlyReport) {
+      const updatedCurrency = currency(transaction.amount).add(
+        existingMonthlyReport.amount
+      );
+      const updatedMonthlyReport: typeof existingMonthlyReport = {
+        ...existingMonthlyReport,
+        amount: updatedCurrency.value,
+      };
+      await updateTransactionReport({
+        id: updatedMonthlyReport.id,
+        values: updatedMonthlyReport,
+      });
 
-  if (!isValid) {
-    error = {
-      message: "CSV is not valid",
-    };
+      return {
+        done: true,
+        data: updatedMonthlyReport,
+        error: null,
+      };
+    } else {
+      /* -------------------------- CREATE IF NOT EXISTS -------------------------- */
+      const createResults = await createTransactionReport({
+        transaction: transaction,
+        type: type,
+      });
+      return createResults;
+    }
+  } catch (error) {
+    const errorMessage = debugDev({
+      type: "error",
+      name: funcName,
+      value: error,
+    });
     return {
       data: null,
-      error,
       done: false,
+      error: {
+        message: errorMessage,
+      },
     };
   }
-
-  const rawTransactions: RawTransaction[] = data.reduce((acc, entry) => {
-    const transaction: RawTransaction = {} as RawTransaction;
-    headers.forEach((key, index) => {
-      const parsedKey = headersSettings.find((item) => item.expected == key)
-        ?.parsed as keyof RawTransaction;
-      if (parsedKey) transaction[parsedKey] = entry[index];
-    });
-    if (transaction.amount && transaction.date) {
-      acc.push(transaction);
-    }
-    return acc;
-  }, [] as RawTransaction[]);
-
-  const parsedTransactions: CreateTransaction[] = parseTransactions(
-    rawTransactions,
-    bankAccountId
-  );
-
-  return {
-    data: parsedTransactions,
-    error: null,
-    done: true,
-  };
-};
-
-const parseTransactions = (
-  rawTransactions: RawTransaction[],
-  bankAccountId: string
-) => {
-  return rawTransactions.reduce((acc, item) => {
-    try {
-      const type =
-        Number(item.amount) > 0
-          ? TransactionType.credit
-          : TransactionType.debit;
-      const amount = currency(item.amount).value;
-      const dateAsLocaleString = item["date"];
-      const dateObject = parse(dateAsLocaleString, "P", new Date(), {
-        locale: ptBR,
-      });
-      const dateIso = dateObject.toISOString();
-      const description = item["description"] || "";
-      const creditor = (description.split("-")[1] || "").trim();
-      const idFromBank = item["idFromBank"];
-      const transaction: CreateTransaction = {
-        idFromBank: idFromBank,
-        bankAccountId: bankAccountId,
-        amount: amount,
-        type: type,
-        date: dateIso,
-        creditor: creditor,
-        description: description,
-        slug: makeTransactionSlug({
-          date: dateIso,
-          amount: amount.toString(),
-          idFromBank,
-        }),
-      };
-      const validation = createTransactionSchema.safeParse(transaction);
-      if (validation.success) {
-        acc.push(transaction);
-      } else {
-        console.log(
-          "Validation Error, transaction skipped -->",
-          transaction,
-          validation.error
-        );
-      }
-
-      return acc;
-    } catch (e) {
-      console.log("parsedTransactions catch error, item -->", e, item);
-      return acc;
-    }
-  }, [] as CreateTransaction[]);
 };

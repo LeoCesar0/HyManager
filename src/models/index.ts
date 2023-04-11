@@ -29,6 +29,7 @@ export enum FirebaseCollection {
   users = "users",
   bankAccounts = "bankAccounts",
   transactions = "transactions",
+  transactionReports = "transactionReports",
 }
 
 export const firebaseCollections = Object.values(FirebaseCollection);
@@ -66,9 +67,6 @@ export const firebaseCreate = async <T extends { id: string }>({
   debugDev({ name: funcName, type: "call", value: data });
   try {
     const id = data.id || uuid();
-    console.log("collectionName -->", collectionName);
-    console.log("data -->", data);
-    console.log("id -->", id);
     await addData(collectionName, data, id);
     const snapShot = await getDataById(collectionName, id);
     const updatedData = snapShot.data() as T | undefined;
@@ -105,7 +103,8 @@ export const firebaseCreate = async <T extends { id: string }>({
 
 type IFirebaseUpdate<T> = {
   collection: FirebaseCollection;
-  data: Partial<T> & Partial<{ id: string; createdAt: Timestamp }>;
+  data: Partial<T> &
+    Partial<{ id: string; createdAt: Timestamp; updatedAt: Timestamp }>;
   id: string;
 };
 export const firebaseUpdate = async <T>({
@@ -115,9 +114,11 @@ export const firebaseUpdate = async <T>({
 }: IFirebaseUpdate<T>): Promise<AppModelResponse<T>> => {
   const funcName = "firebaseUpdate";
   debugDev({ name: funcName, type: "call", value: data });
+  const now = new Date();
 
   if (data?.id) delete data.id;
   if (data?.createdAt) delete data.createdAt;
+  data.updatedAt = Timestamp.fromDate(now);
 
   try {
     updateData(collectionName, data, id);

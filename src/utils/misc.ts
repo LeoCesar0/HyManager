@@ -68,8 +68,8 @@ export function getTimezoneOffset() {
     .padStart(2, "0")}`;
 }
 
-export const timestampToDate = (unix: Timestamp) => {
-  const date = new Date(unix.seconds * 1000);
+export const timestampToDate = (timestamp: Timestamp) => {
+  const date = new Date(timestamp.seconds * 1000);
   return date;
 };
 

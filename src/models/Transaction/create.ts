@@ -1,11 +1,13 @@
 import { AppModelResponse } from "@types-folder/index";
-import { debugDev } from "src/utils/dev";
-import { FirebaseCollection, firebaseCreate } from "..";
+import { debugDev, debugResults } from "src/utils/dev";
+import { FirebaseCollection, firebaseCreate, firebaseList } from "..";
 import { CreateTransaction, Transaction, transactionSchema } from "./schema";
-import { v4 as uuid } from "uuid";
 import { doc, Timestamp, writeBatch } from "firebase/firestore";
 import { makeDateFields, makeTransactionSlug } from "src/utils/app";
 import { firebaseDB } from "src/services/firebase";
+import { TransactionReport } from "../TransactionReport/schema";
+import { makeTransactionReport } from "./utils";
+import { getTransactionById } from "./read";
 
 interface ICreateTransaction {
   values: CreateTransaction;
@@ -20,15 +22,16 @@ export const createTransaction = async ({
   const date = new Date(values.date);
   const firebaseTimestamp = Timestamp.fromDate(date);
   const now = new Date();
+  const slugId = makeTransactionSlug({
+    date: values.date,
+    amount: values.amount.toString(),
+    idFromBank: values.idFromBank,
+  });
   const item: Transaction = {
     ...values,
     bankAccountId: bankAccountId,
-    id: uuid(),
-    slug: makeTransactionSlug({
-      date: values.date,
-      amount: values.amount.toString(),
-      idFromBank: values.idFromBank,
-    }),
+    id: slugId,
+    slug: slugId,
     date: firebaseTimestamp,
     createdAt: Timestamp.fromDate(now),
     updatedAt: Timestamp.fromDate(now),
@@ -41,6 +44,17 @@ export const createTransaction = async ({
       collection: FirebaseCollection.transactions,
       data: item,
     });
+    const createdTransactionResult = await getTransactionById({ id: slugId });
+    const createdTransaction = createdTransactionResult.data;
+    if (result.done && createdTransaction) {
+      const transactionReport = await makeTransactionReport({
+        transaction: createdTransaction,
+        type: "month",
+      });
+      if (transactionReport.error) {
+        debugResults(transactionReport, funcName);
+      }
+    }
     return result;
   } catch (error) {
     const errorMessage = debugDev({
@@ -75,26 +89,26 @@ export const createManyTransactions = async ({
     values.forEach((transactionInputs) => {
       const date = new Date(transactionInputs.date);
       const firebaseTimestamp = Timestamp.fromDate(date);
-      const id = uuid();
       const now = new Date();
+      const slugId = makeTransactionSlug({
+        date: transactionInputs.date,
+        amount: transactionInputs.amount.toString(),
+        idFromBank: transactionInputs.idFromBank,
+      });
       const item: Transaction = {
         ...transactionInputs,
         bankAccountId: bankAccountId,
-        id: id,
-        slug: makeTransactionSlug({
-          date: transactionInputs.date,
-          amount: transactionInputs.amount.toString(),
-          idFromBank: transactionInputs.idFromBank,
-        }),
+        id: slugId,
+        slug: slugId,
         date: firebaseTimestamp,
         createdAt: Timestamp.fromDate(now),
         updatedAt: Timestamp.fromDate(now),
         ...makeDateFields(date),
       };
       transactionSchema.parse(item);
-      const docRef = doc(firebaseDB, FirebaseCollection.transactions, id);
+      const docRef = doc(firebaseDB, FirebaseCollection.transactions, slugId);
       batch.set(docRef, item);
-      createdTransactionsIds.push({ id: id });
+      createdTransactionsIds.push({ id: slugId });
     });
 
     await batch.commit();
