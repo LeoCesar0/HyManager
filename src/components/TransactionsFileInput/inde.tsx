@@ -37,7 +37,7 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
       try {
         const results = await handleToastPromise(
           createManyTransactions({
-            values: transactionsForEveryFile,
+            transactions: transactionsForEveryFile,
             bankAccountId: currentBankId,
           }),
           { loadingMessage: "Inserting Transactions" }

@@ -2,12 +2,22 @@ import { AppModelResponse } from "@types-folder/index";
 import { debugDev, debugResults } from "src/utils/dev";
 import { FirebaseCollection, firebaseCreate, firebaseList } from "..";
 import { CreateTransaction, Transaction, transactionSchema } from "./schema";
-import { doc, Timestamp, writeBatch } from "firebase/firestore";
+import {
+  doc,
+  increment,
+  setDoc,
+  Timestamp,
+  writeBatch,
+} from "firebase/firestore";
 import { makeDateFields, makeTransactionSlug } from "src/utils/app";
 import { firebaseDB } from "src/services/firebase";
 import { TransactionReport } from "../TransactionReport/schema";
-import { makeTransactionReport } from "./utils";
+
 import { getTransactionById } from "./read";
+import { makeTransactionReportFields } from "../TransactionReport/create";
+import currency from "currency.js";
+import { listTransactionReportsBy } from "../TransactionReport/read";
+import { makeTransactionReport } from "../TransactionReport/utils";
 
 interface ICreateTransaction {
   values: CreateTransaction;
@@ -73,19 +83,20 @@ export const createTransaction = async ({
 };
 
 interface ICreateManyTransactions {
-  values: CreateTransaction[];
+  transactions: CreateTransaction[];
   bankAccountId: string;
 }
 
 export const createManyTransactions = async ({
-  values,
+  transactions: values,
   bankAccountId,
 }: ICreateManyTransactions): Promise<AppModelResponse<{ id: string }[]>> => {
   const funcName = "createManyTransactions";
 
   try {
     const batch = writeBatch(firebaseDB);
-    const createdTransactionsIds: { id: string }[] = [];
+    const createdTransactions: Transaction[] = [];
+
     values.forEach((transactionInputs) => {
       const date = new Date(transactionInputs.date);
       const firebaseTimestamp = Timestamp.fromDate(date);
@@ -95,7 +106,7 @@ export const createManyTransactions = async ({
         amount: transactionInputs.amount.toString(),
         idFromBank: transactionInputs.idFromBank,
       });
-      const item: Transaction = {
+      const transaction: Transaction = {
         ...transactionInputs,
         bankAccountId: bankAccountId,
         id: slugId,
@@ -105,14 +116,79 @@ export const createManyTransactions = async ({
         updatedAt: Timestamp.fromDate(now),
         ...makeDateFields(date),
       };
-      transactionSchema.parse(item);
+      transactionSchema.parse(transaction);
       const docRef = doc(firebaseDB, FirebaseCollection.transactions, slugId);
-      batch.set(docRef, item);
-      createdTransactionsIds.push({ id: slugId });
+
+      createdTransactions.push(transaction);
+      batch.set(docRef, transaction);
     });
+
+    /* ------------------------------ MAKE REPORTS ------------------------------ */
+
+    const reports: TransactionReport[] = createdTransactions.reduce(
+      (acc, entry) => {
+        let transactionReport = makeTransactionReportFields(entry, "month");
+        const existingReportIndex = acc.findIndex(
+          (item) => item.id === transactionReport.id
+        );
+        if (existingReportIndex >= 0) {
+          const existingReport = acc[existingReportIndex];
+          const updatedAmount = currency(existingReport.amount).add(
+            entry.amount
+          ).value;
+          acc.splice(existingReportIndex, 1, {
+            ...existingReport,
+            amount: updatedAmount,
+          });
+        } else {
+          acc.push(transactionReport);
+        }
+
+        return acc;
+      },
+      [] as TransactionReport[]
+    );
+
+    const { data: existingTransactionReports } = await listTransactionReportsBy(
+      { bankAccountId: bankAccountId, type: "month" }
+    );
+    console.log("existingTransactionReports -->", existingTransactionReports);
+
+    reports.forEach((transactionReport) => {
+      const docRef = doc(
+        firebaseDB,
+        FirebaseCollection.transactionReports,
+        transactionReport.id
+      );
+      const incrementAmount = increment(transactionReport.amount);
+      const now = new Date();
+      let updatedItem: any = {
+        ...transactionReport,
+        amount: incrementAmount,
+        updatedAt: Timestamp.fromDate(now),
+      };
+      const alreadyExists = existingTransactionReports?.find(
+        (item) => item.id === transactionReport.id
+      );
+      if (alreadyExists) {
+        updatedItem = {
+          amount: incrementAmount,
+          updatedAt: Timestamp.fromDate(now),
+        };
+      }
+      batch.set(docRef, updatedItem, { merge: true });
+    });
+
+    console.log("reports -->", reports);
+    console.log("createdTransactions -->", createdTransactions);
+
+    /* ------------------------------ COMMIT BATCH ------------------------------ */
 
     await batch.commit();
 
+    const createdTransactionsIds = createdTransactions.map((item) => ({
+      id: item.id,
+    }));
     return {
       data: createdTransactionsIds,
       done: true,

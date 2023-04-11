@@ -1,6 +1,7 @@
 import { AppModelResponse, FirebaseFilterFor } from "@types-folder/index";
 import { debugDev } from "src/utils/dev";
 import { FirebaseCollection, firebaseGet, firebaseList } from "..";
+import { Transaction } from "../Transaction/schema";
 import { TransactionReport } from "./schema";
 
 interface IGetTransactionReportById {
@@ -70,4 +71,26 @@ export const listTransactionReportsBy = async ({
       },
     };
   }
+};
+
+export const listTransactionReportByTransaction = async ({
+  transaction,
+  type,
+}: {
+  transaction: Transaction;
+  type: TransactionReport["type"];
+}) => {
+  return await firebaseList<TransactionReport>({
+    collection: FirebaseCollection.transactionReports,
+    filters: [
+      { field: "type", operator: "==", value: type },
+      { field: "dateMonth", operator: "==", value: transaction.dateMonth },
+      { field: "dateYear", operator: "==", value: transaction.dateYear },
+      {
+        field: "bankAccountId",
+        operator: "==",
+        value: transaction.bankAccountId,
+      },
+    ],
+  });
 };
