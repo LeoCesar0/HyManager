@@ -1,10 +1,12 @@
 import Button from "@components/Button";
 import { useGlobalCache } from "@contexts/GlobalCache";
+import useFetcher from "@hooks/useFetcher";
 import { FirebaseFilterFor } from "@types-folder/index";
 import { format, sub } from "date-fns";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { FirebaseCollection } from "src/models";
 import { listTransactionsByBankId } from "src/models/Transaction/read";
 import { Transaction } from "src/models/Transaction/schema";
 
@@ -17,50 +19,36 @@ interface IBalanceChart {
 
 export const BalanceChart: React.FC<IBalanceChart> = (props) => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [dateFilter, setDateFilter] = useState<IFilterDate>(
     dateOptions[dateOptions.length - 1]
   );
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const { cache, setCache } = useGlobalCache();
   const bankAccountId = props.bankAccountId || (router.query.id as string);
 
-  useEffect(() => {
-    if (!bankAccountId) return;
-    const key = `balanceChart-last-${dateFilter.days}-${bankAccountId}`;
-    const cachedTransactions = cache[key];
+  const cacheKey = `balanceChart-last-${dateFilter.days}-${bankAccountId}`;
 
-    console.log("cache -->", cache);
-    console.log("dateFilter -->", dateFilter);
-    console.log("cachedTransactions -->", cachedTransactions);
+  const transactionsFetcher = () => {
+    const now = new Date();
+    const lastDaysValue = dateFilter.days;
+    const pastDate = sub(now, {
+      days: lastDaysValue,
+    });
+    const filters: FirebaseFilterFor<Transaction>[] = [
+      { field: "date", operator: ">=", value: pastDate },
+    ];
+    return listTransactionsByBankId({
+      id: bankAccountId,
+      filters: filters,
+    });
+  };
 
-    if (cachedTransactions) {
-      setTransactions(cachedTransactions);
-    } else {
-      const now = new Date();
-      const lastDaysValue = dateFilter.days;
-      const pastDate = sub(now, {
-        days: lastDaysValue,
-      });
-      const filters: FirebaseFilterFor<Transaction>[] = [
-        { field: "date", operator: ">=", value: pastDate },
-      ];
-      setLoading(true);
-      listTransactionsByBankId({
-        id: bankAccountId,
-        filters: filters,
-      })
-        .then((result) => {
-          if (result.data) {
-            setCache(key, result.data);
-            setTransactions(result.data);
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [bankAccountId, dateFilter]);
+  const { data: transactions, loading } = useFetcher({
+    cacheKey,
+    collection: FirebaseCollection.transactions,
+    fetcher: transactionsFetcher,
+    dependencies: [],
+    initialData: [],
+    stopAction: !bankAccountId,
+  });
 
   const { series, options } = useMemo(() => {
     return makeBalanceChartData({ transactions });

@@ -9,7 +9,7 @@ import {
   Timestamp,
   writeBatch,
 } from "firebase/firestore";
-import { makeDateFields, makeTransactionSlug } from "src/utils/app";
+import { makeDateFields, slugify } from "src/utils/app";
 import { firebaseDB } from "src/services/firebase";
 import { TransactionReport } from "../TransactionReport/schema";
 import { getTransactionById } from "./read";
@@ -17,6 +17,7 @@ import { makeTransactionReportFields } from "../TransactionReport/utils";
 import currency from "currency.js";
 import { listTransactionReportsBy } from "../TransactionReport/read";
 import { makeTransactionReport } from "../TransactionReport/utils";
+import { makeTransactionSlug } from "./utils";
 
 interface ICreateTransaction {
   values: CreateTransaction;
@@ -35,8 +36,9 @@ export const createTransaction = async ({
     date: values.date,
     amount: values.amount.toString(),
     idFromBank: values.idFromBank,
+    creditor: values.creditor || "",
   });
-  const item: Transaction = {
+  const transaction: Transaction = {
     ...values,
     bankAccountId: bankAccountId,
     id: slugId,
@@ -46,12 +48,14 @@ export const createTransaction = async ({
     updatedAt: Timestamp.fromDate(now),
     ...makeDateFields(date),
   };
+  if (transaction.creditor)
+    transaction.creditorSlug = slugify(transaction.creditor);
   try {
-    transactionSchema.parse(item);
+    transactionSchema.parse(transaction);
 
     const result = await firebaseCreate<Transaction>({
       collection: FirebaseCollection.transactions,
-      data: item,
+      data: transaction,
     });
     const createdTransactionResult = await getTransactionById({ id: slugId });
     const createdTransaction = createdTransactionResult.data;
@@ -104,6 +108,7 @@ export const createManyTransactions = async ({
         date: transactionInputs.date,
         amount: transactionInputs.amount.toString(),
         idFromBank: transactionInputs.idFromBank,
+        creditor: transactionInputs.creditor || "",
       });
       const transaction: Transaction = {
         ...transactionInputs,
@@ -115,11 +120,13 @@ export const createManyTransactions = async ({
         updatedAt: Timestamp.fromDate(now),
         ...makeDateFields(date),
       };
+      if (transaction.creditor)
+        transaction.creditorSlug = slugify(transaction.creditor);
       transactionSchema.parse(transaction);
       const docRef = doc(firebaseDB, FirebaseCollection.transactions, slugId);
 
       createdTransactions.push(transaction);
-      batch.set(docRef, transaction);
+      batch.set(docRef, transaction, { merge: true });
     });
 
     /* ------------------------------ MAKE REPORTS ------------------------------ */

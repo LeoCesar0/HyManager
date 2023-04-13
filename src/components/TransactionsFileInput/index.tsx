@@ -1,5 +1,9 @@
+import { useGlobalAuth } from "@contexts/GlobalAuth";
+import { useGlobalCache } from "@contexts/GlobalCache";
+import { useGlobalContext } from "@contexts/GlobalContext";
 import { CSVData } from "@types-folder/index";
 import { ChangeEvent, InputHTMLAttributes, useRef, useState } from "react";
+import { FirebaseCollection } from "src/models";
 import { createManyTransactions } from "src/models/Transaction/create";
 import { CreateTransaction } from "src/models/Transaction/schema";
 import { extractTransactionsFromCSVData } from "src/models/Transaction/utils";
@@ -20,6 +24,7 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<TransactionFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { refetchCollection } = useGlobalCache();
 
   const onFilesCSVDataReady = async (csvDataArray: CSVData[]) => {
     const transactionsForEveryFile: CreateTransaction[] = [];
@@ -42,6 +47,12 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
           }),
           { loadingMessage: "Inserting Transactions" }
         );
+        if (results.done) {
+          refetchCollection([
+            FirebaseCollection.transactions,
+            FirebaseCollection.transactionReports,
+          ]);
+        }
         console.log("Final Results -->", results);
       } catch (e) {
         console.log("createManyTransactions ERROR -->", e);

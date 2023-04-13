@@ -2,12 +2,12 @@ import currency from "currency.js";
 import { CSVData } from "@types-folder/index";
 import { parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { makeTransactionSlug } from "src/utils/app";
 import {
   CreateTransaction,
   createTransactionSchema,
   TransactionType,
 } from "./schema";
+import { slugify } from "src/utils/app";
 
 interface IExtractTransactionsFromCSVData {
   data: CSVData;
@@ -119,6 +119,7 @@ const parseTransactions = (
           date: dateIso,
           amount: amount.toString(),
           idFromBank,
+          creditor: creditor,
         }),
       };
       const validation = createTransactionSchema.safeParse(transaction);
@@ -138,4 +139,30 @@ const parseTransactions = (
       return acc;
     }
   }, [] as CreateTransaction[]);
+};
+
+interface IMakeTransactionSlug {
+  amount: string;
+  date: string;
+  idFromBank?: string;
+  creditor: string;
+}
+export const makeTransactionSlug = ({
+  amount,
+  date,
+  idFromBank,
+  creditor,
+}: IMakeTransactionSlug) => {
+  const creditorSlug = creditor ? slugify(creditor) : "";
+  let slug = `$$${slugify(amount)}`;
+  slug += "&&";
+  slug += slugify(date.slice(0, 10));
+  if (creditorSlug) {
+    slug += "@@";
+    slug += creditorSlug;
+  }
+  slug += "##";
+  const idFromBank_ = idFromBank ? idFromBank : "manual";
+  slug += idFromBank_;
+  return slug;
 };

@@ -1,11 +1,13 @@
 import Button from "@components/Button";
 import FormControl from "@components/FormControl/FormControl";
 import InputField from "@components/InputField/InputField";
+import { useGlobalCache } from "@contexts/GlobalCache";
 import { useGlobalModal } from "@contexts/GlobalModal";
 import { Timestamp } from "firebase/firestore";
 
 import { FormikProps, useFormik } from "formik";
 import { toast } from "react-toastify";
+import { FirebaseCollection } from "src/models";
 import { createTransaction } from "src/models/Transaction/create";
 import {
   CreateTransaction,
@@ -35,14 +37,18 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
   bankAccountId,
 }) => {
   const { setModalProps } = useGlobalModal();
+  const { refetchCollection } = useGlobalCache();
   const formik = useFormik({
     validationSchema: toFormikValidationSchema(createTransactionSchema),
     initialValues: initialValues,
     onSubmit: async (inputs) => {
       if (!bankAccountId) return;
-      
+
       const toastId = toast.loading("Creating Transaction");
-      const results = await createTransaction({ values: inputs, bankAccountId });
+      const results = await createTransaction({
+        values: inputs,
+        bankAccountId,
+      });
       if (results.done) {
         toast.update(toastId, {
           render: "Success!",
@@ -51,6 +57,10 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
           autoClose: 5000,
         });
         formik.resetForm();
+        refetchCollection([
+          FirebaseCollection.transactions,
+          FirebaseCollection.transactionReports,
+        ]);
       } else {
         toast.update(toastId, {
           render: "Error: Something went wrong",
@@ -61,7 +71,7 @@ export const TransactionForm: React.FC<ITransactionForm> = ({
       }
     },
   });
-  console.log('formik.errors -->', formik.errors)
+  console.log("formik.errors -->", formik.errors);
 
   return (
     <div className="component__modal-form">

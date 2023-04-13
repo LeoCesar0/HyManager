@@ -77,24 +77,7 @@ export const slugify = (string: string) => {
   return newText;
 };
 
-interface IMakeTransactionSlug {
-  amount: string;
-  date: string;
-  idFromBank?: string;
-}
-export const makeTransactionSlug = ({
-  amount,
-  date,
-  idFromBank,
-}: IMakeTransactionSlug) => {
-  let slug = slugify(amount);
-  slug += "@@";
-  slug += slugify(date.slice(0, 10));
-  slug += "&&";
-  const idFromBank_ = idFromBank ? idFromBank : "manual";
-  slug += idFromBank_;
-  return slug;
-};
+
 
 
 export const makeCreatedAtFields = (

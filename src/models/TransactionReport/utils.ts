@@ -82,7 +82,7 @@ export const makeTransactionReportSlugId = ({
     const dateParams = makeDateFields(date);
     let string = `${dateParams.dateYear}-${dateParams.dateMonth}`;
     if (type === "day") string += `-${dateParams.dateDay}`;
-    string += `&&${backAccountId}`;
+    string += `##${backAccountId}`;
     return string;
   };
   

@@ -17,12 +17,14 @@ export function debugDev({ type, name, value }: IDebugDev): string {
     value = value.join("; ");
   }
   const log = `${typeLabel} ${name} -->`;
-  if (type === "error") {
-    console.error(log, value);
-  } else {
-    console.log(log, value);
+  if (process.env.NODE_ENV === "development") {
+    if (type === "error") {
+      console.error(log, value);
+    } else {
+      console.log(log, value);
+    }
   }
-  const debugString = `Error: ${value}`;
+  const debugString = `${typeLabel}: ${value}`;
   return debugString;
 }
 

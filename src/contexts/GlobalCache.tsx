@@ -1,23 +1,33 @@
 "use client";
 
-import { Locale } from "@types-folder/index";
-import { useRouter } from "next/router";
 import React, {
   createContext,
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
+import { FirebaseCollection } from "src/models";
+
+interface Cache {
+  key: string;
+  value: any;
+  collection?: FirebaseCollection;
+  refetcher: (...args: any[]) => void;
+}
 
 interface GlobalCacheProps {
   setState: Dispatch<SetStateAction<GlobalCacheProps>>;
   handleSetState: (newValues: {}) => void;
-  setCache: (key: string, value: any) => void;
-  cache: { [key: string]: any };
+  setCache: (cache: Cache) => void;
+  refetchCollection: (collection: FirebaseCollection[]) => void;
+  caches: Cache[];
+  collectionsToRefetch: FirebaseCollection[];
 }
 const initialValues = {
-  cache: {},
+  caches: [] as Cache[],
+  collectionsToRefetch: [] as FirebaseCollection[],
 };
 
 const GlobalCache = createContext<GlobalCacheProps>(
@@ -35,9 +45,41 @@ export const GlobalCacheProvider: React.FC<{ children: React.ReactNode }> = ({
     setState((prev) => ({ ...prev, ...newValues }));
   };
 
-  const setCache = (key: string, value: any) => {
-    setState((prev) => ({ ...prev, cache: { ...prev.cache, [key]: value } }));
+  const setCache = (cache: Cache) => {
+    setState((prev) => ({
+      ...prev,
+      caches: [...prev.caches.filter((item) => item.key !== cache.key), cache],
+    }));
   };
+
+  const refetchCollection = (collections: FirebaseCollection[]) => {
+    setState((prev) => ({
+      ...prev,
+      collectionsToRefetch: [...prev.collectionsToRefetch, ...collections],
+    }));
+  };
+
+  useEffect(() => {
+    const caches = state.caches;
+    const collectionsToRefetch = state.collectionsToRefetch;
+
+    if (collectionsToRefetch.length === 0) return;
+
+    setState((prev) => ({
+      ...prev,
+      collectionsToRefetch: [],
+    }));
+
+    caches.forEach((cache) => {
+      const shouldRefetch = collectionsToRefetch.find(
+        (collection) => cache.collection === collection
+      );
+      if (shouldRefetch) {
+        cache.refetcher();
+        console.log("Refetching! -->", cache);
+      }
+    });
+  }, [state.caches, state.collectionsToRefetch]);
 
   return (
     <GlobalCache.Provider
@@ -46,6 +88,7 @@ export const GlobalCacheProvider: React.FC<{ children: React.ReactNode }> = ({
         setState,
         handleSetState,
         setCache,
+        refetchCollection,
       }}
     >
       {children}

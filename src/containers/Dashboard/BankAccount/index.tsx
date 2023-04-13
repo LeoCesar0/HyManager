@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useGlobalAuth } from "@contexts/GlobalAuth";
 import BankHeader from "./BankHeader";
 import TransactionList from "./TransactionList";
-import TransactionsFileInput from "@components/TransactionsFileInput/inde";
+import TransactionsFileInput from "@components/TransactionsFileInput";
 import { BankAccount } from "src/models/BankAccount/schema";
 
 const BankAccountPage = ({}) => {

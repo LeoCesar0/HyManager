@@ -23,6 +23,7 @@ export const transactionSchema = z.object({
     })
     .optional(),
   creditor: z.string().optional(),
+  creditorSlug: z.string().optional(),
   description: z.string().optional(),
   date: timestampSchema,
   createdAt: timestampSchema,

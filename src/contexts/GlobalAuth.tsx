@@ -66,8 +66,6 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   /* --------------------------- onAuthStateChanged --------------------------- */
   firebaseAuth.onAuthStateChanged((user) => {
-    console.log("-- onAuthStateChanged --");
-    console.log("state -->", state);
     // RETURN WHEN NOTHING WOULD CHANGE
     if (!user && !currentUser) return;
     if (user && user.uid === currentUser?.id) return;

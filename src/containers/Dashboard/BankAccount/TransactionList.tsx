@@ -1,8 +1,5 @@
-import { useGlobalCache } from "@contexts/GlobalCache";
-import { useEffect, useState } from "react";
-import { listTransactionsByBankId } from "src/models/Transaction/read";
+import { useState } from "react";
 import { Transaction, TransactionType } from "src/models/Transaction/schema";
-import { timestampToDate } from "src/utils/misc";
 import BalanceChart from "./BalanceChart";
 import TransactionsChart from "./TransactionsChart";
 
@@ -14,7 +11,6 @@ export const TransactionList: React.FC<ITransactionList> = ({
   bankAccountId,
 }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const { cache, setCache } = useGlobalCache();
 
   // useEffect(() => {
   //   if (!bankAccountId) return;
