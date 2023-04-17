@@ -13,11 +13,10 @@ import { makeDateFields, slugify } from "src/utils/app";
 import { firebaseDB } from "src/services/firebase";
 import { TransactionReport } from "../TransactionReport/schema";
 import { getTransactionById } from "./read";
-import { makeTransactionReportFields } from "../TransactionReport/utils";
 import currency from "currency.js";
-import { listTransactionReportsBy } from "../TransactionReport/read";
 import { makeTransactionReport } from "../TransactionReport/utils";
 import { makeTransactionSlug } from "./utils";
+import { batchManyTransactionReports } from "../TransactionReport/create";
 
 interface ICreateTransaction {
   values: CreateTransaction;
@@ -98,7 +97,9 @@ export const createManyTransactions = async ({
 
   try {
     const batch = writeBatch(firebaseDB);
-    const createdTransactions: Transaction[] = [];
+    const transactionsOnCreate: Transaction[] = [];
+
+    console.log('values -->', values)
 
     values.forEach((transactionInputs) => {
       const date = new Date(transactionInputs.date);
@@ -125,74 +126,23 @@ export const createManyTransactions = async ({
       transactionSchema.parse(transaction);
       const docRef = doc(firebaseDB, FirebaseCollection.transactions, slugId);
 
-      createdTransactions.push(transaction);
+      transactionsOnCreate.push(transaction);
       batch.set(docRef, transaction, { merge: true });
     });
 
-    /* ------------------------------ MAKE REPORTS ------------------------------ */
-
-    const reports: TransactionReport[] = createdTransactions.reduce(
-      (acc, entry) => {
-        let transactionReport = makeTransactionReportFields(entry, "month");
-        const existingReportIndex = acc.findIndex(
-          (item) => item.id === transactionReport.id
-        );
-        if (existingReportIndex >= 0) {
-          const existingReport = acc[existingReportIndex];
-          const updatedAmount = currency(existingReport.amount).add(
-            entry.amount
-          ).value;
-          acc.splice(existingReportIndex, 1, {
-            ...existingReport,
-            amount: updatedAmount,
-          });
-        } else {
-          acc.push(transactionReport);
-        }
-
-        return acc;
-      },
-      [] as TransactionReport[]
-    );
-
-    const { data: existingTransactionReports } = await listTransactionReportsBy(
-      { bankAccountId: bankAccountId, type: "month" }
-    );
-    console.log("existingTransactionReports -->", existingTransactionReports);
-
-    reports.forEach((transactionReport) => {
-      const docRef = doc(
-        firebaseDB,
-        FirebaseCollection.transactionReports,
-        transactionReport.id
-      );
-      const incrementAmount = increment(transactionReport.amount);
-      const now = new Date();
-      let updatedItem: any = {
-        ...transactionReport,
-        amount: incrementAmount,
-        updatedAt: Timestamp.fromDate(now),
-      };
-      const alreadyExists = existingTransactionReports?.find(
-        (item) => item.id === transactionReport.id
-      );
-      if (alreadyExists) {
-        updatedItem = {
-          amount: incrementAmount,
-          updatedAt: Timestamp.fromDate(now),
-        };
-      }
-      batch.set(docRef, updatedItem, { merge: true });
-    });
-
-    console.log("reports -->", reports);
-    console.log("createdTransactions -->", createdTransactions);
+    console.log("createdTransactions -->", transactionsOnCreate);
 
     /* ------------------------------ COMMIT BATCH ------------------------------ */
 
+    await batchManyTransactionReports({
+      bankAccountId,
+      batch,
+      transactionsOnCreate,
+    });
+
     await batch.commit();
 
-    const createdTransactionsIds = createdTransactions.map((item) => ({
+    const createdTransactionsIds = transactionsOnCreate.map((item) => ({
       id: item.id,
     }));
     return {

@@ -7,7 +7,7 @@ import { timestampToDate } from "src/utils/misc";
 import { Transaction } from "../Transaction/schema";
 import { createTransactionReport } from "../TransactionReport/create";
 import { listTransactionReportByTransaction } from "../TransactionReport/read";
-import { TransactionReport } from "../TransactionReport/schema";
+import { TransactionMin, TransactionReport } from "../TransactionReport/schema";
 import { updateTransactionReport } from "../TransactionReport/update";
 
 interface IMakeTransactionReport {
@@ -71,44 +71,53 @@ export const makeTransactionReport = async ({
 };
 
 export const makeTransactionReportSlugId = ({
-    date,
-    backAccountId,
-    type,
-  }: {
-    backAccountId: string;
-    date: Date;
-    type: TransactionReport["type"];
-  }) => {
-    const dateParams = makeDateFields(date);
-    let string = `${dateParams.dateYear}-${dateParams.dateMonth}`;
-    if (type === "day") string += `-${dateParams.dateDay}`;
-    string += `##${backAccountId}`;
-    return string;
+  date,
+  backAccountId,
+  type,
+}: {
+  backAccountId: string;
+  date: Date;
+  type: TransactionReport["type"];
+}) => {
+  const dateParams = makeDateFields(date);
+  let string = `${dateParams.dateYear}-${dateParams.dateMonth}`;
+  if (type === "day") string += `-${dateParams.dateDay}`;
+  string += `##${backAccountId}`;
+  return string;
+};
+
+export const makeTransactionReportFields = (
+  transaction: Transaction,
+  type: TransactionReport["type"]
+): TransactionReport => {
+  const now = new Date();
+  const nowTimestamp = Timestamp.fromDate(now);
+
+  let date = timestampToDate(transaction.date); // if type === day
+  let dateTimestamp = transaction.date;
+
+  const transactionMin: TransactionMin = {
+    amount: transaction.amount,
+    id: transaction.id,
+    type: transaction.type,
+    creditor: transaction.creditor || "",
+    creditorSlug: transaction.creditorSlug || "",
   };
-  
-  export const makeTransactionReportFields = (
-    transaction: Transaction,
-    type: TransactionReport["type"]
-  ): TransactionReport => {
-    const now = new Date();
-    const nowTimestamp = Timestamp.fromDate(now);
-  
-    let date = timestampToDate(transaction.date); // if type === day
-    let dateTimestamp = transaction.date;
-  
-    const newTransactionReport: TransactionReport = {
-      id: makeTransactionReportSlugId({
-        backAccountId: transaction.bankAccountId,
-        date: date,
-        type,
-      }),
-      amount: transaction.amount,
-      bankAccountId: transaction.bankAccountId,
-      createdAt: nowTimestamp,
-      updatedAt: nowTimestamp,
-      date: dateTimestamp,
-      type: type,
-      ...makeDateFields(date),
-    };
-    return newTransactionReport;
+
+  const newTransactionReport: TransactionReport = {
+    id: makeTransactionReportSlugId({
+      backAccountId: transaction.bankAccountId,
+      date: date,
+      type,
+    }),
+    amount: transaction.amount,
+    bankAccountId: transaction.bankAccountId,
+    createdAt: nowTimestamp,
+    updatedAt: nowTimestamp,
+    date: dateTimestamp,
+    type: type,
+    transactions: [transactionMin],
+    ...makeDateFields(date),
   };
+  return newTransactionReport;
+};

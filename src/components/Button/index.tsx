@@ -19,7 +19,8 @@ const Button: React.FC<IButton> = ({
 }) => {
   if (selected) console.log("IS SELECTED");
 
-  const bgColorSelected = `bg-${theme}-selected`;
+  // const bgColorSelected = `bg-${theme}-selected`;
+  const bgColorSelected = `bg-blue-500`;
   const textColor = `text-on-${theme}`;
 
   return (
