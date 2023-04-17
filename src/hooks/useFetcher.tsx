@@ -1,6 +1,6 @@
 import { useGlobalCache } from "@contexts/GlobalCache";
 import { AppModelResponse } from "@types-folder/index";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FirebaseCollection } from "src/models";
 
 interface IProps<T> {
@@ -23,7 +23,7 @@ const useFetcher = <T,>(props: IProps<T>) => {
     fetcher,
     stopAction,
     collection,
-    dependencies,
+    dependencies = [],
     initialData,
   } = props;
 
@@ -34,9 +34,9 @@ const useFetcher = <T,>(props: IProps<T>) => {
 
   const { loading } = state;
 
-  const { caches, setCache } = useGlobalCache();
+  const { caches, setCache, updateCacheFetcher } = useGlobalCache();
 
-  const fetchData = () => {
+  const fetchData = useCallback(() => {
     setState((prev) => ({ ...prev, loading: true }));
     fetcher()
       .then((result) => {
@@ -53,18 +53,22 @@ const useFetcher = <T,>(props: IProps<T>) => {
       .finally(() => {
         setState((prev) => ({ ...prev, loading: false }));
       });
-  };
+  }, [fetcher]);
+
+  useEffect(() => {
+    updateCacheFetcher(cacheKey, fetchData);
+  }, [fetchData]);
 
   useEffect(() => {
     if (stopAction || loading) return;
-    const cachedTransactions = caches.find((item) => item.key === cacheKey);
+    const cachedData = caches.find((item) => item.key === cacheKey);
 
-    if (!cachedTransactions) {
+    if (!cachedData) {
       fetchData();
     } else {
-      setState((prev) => ({ ...prev, data: cachedTransactions.value }));
+      setState((prev) => ({ ...prev, data: cachedData.value }));
     }
-  }, [...dependencies]);
+  }, dependencies);
 
   return {
     ...state,

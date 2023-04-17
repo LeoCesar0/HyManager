@@ -21,6 +21,10 @@ interface GlobalCacheProps {
   setState: Dispatch<SetStateAction<GlobalCacheProps>>;
   handleSetState: (newValues: {}) => void;
   setCache: (cache: Cache) => void;
+  updateCacheFetcher: (
+    cacheKey: string,
+    refetcher: (...args: any[]) => void
+  ) => void;
   refetchCollection: (collection: FirebaseCollection[]) => void;
   caches: Cache[];
   collectionsToRefetch: FirebaseCollection[];
@@ -50,6 +54,24 @@ export const GlobalCacheProvider: React.FC<{ children: React.ReactNode }> = ({
       ...prev,
       caches: [...prev.caches.filter((item) => item.key !== cache.key), cache],
     }));
+  };
+  const updateCacheFetcher = (
+    cacheKey: string,
+    refetcher: (...args: any[]) => void
+  ) => {
+    const currentCache = state.caches.find((cache) => cache.key === cacheKey);
+    if (currentCache) {
+      setState((prev) => ({
+        ...prev,
+        caches: [
+          ...prev.caches.filter((item) => item.key !== cacheKey),
+          {
+            ...currentCache,
+            refetcher: refetcher,
+          },
+        ],
+      }));
+    }
   };
 
   const refetchCollection = (collections: FirebaseCollection[]) => {
@@ -89,6 +111,7 @@ export const GlobalCacheProvider: React.FC<{ children: React.ReactNode }> = ({
         handleSetState,
         setCache,
         refetchCollection,
+        updateCacheFetcher,
       }}
     >
       {children}

@@ -26,7 +26,7 @@ export const BalanceChart: React.FC<IBalanceChart> = (props) => {
 
   const cacheKey = `balanceChart-last-${dateFilter.days}-${bankAccountId}`;
 
-  const transactionsFetcher = () => {
+  const transactionsFetcher = useCallback(() => {
     const now = new Date();
     const lastDaysValue = dateFilter.days;
     const pastDate = sub(now, {
@@ -39,13 +39,13 @@ export const BalanceChart: React.FC<IBalanceChart> = (props) => {
       id: bankAccountId,
       filters: filters,
     });
-  };
+  }, [bankAccountId, dateFilter.days]);
 
   const { data: transactions, loading } = useFetcher({
     cacheKey,
     collection: FirebaseCollection.transactions,
     fetcher: transactionsFetcher,
-    dependencies: [],
+    dependencies: [bankAccountId, dateFilter.days],
     initialData: [],
     stopAction: !bankAccountId,
   });
