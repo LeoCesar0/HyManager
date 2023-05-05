@@ -28,7 +28,6 @@ import {
   makeTransactionReportSlugId,
   transactionsToTransactionsReport,
 } from "./utils";
-import currency from "currency.js";
 import {
   listTransactionReportByTransaction,
   listTransactionReportsBy,

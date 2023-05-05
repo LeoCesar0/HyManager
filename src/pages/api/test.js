@@ -1,4 +1,4 @@
-export const calling = (req, res) => {
+export const test = (req, res) => {
   const data = {};
 
   res.status(200).json({ data: data });
@@ -7,4 +7,4 @@ export const calling = (req, res) => {
   return res;
 };
 
-export default calling;
+export default test;
