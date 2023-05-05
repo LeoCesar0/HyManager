@@ -2,11 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -24,6 +20,7 @@
         "name": "next"
       }
     ],
+    "types": ["jest"],
     "paths": {
       "@components/*": ["src/components/*"],
       "@containers/*": ["src/containers/*"],
@@ -33,16 +30,16 @@
       "@graphql-folder/*": ["src/graphql/*"],
       "@contexts/*": ["src/contexts/*"],
       "@constants": ["src/assets/constants"],
-      "@assets": ["src/constants"],
+      "@assets": ["src/constants"]
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "src/pages/api/test.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    ".next/types/**/*.ts",
+    "src/pages/api/calling.js",
+    "vitest.config.js"
+  ],
+  "exclude": ["node_modules"]
 }

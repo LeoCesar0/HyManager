@@ -10,7 +10,7 @@ const BankAccountPage = ({}) => {
   const [currentBank, setCurrentBank] = useState<BankAccount | null>(null);
   const { userBankAccounts } = useGlobalAuth();
   const router = useRouter();
-  const { id: bankAccountId } = router.query;
+  const { bankAccountId } = router.query;
 
   useEffect(() => {
     if (userBankAccounts && bankAccountId) {

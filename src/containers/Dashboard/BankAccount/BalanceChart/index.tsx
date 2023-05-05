@@ -9,6 +9,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { FirebaseCollection } from "src/models";
 import { listTransactionsByBankId } from "src/models/Transaction/read";
 import { Transaction } from "src/models/Transaction/schema";
+import { listTransactionReportsBy } from "src/models/TransactionReport/read";
+import { TransactionReport } from "src/models/TransactionReport/schema";
 
 import { dateOptions, IFilterDate, makeBalanceChartData } from "./controller";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
@@ -22,7 +24,7 @@ export const BalanceChart: React.FC<IBalanceChart> = (props) => {
   const [dateFilter, setDateFilter] = useState<IFilterDate>(
     dateOptions[dateOptions.length - 1]
   );
-  const bankAccountId = props.bankAccountId || (router.query.id as string);
+  const bankAccountId = props.bankAccountId || (router.query.bankAccountId as string);
 
   const cacheKey = `balanceChart-last-${dateFilter.days}-${bankAccountId}`;
 
@@ -32,16 +34,17 @@ export const BalanceChart: React.FC<IBalanceChart> = (props) => {
     const pastDate = sub(now, {
       days: lastDaysValue,
     });
-    const filters: FirebaseFilterFor<Transaction>[] = [
+    const filters: FirebaseFilterFor<TransactionReport>[] = [
       { field: "date", operator: ">=", value: pastDate },
     ];
-    return listTransactionsByBankId({
-      id: bankAccountId,
+    return listTransactionReportsBy({
       filters: filters,
+      bankAccountId: bankAccountId,
+      type: "day",
     });
   }, [bankAccountId, dateFilter.days]);
 
-  const { data: transactions, loading } = useFetcher({
+  const { data: transactionReports, loading } = useFetcher({
     cacheKey,
     collection: FirebaseCollection.transactions,
     fetcher: transactionsFetcher,
@@ -50,9 +53,11 @@ export const BalanceChart: React.FC<IBalanceChart> = (props) => {
     stopAction: !bankAccountId,
   });
 
+  console.log('transactionReports -->', transactionReports)
+
   const { series, options } = useMemo(() => {
-    return makeBalanceChartData({ transactions });
-  }, [transactions, dateFilter]);
+    return makeBalanceChartData({ transactions: transactionReports });
+  }, [transactionReports, dateFilter]);
 
   if (!bankAccountId) return null;
 

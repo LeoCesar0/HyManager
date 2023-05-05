@@ -14,7 +14,6 @@ import { firebaseDB } from "src/services/firebase";
 import { TransactionReport } from "../TransactionReport/schema";
 import { getTransactionById } from "./read";
 import currency from "currency.js";
-import { makeTransactionReport } from "../TransactionReport/utils";
 import { makeTransactionSlug } from "./utils";
 import { batchManyTransactionReports } from "../TransactionReport/create";
 
@@ -52,22 +51,45 @@ export const createTransaction = async ({
   try {
     transactionSchema.parse(transaction);
 
-    const result = await firebaseCreate<Transaction>({
-      collection: FirebaseCollection.transactions,
-      data: transaction,
+    const batch = writeBatch(firebaseDB);
+    const transactionsRef = doc(
+      firebaseDB,
+      FirebaseCollection.transactionReports,
+      transaction.id
+    );
+
+    batch.set(transactionsRef, transaction);
+
+    await batchManyTransactionReports({
+      bankAccountId: bankAccountId,
+      batch: batch,
+      transactionsOnCreate: [transaction],
     });
-    const createdTransactionResult = await getTransactionById({ id: slugId });
-    const createdTransaction = createdTransactionResult.data;
-    if (result.done && createdTransaction) {
-      const transactionReport = await makeTransactionReport({
-        transaction: createdTransaction,
-        type: "month",
-      });
-      if (transactionReport.error) {
-        debugResults(transactionReport, funcName);
-      }
-    }
-    return result;
+
+    await batch.commit();
+
+    return {
+      done: true,
+      error: null,
+      data: transaction,
+    };
+
+    // const result = await firebaseCreate<Transaction>({
+    //   collection: FirebaseCollection.transactions,
+    //   data: transaction,
+    // });
+    // const createdTransactionResult = await getTransactionById({ id: slugId });
+    // const createdTransaction = createdTransactionResult.data;
+    // if (result.done && createdTransaction) {
+    //   const transactionReport = await makeTransactionReport({
+    //     transaction: createdTransaction,
+    //     type: "month",
+    //   });
+    //   if (transactionReport.error) {
+    //     debugResults(transactionReport, funcName);
+    //   }
+    // }
+    // return result;
   } catch (error) {
     const errorMessage = debugDev({
       type: "error",
@@ -99,7 +121,7 @@ export const createManyTransactions = async ({
     const batch = writeBatch(firebaseDB);
     const transactionsOnCreate: Transaction[] = [];
 
-    console.log('values -->', values)
+    console.log("values -->", values);
 
     values.forEach((transactionInputs) => {
       const date = new Date(transactionInputs.date);
@@ -126,8 +148,10 @@ export const createManyTransactions = async ({
       transactionSchema.parse(transaction);
       const docRef = doc(firebaseDB, FirebaseCollection.transactions, slugId);
 
-      transactionsOnCreate.push(transaction);
-      batch.set(docRef, transaction, { merge: true });
+      if (!transactionsOnCreate.some((item) => item.id === transaction.id)) {
+        transactionsOnCreate.push(transaction);
+        batch.set(docRef, transaction, { merge: true });
+      }
     });
 
     console.log("createdTransactions -->", transactionsOnCreate);

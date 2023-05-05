@@ -44,13 +44,14 @@ export const makeBalanceChartData = ({
   const { dates, balances } = transactions.reduce(
     (acc, entry) => {
       const date = timestampToDate(entry.date).getTime();
-      const type = entry.type;
-      let amount = Math.abs(entry.amount);
-      amount = type === TransactionType.debit ? -amount : amount;
+      let amount = entry.amount;
       const prevBalance = acc.balances.at(-1) || 0;
       const currentBalance = currency(prevBalance).add(amount).value;
 
       if (acc.dates.length === 0) console.log("---- START -----");
+      console.log("Date -->", timestampToDate(entry.date).toLocaleDateString());
+      console.log("amount -->", amount);
+      console.log("entry -->", entry);
 
       acc.balances = [...acc.balances, currentBalance];
       acc.dates = [...acc.dates, date];
@@ -72,6 +73,8 @@ export const makeBalanceChartData = ({
       data: balances,
     },
   ];
+
+  console.log('balances -->', balances)
 
   const options_: ApexOptions = {
     ...APEX_DEFAULT_OPTIONS,

@@ -59,15 +59,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <ApolloProvider client={apolloClient}>
         {/* <SessionProvider session={session} > */}
         {/* </SessionProvider> */}
-        <GlobalAuthProvider>
-          <GlobalContextProvider>
-            <GlobalCacheProvider>
+        <GlobalCacheProvider>
+          <GlobalAuthProvider>
+            <GlobalContextProvider>
               <GlobalModalProvider>
                 {getLayout(<Component {...pageProps} />)}
               </GlobalModalProvider>
-            </GlobalCacheProvider>
-          </GlobalContextProvider>
-        </GlobalAuthProvider>
+            </GlobalContextProvider>
+          </GlobalAuthProvider>
+        </GlobalCacheProvider>
       </ApolloProvider>
     </>
   );

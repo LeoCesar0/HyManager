@@ -37,7 +37,7 @@ export const getTransactionReportById = async ({
 
 interface IListTransactionReport {
   bankAccountId: string;
-  type: string;
+  type?: TransactionReport["type"];
   filters?: FirebaseFilterFor<TransactionReport>[];
 }
 export const listTransactionReportsBy = async ({
@@ -47,12 +47,15 @@ export const listTransactionReportsBy = async ({
 }: IListTransactionReport): Promise<AppModelResponse<TransactionReport[]>> => {
   const funcName = "listTransactionReportsBy";
 
+  if (type) {
+    filters.push({ field: "type", operator: "==", value: type });
+  }
+
   try {
     const result = await firebaseList<TransactionReport>({
       collection: FirebaseCollection.transactionReports,
       filters: [
         { field: "bankAccountId", operator: "==", value: bankAccountId },
-        { field: "type", operator: "==", value: type },
         ...filters,
       ],
     });
