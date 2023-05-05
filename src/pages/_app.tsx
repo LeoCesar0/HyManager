@@ -1,7 +1,5 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { ApolloProvider } from "@apollo/client";
-import { apolloClient } from "../lib/apollo";
 import { GlobalContextProvider } from "../contexts/GlobalContext";
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
@@ -56,19 +54,17 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         pauseOnHover
         theme="dark"
       />
-      <ApolloProvider client={apolloClient}>
-        {/* <SessionProvider session={session} > */}
-        {/* </SessionProvider> */}
-        <GlobalCacheProvider>
-          <GlobalAuthProvider>
-            <GlobalContextProvider>
-              <GlobalModalProvider>
-                {getLayout(<Component {...pageProps} />)}
-              </GlobalModalProvider>
-            </GlobalContextProvider>
-          </GlobalAuthProvider>
-        </GlobalCacheProvider>
-      </ApolloProvider>
+      {/* <SessionProvider session={session} > */}
+      {/* </SessionProvider> */}
+      <GlobalCacheProvider>
+        <GlobalAuthProvider>
+          <GlobalContextProvider>
+            <GlobalModalProvider>
+              {getLayout(<Component {...pageProps} />)}
+            </GlobalModalProvider>
+          </GlobalContextProvider>
+        </GlobalAuthProvider>
+      </GlobalCacheProvider>
     </>
   );
 }
