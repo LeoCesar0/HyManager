@@ -108,12 +108,16 @@ export const batchManyTransactionReports = async ({
 
   const t3 = performance.now();
 
+  console.log("existingReportsOnDatabase -->", existingReportsOnDatabase);
+
   console.log(`existingReportsOnDatabase reduce took ${t3 - t2} ms`);
 
   const newReportsMap = transactionsToTransactionsReport(
     transactionsOnCreate,
     existingReportsOnDatabase
   );
+
+  console.log("newReportsMap -->", newReportsMap);
 
   const t4 = performance.now();
   console.log(`transactionsToTransactionsReport took ${t4 - t3} ms`);
@@ -168,6 +172,8 @@ export const batchManyTransactionReports = async ({
 
   const t5 = performance.now();
 
+  let finalItems: TransactionReport[] = [];
+
   newReportsMap.forEach(async (transactionReport) => {
     const docRef = doc(
       firebaseDB,
@@ -191,6 +197,8 @@ export const batchManyTransactionReports = async ({
       };
     }
 
+    finalItems.push(updatedItem);
+
     batch.set(docRef, updatedItem, { merge: true });
   });
 
@@ -199,6 +207,8 @@ export const batchManyTransactionReports = async ({
   console.log(`Bank Insertion took ${t6 - t5} ms`);
 
   console.log(`batchManyTransactionReports took ${t6 - t1} ms`);
+
+  console.log("finalItems -->", finalItems);
 };
 
 interface ICreateManyTransactionReports {
