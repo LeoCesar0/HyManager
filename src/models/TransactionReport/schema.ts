@@ -14,6 +14,7 @@ export const transactionReportSchema = z.object({
   id: z.string(),
   bankAccountId: z.string(),
   amount: z.number(),
+  accountBalance: z.number(),
   type: z.enum(["day", "month"]),
   date: timestampSchema,
   dateDay: z.string(),

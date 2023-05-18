@@ -5,7 +5,7 @@ import { FirebaseCollection } from "src/models";
 
 interface IProps<T> {
   cacheKey: string;
-  fetcher: (...args: any[]) => Promise<AppModelResponse<any>>;
+  fetcher: (...args: any[]) => Promise<AppModelResponse<T>>;
   stopAction?: boolean;
   collection: FirebaseCollection;
   dependencies: any[];
@@ -47,7 +47,7 @@ const useFetcher = <T,>(props: IProps<T>) => {
             collection: collection,
             refetcher: fetchData,
           });
-          setState((prev) => ({ ...prev, data: result.data }));
+          setState((prev) => ({ ...prev, data: result.data as T }));
         }
       })
       .finally(() => {

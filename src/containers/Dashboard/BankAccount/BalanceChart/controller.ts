@@ -1,11 +1,14 @@
+import { TransactionReport } from "@models/TransactionReport/schema";
 import { ApexOptions } from "apexcharts";
 import currency from "currency.js";
+import { add, sub,differenceInCalendarDays } from "date-fns";
 import { Transaction, TransactionType } from "src/models/Transaction/schema";
 import {
   APEX_DEFAULT_OPTIONS,
   APEX_LOCALES,
   PRIMARY_COLORS,
-} from "src/static/config";
+} from "src/static/Config";
+
 import {
   formatAnyDate,
   timestampToDate,
@@ -14,43 +17,92 @@ import {
 
 export interface IFilterDate {
   label: string;
-  days: number;
+  value: number;
+  type: 'days' | 'months'
 }
 
 export const dateOptions: IFilterDate[] = [
   {
     label: "Last 7 days",
-    days: 7,
+    value: 7,
+    type: 'days'
   },
   {
-    label: "Last 30 days",
-    days: 30,
+    label: "Last month",
+    value: 1,
+    type: 'months'
   },
   {
-    label: "Last 60 days",
-    days: 60,
+    label: "Last 3 months",
+    value: 3,
+    type: 'months'
   },
   {
     label: "Last 12 months",
-    days: 30 * 12,
+    value: 12,
+    type: 'months'
   },
 ];
 
 export const makeBalanceChartData = ({
-  transactions,
+  transactionReports,
+  dateLapse,
 }: {
-  transactions: Transaction[];
+  transactionReports: TransactionReport[];
+  dateLapse: IFilterDate;
 }) => {
-  const { dates, balances } = transactions.reduce(
+  const dateFormat = "dd/MM";
+  // const finalDate = new Date();
+  // const initialDate = sub(finalDate, {
+  //   [dateLapse.type]: dateLapse.value,
+  // });
+  // const balances: number[] = [0];
+  // const dates:string[] = [formatAnyDate(initialDate, dateFormat)]
+
+  // transactionReports.sort((a, b) => {
+  //   return a.date.seconds - b.date.seconds
+  // })
+
+  // console.log('After sort -->', transactionReports)
+
+  // // const dates = new Array(dayslapse).map((_, index) => {
+  // //   const date = add(initialDate, {
+  // //     days: index,
+  // //   });
+  // //   return formatAnyDate(date, dateFormat);
+  // // });
+
+  // const transactionsReportMap: Map<string, number> = new Map();
+
+  // transactionReports.forEach((report) => {
+  //   console.log('report.date -->', report.date)
+  //   const reportDate = formatAnyDate(report.date, dateFormat);
+  //   transactionsReportMap.set(reportDate, report.accountBalance);
+
+
+  //   if(dates[0] === reportDate) {
+  //     balances[0] = report.accountBalance
+  //   }else{
+  //     balances.push(report.accountBalance)
+  //     dates.push(reportDate)
+  //   }
+
+  // });
+
+
+  // console.log("balances -->", balances);
+  // console.log("dates -->", dates);
+  // console.log("transactionsReportMap -->", transactionsReportMap);
+
+
+  const { dates, balances } = transactionReports.reduce(
     (acc, entry) => {
       const date = timestampToDate(entry.date).getTime();
-      let amount = entry.amount;
-      const prevBalance = acc.balances.at(-1) || 0;
-      const currentBalance = currency(prevBalance).add(amount).value;
+      const currentBalance = entry.accountBalance
 
       if (acc.dates.length === 0) console.log("---- START -----");
       console.log("Date -->", timestampToDate(entry.date).toLocaleDateString());
-      console.log("amount -->", amount);
+      console.log("currentBalance -->", currentBalance);
       console.log("entry -->", entry);
 
       acc.balances = [...acc.balances, currentBalance];
@@ -74,7 +126,6 @@ export const makeBalanceChartData = ({
     },
   ];
 
-  console.log('balances -->', balances)
 
   const options_: ApexOptions = {
     ...APEX_DEFAULT_OPTIONS,
@@ -93,7 +144,7 @@ export const makeBalanceChartData = ({
       categories: dates,
       labels: {
         formatter: (value) => {
-          return formatAnyDate(value, "dd/MM");
+          return formatAnyDate(value, dateFormat);
         },
       },
     },

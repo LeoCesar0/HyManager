@@ -1,13 +1,14 @@
 import { useGlobalAuth } from "@contexts/GlobalAuth";
 import { useGlobalCache } from "@contexts/GlobalCache";
 import { useGlobalContext } from "@contexts/GlobalContext";
-import { CSVData } from "@types-folder/index";
+import { AppModelResponse, CSVData } from "@types-folder/index";
 import { ChangeEvent, InputHTMLAttributes, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { FirebaseCollection } from "src/models";
 import { createManyTransactions } from "src/models/Transaction/create";
 import { CreateTransaction } from "src/models/Transaction/schema";
 import { extractTransactionsFromCSVData } from "src/models/Transaction/utils";
-import { handleToastPromise } from "src/utils/app";
+import { handleToastPromise, showErrorToast } from "src/utils/app";
 
 interface ITransactionsFileInput extends InputHTMLAttributes<HTMLInputElement> {
   currentBankId: string;
@@ -22,7 +23,7 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
   currentBankId,
   ...props
 }) => {
-  const [selectedFiles, setSelectedFiles] = useState<TransactionFile[]>([]);
+  // const [selectedFiles, setSelectedFiles] = useState<TransactionFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { refetchCollection } = useGlobalCache();
 
@@ -36,6 +37,9 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
         });
         if (results.data) {
           transactionsForEveryFile.push(...results.data);
+        } else {
+          showErrorToast(results.error)
+          return
         }
       }
       /* ------------------------- createManyTransactions ------------------------- */
@@ -52,8 +56,10 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
             FirebaseCollection.transactions,
             FirebaseCollection.transactionReports,
           ]);
+          
         }
         console.log("Final Results -->", results);
+        return results;
       } catch (e) {
         console.log("createManyTransactions ERROR -->", e);
       }
@@ -61,14 +67,12 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
   };
 
   async function handleFileInputChange(event: ChangeEvent<HTMLInputElement>) {
-    console.log("handleFileInputChange -->", handleFileInputChange);
     const files = event.target.files;
     if (!files) return;
     const transactionsFiles: TransactionFile[] = [];
     const fileReadPromises: Promise<void>[] = [];
 
     for (let i = 0; i < files.length; i++) {
-      console.log("File -->");
       const file = files.item(i);
       if (file && file.type === "text/csv") {
         const fileReader = new FileReader();
@@ -93,8 +97,8 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
     }
     await Promise.all(fileReadPromises);
     const allCSVData = transactionsFiles.map((item) => item.data);
-    setSelectedFiles(transactionsFiles);
-    onFilesCSVDataReady(allCSVData);
+    // setSelectedFiles(transactionsFiles);
+    onFilesCSVDataReady(allCSVData)
   }
 
   function handleButtonClick() {

@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { Timestamp } from "firebase/firestore";
 import { toast } from "react-toastify";
-import { AppError } from "../types";
+import { AppError, AppModelResponse } from "../types";
 
 export const showErrorToast = (error: AppError) => {
   const message = error?.message;
@@ -26,7 +26,7 @@ type IPromiseOptions = {
   errorMessage?: string;
 };
 export async function handleToastPromise<T>(
-  promise: Promise<T & { done: boolean }>,
+  promise: Promise<T & AppModelResponse<any>>,
   {
     loadingMessage,
     errorMessage = "Error: Something went wrong",
@@ -45,7 +45,7 @@ export async function handleToastPromise<T>(
         });
       } else {
         toast.update(toastId, {
-          render: errorMessage,
+          render: results?.error?.message || errorMessage,
           type: "error",
           isLoading: false,
           autoClose: 5000,

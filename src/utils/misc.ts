@@ -111,7 +111,7 @@ export const formatAnyDate = (
 
     return "";
   } catch (err) {
-    console.log("formatAnyDate err -->", err);
+    console.log("formatAnyDate err -->", date, err);
     return "";
   }
 };

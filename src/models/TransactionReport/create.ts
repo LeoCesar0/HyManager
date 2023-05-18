@@ -23,16 +23,13 @@ import {
 import { firebaseDB } from "src/services/firebase";
 import { Transaction } from "../Transaction/schema";
 import { timestampToDate } from "src/utils/misc";
-import {
-  makeTransactionReportFields,
-  makeTransactionReportSlugId,
-  transactionsToTransactionsReport,
-} from "./utils";
-import {
-  listTransactionReportByTransaction,
-  listTransactionReportsBy,
-} from "./read";
-import { listTransactionsByBankId } from "../Transaction/read";
+
+import { listTransactionReportsBy } from "./read";
+import { makeTransactionReportFields } from "./utils/makeTransactionReportFields";
+import { transactionsToTransactionsReport } from "./utils/transactionToTransactionsReport";
+import { makeTransactionReportSlugId } from "./utils/makeTransactionReportSlugId";
+import currency from "currency.js";
+import calculateAccountBalance from "./utils/calculateAccountBalance";
 
 interface ICreateTransactionReport {
   transaction: Transaction;
@@ -108,10 +105,6 @@ export const batchManyTransactionReports = async ({
 
   const t3 = performance.now();
 
-  console.log("existingReportsOnDatabase -->", existingReportsOnDatabase);
-
-  console.log(`existingReportsOnDatabase reduce took ${t3 - t2} ms`);
-
   const newReportsMap = transactionsToTransactionsReport(
     transactionsOnCreate,
     existingReportsOnDatabase
@@ -122,29 +115,51 @@ export const batchManyTransactionReports = async ({
   const t4 = performance.now();
   console.log(`transactionsToTransactionsReport took ${t4 - t3} ms`);
 
-  // newReportsMap.forEach((report) => {
-  //   const currentReportInDatabase = existingReportsOnDatabaseMap.get(report.id);
+  const tA = performance.now()
 
-  //   if (currentReportInDatabase) {
-  //     report.transactions = [
-  //       ...(currentReportInDatabase.transactions || []),
-  //       ...report.transactions,
-  //     ];
-  //     report.amount = currency(currentReportInDatabase.amount).add(
-  //       report.amount
-  //     ).value;
-  //   }
-  // });
+  const reports = calculateAccountBalance({
+    existingReports: existingReportsOnDatabase,
+    newReportsMap: newReportsMap,
+  });
 
-  // const reports = new Map();
+  const tB = performance.now()
 
-  /* ------------------------------ MAKE REPORTS ------------------------------ */
-  // const monthReports = makeReportsByType("month");
-  // const dayReports = makeReportsByType("day");
+  console.log(`calculateAccountBalance took ${tB - tA} ms`);
 
-  // const reports = dayReports.concat(monthReports);
+  const t5 = performance.now();
 
-  // reports.forEach(async (transactionReport) => {
+  let finalItems: TransactionReport[] = [];
+
+  console.log('All reports to batch -->', reports)
+
+  reports.forEach((transactionReport) => {
+    const docRef = doc(
+      firebaseDB,
+      FirebaseCollection.transactionReports,
+      transactionReport.id
+    );
+
+    // let updatedItem: Omit<TransactionReport, "amount" | "transactions"> & {
+    //   amount: any;
+    //   transactions: any;
+    // } = {
+    //   ...transactionReport,
+    //   updatedAt: Timestamp.fromDate(now),
+    // };
+    // if (transactionReport.transactions.length > 0) {
+    //   updatedItem = {
+    //     ...updatedItem,
+    //     transactions: arrayUnion(...transactionReport.transactions),
+    //   };
+    // }
+    transactionReport.updatedAt = Timestamp.fromDate(now)
+
+    finalItems.push(transactionReport);
+
+    batch.set(docRef, transactionReport, { merge: true });
+  });
+
+  // newReportsMap.forEach(async (transactionReport) => {
   //   const docRef = doc(
   //     firebaseDB,
   //     FirebaseCollection.transactionReports,
@@ -167,40 +182,10 @@ export const batchManyTransactionReports = async ({
   //     };
   //   }
 
+  //   finalItems.push(updatedItem);
+
   //   batch.set(docRef, updatedItem, { merge: true });
   // });
-
-  const t5 = performance.now();
-
-  let finalItems: TransactionReport[] = [];
-
-  newReportsMap.forEach(async (transactionReport) => {
-    const docRef = doc(
-      firebaseDB,
-      FirebaseCollection.transactionReports,
-      transactionReport.id
-    );
-
-    const incrementAmount = increment(transactionReport.amount);
-    let updatedItem: Omit<TransactionReport, "amount" | "transactions"> & {
-      amount: any;
-      transactions: any;
-    } = {
-      ...transactionReport,
-      amount: incrementAmount,
-      updatedAt: Timestamp.fromDate(now),
-    };
-    if (transactionReport.transactions.length > 0) {
-      updatedItem = {
-        ...updatedItem,
-        transactions: arrayUnion(...transactionReport.transactions),
-      };
-    }
-
-    finalItems.push(updatedItem);
-
-    batch.set(docRef, updatedItem, { merge: true });
-  });
 
   const t6 = performance.now();
 
@@ -208,7 +193,8 @@ export const batchManyTransactionReports = async ({
 
   console.log(`batchManyTransactionReports took ${t6 - t1} ms`);
 
-  console.log("finalItems -->", finalItems);
+  console.log("FINAL ITEMS -->", finalItems);
+  console.log('---------------------------------------')
 };
 
 interface ICreateManyTransactionReports {

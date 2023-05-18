@@ -28,7 +28,7 @@
       "@styles/*": ["src/styles/*"],
       "@contexts/*": ["src/contexts/*"],
       "@constants": ["src/assets/constants"],
-      "@assets": ["src/constants"]
+      "@models/*": ["src/models/*"]
     }
   },
   "include": [

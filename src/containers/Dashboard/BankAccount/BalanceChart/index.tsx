@@ -1,14 +1,11 @@
 import Button from "@components/Button";
-import { useGlobalCache } from "@contexts/GlobalCache";
 import useFetcher from "@hooks/useFetcher";
 import { FirebaseFilterFor } from "@types-folder/index";
-import { format, sub } from "date-fns";
+import { sub } from "date-fns";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FirebaseCollection } from "src/models";
-import { listTransactionsByBankId } from "src/models/Transaction/read";
-import { Transaction } from "src/models/Transaction/schema";
 import { listTransactionReportsBy } from "src/models/TransactionReport/read";
 import { TransactionReport } from "src/models/TransactionReport/schema";
 
@@ -19,20 +16,21 @@ interface IBalanceChart {
   bankAccountId?: string;
 }
 
-export const BalanceChart: React.FC<IBalanceChart> = (props) => {
+const BalanceChart: React.FC<IBalanceChart> = (props) => {
   const router = useRouter();
   const [dateFilter, setDateFilter] = useState<IFilterDate>(
     dateOptions[dateOptions.length - 1]
   );
-  const bankAccountId = props.bankAccountId || (router.query.bankAccountId as string);
+  const bankAccountId =
+    props.bankAccountId || (router.query.bankAccountId as string);
 
-  const cacheKey = `balanceChart-last-${dateFilter.days}-${bankAccountId}`;
+  const cacheKey = `balanceChart-last-${dateFilter.value}-${bankAccountId}`;
 
+  /* --------------------------- transactionsFetcher -------------------------- */
   const transactionsFetcher = useCallback(() => {
     const now = new Date();
-    const lastDaysValue = dateFilter.days;
     const pastDate = sub(now, {
-      days: lastDaysValue,
+      [dateFilter.type]: dateFilter.value,
     });
     const filters: FirebaseFilterFor<TransactionReport>[] = [
       { field: "date", operator: ">=", value: pastDate },
@@ -42,21 +40,24 @@ export const BalanceChart: React.FC<IBalanceChart> = (props) => {
       bankAccountId: bankAccountId,
       type: "day",
     });
-  }, [bankAccountId, dateFilter.days]);
+  }, [bankAccountId, dateFilter.value]);
 
-  const { data: transactionReports, loading } = useFetcher({
-    cacheKey,
-    collection: FirebaseCollection.transactions,
-    fetcher: transactionsFetcher,
-    dependencies: [bankAccountId, dateFilter.days],
-    initialData: [],
-    stopAction: !bankAccountId,
-  });
-
-  console.log('transactionReports -->', transactionReports)
+  const { data: transactionReports, loading } = useFetcher<TransactionReport[]>(
+    {
+      cacheKey,
+      collection: FirebaseCollection.transactions,
+      fetcher: transactionsFetcher,
+      dependencies: [bankAccountId, dateFilter.value],
+      initialData: [],
+      stopAction: !bankAccountId,
+    }
+  );
 
   const { series, options } = useMemo(() => {
-    return makeBalanceChartData({ transactions: transactionReports });
+    return makeBalanceChartData({
+      transactionReports: transactionReports,
+      dateLapse: dateFilter,
+    });
   }, [transactionReports, dateFilter]);
 
   if (!bankAccountId) return null;
@@ -67,11 +68,11 @@ export const BalanceChart: React.FC<IBalanceChart> = (props) => {
         <>
           <div className="flex gap-4 mb-4">
             {dateOptions.map((item) => {
-              const isSelected = dateFilter.days === item.days;
+              const isSelected = dateFilter.label === item.label
               return (
                 <Button
                   selected={isSelected}
-                  key={item.days}
+                  key={item.value}
                   onClick={() => {
                     setDateFilter(item);
                   }}
