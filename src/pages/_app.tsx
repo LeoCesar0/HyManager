@@ -3,7 +3,7 @@ import Head from "next/head";
 import { GlobalContextProvider } from "../contexts/GlobalContext";
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
-import { APP_CONFIG } from "../static/config";
+import { APP_CONFIG } from "../static/Config";
 import SiteLayout from "../containers/SiteLayout";
 // import { SessionProvider } from "next-auth/react"
 // import { Session } from "next-auth";

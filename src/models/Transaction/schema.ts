@@ -50,7 +50,7 @@ export const createTransactionSchema = z.object({
   creditor: z.string().optional(),
   description: z
     .string({ required_error: "Insert a description" })
-    .min(4, "Min 4 characters"),
+    .min(2, "Min 2 character"),
   date: z.string({
     invalid_type_error: "Insert a date",
     required_error: "This field is required!",

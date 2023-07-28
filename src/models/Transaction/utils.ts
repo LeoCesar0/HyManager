@@ -159,7 +159,7 @@ export const makeTransactionSlug = ({
   slug += slugify(date.slice(0, 10));
   if (creditorSlug) {
     slug += "@@";
-    slug += creditorSlug;
+    slug += creditorSlug
   }
   slug += "##";
   const idFromBank_ = idFromBank ? idFromBank : "manual";

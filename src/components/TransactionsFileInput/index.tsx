@@ -2,8 +2,10 @@ import { useGlobalAuth } from "@contexts/GlobalAuth";
 import { useGlobalCache } from "@contexts/GlobalCache";
 import { useGlobalContext } from "@contexts/GlobalContext";
 import { AppModelResponse, CSVData } from "@types-folder/index";
+import currency from "currency.js";
 import { ChangeEvent, InputHTMLAttributes, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { IPDFData } from "src/lib/PDFReader/interfaces";
 import { FirebaseCollection } from "src/models";
 import { createManyTransactions } from "src/models/Transaction/create";
 import { CreateTransaction } from "src/models/Transaction/schema";
@@ -38,8 +40,8 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
         if (results.data) {
           transactionsForEveryFile.push(...results.data);
         } else {
-          showErrorToast(results.error)
-          return
+          showErrorToast(results.error);
+          return;
         }
       }
       /* ------------------------- createManyTransactions ------------------------- */
@@ -56,7 +58,6 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
             FirebaseCollection.transactions,
             FirebaseCollection.transactionReports,
           ]);
-          
         }
         console.log("Final Results -->", results);
         return results;
@@ -71,9 +72,11 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
     if (!files) return;
     const transactionsFiles: TransactionFile[] = [];
     const fileReadPromises: Promise<void>[] = [];
+    const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
       const file = files.item(i);
+      if (file) formData.append("files", file);
       if (file && file.type === "text/csv") {
         const fileReader = new FileReader();
 
@@ -96,9 +99,36 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
       }
     }
     await Promise.all(fileReadPromises);
-    const allCSVData = transactionsFiles.map((item) => item.data);
+
+    // const allCSVData = transactionsFiles.map((item) => item.data);
+
+    console.log("files -->", files);
+    console.log("formData -->", formData);
+
+    formData.append("bankAccountId", currentBankId);
+
+    const res = await fetch("/api/pdf2json", {
+      method: "POST",
+      body: formData,
+    });
+    const result: IPDFData[] = await res.json();
+
+    const jsonString = JSON.stringify(result, null, 2);
+    const jsonPre = `<pre>${jsonString}</pre>`;
+    const blob = new Blob([jsonPre], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+
+    
+
+    // window.open("data:text/json," + encodeURIComponent(result), "_blank");
+
+    // formRef.current?.reset();
+
+    fileInputRef.current!.value = "";
+
     // setSelectedFiles(transactionsFiles);
-    onFilesCSVDataReady(allCSVData)
+    // onFilesCSVDataReady(allCSVData)
   }
 
   function handleButtonClick() {
@@ -109,7 +139,7 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
     <div className="">
       <input
         multiple
-        accept=".csv"
+        accept=".csv,.pdf"
         className="hidden"
         ref={fileInputRef}
         onChange={handleFileInputChange}
