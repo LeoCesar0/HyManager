@@ -1,7 +1,7 @@
 import { FormikProps } from "formik";
 import { InputHTMLAttributes } from "react";
 import { cx } from "../../utils/misc";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface IInputField extends InputHTMLAttributes<HTMLInputElement> {
   name: string;

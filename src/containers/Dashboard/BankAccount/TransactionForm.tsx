@@ -7,13 +7,13 @@ import { Timestamp } from "firebase/firestore";
 
 import { FormikProps, useFormik } from "formik";
 import { toast } from "react-toastify";
-import { FirebaseCollection } from "src/models";
-import { createTransaction } from "src/models/Transaction/create";
+import { FirebaseCollection } from "src/server/models";
+import { createTransaction } from "src/server/models/Transaction/create";
 import {
   CreateTransaction,
   createTransactionSchema,
   TransactionType,
-} from "src/models/Transaction/schema";
+} from "src/server/models/Transaction/schema";
 import { cx, dateToIsoString } from "src/utils/misc";
 import z from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";

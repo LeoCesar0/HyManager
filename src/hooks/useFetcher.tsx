@@ -1,7 +1,7 @@
 import { useGlobalCache } from "@contexts/GlobalCache";
+import { FirebaseCollection } from "@server/firebase";
 import { AppModelResponse } from "@types-folder/index";
 import { useState, useEffect, useCallback } from "react";
-import { FirebaseCollection } from "src/models";
 
 interface IProps<T> {
   cacheKey: string;

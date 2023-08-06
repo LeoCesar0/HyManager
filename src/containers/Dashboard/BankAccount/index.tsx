@@ -4,7 +4,7 @@ import { useGlobalAuth } from "@contexts/GlobalAuth";
 import BankHeader from "./BankHeader";
 import TransactionList from "./TransactionList";
 import TransactionsFileInput from "@components/TransactionsFileInput";
-import { BankAccount } from "src/models/BankAccount/schema";
+import { BankAccount } from "src/server/models/BankAccount/schema";
 
 const BankAccountPage = ({}) => {
   const [currentBank, setCurrentBank] = useState<BankAccount | null>(null);

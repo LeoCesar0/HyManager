@@ -1,15 +1,15 @@
 import { useGlobalAuth } from "@contexts/GlobalAuth";
 import { useGlobalCache } from "@contexts/GlobalCache";
 import { useGlobalContext } from "@contexts/GlobalContext";
+import { createManyTransactions } from "@models/Transaction/create/createManyTransactions";
+import { FirebaseCollection } from "@server/firebase";
+import { extractTransactionsFromCSVData } from "@server/utils/extractTransactionsFromCSVData";
 import { AppModelResponse, CSVData } from "@types-folder/index";
 import currency from "currency.js";
 import { ChangeEvent, InputHTMLAttributes, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { IPDFData } from "src/lib/PDFReader/interfaces";
-import { FirebaseCollection } from "src/models";
-import { createManyTransactions } from "src/models/Transaction/create";
-import { CreateTransaction } from "src/models/Transaction/schema";
-import { extractTransactionsFromCSVData } from "src/models/Transaction/utils";
+import { CreateTransaction } from "src/server/models/Transaction/schema";
 import { handleToastPromise, showErrorToast } from "src/utils/app";
 
 interface ITransactionsFileInput extends InputHTMLAttributes<HTMLInputElement> {

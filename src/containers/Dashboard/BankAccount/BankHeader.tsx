@@ -6,7 +6,7 @@ import TransactionForm from "./TransactionForm";
 import { useRouter } from "next/router";
 import Dropdown, { IDropdown } from "@components/Dropdown";
 import { useMemo } from "react";
-import { BankAccount } from "src/models/BankAccount/schema";
+import { BankAccount } from "src/server/models/BankAccount/schema";
 
 interface IBankHeader {
   currentBank: BankAccount | null;

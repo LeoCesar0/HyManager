@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, LegacyRef } from "react";
+import { useState, useEffect } from "react";
 //LegacyRef<HTMLElement>>
 export default function useScrollPercentage() {
   const [scrollPercentage, setScrollPercentage] = useState(0);

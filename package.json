@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "NODE_ENV=development next dev",
+    "build": "NODE_ENV=production next build",
+    "start": "NODE_ENV=production next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -45,7 +45,8 @@
     "uuid": "^9.0.0",
     "windstitch": "^0.3.0",
     "zod": "^3.20.6",
-    "zod-formik-adapter": "^1.2.0"
+    "zod-formik-adapter": "^1.2.0",
+    "zustand": "^4.4.0"
   },
   "devDependencies": {
     "@types/formidable": "^2.0.6",

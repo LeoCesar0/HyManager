@@ -1,16 +1,15 @@
-import { TransactionReport } from "@models/TransactionReport/schema";
+import { TransactionReport } from "src/server/models/TransactionReport/schema";
 import { ApexOptions } from "apexcharts";
 import {
-  APEX_DEFAULT_OPTIONS,
-  APEX_LOCALES,
   PRIMARY_COLORS,
-} from "src/static/Config";
+} from "src/static/appConfig";
 
 import {
   formatAnyDate,
   timestampToDate,
   valueToCurrency,
 } from "src/utils/misc";
+import { APEX_DEFAULT_OPTIONS, APEX_LOCALES } from "src/static/apexConfig";
 
 export interface IFilterDate {
   label: string;
@@ -49,48 +48,6 @@ export const makeBalanceChartData = ({
   dateLapse: IFilterDate;
 }) => {
   const dateFormat = "dd/MM";
-  // const finalDate = new Date();
-  // const initialDate = sub(finalDate, {
-  //   [dateLapse.type]: dateLapse.value,
-  // });
-  // const balances: number[] = [0];
-  // const dates:string[] = [formatAnyDate(initialDate, dateFormat)]
-
-  // transactionReports.sort((a, b) => {
-  //   return a.date.seconds - b.date.seconds
-  // })
-
-  // console.log('After sort -->', transactionReports)
-
-  // // const dates = new Array(dayslapse).map((_, index) => {
-  // //   const date = add(initialDate, {
-  // //     days: index,
-  // //   });
-  // //   return formatAnyDate(date, dateFormat);
-  // // });
-
-  // const transactionsReportMap: Map<string, number> = new Map();
-
-  // transactionReports.forEach((report) => {
-  //   console.log('report.date -->', report.date)
-  //   const reportDate = formatAnyDate(report.date, dateFormat);
-  //   transactionsReportMap.set(reportDate, report.accountBalance);
-
-
-  //   if(dates[0] === reportDate) {
-  //     balances[0] = report.accountBalance
-  //   }else{
-  //     balances.push(report.accountBalance)
-  //     dates.push(reportDate)
-  //   }
-
-  // });
-
-
-  // console.log("balances -->", balances);
-  // console.log("dates -->", dates);
-  // console.log("transactionsReportMap -->", transactionsReportMap);
-
 
   const { dates, balances } = transactionReports.reduce(
     (acc, entry) => {

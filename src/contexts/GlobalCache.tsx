@@ -1,5 +1,6 @@
 "use client";
 
+import { FirebaseCollection } from "@server/firebase";
 import React, {
   createContext,
   Dispatch,
@@ -8,7 +9,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { FirebaseCollection } from "src/models";
 
 interface Cache {
   key: string;

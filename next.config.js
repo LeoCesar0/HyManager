@@ -4,13 +4,12 @@
 // const withGraphQL = require("next-plugin-graphql")
 
 const nextConfig = {
-  reactStrictMode: false,
-
+  reactStrictMode: true,
   images: {
     domains: ["media.graphassets.com", "cdn.midjourney.com"],
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   i18n: {
     locales: ["en", "pt"],

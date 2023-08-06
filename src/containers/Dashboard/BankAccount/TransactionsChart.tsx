@@ -1,8 +1,8 @@
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
-import { Transaction, TransactionType } from "src/models/Transaction/schema";
-import { TAILWIND_CONFIG } from "src/static/Config";
+import { Transaction, TransactionType } from "src/server/models/Transaction/schema";
+import { TAILWIND_CONFIG } from "src/static/appConfig";
 import { timestampToDate } from "src/utils/misc";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 

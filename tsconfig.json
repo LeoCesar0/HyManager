@@ -23,12 +23,18 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@containers/*": ["src/containers/*"],
+      "@types-folder": ["src/types"],
       "@types-folder/*": ["src/types/*"],
       "@hooks/*": ["src/hooks/*"],
+      "@utils/*": ["src/utils/*"],
       "@styles/*": ["src/styles/*"],
       "@contexts/*": ["src/contexts/*"],
       "@constants": ["src/assets/constants"],
-      "@models/*": ["src/models/*"]
+      "@static": ["src/assets/static"],
+      "@models": ["src/server/models"],
+      "@models/*": ["src/server/models/*"],
+      "@server": ["src/server"],
+      "@server/*": ["src/server/*"],
     }
   },
   "include": [

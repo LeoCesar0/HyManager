@@ -5,9 +5,9 @@ import { sub } from "date-fns";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
-import { FirebaseCollection } from "src/models";
-import { listTransactionReportsBy } from "src/models/TransactionReport/read";
-import { TransactionReport } from "src/models/TransactionReport/schema";
+import { FirebaseCollection } from "src/server/models";
+import { listTransactionReportsBy } from "src/server/models/TransactionReport/read";
+import { TransactionReport } from "src/server/models/TransactionReport/schema";
 
 import { dateOptions, IFilterDate, makeBalanceChartData } from "./controller";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });

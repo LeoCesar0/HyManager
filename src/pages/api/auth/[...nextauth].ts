@@ -1,7 +1,5 @@
 import NextAuth from "next-auth";
-import { AuthorizationEndpointHandler } from "next-auth/providers";
 import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
-import { createNewUser } from "../../../models/User";
 
 // const GetNextAuthUserByEmail = gql`
 //   query GetNextAuthUserByEmail($email: String!) {

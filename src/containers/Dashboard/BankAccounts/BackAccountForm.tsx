@@ -1,12 +1,11 @@
+import { createBankAccount } from "@models/BankAccount/create/createBankAccount";
+import { CreateBankAccount } from "@models/BankAccount/schema";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import { createBankAccount } from "src/models/BankAccount/create";
-import { CreateBankAccount } from "src/models/BankAccount/schema";
 import Button from "../../../components/Button";
 import FormControl from "../../../components/FormControl/FormControl";
 import InputField from "../../../components/InputField/InputField";
 import { useGlobalAuth } from "../../../contexts/GlobalAuth";
-import { slugify } from "../../../utils/app";
 
 const initialValues: CreateBankAccount = {
   balance: "0",

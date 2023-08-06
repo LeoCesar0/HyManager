@@ -3,16 +3,13 @@ import Head from "next/head";
 import { GlobalContextProvider } from "../contexts/GlobalContext";
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
-import { APP_CONFIG } from "../static/Config";
+import { APP_CONFIG } from "../static/appConfig";
 import SiteLayout from "../containers/SiteLayout";
-// import { SessionProvider } from "next-auth/react"
-// import { Session } from "next-auth";
-// import * as googleAnalytics from "../lib/gtag";
-
 import "../styles/tailwind.css";
 import "../styles/global.scss";
 import "../styles/tailwindComponents.css";
 import "react-toastify/dist/ReactToastify.css";
+
 import { GlobalAuthProvider } from "../contexts/GlobalAuth";
 import { ToastContainer } from "react-toastify";
 import { GlobalModalProvider } from "../contexts/GlobalModal";
@@ -54,8 +51,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         pauseOnHover
         theme="dark"
       />
-      {/* <SessionProvider session={session} > */}
-      {/* </SessionProvider> */}
       <GlobalCacheProvider>
         <GlobalAuthProvider>
           <GlobalContextProvider>

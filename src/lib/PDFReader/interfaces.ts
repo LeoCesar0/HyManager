@@ -1,5 +1,5 @@
-import { transactionSchema } from "@models/Transaction/schema";
-import { transactionReportSchema } from "@models/TransactionReport/schema";
+import { transactionSchema } from "src/server/models/Transaction/schema";
+import { transactionReportSchema } from "src/server/models/TransactionReport/schema";
 import { z } from "zod";
 import { IPDFRawData } from "./rawDataTypes";
 

@@ -1,11 +1,11 @@
-import { Transaction, TransactionType } from "@models/Transaction/schema";
-import { makeTransactionSlug } from "@models/Transaction/utils";
-import { TransactionReport } from "@models/TransactionReport/schema";
+import { Transaction, TransactionType } from "src/server/models/Transaction/schema";
+import { TransactionReport } from "src/server/models/TransactionReport/schema";
 import { Timestamp } from "firebase/firestore";
 import { makeDateFields, slugify } from "src/utils/app";
 import { numericFromAnyFormatToNumber } from "src/utils/misc";
 import { IPDFData, IPDFDataParser } from "../interfaces";
 import { IPDFRawData } from "../rawDataTypes";
+import { makeTransactionSlug } from "@server/utils/makeTransactionSlug";
 
 const headerMapping = {
   initialBalance: [20.921, 9.97],

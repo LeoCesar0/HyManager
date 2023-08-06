@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Transaction, TransactionType } from "src/models/Transaction/schema";
+import { Transaction, TransactionType } from "src/server/models/Transaction/schema";
 import BalanceChart from "./BalanceChart";
 import TransactionsChart from "./TransactionsChart";
 
