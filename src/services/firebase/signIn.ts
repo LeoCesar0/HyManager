@@ -7,16 +7,17 @@ import {
   import { v4 as uuidv4 } from "uuid";
   import { debugDev } from "../../utils/dev";
   import { AppModelResponse } from "../../types";
-  import { getUserById } from "src/server/models/User/read";
-  import { createUser } from "src/server/models/User/create";
   import { User } from "src/server/models/User/schema";
 import { firebaseAuth } from ".";
+import { getUserById } from "@models/User/read/getUserById";
+import { createUser } from "@models/User/create/createUser";
 
 export type SignIn = AppModelResponse<User>;
 
 export const signIn = async (): Promise<SignIn> => {
   const googleProvider = new GoogleAuthProvider();
   setPersistence(firebaseAuth, browserLocalPersistence);
+
   return signInWithPopup(firebaseAuth, googleProvider)
     .then(async (result) => {
       let error = null;
