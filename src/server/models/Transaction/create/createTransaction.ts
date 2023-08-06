@@ -69,22 +69,6 @@ interface ICreateTransaction {
         data: transaction,
       };
   
-      // const result = await firebaseCreate<Transaction>({
-      //   collection: FirebaseCollection.transactions,
-      //   data: transaction,
-      // });
-      // const createdTransactionResult = await getTransactionById({ id: slugId });
-      // const createdTransaction = createdTransactionResult.data;
-      // if (result.done && createdTransaction) {
-      //   const transactionReport = await makeTransactionReport({
-      //     transaction: createdTransaction,
-      //     type: "month",
-      //   });
-      //   if (transactionReport.error) {
-      //     debugResults(transactionReport, funcName);
-      //   }
-      // }
-      // return result;
     } catch (error) {
       const errorMessage = debugDev({
         type: "error",

@@ -23,7 +23,19 @@ export const createUser = async ({
       collection: FirebaseCollection.users,
       data: item,
     });
-    return result;
+    return {
+      data: result || null,
+      done: !!result,
+      error: result
+        ? null
+        : {
+            message: debugDev({
+              type: "error",
+              name: funcName,
+              value: "Error",
+            }),
+          },
+    };
   } catch (error) {
     const errorMessage = debugDev({
       type: "error",

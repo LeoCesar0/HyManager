@@ -12,11 +12,17 @@ export const deleteBankAccount = async ({
 }: IDeleteBankAccount): Promise<AppModelResponse<{ id: string }>> => {
   const funcName = "deleteBankAccount";
   try {
-    const result = await firebaseDelete({
+    await firebaseDelete({
       collection: FirebaseCollection.bankAccounts,
       id: id,
     });
-    return result;
+    return {
+      data: {
+        id,
+      },
+      done: true,
+      error: null,
+    };
   } catch (error) {
     const errorMessage = debugDev({
       type: "error",

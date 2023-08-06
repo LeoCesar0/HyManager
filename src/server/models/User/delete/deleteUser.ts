@@ -12,11 +12,17 @@ export const deleteUser = async ({
 }: IDeleteUser): Promise<AppModelResponse<{ id: string }>> => {
   const funcName = "deleteUser";
   try {
-    const result = await firebaseDelete({
+    await firebaseDelete({
       collection: FirebaseCollection.users,
       id: id,
     });
-    return result;
+    return {
+      data: {
+        id,
+      },
+      done: true,
+      error: null,
+    };
   } catch (error) {
     const errorMessage = debugDev({
       type: "error",
