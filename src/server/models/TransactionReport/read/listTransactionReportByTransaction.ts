@@ -1,7 +1,6 @@
 import { Transaction } from "@models/Transaction/schema";
 import { FirebaseCollection } from "@server/firebase";
 import { firebaseList } from "@server/firebase/firebaseList";
-import { AppModelResponse, FirebaseFilterFor } from "@types-folder/index";
 import { debugDev } from "src/utils/dev";
 import { TransactionReport } from "../schema";
 

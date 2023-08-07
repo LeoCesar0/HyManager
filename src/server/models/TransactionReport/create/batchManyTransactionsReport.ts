@@ -2,7 +2,7 @@ import { Transaction } from "@models/Transaction/schema";
 import { FirebaseCollection } from "@server/firebase";
 import { doc, Timestamp, WriteBatch } from "firebase/firestore";
 import { firebaseDB } from "src/services/firebase";
-import { listTransactionReportsBy } from "../read";
+import { listTransactionReportsBy } from "../read/listTransactionReportBy";
 import { TransactionReport } from "../schema";
 import calculateAccountBalance from "../utils/calculateAccountBalance";
 import { transactionsToTransactionsReport } from "../utils/transactionToTransactionsReport";
