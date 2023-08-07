@@ -15,14 +15,18 @@ export const listTransactionsByBankId = async ({
   const funcName = "getTransactionById";
 
   try {
-    const result = await firebaseList<Transaction>({
+    const list = await firebaseList<Transaction>({
       collection: FirebaseCollection.transactions,
       filters: [
         { field: "bankAccountId", operator: "==", value: id },
         ...filters,
       ],
     });
-    return result;
+    return {
+      data: list,
+      done: true,
+      error: null,
+    };
   } catch (error) {
     const errorMessage = debugDev({
       type: "error",

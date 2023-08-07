@@ -21,14 +21,18 @@ interface IListTransactionReport {
     }
   
     try {
-      const result = await firebaseList<TransactionReport>({
+      const list = await firebaseList<TransactionReport>({
         collection: FirebaseCollection.transactionReports,
         filters: [
           { field: "bankAccountId", operator: "==", value: bankAccountId },
           ...filters,
         ],
       });
-      return result;
+      return {
+        data: list,
+        done: true,
+        error: null,
+      };
     } catch (error) {
       const errorMessage = debugDev({
         type: "error",

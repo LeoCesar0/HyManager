@@ -2,10 +2,10 @@ import { AppModelResponse } from "@types-folder/index";
 import currency from "currency.js";
 import { debugDev } from "src/utils/dev";
 import { Transaction } from "../../Transaction/schema";
-import { createTransactionReport } from "../create";
-import { listTransactionReportByTransaction } from "../read";
+import { createTransactionReport } from "../create/createTransactionReport";
+import { listTransactionReportByTransaction } from "../read/listTransactionReportByTransaction";
 import { TransactionReport } from "../schema";
-import { updateTransactionReport } from "../update";
+import { updateTransactionReport } from "../update/updateTransactionReport";
 
 interface IMakeTransactionReport {
   type?: TransactionReport["type"];
