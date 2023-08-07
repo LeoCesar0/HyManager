@@ -14,11 +14,23 @@ export const getTransactionReportById = async ({
   const funcName = "getTransactionReportById";
 
   try {
-    const result = await firebaseGet<TransactionReport>({
+    const data = await firebaseGet<TransactionReport>({
       collection: FirebaseCollection.transactionReports,
       id: id,
     });
-    return result;
+    return {
+      data: data || null,
+      done: !!data,
+      error: data
+        ? null
+        : {
+            message: debugDev({
+              type: "error",
+              name: funcName,
+              value: "Error",
+            }),
+          },
+    };
   } catch (error) {
     const errorMessage = debugDev({
       type: "error",

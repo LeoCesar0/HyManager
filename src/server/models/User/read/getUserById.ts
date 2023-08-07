@@ -14,13 +14,25 @@ export const getUserById = async ({
   const funcName = "getUserById";
 
   try {
-    const result = await firebaseGet<User>({
+    const data = await firebaseGet<User>({
       collection: FirebaseCollection.users,
       id: id,
     });
-    return result;
+    return {
+      data: data || null,
+      done: !!data,
+      error: data
+        ? null
+        : {
+            message: debugDev({
+              type: "error",
+              name: funcName,
+              value: "Error",
+            }),
+          },
+    };
   } catch (error) {
-    console.log('Catch error -->', error)
+    console.log("Catch error -->", error);
     const errorMessage = debugDev({
       type: "error",
       name: funcName,

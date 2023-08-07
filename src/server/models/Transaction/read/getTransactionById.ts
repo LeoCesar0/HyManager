@@ -1,4 +1,4 @@
-import { AppModelResponse, FirebaseFilterFor } from "@types-folder/index";
+import { AppModelResponse } from "@types-folder/index";
 import { FirebaseCollection } from "@server/firebase";
 import { firebaseGet } from "@server/firebase/firebaseGet";
 import { debugDev } from "@utils/dev";
@@ -14,11 +14,23 @@ export const getTransactionById = async ({
   const funcName = "getTransactionById";
 
   try {
-    const result = await firebaseGet<Transaction>({
+    const data = await firebaseGet<Transaction>({
       collection: FirebaseCollection.transactions,
       id: id,
     });
-    return result;
+    return {
+      data: data || null,
+      done: !!data,
+      error: data
+        ? null
+        : {
+            message: debugDev({
+              type: "error",
+              name: funcName,
+              value: "Error",
+            }),
+          },
+    };
   } catch (error) {
     const errorMessage = debugDev({
       type: "error",

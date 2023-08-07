@@ -1,6 +1,5 @@
 import { AppModelResponse, FirebaseFilterFor } from "@types-folder/index";
 import { FirebaseCollection } from "src/server/firebase";
-import { firebaseGet } from "src/server/firebase/firebaseGet";
 import { firebaseList } from "src/server/firebase/firebaseList";
 import { debugDev } from "src/utils/dev";
 import { Transaction } from "../schema";

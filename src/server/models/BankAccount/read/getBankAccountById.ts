@@ -14,11 +14,23 @@ export const getBankAccountById = async ({
   const funcName = "getBankAccountById";
 
   try {
-    const result = await firebaseGet<BankAccount>({
+    const data = await firebaseGet<BankAccount>({
       collection: FirebaseCollection.bankAccounts,
       id: id,
     });
-    return result;
+    return {
+      data: data || null,
+      done: !!data,
+      error: data
+        ? null
+        : {
+            message: debugDev({
+              type: "error",
+              name: funcName,
+              value: "Error",
+            }),
+          },
+    };
   } catch (error) {
     const errorMessage = debugDev({
       type: "error",
