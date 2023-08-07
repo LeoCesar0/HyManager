@@ -1,10 +1,10 @@
 'use client'
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { APP_PAGES } from "src/static/appPages";
 import { useGlobalAuth } from "../../../contexts/GlobalAuth";
 import { cx } from "../../../utils/misc";
 import Button from "../../../components/Button";
+import { useRouter } from "next/router";
 
 const Header = () => {
   const {
@@ -13,7 +13,9 @@ const Header = () => {
     handleSignIn,
     loading: loadingUser,
   } = useGlobalAuth();
-  const pathname = usePathname();
+  const router = useRouter()
+
+  const pathname = router.pathname
 
   return (
     <header className="">
