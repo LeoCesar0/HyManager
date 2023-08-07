@@ -3,12 +3,12 @@ import FormControl from "@components/FormControl/FormControl";
 import InputField from "@components/InputField/InputField";
 import { useGlobalCache } from "@contexts/GlobalCache";
 import { useGlobalModal } from "@contexts/GlobalModal";
+import { createTransaction } from "@models/Transaction/create/createTransaction";
+import { FirebaseCollection } from "@server/firebase";
 import { Timestamp } from "firebase/firestore";
 
 import { FormikProps, useFormik } from "formik";
 import { toast } from "react-toastify";
-import { FirebaseCollection } from "src/server/models";
-import { createTransaction } from "src/server/models/Transaction/create";
 import {
   CreateTransaction,
   createTransactionSchema,
