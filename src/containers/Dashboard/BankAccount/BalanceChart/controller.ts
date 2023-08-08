@@ -55,9 +55,9 @@ export const makeBalanceChartData = ({
       const currentBalance = entry.accountBalance
 
       if (acc.dates.length === 0) console.log("---- START -----");
-      console.log("Date -->", timestampToDate(entry.date).toLocaleDateString());
-      console.log("currentBalance -->", currentBalance);
-      console.log("entry -->", entry);
+      // console.log("Date -->", timestampToDate(entry.date).toLocaleDateString());
+      // console.log("currentBalance -->", currentBalance);
+      // console.log("entry -->", entry);
 
       acc.balances = [...acc.balances, currentBalance];
       acc.dates = [...acc.dates, date];
