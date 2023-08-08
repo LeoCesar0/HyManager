@@ -1,8 +1,11 @@
+import { TransactionType } from "@models/Transaction/schema";
+import { AppModelResponse } from "@types-folder";
 import currency from "currency.js";
 import formidable from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";
 import { PDFReader } from "src/lib/PDFReader";
-import NubankPDFParser from "src/lib/PDFReader/parsers/NubankPDFParser";
+import { IPDFData } from "src/lib/PDFReader/interfaces";
+import NubankPDFParser from "src/lib/PDFReader/parsers/Nubank/NubankPDFParser";
 
 export const config = {
   api: {
@@ -10,7 +13,12 @@ export const config = {
   },
 };
 
-export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+export type PDF2JSONResponse = AppModelResponse<IPDFData[]>;
+
+export const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse<PDF2JSONResponse>
+) => {
   const form = formidable({ multiples: true });
   const pdfReader = new PDFReader();
   const pdfDataParser = new NubankPDFParser();
@@ -19,23 +27,23 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     form.parse(req, async (err, fields, { files }) => {
       const bankAccountId = fields.bankAccountId as string;
 
+      const handleReject = (errorMessage = "Error reading pdf") => {
+        console.log("Reject -->", errorMessage);
+        const response = {
+          error: { message: errorMessage },
+          done: false,
+          data: null,
+        };
+        res.status(400).json(response);
+        reject(response);
+      };
+
       if (!bankAccountId) {
-        res
-          .status(400)
-          .json({
-            error: "No bank account id provided",
-            done: false,
-            data: null,
-          });
-        reject(err);
+        handleReject("No bank account id provided");
       }
 
       if (err) {
-        res
-          .status(400)
-          .json({ error: "Error parsing form", done: false, data: null });
-        reject(err);
-        return;
+        handleReject();
       }
       if (!Array.isArray(files)) {
         files = [files];
@@ -43,22 +51,15 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const rawData = await pdfReader.read({ files: files });
 
-      const parsedResult = pdfDataParser.parse(rawData, bankAccountId);
+      const parsedResults = pdfDataParser.parse(rawData, bankAccountId);
 
-      const amount = parsedResult[0].transactions.reduce((acc, entry) => {
-        acc = currency(acc).add(entry.amount).value
-        return acc;
-      }, 0);
+      pdfDataParser.validateResults(parsedResults, handleReject);
 
-      parsedResult.forEach((pdf, index) => {
-        console.log('---> RESUMO PDF ' + index)
-        console.log("transactions num -->", pdf.transactions.length);
-        console.log("amount -->", amount);
-        console.log("Expect amount -->", currency(pdf.totalCredit).add(pdf.totalDebit).value)
-      })
-      
-
-      res.status(200).json(parsedResult);
+      res.status(200).json({
+        data: parsedResults,
+        done: true,
+        error: null,
+      });
       resolve(files);
     });
   });

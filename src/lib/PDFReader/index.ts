@@ -1,7 +1,5 @@
 import formidable from "formidable";
-import { IPDFDataParser } from "./interfaces";
 import { IPDFRawData } from "./rawDataTypes";
-const fs = require("fs");
 const PDFParser = require("pdf2json");
 
 interface IRead {
