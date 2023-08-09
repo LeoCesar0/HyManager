@@ -1,4 +1,5 @@
 import { CSVData } from "@types-folder";
+import { openDataAsText } from "@utils/openDataAsText";
 import { ChangeEvent, RefObject } from "react";
 import { IPDFData } from "src/lib/PDFReader/interfaces";
 import { PDF2JSONResponse } from "src/pages/api/pdf2json";
@@ -62,11 +63,7 @@ export const onFileInputChange = async ({
   });
   const result: PDF2JSONResponse = await res.json();
 
-  const jsonString = JSON.stringify(result, null, 2);
-  const jsonPre = `<pre>${jsonString}</pre>`;
-  const blob = new Blob([jsonPre], { type: "text/html" });
-  const url = URL.createObjectURL(blob);
-  window.open(url, "_blank");
+  openDataAsText(result);
 
   // window.open("data:text/json," + encodeURIComponent(result), "_blank");
 
