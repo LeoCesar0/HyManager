@@ -1,3 +1,4 @@
+import { FirebaseCollection } from "@server/firebase";
 import { WhereFilterOp } from "firebase/firestore";
 
 export type AppError = {
@@ -33,3 +34,5 @@ export type FirebaseFilterFor<T> = {
   operator: WhereFilterOp;
   value: any;
 };
+
+export type RefetchCollection = (collection: FirebaseCollection[]) => void;

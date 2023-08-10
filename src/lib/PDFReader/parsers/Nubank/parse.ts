@@ -1,4 +1,5 @@
 import {
+  CreateTransaction,
   Transaction,
   TransactionType,
 } from "src/server/models/Transaction/schema";
@@ -26,7 +27,7 @@ Object.entries(headerMapping).forEach(([key, value]) => {
 });
 
 export function parse(
-  rawDataArray: IPDFRawData[],
+  PDFsRawData: IPDFRawData[],
   bankAccountId: string
 ): IPDFData[] {
   const finalResult: IPDFData[] = [];
@@ -34,8 +35,8 @@ export function parse(
   const now = new Date();
   let afterTransXValues: number[] = [];
 
-  rawDataArray.forEach((rawPDFData) => {
-    const currentPDFTransactions: Transaction[] = [];
+  PDFsRawData.forEach((rawPDFData) => {
+    const currentPDFTransactions: CreateTransaction[] = [];
 
     let currentPDFData: IPDFData = {
       finalBalance: 0,
@@ -43,7 +44,6 @@ export function parse(
       initialBalance: 0,
       totalCredit: 0,
       totalDebit: 0,
-      transactionReports: [],
       transactions: [],
     };
 
@@ -72,9 +72,9 @@ export function parse(
 
         if (textValue === "Movimentações") {
           checkingTransactions = true;
-          console.log(
-            "----------------- START TRANSACTIONS ---------------------"
-          );
+          // console.log(
+          //   "----------------- START TRANSACTIONS ---------------------"
+          // );
         }
 
         if (pageIndex === 0 && !checkingTransactions) {
@@ -98,16 +98,15 @@ export function parse(
           !foundDate &&
           !foundDescriptionX
         ) {
-          console.log(
-            "HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE --> HERE <--"
-          );
-          console.log("tempTransaction -->", tempTransaction);
-          console.log("TextValue -->", textValue);
-          console.log("foundDate -->", foundDate);
-          console.log("foundDescriptionX -->", foundDescriptionX);
-          console.log("x -->", x);
-          console.log("--------------------------------");
-          // tempTransaction = undefined;
+          // console.log(
+          //   "HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE --> HERE <--"
+          // );
+          // console.log("tempTransaction -->", tempTransaction);
+          // console.log("TextValue -->", textValue);
+          // console.log("foundDate -->", foundDate);
+          // console.log("foundDescriptionX -->", foundDescriptionX);
+          // console.log("x -->", x);
+          // console.log("--------------------------------");
           return;
         }
 
@@ -115,14 +114,14 @@ export function parse(
           tempTransaction = {
             date: foundDate,
           };
-          console.log("Step 1 - Found new Date");
-          console.log("textValue -->", textValue);
-          console.log("------------------------------------------------");
+          // console.log("Step 1 - Found new Date");
+          // console.log("textValue -->", textValue);
+          // console.log("------------------------------------------------");
           return;
         }
 
         if (!tempTransaction || !tempTransaction.date) {
-          console.log("SKIPPED date -->", textValue);
+          // console.log("SKIPPED date -->", textValue);
           return;
         }
 
@@ -131,9 +130,9 @@ export function parse(
         if (!tempTransaction.type || prevTransactionAlreadyCompleted) {
           // HAS NOT ENTER IN TRANSACTION YET
           if (slugify(textValue) === slugify("Total de entradas")) {
-            console.log("Step 2 - Found New Type");
-            console.log("textValue -->", textValue);
-            console.log("----------------- CREDIT LIST ---------------------");
+            // console.log("Step 2 - Found New Type");
+            // console.log("textValue -->", textValue);
+            // console.log("----------------- CREDIT LIST ---------------------");
             tempTransaction = {
               date: tempTransaction.date,
               type: "credit",
@@ -141,9 +140,9 @@ export function parse(
             return;
           }
           if (slugify(textValue) === slugify("Total de saídas")) {
-            console.log("Step 2");
-            console.log("textValue -->", textValue);
-            console.log("----------------- DEBIT LIST ---------------------");
+            // console.log("Step 2");
+            // console.log("textValue -->", textValue);
+            // console.log("----------------- DEBIT LIST ---------------------");
             tempTransaction = {
               date: tempTransaction.date,
               type: "debit",
@@ -153,7 +152,7 @@ export function parse(
         }
 
         if (!tempTransaction.type) {
-          console.log("SKIPPED type -->", textValue);
+          // console.log("SKIPPED type -->", textValue);
           return;
         }
         if (foundDescriptionX) {
@@ -162,14 +161,14 @@ export function parse(
             type: tempTransaction.type,
             description: textValue,
           };
-          console.log("Step 3 - Found new Description");
-          console.log("textValue -->", textValue);
-          console.log("------------------------------------------------");
+          // console.log("Step 3 - Found new Description");
+          // console.log("textValue -->", textValue);
+          // console.log("------------------------------------------------");
           return;
         }
 
         if (!tempTransaction.description) {
-          console.log("SKIPPED description -->", textValue);
+          // console.log("SKIPPED description -->", textValue);
           return;
         }
 
@@ -191,15 +190,15 @@ export function parse(
             description: tempTransaction.description,
             creditor: creditor,
           };
-          console.log("Step 4 - Found new Creditor");
-          console.log("textValue -->", textValue);
-          console.log("------------------------------------------------");
+          // console.log("Step 4 - Found new Creditor");
+          // console.log("textValue -->", textValue);
+          // console.log("------------------------------------------------");
           return;
         }
         // AMOUNT
 
         if (!amount) {
-          console.log("SKIPPED amount -->", textValue);
+          // console.log("SKIPPED amount -->", textValue);
           return;
         }
         // MAKE TRANSACTION OBJECT
@@ -213,24 +212,20 @@ export function parse(
         };
         const date = tempTransaction.date!;
 
-        const slugId = makeTransactionSlug({
-          date: date.toISOString(),
-          amount: amount.toString(),
-          idFromBank: "",
+        // const slugId = makeTransactionSlug({
+        //   date: date.toISOString(),
+        //   amount: amount.toString(),
+        //   idFromBank: "",
+        //   creditor: tempTransaction.creditor || "",
+        // });
+        const transaction: CreateTransaction = {
           creditor: tempTransaction.creditor || "",
-        });
-        const transaction: Transaction = {
-          creditor: tempTransaction.creditor || "",
-          description: tempTransaction.description,
+          description: tempTransaction.description || "",
           type: tempTransaction.type as TransactionType,
           amount: amount,
           bankAccountId: bankAccountId,
-          id: slugId,
-          slug: slugId,
-          createdAt: Timestamp.fromDate(now),
-          updatedAt: Timestamp.fromDate(now),
-          date: Timestamp.fromDate(date),
-          ...makeDateFields(date),
+          date: date.toISOString(),
+          // ...makeDateFields(date),
         };
         currentPDFTransactions.push(transaction);
         if (Texts[textIndex + 1]) {
@@ -238,10 +233,10 @@ export function parse(
             afterTransXValues.push(Texts[textIndex + 1].x);
           }
         }
-        console.log("Step 5 FINAL");
-        console.log("textValue -->", textValue);
-        console.log("Inserted tempTransaction -->", transaction);
-        console.log("------------------------------------------------");
+        // console.log("Step 5 FINAL");
+        // console.log("textValue -->", textValue);
+        // console.log("Inserted tempTransaction -->", transaction);
+        // console.log("------------------------------------------------");
 
         return;
       });

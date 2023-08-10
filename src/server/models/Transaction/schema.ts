@@ -1,3 +1,4 @@
+import { fileInfoSchema } from "@types-folder/file";
 import { timestampSchema } from "src/server/firebase";
 import { z } from "zod";
 
@@ -15,13 +16,7 @@ export const transactionSchema = z.object({
   bankAccountId: z.string(),
   amount: z.number(),
   type: z.enum([TransactionType.credit, TransactionType.debit]),
-  file: z
-    .object({
-      id: z.string(),
-      name: z.string(),
-      url: z.string(),
-    })
-    .optional(),
+  file: fileInfoSchema.optional(),
   creditor: z.string().optional(),
   creditorSlug: z.string().optional(),
   description: z.string().optional(),

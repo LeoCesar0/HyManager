@@ -1,6 +1,5 @@
-import { TransactionType } from "@models/Transaction/schema";
 import { AppModelResponse } from "@types-folder";
-import currency from "currency.js";
+import { FileInfo } from "@types-folder/file";
 import formidable from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";
 import { PDFReader } from "src/lib/PDFReader";
@@ -26,6 +25,9 @@ export const handler = async (
   const readFilesPromise = new Promise((resolve, reject) => {
     form.parse(req, async (err, fields, { files }) => {
       const bankAccountId = fields.bankAccountId as string;
+      const uploadedFiles = JSON.parse(
+        fields.uploadedFiles as string
+      ) as FileInfo[];
 
       const handleReject = (errorMessage = "Error reading pdf") => {
         console.log("Reject -->", errorMessage);
@@ -40,6 +42,10 @@ export const handler = async (
 
       if (!bankAccountId) {
         handleReject("No bank account id provided");
+      }
+
+      if (!uploadedFiles) {
+        handleReject("Error uploading files");
       }
 
       if (err) {

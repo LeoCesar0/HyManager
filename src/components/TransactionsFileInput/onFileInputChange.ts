@@ -1,76 +1,97 @@
-import { CSVData } from "@types-folder";
-import { openDataAsText } from "@utils/openDataAsText";
+import { createManyTransactions } from "@models/Transaction/create/createManyTransactions";
+import { CreateTransaction } from "@models/Transaction/schema";
 import { ChangeEvent, RefObject } from "react";
-import { IPDFData } from "src/lib/PDFReader/interfaces";
 import { PDF2JSONResponse } from "src/pages/api/pdf2json";
-import { TransactionFile } from ".";
+import { uploadFilesToStorage } from "./uploadFilesToStorage";
 
 export interface OnFileInputChangeProps {
   event: ChangeEvent<HTMLInputElement>;
   fileInputRef: RefObject<HTMLInputElement>;
-  currentBankId: string;
+  bankAccountId: string;
+  userId: string;
 }
 
 export const onFileInputChange = async ({
   event,
   fileInputRef,
-  currentBankId,
+  bankAccountId,
+  userId,
 }: OnFileInputChangeProps) => {
-  const files = event.target.files;
-  if (!files) return;
-  const transactionsFiles: TransactionFile[] = [];
-  const fileReadPromises: Promise<void>[] = [];
+  const fileList = event.target.files;
+  if (!fileList) {
+    return {
+      data: null,
+      error: {
+        message: "No files detected",
+      },
+      done: false,
+    };
+  }
+  const files: File[] = [];
   const formData = new FormData();
 
-  console.log("files -->", files);
+  console.log("files -->", fileList);
 
-  for (let i = 0; i < files.length; i++) {
-    const file = files.item(i);
+  for (let i = 0; i < fileList.length; i++) {
+    const file = fileList.item(i);
     if (file) {
+      files.push(file);
       formData.append("files", file);
-      const fileReader = new FileReader();
-
-      const promise = new Promise<void>((resolve) => {
-        fileReader.onload = () => {
-          const csvData = fileReader.result as string;
-          const csvDataArrayForFile = csvData
-            .split("\n")
-            .map((row) => row.split(","));
-
-          console.log("csvDataArrayForFile -->", csvDataArrayForFile);
-
-          transactionsFiles.push({
-            file: file,
-            data: [...csvDataArrayForFile],
-          });
-          resolve();
-        };
-        fileReader.readAsText(file!);
-      });
-
-      fileReadPromises.push(promise);
     }
   }
-  await Promise.all(fileReadPromises);
 
-  // const allCSVData = transactionsFiles.map((item) => item.data);
+  const uploadedFiles = await uploadFilesToStorage({
+    bankAccountId,
+    files,
+    userId,
+  });
 
-  formData.append("bankAccountId", currentBankId);
+  // uploadedFiles.forEach((item) => {
+  //   formData.append("files", item.file);
+  // });
+
+  formData.append("bankAccountId", bankAccountId);
+  formData.append("uploadedFiles", JSON.stringify(uploadedFiles));
+
+  console.log("uploadedFiles -->", uploadedFiles);
 
   const res = await fetch("/api/pdf2json", {
     method: "POST",
     body: formData,
   });
-  const result: PDF2JSONResponse = await res.json();
+  const readResult: PDF2JSONResponse = await res.json();
 
-  openDataAsText(result);
-
-  // window.open("data:text/json," + encodeURIComponent(result), "_blank");
-
-  // formRef.current?.reset();
+  // openDataAsText(result);
 
   fileInputRef.current!.value = "";
 
-  // setSelectedFiles(transactionsFiles);
-  // onFilesCSVDataReady(allCSVData)
+  if (readResult.data) {
+    const transactionsToCreate: CreateTransaction[] = [];
+
+    readResult.data.forEach((pdfResult, index) => {
+      const relativeFile = uploadedFiles[index];
+      // GET RELATIVE FILE TO EACH TRANSACTION
+      pdfResult.transactions.forEach((transaction) => {
+        transactionsToCreate.push({
+          ...transaction,
+          file: relativeFile,
+        });
+      });
+    });
+
+    const createResult = createManyTransactions({
+      bankAccountId,
+      transactions: transactionsToCreate,
+    });
+
+    return createResult;
+  } else {
+    return {
+      error: { message: "Error reading files" },
+      data: null,
+      done: false,
+    };
+  }
+
+  // formRef.current?.reset();
 };

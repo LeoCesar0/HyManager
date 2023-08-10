@@ -1,6 +1,7 @@
 "use client";
 
 import { FirebaseCollection } from "@server/firebase";
+import { RefetchCollection } from "@types-folder";
 import React, {
   createContext,
   Dispatch,
@@ -25,7 +26,7 @@ interface GlobalCacheProps {
     cacheKey: string,
     refetcher: (...args: any[]) => void
   ) => void;
-  refetchCollection: (collection: FirebaseCollection[]) => void;
+  refetchCollection: RefetchCollection;
   caches: Cache[];
   collectionsToRefetch: FirebaseCollection[];
 }
