@@ -2,10 +2,9 @@ import { TransactionType } from "@models/Transaction/schema";
 import currency from "currency.js";
 import { IPDFData } from "../../interfaces";
 
-export const validateResults = (
-  parsedResults: IPDFData[],
-  handleReject: () => void
-) => {
+export const validateResults = (parsedResults: IPDFData[]) => {
+  let valid = true;
+
   parsedResults.forEach((pdfResult, index) => {
     console.log("---> validateResults PDF " + index);
 
@@ -29,13 +28,15 @@ export const validateResults = (
       console.log(
         `ERROR total CREDIT. Got ${totalsByTransactions.totalCredit}, expected ${pdfResult.totalCredit}`
       );
-      handleReject();
+      valid = false;
     }
     if (pdfResult.totalDebit !== totalsByTransactions.totalDebit) {
       console.log(
         `ERROR total DEBIT. Got ${totalsByTransactions.totalDebit}, expected ${pdfResult.totalDebit}`
       );
-      handleReject();
+      valid = false;
     }
   });
+
+  return valid;
 };

@@ -59,7 +59,13 @@ export const handler = async (
 
       const parsedResults = pdfDataParser.parse(rawData, bankAccountId);
 
-      pdfDataParser.validateResults(parsedResults, handleReject);
+      const valid = pdfDataParser.validateResults(parsedResults);
+
+      if (!valid) {
+        handleReject();
+        resolve(files);
+        return;
+      }
 
       res.status(200).json({
         data: parsedResults,
