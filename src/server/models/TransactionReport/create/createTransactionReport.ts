@@ -1,42 +1,49 @@
 import { AppModelResponse } from "@types-folder/index";
 import { debugDev } from "src/utils/dev";
 import { TransactionReport, transactionReportSchema } from "../schema";
-import { Transaction } from "../../Transaction/schema";
-import { makeTransactionReportFields } from "../utils/makeTransactionReportFields";
-
 import { firebaseCreate } from "@server/firebase/firebaseCreate";
 import { FirebaseCollection } from "@server/firebase";
+import { makeTransactionReportSlugId } from "../utils/makeTransactionReportSlugId";
 
 interface ICreateTransactionReport {
-  transaction: Transaction;
-  type: TransactionReport["type"];
+  transactionReport: TransactionReport;
 }
 
 export const createTransactionReport = async ({
-  transaction,
-  type,
+  transactionReport,
 }: ICreateTransactionReport): Promise<AppModelResponse<TransactionReport>> => {
   const funcName = "createTransactionReport";
 
   try {
-    const newTransactionReport = makeTransactionReportFields(transaction, type);
+    const id = makeTransactionReportSlugId({
+      backAccountId: transactionReport.bankAccountId,
+      date: transactionReport.date.toDate(),
+      type: transactionReport.type,
+    });
 
-    transactionReportSchema.parse(newTransactionReport);
+    const data: TransactionReport = {
+      ...transactionReport,
+      id,
+    };
+
+    transactionReportSchema.parse(data);
 
     const result = await firebaseCreate<TransactionReport>({
       collection: FirebaseCollection.transactionReports,
-      data: newTransactionReport,
+      data: data,
     });
     return {
       done: !!result,
       data: result || null,
-      error: result ? null : {
-        message: debugDev({
-          name: funcName,
-          type: 'error',
-          value: 'Error'
-        })
-      }
+      error: result
+        ? null
+        : {
+            message: debugDev({
+              name: funcName,
+              type: "error",
+              value: "Error",
+            }),
+          },
     };
   } catch (error) {
     const errorMessage = debugDev({

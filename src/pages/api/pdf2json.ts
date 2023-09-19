@@ -58,7 +58,7 @@ export const handler = async (
       const rawData = await pdfReader.read({ files: files });
 
       const parsedResults = pdfDataParser.parse(rawData, bankAccountId);
-
+      
       const valid = pdfDataParser.validateResults(parsedResults);
 
       if (!valid) {

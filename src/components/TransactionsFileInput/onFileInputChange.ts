@@ -1,5 +1,6 @@
 import { createManyTransactions } from "@models/Transaction/create/createManyTransactions";
 import { CreateTransaction } from "@models/Transaction/schema";
+import { createTransactionsFromPDFResult } from "@server/utils/createTransactionsFromPDFResult";
 import { ChangeEvent, RefObject } from "react";
 import { PDF2JSONResponse } from "src/pages/api/pdf2json";
 import { uploadFilesToStorage } from "./uploadFilesToStorage";
@@ -66,25 +67,12 @@ export const onFileInputChange = async ({
   fileInputRef.current!.value = "";
 
   if (readResult.data) {
-    const transactionsToCreate: CreateTransaction[] = [];
-
-    readResult.data.forEach((pdfResult, index) => {
-      const relativeFile = uploadedFiles[index];
-      // GET RELATIVE FILE TO EACH TRANSACTION
-      pdfResult.transactions.forEach((transaction) => {
-        transactionsToCreate.push({
-          ...transaction,
-          file: relativeFile,
-        });
-      });
-    });
-
-    const createResult = createManyTransactions({
+    const result = await createTransactionsFromPDFResult({
       bankAccountId,
-      transactions: transactionsToCreate,
+      pdfReadResult: readResult.data,
+      uploadedFiles,
     });
-
-    return createResult;
+    return result;
   } else {
     return {
       error: { message: "Error reading files" },

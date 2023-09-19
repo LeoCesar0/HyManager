@@ -1,8 +1,6 @@
 import { TransactionReport } from "src/server/models/TransactionReport/schema";
 import { ApexOptions } from "apexcharts";
-import {
-  PRIMARY_COLORS,
-} from "src/static/appConfig";
+import { PRIMARY_COLORS } from "src/static/appConfig";
 
 import {
   formatAnyDate,
@@ -14,29 +12,29 @@ import { APEX_DEFAULT_OPTIONS, APEX_LOCALES } from "src/static/apexConfig";
 export interface IFilterDate {
   label: string;
   value: number;
-  type: 'days' | 'months'
+  type: "days" | "months";
 }
 
 export const dateOptions: IFilterDate[] = [
   {
     label: "Last 7 days",
     value: 7,
-    type: 'days'
+    type: "days",
   },
   {
     label: "Last month",
     value: 1,
-    type: 'months'
+    type: "months",
   },
   {
     label: "Last 3 months",
     value: 3,
-    type: 'months'
+    type: "months",
   },
   {
     label: "Last 12 months",
     value: 12,
-    type: 'months'
+    type: "months",
   },
 ];
 
@@ -52,14 +50,14 @@ export const makeBalanceChartData = ({
   const { dates, balances } = transactionReports.reduce(
     (acc, entry) => {
       const date = timestampToDate(entry.date).getTime();
-      const currentBalance = entry.accountBalance
+      const periodFinalBalance = entry.finalBalance;
 
       if (acc.dates.length === 0) console.log("---- START -----");
       // console.log("Date -->", timestampToDate(entry.date).toLocaleDateString());
-      // console.log("currentBalance -->", currentBalance);
+      // console.log("periodFinalBalance -->", periodFinalBalance);
       // console.log("entry -->", entry);
 
-      acc.balances = [...acc.balances, currentBalance];
+      acc.balances = [...acc.balances, periodFinalBalance];
       acc.dates = [...acc.dates, date];
 
       return acc;
@@ -79,7 +77,6 @@ export const makeBalanceChartData = ({
       data: balances,
     },
   ];
-
 
   const options_: ApexOptions = {
     ...APEX_DEFAULT_OPTIONS,

@@ -2,7 +2,7 @@ import { AppModelResponse } from "@types-folder/index";
 import currency from "currency.js";
 import { debugDev } from "src/utils/dev";
 import { Transaction } from "../../Transaction/schema";
-import { createTransactionReport } from "../create/createTransactionReport";
+import { createTransactionReportByTransaction } from "../create/createTransactionReportByTransaction";
 import { listTransactionReportByTransaction } from "../read/listTransactionReportByTransaction";
 import { TransactionReport } from "../schema";
 import { updateTransactionReport } from "../update/updateTransactionReport";
@@ -46,7 +46,7 @@ export const makeTransactionReport = async ({
       };
     } else {
       /* -------------------------- CREATE IF NOT EXISTS -------------------------- */
-      const createResults = await createTransactionReport({
+      const createResults = await createTransactionReportByTransaction({
         transaction: transaction,
         type: type,
       });

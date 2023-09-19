@@ -9,25 +9,22 @@ interface ICalculateAccountBalance {
 const calculateAccountBalance = ({
   existingReports,
   newReportsMap,
-}: ICalculateAccountBalance) => {
+}: ICalculateAccountBalance): TransactionReport[] => {
   const allReports: TransactionReport[] = Array.from(newReportsMap.values());
-  let result: TransactionReport[] = [];
+  let calculatedReports: TransactionReport[] = [];
 
   for (const existingReport of existingReports) {
-    const id = existingReport.id;
-    if (!newReportsMap.has(id)) {
+    if (!newReportsMap.has(existingReport.id)) {
       allReports.push(existingReport);
     }
   }
 
-  console.log('allReports -->', allReports)
+  console.log("allReports -->", allReports);
 
   const types: TransactionReport["type"][] = ["month", "day"];
 
   for (const type of types) {
     let filteredByType = allReports.filter((item) => item.type === type);
-
-    console.log('filteredByType 1 -->', filteredByType)
 
     // SORT
     filteredByType.sort((a, b) => {
@@ -35,25 +32,28 @@ const calculateAccountBalance = ({
     });
 
     // SUM ACCOUNT BALANCE
-    let accountBalance = currency(0);
+    let initialBalance = currency(filteredByType[0].initialBalance);
+    let finalBalance = currency(0);
 
     filteredByType = filteredByType.reduce((acc, entry) => {
-      accountBalance = accountBalance.add(entry.amount);
+      finalBalance = initialBalance.add(entry.amount);
 
       acc.push({
         ...entry,
-        accountBalance: accountBalance.value,
+        initialBalance: initialBalance.value,
+        finalBalance: finalBalance.value,
       });
+
+      // Next entry
+      initialBalance = currency(finalBalance.value);
 
       return acc;
     }, [] as typeof filteredByType);
 
-    console.log('filteredByType 2 -->', filteredByType)
-
-    result = result.concat(filteredByType);
+    calculatedReports = calculatedReports.concat(filteredByType);
   }
 
-  return result;
+  return calculatedReports;
 };
 
 export default calculateAccountBalance;
