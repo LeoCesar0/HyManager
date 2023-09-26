@@ -1,7 +1,8 @@
 const Home = () => {
   return (
     <>
-      <div className="container max-w-7xl">
+      <div className="container">
+        <h1>HOME PAGE</h1>
       </div>
     </>
   );

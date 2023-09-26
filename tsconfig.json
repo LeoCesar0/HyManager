@@ -21,6 +21,7 @@
       }
     ],
     "paths": {
+      "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@containers/*": ["src/containers/*"],
       "@types-folder": ["src/types"],

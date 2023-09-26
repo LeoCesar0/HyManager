@@ -1,5 +1,5 @@
 import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "tailwind.config.cjs";
+import tailwindConfig from "tailwind.config.js";
 
 import { APP_PAGES } from "./appPages";
 

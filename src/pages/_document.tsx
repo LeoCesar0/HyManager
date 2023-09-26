@@ -7,7 +7,7 @@ export default function Document({ locale }: DocumentContext) {
   if (typeof lang !== "string") lang = "en";
 
   return (
-    <Html lang={lang}>
+    <Html lang={lang} className="dark" >
       <Head>
         {/* <script
           async

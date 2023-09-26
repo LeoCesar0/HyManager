@@ -1,46 +1,95 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* 
+:root {
+  --color-primary: #6c9bcf;
+  --color-danger: #ff0060;
+  --color-success: hsl(169, 70%, 36%);
+  --color-warning: #f7d060;
+  --color-white: #fff;
+  --color-info-dark: #7d8da1;
+  --color-dark: #363949;
+  --color-light: rgba(132, 139, 200, 0.18);
+  --color-dark-variant: hsl(212, 12%, 46%);
+  --color-background: #f6f6f9;
 
+  --card-border-radius: 2rem;
+  --border-radius-1: 0.4rem;
+  --border-radius-2: 1.2rem;
+
+  --card-padding: 1.8rem;
+  --padding-1: 1.2rem;
+
+  --box-shadow: 0 2rem 3rem var(--color-light);
+}
+
+.dark-mode-variables {
+  --color-background: hsl(220, 11%, 11%);
+  --color-white: hsl(202, 11%, 14%);
+  --color-dark: hsl(233, 80%, 96%);
+  --color-dark-variant: #a3bdcc;
+  --color-light: rgba(0, 0, 0, 0.4);
+  --box-shadow: 0 2rem 3rem var(--color-light);
+} */
 
 @layer base {
-	:root {
-		--color-primary: theme('colors.teal.600');
-		--color-primary-dark: theme('colors.teal.900');
-		--color-on-primary: theme('colors.zinc.100');
-		--color-primary-hover: theme('colors.teal.500');
-		--color-primary-selected: theme('colors.teal.700');
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 346.8 77.2% 49.8%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 346.8 77.2% 49.8%;
+    --radius: 0.5rem;
 
-		--color-secondary: theme('colors.pink.600');
-		--color-secondary-dark: theme('colors.pink.900');
-		--color-on-secondary: theme('colors.zinc.100');
-		--color-secondary-hover: theme('colors.pink.500');
-		--color-secondary-selected: theme('colors.pink.700');
+    /* ---------------------------------- OTHER --------------------------------- */
+    --credit: theme(colors.blue.600);
+    --debit: theme(colors.red.600);
+  }
 
-		--color-background: theme('colors.neutral.700');
-		--color-on-background: theme('colors.neutral.300');
-
-		--color-surface: theme('colors.stone.100');
-		--color-on-surface: theme('colors.slate.700');
-		/* --color-surface: theme('colors.stone.600');
-		--color-on-surface: theme('colors.zinc.400'); */
-
-		--color-accent: theme('colors.teal.100');
-		--color-on-accent: theme('colors.stone.800');
-
-		--color-border: theme('colors.neutral.300');
-
-		--color-hint: theme('colors.red.400');
-		--color-error: theme('colors.red.500');
-		
-		--color-disabled: theme('colors.zinc.700/0.70');
-		--color-disabled-border: theme('colors.zinc.600');
-		--color-disabled-text: theme('colors.zinc.600');
-	}
+  .dark {
+    --background: 220 11% 11%;
+    --foreground: 233 80% 96%;
+    /* --card: 24 9.8% 10%; */
+    --card: 202 11% 14%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 346.8 77.2% 49.8%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 346.8 77.2% 49.8%;
+  }
 }
 
-@layer components{
-
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
-
-/* ... */

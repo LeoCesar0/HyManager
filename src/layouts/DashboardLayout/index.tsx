@@ -1,18 +1,17 @@
+import Header from "./Header";
 import { ReactNode } from "react";
-import Header from "../../layouts/DefaultLayout/Header";
 
-interface SiteLayoutProps {
+interface DashboardLayoutProps {
   children: ReactNode;
 }
 
-const SiteLayout: React.FC<SiteLayoutProps> = ({ children }) => {
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <div className="relative flex flex-col min-h-[100vh]" id="app">
       <Header />
       <div className="flex-1">{children}</div>
-      {/* {footer && <Footer />} */}
     </div>
   );
 };
 
-export default SiteLayout;
+export default DashboardLayout;

@@ -4,16 +4,15 @@ import { GlobalContextProvider } from "../contexts/GlobalContext";
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
 import { APP_CONFIG } from "../static/appConfig";
-import SiteLayout from "../containers/SiteLayout";
-import "../styles/tailwind.css";
 import "../styles/global.scss";
-import "../styles/tailwindComponents.css";
+import "../styles/tailwind.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import { GlobalAuthProvider } from "../contexts/GlobalAuth";
 import { ToastContainer } from "react-toastify";
 import { GlobalModalProvider } from "../contexts/GlobalModal";
 import { GlobalCacheProvider } from "@contexts/GlobalCache";
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 // const trackingId = process.env.GA_TRACKING_ID;
 
@@ -26,7 +25,7 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const LayoutDefault = function getLayout(page: ReactElement) {
-  return <SiteLayout>{page}</SiteLayout>;
+  return <DefaultLayout>{page}</DefaultLayout>;
 };
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {

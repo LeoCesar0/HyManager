@@ -3,10 +3,10 @@ import Link from "next/link";
 import { APP_PAGES } from "src/static/appPages";
 import { useGlobalAuth } from "../../../contexts/GlobalAuth";
 import { cx } from "../../../utils/misc";
-// import Button from "../../../components/Button";
 import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import AppLogo from "@/components/AppLogo";
+import { HiUser } from "react-icons/hi";
 
 const Header = () => {
   const {
@@ -20,14 +20,12 @@ const Header = () => {
   const pathname = router.pathname;
 
   return (
-    <header className="container px-4">
-      <div className="border-b flex items-center gap-2 py-2  ">
+    <header className="">
+      <div className="container mx-auto flex gap-2 py-2 px-4">
         <div>
           <AppLogo />
         </div>
-        <div className="flex-1 flex items-center px-4">
-          {currentUser && <p>Hello {currentUser.name}!</p>}
-        </div>
+        <div className="flex-1 flex items-center px-4"></div>
         <nav className="flex gap-4 items-center justify-between px-4">
           {APP_PAGES.map((item) => {
             let isSelected = pathname.includes(item.link);
@@ -36,9 +34,9 @@ const Header = () => {
               <Link key={item.label} href={item.link}>
                 <span
                   className={cx([
-                    "transition-colors text-muted-foreground",
-                    ["text-primary-foreground border-b shadow-md", isSelected],
-                    "hover:text-primary",
+                    "transition-colors",
+                    ["text-primary", isSelected],
+                    "hover:text-primary-hover",
                   ])}
                 >
                   {item.label}
@@ -47,18 +45,10 @@ const Header = () => {
             );
           })}
         </nav>
-        <div className="flex-center">
-          <Button
-            onClick={() => {
-              if (currentUser) {
-                handleSignOut();
-              } else {
-                handleSignIn();
-              }
-            }}
-            disabled={loadingUser}
-          >
-            {currentUser ? "Sign Out" : "Sign In"}
+        <div className="flex-center gap-4">
+          <span>Hey {currentUser?.name}</span>
+          <Button variant="outline" size="icon" className="rounded-full" >
+            <HiUser className="w-4 h-4" />
           </Button>
         </div>
       </div>

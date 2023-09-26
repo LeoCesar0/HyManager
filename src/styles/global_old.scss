@@ -3,11 +3,26 @@
 *,
 *::after,
 *::before {
+  margin: 0;
+  padding: 0;
+  border: 0;
   box-sizing: border-box;
+  @apply outline-1 outline-primary outline-offset-2
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 html {
   font-size: 16px;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
 }
 
 /* ---------------------------------- RESET --------------------------------- */
@@ -18,16 +33,4 @@ input::-webkit-inner-spin-button {
 }
 input[type="number"] {
   -moz-appearance: textfield !important;
-}
-
-/* ---------------------------------- UTILS --------------------------------- */
-
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.box-shadow{
-  box-shadow: 0 2rem 3rem rgba(0, 0, 0, 0.4);
 }
