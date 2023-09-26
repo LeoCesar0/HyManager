@@ -6,6 +6,7 @@ import { NextPage } from "next";
 import { APP_CONFIG } from "../static/appConfig";
 import "../styles/global.scss";
 import "../styles/tailwind.css";
+import "../styles/components.scss";
 import "react-toastify/dist/ReactToastify.css";
 
 import { GlobalAuthProvider } from "../contexts/GlobalAuth";

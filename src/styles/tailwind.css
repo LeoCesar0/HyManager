@@ -81,7 +81,7 @@
     --accent-foreground: hsl(0 0% 98%);
     --destructive: hsl(0 62.8% 30.6%);
     --destructive-foreground: hsl(0 85.7% 97.3%);
-    --border: hsl(240 0% 5%);
+    --border: theme(colors.zinc.600/0.5);
     --input: var(--border);
     --ring: hsl(346.8 75% 48%);
   }
@@ -95,3 +95,4 @@
     @apply bg-background text-foreground;
   }
 }
+

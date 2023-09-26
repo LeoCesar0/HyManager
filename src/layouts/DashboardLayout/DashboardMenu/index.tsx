@@ -13,6 +13,9 @@ import { cn } from "@/lib/utils";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { DASHBOARD_CONFIG } from "../../../static/dashboardConfig";
 import useT from "../../../hooks/useT";
+import Link from "next/link";
+import { cx } from "@/utils/misc";
+import {MdBusiness} from 'react-icons/md'
 
 const { menuItems } = DASHBOARD_CONFIG;
 
@@ -23,7 +26,7 @@ export const DashboardMenu = () => {
     <>
       <aside
         className={cn(
-          "max-w-[300px] w-full min-h-screen bg-surface text-surface-foreground space-y-4 p-4"
+          "max-w-[300px] w-full min-h-screen border-r shadow-2xl border-border/25 bg-surface text-surface-foreground space-y-4 p-4"
         )}
       >
         <div className="flex justify-between items-center">
@@ -32,7 +35,7 @@ export const DashboardMenu = () => {
             <HamburgerMenuIcon />
           </Button>
         </div>
-        <div className="mb-6">
+        <div className="!mb-8">
           <Label>Bank Account</Label>
           <Select>
             <SelectTrigger>
@@ -48,14 +51,21 @@ export const DashboardMenu = () => {
             </SelectContent>
           </Select>
         </div>
-        <ul>
-          {menuItems.map((item) => {
+        <ul className="rounded-md overflow-hidden" >
+          {menuItems.map((item, index) => {
             return (
-              <>
-                <a>
-                  <li>{item.label[currentLanguage]}</li>
-                </a>
-              </>
+              <Link key={item.link} href={item.link}>
+                <li
+                  className={cx([
+                    "py-4 px-4 shadow-inner bg-surface/25 hover:bg-accent transition-colors",
+                    "flex items-center gap-2",
+                    ["border-t", index !== 0],
+                  ])}
+                >
+                  <item.icon className="w-4 h-4 " />
+                  {item.label[currentLanguage]}
+                </li>
+              </Link>
             );
           })}
         </ul>
