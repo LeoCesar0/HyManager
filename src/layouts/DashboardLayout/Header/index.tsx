@@ -21,30 +21,12 @@ const Header = () => {
 
   return (
     <header className="">
-      <div className="container mx-auto flex gap-2 py-2 px-4">
-        <div>
+      <div className="flex gap-2 py-2 px-4">
+        {/* <div>
           <AppLogo />
-        </div>
+        </div> */}
         <div className="flex-1 flex items-center px-4"></div>
-        <nav className="flex gap-4 items-center justify-between px-4">
-          {APP_PAGES.map((item) => {
-            let isSelected = pathname.includes(item.link);
-            if (item.link === "/") isSelected = pathname === "/";
-            return (
-              <Link key={item.label} href={item.link}>
-                <span
-                  className={cx([
-                    "transition-colors",
-                    ["text-primary", isSelected],
-                    "hover:text-primary-hover",
-                  ])}
-                >
-                  {item.label}
-                </span>
-              </Link>
-            );
-          })}
-        </nav>
+        
         <div className="flex-center gap-4">
           <span>Hey {currentUser?.name}</span>
           <Button variant="outline" size="icon" className="rounded-full" >
