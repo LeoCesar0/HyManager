@@ -2,7 +2,7 @@ import { createManyTransactions } from "@models/Transaction/create/createManyTra
 import { CreateTransaction } from "@models/Transaction/schema";
 import { FirebaseCollection } from "@server/firebase";
 import { extractTransactionsFromCSVData } from "@server/utils/extractTransactionsFromCSVData";
-import { AppModelResponse, CSVData, RefetchCollection } from "@types-folder";
+import { AppModelResponse, CSVData, RefetchCollection } from "@/@types";
 import { handleToastPromise, showErrorToast } from "@utils/app";
 
 export const onFilesCSVDataReady = async (

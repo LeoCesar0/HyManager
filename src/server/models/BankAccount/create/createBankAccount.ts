@@ -1,4 +1,4 @@
-import { AppModelResponse } from "@types-folder/index";
+import { AppModelResponse } from "@/@types/index";
 import { debugDev } from "src/utils/dev";
 import { v4 as uuid } from "uuid";
 import { Timestamp } from "firebase/firestore";

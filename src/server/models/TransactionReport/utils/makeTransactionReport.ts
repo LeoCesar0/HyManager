@@ -1,4 +1,4 @@
-import { AppModelResponse } from "@types-folder/index";
+import { AppModelResponse } from "@/@types/index";
 import currency from "currency.js";
 import { debugDev } from "src/utils/dev";
 import { Transaction } from "../../Transaction/schema";

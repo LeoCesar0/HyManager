@@ -1,6 +1,6 @@
 import { FirebaseCollection } from "@server/firebase";
 import { firebaseUpdate } from "@server/firebase/firebaseUpdate";
-import { AppModelResponse } from "@types-folder/index";
+import { AppModelResponse } from "@/@types/index";
 import { debugDev } from "src/utils/dev";
 import { Transaction } from "../schema";
 

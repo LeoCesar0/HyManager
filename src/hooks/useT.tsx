@@ -1,4 +1,4 @@
-import { Locale } from "@types-folder/index";
+import { Locale } from "@/@types/index";
 import { useRouter } from "next/router";
 
 type IUseT = {

@@ -21,7 +21,7 @@ const Header = () => {
 
   return (
     <header className="">
-      <div className="flex gap-2 py-2 px-4">
+      <div className="flex gap-2 py-4">
         {/* <div>
           <AppLogo />
         </div> */}

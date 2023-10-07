@@ -1,5 +1,5 @@
 import currency from "currency.js";
-import { CSVData } from "@types-folder/index";
+import { CSVData } from "@/@types/index";
 import { parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CreateTransaction, createTransactionSchema, TransactionType } from "@models/Transaction/schema";

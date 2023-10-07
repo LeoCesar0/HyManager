@@ -1,4 +1,4 @@
-import { AppModelResponse } from "@types-folder";
+import { AppModelResponse } from "@/@types";
 import { FileInfo } from "@types-folder/file";
 import formidable from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";

@@ -3,7 +3,7 @@ import useFetcher from "@hooks/useFetcher";
 import { listTransactionReportsBy } from "@models/TransactionReport/read/listTransactionReportBy";
 import { TransactionReport } from "@models/TransactionReport/schema";
 import { FirebaseCollection } from "@server/firebase";
-import { FirebaseFilterFor } from "@types-folder/index";
+import { FirebaseFilterFor } from "@/@types/index";
 import { sub } from "date-fns";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";

@@ -1,7 +1,7 @@
 "use client";
 
 import { FirebaseCollection } from "@server/firebase";
-import { RefetchCollection } from "@types-folder";
+import { RefetchCollection } from "@/@types";
 import React, {
   createContext,
   Dispatch,

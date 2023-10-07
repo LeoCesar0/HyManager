@@ -1,4 +1,4 @@
-import { CSVData } from "@types-folder";
+import { CSVData } from "@/@types";
 import { openDataAsText } from "@utils/openDataAsText";
 import { ChangeEvent, RefObject } from "react";
 import { PDF2JSONResponse } from "src/pages/api/pdf2json";

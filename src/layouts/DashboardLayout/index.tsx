@@ -11,10 +11,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     <div className="relative flex flex-col min-h-[100vh]">
       <div className="flex-1 flex">
         <DashboardMenu />
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1 px-8">
           <Header />
           <div className="flex-1">
-            <main className="p-4" >{children}</main>
+            <main className="">{children}</main>
           </div>
         </div>
       </div>

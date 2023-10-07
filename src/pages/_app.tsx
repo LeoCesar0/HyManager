@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import { GlobalModalProvider } from "../contexts/GlobalModal";
 import { GlobalCacheProvider } from "@contexts/GlobalCache";
 import DefaultLayout from "@/layouts/DefaultLayout";
+import ContextProviders from "@/contexts/ContextProviders";
 
 // const trackingId = process.env.GA_TRACKING_ID;
 
@@ -51,15 +52,19 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         pauseOnHover
         theme="dark"
       />
-      <GlobalCacheProvider>
+      <ContextProviders>
+        {getLayout(<Component {...pageProps} />)}
+      </ContextProviders>
+
+      {/* <GlobalCacheProvider>
         <GlobalAuthProvider>
           <GlobalContextProvider>
             <GlobalModalProvider>
-              {getLayout(<Component {...pageProps} />)}
+                {getLayout(<Component {...pageProps} />)}
             </GlobalModalProvider>
           </GlobalContextProvider>
         </GlobalAuthProvider>
-      </GlobalCacheProvider>
+      </GlobalCacheProvider> */}
     </>
   );
 }

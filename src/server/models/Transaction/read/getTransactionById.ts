@@ -1,4 +1,4 @@
-import { AppModelResponse } from "@types-folder/index";
+import { AppModelResponse } from "@/@types/index";
 import { FirebaseCollection } from "@server/firebase";
 import { firebaseGet } from "@server/firebase/firebaseGet";
 import { debugDev } from "@utils/dev";

@@ -18,6 +18,8 @@ export type AppBaseDocFields<T> = T & {
   createdAtWeek: string;
 };
 
+export type ReactNode<T = {}> = React.FC<{children:React.ReactNode} & T>
+
 export type CSVData = string[][];
 
 export enum Locale {

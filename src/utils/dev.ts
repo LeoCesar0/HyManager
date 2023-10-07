@@ -1,4 +1,4 @@
-import { AppModelResponse } from "@types-folder/index";
+import { AppModelResponse } from "@/@types/index";
 
 interface IDebugDev {
   type: "error" | "success" | "call";

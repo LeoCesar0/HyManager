@@ -1,4 +1,4 @@
-import { AppModelResponse } from "@types-folder";
+import { AppModelResponse } from "@/@types";
 import { Timestamp } from "firebase/firestore";
 import { debugDev } from "src/utils/dev";
 import { FirebaseCollection } from ".";

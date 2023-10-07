@@ -1,7 +1,7 @@
 import { useGlobalAuth } from "@contexts/GlobalAuth";
 import { useGlobalCache } from "@contexts/GlobalCache";
 import { FirebaseCollection } from "@server/firebase";
-import { CSVData } from "@types-folder/index";
+import { CSVData } from "@/@types/index";
 import { handleToastPromise } from "@utils/app";
 import { InputHTMLAttributes, useRef } from "react";
 

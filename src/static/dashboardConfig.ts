@@ -1,4 +1,4 @@
-import { Locale } from "@/types";
+import { Locale } from "@/@types";
 import { HomeIcon } from "@radix-ui/react-icons";
 import {
   MdStackedBarChart,
