@@ -14,7 +14,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         <div className="flex flex-col flex-1 px-8">
           <Header />
           <div className="flex-1">
-            <main className="">{children}</main>
+            <main className="py-4">{children}</main>
           </div>
         </div>
       </div>

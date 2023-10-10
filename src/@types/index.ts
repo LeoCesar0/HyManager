@@ -1,5 +1,7 @@
+import { IconProps } from "@radix-ui/react-icons/dist/types";
 import { FirebaseCollection } from "@server/firebase";
 import { WhereFilterOp } from "firebase/firestore";
+import { IconType } from "react-icons/lib";
 
 export type AppError = {
   message: string;
@@ -27,6 +29,10 @@ export enum Locale {
   pt = "pt",
 }
 
+export type LocalizedText = {
+  [key in Locale]: string;
+};
+
 export type AnyObject = {
   [key: string | number | symbol]: any;
 };
@@ -38,3 +44,5 @@ export type FirebaseFilterFor<T> = {
 };
 
 export type RefetchCollection = (collection: FirebaseCollection[]) => void;
+
+export type AppIcon = React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>> | IconType

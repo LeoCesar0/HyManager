@@ -1,5 +1,6 @@
 import { Html, Head, Main, NextScript, DocumentContext } from "next/document";
 
+
 // const trackingId = process.env.GA_TRACKING_ID;
 
 export default function Document({ locale }: DocumentContext) {

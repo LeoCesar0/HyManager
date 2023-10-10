@@ -1,18 +1,16 @@
-import { Locale } from "@/@types";
-import { HomeIcon } from "@radix-ui/react-icons";
+import { AppIcon, Locale } from "@/@types";
 import {
   MdStackedBarChart,
   MdDashboard,
   MdSettings,
   MdPieChart,
 } from "react-icons/md";
-import { IconType } from "react-icons/lib";
 
 interface MenuItem {
   label: {
     [key in Locale]: string;
   };
-  icon: typeof HomeIcon | IconType;
+  icon: AppIcon;
   link: string;
 }
 

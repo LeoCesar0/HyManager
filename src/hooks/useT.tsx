@@ -1,11 +1,8 @@
 import { Locale } from "@/@types/index";
 import { useRouter } from "next/router";
+import { LocalizedText } from "../@types/index";
 
-type IUseT = {
-  [key in Locale]: string;
-};
-
-const useT = (langObject: IUseT) => {
+const useT = (langObject: LocalizedText) => {
   const router = useRouter();
   if (!langObject) return "";
 

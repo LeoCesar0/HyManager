@@ -16,6 +16,15 @@ import { GlobalCacheProvider } from "@contexts/GlobalCache";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import ContextProviders from "@/contexts/ContextProviders";
 
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
 // const trackingId = process.env.GA_TRACKING_ID;
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -53,7 +62,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         theme="dark"
       />
       <ContextProviders>
-        {getLayout(<Component {...pageProps} />)}
+        {getLayout(
+          <div className={inter.className}>
+            <Component {...pageProps} />
+          </div>
+        )}
       </ContextProviders>
 
       {/* <GlobalCacheProvider>

@@ -20,7 +20,7 @@ const Header = () => {
   const pathname = router.pathname;
 
   return (
-    <header className="">
+    <header className="border-b">
       <div className="flex gap-2 py-4">
         {/* <div>
           <AppLogo />
