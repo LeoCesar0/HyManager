@@ -43,7 +43,7 @@ export const OverviewCard = (card: IOverviewCard) => {
       >
         <CardHeader className="flex flex-row justify-between items-center pb-2">
           <CardTitle className="text-sm font-medium tracking-tight">
-            {card.title[currentLanguage]} {card.strong && <strong className="font-bold text-xs text-muted-foreground" >{card.strong[currentLanguage]}</strong>}
+            {card.title[currentLanguage]} {card.strong && <strong className="font-bold text-xs text-muted-foreground tracking-tighter" >{card.strong[currentLanguage]}</strong>}
           </CardTitle>
           <card.Icon className="w-6 h-6" />
         </CardHeader>
