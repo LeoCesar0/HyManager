@@ -1,4 +1,4 @@
-import { fileInfoSchema } from "@types-folder/file";
+import { fileInfoSchema } from "@/@types/File";
 import { timestampSchema } from "src/server/firebase";
 import { z } from "zod";
 

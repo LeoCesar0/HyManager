@@ -1,4 +1,4 @@
-import { FileInfo, FileInfoWithFile } from "@types-folder/file";
+import { FileInfo } from "@/@types/File";
 import { getFilePath } from "@utils/getFilePath";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { firebaseStorage } from "src/services/firebase";

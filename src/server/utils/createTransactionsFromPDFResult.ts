@@ -1,8 +1,8 @@
+import { FileInfo } from "@/@types/File";
 import { createManyTransactions } from "@models/Transaction/create/createManyTransactions";
 import { CreateTransaction, TransactionType } from "@models/Transaction/schema";
 import { createTransactionReport } from "@models/TransactionReport/create/createTransactionReport";
 import { TransactionReport } from "@models/TransactionReport/schema";
-import { FileInfo } from "@types-folder/file";
 import { makeDateFields } from "@utils/app";
 import { Timestamp } from "firebase/firestore";
 import { IPDFData } from "src/lib/PDFReader/interfaces";

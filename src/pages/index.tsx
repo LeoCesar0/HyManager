@@ -1,5 +1,5 @@
 import type { NextPage } from "next"
-import Home from "../containers/Home"
+import Home from "../pageComponents/Home"
 
 const HomePage: NextPage = () => {
   return <Home />

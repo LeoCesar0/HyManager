@@ -55,6 +55,7 @@ specifiers:
   react-toastify: ^9.1.1
   sass: ^1.51.0
   scss: ^0.2.4
+  swr: ^2.2.4
   tailwind-merge: ^1.14.0
   tailwindcss: ^3.2.6
   tailwindcss-animate: ^1.0.7
@@ -109,6 +110,7 @@ dependencies:
   react-toastify: 9.1.3_biqbaboplfbrettd7655fr4n2y
   sass: 1.69.1
   scss: 0.2.4
+  swr: 2.2.4_react@18.2.0
   tailwind-merge: 1.14.0
   tailwindcss-animate: 1.0.7_tailwindcss@3.3.3
   uuid: 9.0.1
@@ -1887,6 +1889,11 @@ packages:
       '@typescript-eslint/types': 5.62.0
       eslint-visitor-keys: 3.4.3
     dev: true
+
+  /@xmldom/xmldom/0.8.10:
+    resolution: {integrity: sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==}
+    engines: {node: '>=10.0.0'}
+    dev: false
 
   /@yr/monotone-cubic-spline/1.0.3:
     resolution: {integrity: sha512-FQXkOta0XBSUPHndIKON2Y9JeQz5ZeMqLYZVVK93FliNBFm7LNMIZmY6FrMEB9XPcDbE2bekMbZD6kzDkxwYjA==}
@@ -4131,6 +4138,8 @@ packages:
     resolution: {integrity: sha512-BFt5zy5VeAc6sOAUy+TWT6cM+eFFrFoSzcqFUYjKK82lukq5/1SwCD9QdC4ostj0/u3NEr6cqDsqVL/971U28Q==}
     engines: {node: '>=14.18.0', npm: '>=6.14.15'}
     hasBin: true
+    dependencies:
+      '@xmldom/xmldom': 0.8.10
     dev: false
     bundledDependencies:
       - '@xmldom/xmldom'
@@ -4139,6 +4148,8 @@ packages:
     resolution: {integrity: sha512-1pNsakC8F+OuFS72U+ZI0u8J/voPYYDYHj/0B/7ywYUm3w0QurkDBy3pH35kzygjgmJJVHk2a9I6gBswFF8hQQ==}
     engines: {node: '>=14.18.0', npm: '>=8.12.1'}
     hasBin: true
+    dependencies:
+      '@xmldom/xmldom': 0.8.10
     dev: false
     bundledDependencies:
       - '@xmldom/xmldom'
@@ -4831,6 +4842,16 @@ packages:
     engines: {node: '>= 0.8.0'}
     dependencies:
       svg.js: 2.7.1
+    dev: false
+
+  /swr/2.2.4_react@18.2.0:
+    resolution: {integrity: sha512-njiZ/4RiIhoOlAaLYDqwz5qH/KZXVilRLvomrx83HjzCWTfa+InyfAjv05PSFxnmLzZkNO9ZfvgoqzAaEI4sGQ==}
+    peerDependencies:
+      react: ^16.11.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      client-only: 0.0.1
+      react: 18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
   /tailwind-merge/1.14.0:

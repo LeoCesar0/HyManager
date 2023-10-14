@@ -23,9 +23,9 @@
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
-      "@containers/*": ["src/containers/*"],
-      "@types-folder": ["src/@types"],
-      "@types-folder/*": ["src/@types/*"],
+      "@pageComponents/*": ["src/pageComponents/*"],
+      "@types": ["src/@types"],
+      "@types/*": ["src/@types/*"],
       "@hooks/*": ["src/hooks/*"],
       "@utils/*": ["src/utils/*"],
       "@styles/*": ["src/styles/*"],

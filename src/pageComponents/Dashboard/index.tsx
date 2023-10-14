@@ -2,6 +2,7 @@ import { Section } from "./components/Section";
 import { HiCurrencyDollar, HiTrendingDown } from "react-icons/hi";
 import { TargetIcon } from "@radix-ui/react-icons";
 import { IOverviewCard, OverviewCard } from "./components/OverviewCard";
+import useSWR from "swr";
 
 const Dashboard = () => {
   return (
@@ -66,10 +67,31 @@ const cards: IOverviewCard[] = [
       pt: "Meta de economia",
       en: "Saving goals",
     },
+    strong: {
+      pt: "esse anterior",
+      en: "this month",
+    },
     Icon: TargetIcon,
     slider: {
       from: 0,
       current: 1658,
+      to: 3500,
+    },
+  },
+  {
+    id: "saving-goals-last-month",
+    title: {
+      pt: "Meta de economia",
+      en: "Saving goals",
+    },
+    strong: {
+      pt: "mês anterior",
+      en: "last month",
+    },
+    Icon: TargetIcon,
+    slider: {
+      from: 0,
+      current: 3298,
       to: 3500,
     },
   },

@@ -12,7 +12,7 @@ export const listTransactionsByBankId = async ({
   id,
   filters = [],
 }: IListTransactionByBankId): Promise<AppModelResponse<Transaction[]>> => {
-  const funcName = "getTransactionById";
+  const funcName = "listTransactionsByBankId";
 
   try {
     const list = await firebaseList<Transaction>({

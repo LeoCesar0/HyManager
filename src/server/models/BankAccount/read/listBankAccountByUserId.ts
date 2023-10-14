@@ -3,12 +3,21 @@ import { firebaseList } from "@server/firebase/firebaseList";
 import { AppModelResponse } from "@/@types/index";
 import { debugDev } from "src/utils/dev";
 import { BankAccount } from "../schema";
+import { z } from "zod";
+
+export const listBankAccountByUserIdSchema = z.object({
+  id: z.string(),
+});
+
+export type IListBankAccountByUserId = z.infer<
+  typeof listBankAccountByUserIdSchema
+>;
+
+export type ListBankAccountByUserIdReturnType = AppModelResponse<BankAccount[]>;
 
 export const listBankAccountByUserId = async ({
   id,
-}: {
-  id: string;
-}): Promise<AppModelResponse<BankAccount[]>> => {
+}: IListBankAccountByUserId): Promise<ListBankAccountByUserIdReturnType> => {
   const funcName = "listBankAccountByUserId";
 
   try {

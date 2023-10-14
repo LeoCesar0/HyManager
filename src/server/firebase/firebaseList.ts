@@ -24,9 +24,10 @@ export const firebaseList = async <T>({
   let whereList = filters.map(({ field, operator = "==", value }) =>
     where(field as string, operator, value)
   );
-  const q = filters.length > 0 ? query(ref, ...whereList) : query(ref);
-  const snapShot = await getDocs(q);
+  const query_ = filters.length > 0 ? query(ref, ...whereList) : query(ref);
+  const snapShot = await getDocs(query_);
   const list: T[] = [];
+  
   snapShot.forEach((doc) => {
     list.push(doc.data() as T);
   });

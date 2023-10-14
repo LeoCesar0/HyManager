@@ -1,5 +1,5 @@
 import { AppModelResponse } from "@/@types";
-import { FileInfo } from "@types-folder/file";
+import { FileInfo } from "@/@types/File";
 import formidable from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";
 import { PDFReader } from "src/lib/PDFReader";
