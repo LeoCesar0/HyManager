@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import AppLogo from "@/components/AppLogo";
 import { HiUser } from "react-icons/hi";
+import { LanguageSwitch } from "@/components/LanguageSwitch";
 
 const Header = () => {
   const {
@@ -21,15 +22,17 @@ const Header = () => {
 
   return (
     <header className="border-b">
-      <div className="flex gap-2 py-4">
+      <div className="flex items-center gap-2 py-4">
         {/* <div>
           <AppLogo />
         </div> */}
         <div className="flex-1 flex items-center px-4"></div>
-        
-        <div className="flex-center gap-4">
-          <span>Hey {currentUser?.name}</span>
-          <Button variant="outline" size="icon" className="rounded-full" >
+        <div className="flex items-center justify-center gap-4 ">
+          <div className="block whitespace-nowrap flex-center">
+            {currentUser && `Hey ${currentUser.name}`}
+          </div>
+          <LanguageSwitch />
+          <Button variant="outline" size="icon" className="rounded-full ">
             <HiUser className="w-4 h-4" />
           </Button>
         </div>

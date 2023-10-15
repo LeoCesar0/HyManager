@@ -57,7 +57,7 @@ export const OverviewCard = (card: IOverviewCard) => {
                     <h4 className="text-sm font-medium text-card-foreground">
                       {value.value}
                     </h4>
-                    <p className="text-xs font-normal text-muted-foreground">
+                    <p className="text-xs font-normal text-accent-foreground">
                       {value.title[currentLanguage]}
                     </p>
                   </div>
