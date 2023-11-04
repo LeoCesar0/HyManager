@@ -16,12 +16,39 @@ import useT from "../../../hooks/useT";
 import Link from "next/link";
 import { cx } from "@/utils/misc";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
+import useSwr from "swr";
+import {
+  ListBankAccountByUserIdReturnType,
+  listBankAccountByUserId,
+} from "../../../server/models/BankAccount/read/listBankAccountByUserId";
+import { useGlobalAuth } from "../../../contexts/GlobalAuth";
+import { FirebaseCollection } from "../../../server/firebase/index";
 
 const { menuItems } = DASHBOARD_CONFIG;
 
 export const DashboardMenu = () => {
   const { currentLanguage } = useGlobalContext();
-  const { menuIsOpen, toggleMenu } = useGlobalDashboardStore();
+  const { currentUser } = useGlobalAuth();
+  const { menuIsOpen, toggleMenu, currentBankAccount, setCurrentBankAccount } =
+    useGlobalDashboardStore();
+
+  const bankAccountsFetch = useSwr<
+    ListBankAccountByUserIdReturnType,
+    any,
+    string[] | null
+  >(
+    currentUser?.id ? [FirebaseCollection.bankAccounts, currentUser.id] : null,
+    ([_, id]) => {
+      return listBankAccountByUserId({ id: id }).then((data) => {
+        if (data.data) {
+          setCurrentBankAccount(data.data[0]);
+        }
+        return data;
+      });
+    }
+  );
+
+  const bankAccounts = bankAccountsFetch.data?.data ?? [];
 
   return (
     <aside
@@ -52,7 +79,13 @@ export const DashboardMenu = () => {
       </div>
       <div className="!mb-8">
         <Label>Bank Account</Label>
-        <Select>
+        <Select
+          value={currentBankAccount?.id ?? ""}
+          onValueChange={(value) => {
+            const bankAccount = bankAccounts.find((item) => item.id === value);
+            setCurrentBankAccount(bankAccount ?? null);
+          }}
+        >
           <SelectTrigger
             className={cx(["transition-all", ["hidden", !menuIsOpen]])}
           >
@@ -64,7 +97,19 @@ export const DashboardMenu = () => {
             />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="nubank">Nubank</SelectItem>
+            {bankAccounts.map((item) => {
+              return (
+                <SelectItem
+                  key={item.id}
+                  value={item.id}
+                  onClick={() => {
+                    setCurrentBankAccount(item);
+                  }}
+                >
+                  {item.name}
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>

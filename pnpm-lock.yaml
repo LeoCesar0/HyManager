@@ -52,6 +52,7 @@ specifiers:
   react-dom: 18.2.0
   react-hook-form: ^7.46.1
   react-icons: ^4.3.1
+  react-if: ^4.1.5
   react-toastify: ^9.1.1
   sass: ^1.51.0
   scss: ^0.2.4
@@ -107,6 +108,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.47.0_react@18.2.0
   react-icons: 4.11.0_react@18.2.0
+  react-if: 4.1.5_react@18.2.0
   react-toastify: 9.1.3_biqbaboplfbrettd7655fr4n2y
   sass: 1.69.1
   scss: 0.2.4
@@ -4382,6 +4384,15 @@ packages:
     resolution: {integrity: sha512-V+4khzYcE5EBk/BvcuYRq6V/osf11ODUM2J8hg2FDSswRrGvqiYUYPRy4OdrWaQOBj4NcpJfmHZLNaD+VH0TyA==}
     peerDependencies:
       react: '*'
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /react-if/4.1.5_react@18.2.0:
+    resolution: {integrity: sha512-Uk+Ub2gC83PAakuU4+7iLdTEP4LPi2ihNEPCtz/vr8SLGbzkMApbpYbkDZ5z9zYXurd0gg+EK/bpOLFFC1r1eQ==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: ^16.x || ^17.x || ^18.x
     dependencies:
       react: 18.2.0
     dev: false

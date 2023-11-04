@@ -52,11 +52,8 @@ export const makeBalanceChartData = ({
       const date = timestampToDate(entry.date).getTime();
       const periodFinalBalance = entry.finalBalance;
 
-      if (acc.dates.length === 0) console.log("---- START -----");
-      // console.log("Date -->", timestampToDate(entry.date).toLocaleDateString());
-      // console.log("periodFinalBalance -->", periodFinalBalance);
-      // console.log("entry -->", entry);
-
+      if (acc.dates.length === 0) {
+      }
       acc.balances = [...acc.balances, periodFinalBalance];
       acc.dates = [...acc.dates, date];
 
@@ -79,7 +76,6 @@ export const makeBalanceChartData = ({
   ];
 
   const options_: ApexOptions = {
-    ...APEX_DEFAULT_OPTIONS,
     chart: {
       id: "balance-chart",
       type: "line",
@@ -87,8 +83,9 @@ export const makeBalanceChartData = ({
       defaultLocale: "pt-br",
     },
     markers: {
-      size: 4,
+      size: 3,
       colors: PRIMARY_COLORS,
+      strokeColors: ['var(--primary-foreground)']
     },
     xaxis: {
       tickAmount: 12,
@@ -97,6 +94,9 @@ export const makeBalanceChartData = ({
         formatter: (value) => {
           return formatAnyDate(value, dateFormat);
         },
+        style: {
+          colors: "currentColor",
+        },
       },
     },
     yaxis: {
@@ -104,10 +104,34 @@ export const makeBalanceChartData = ({
         formatter: (value) => {
           return valueToCurrency(value);
         },
+        style: {
+          colors: ["currentColor"],
+        },
       },
     },
     title: {
       text: "Balance Chart",
+      style: {
+        color: "currentColor",
+      },
+    },
+    stroke: {
+      colors: PRIMARY_COLORS,
+      curve: 'smooth'
+    },
+
+    tooltip: {
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        return (
+          '<div class="custom-chart">' +
+          '<div class="tooltip">' +
+          "<span>" +
+          valueToCurrency(series[seriesIndex][dataPointIndex]) +
+          "</span>" +
+          "</div>" +
+          "</div>"
+        );
+      },
     },
   };
 

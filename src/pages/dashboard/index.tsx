@@ -1,11 +1,11 @@
 import DashboardLayout from "@/layouts/DashboardLayout";
-import Dashboard from "@pageComponents/Dashboard";
+import { DashboardOverView } from "@/pageComponents/Dashboard/Overview";
 import { ReactElement } from "react";
 
 const DashboardPage = () => {
   return (
     <>
-      <Dashboard />
+      <DashboardOverView />
     </>
   );
 };

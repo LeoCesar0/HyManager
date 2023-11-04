@@ -1,8 +1,13 @@
 @tailwind components;
 
 @layer components {
+  .component-surface {
+    @apply bg-surface text-surface-foreground rounded-lg shadow-lg border border-border;
+  }
 
-    .component-surface {
-        @apply bg-surface text-surface-foreground rounded-lg shadow-lg border border-border;
+  .custom-chart {
+    .tooltip {
+        @apply bg-card text-card-foreground rounded-lg shadow-lg border border-border px-4 py-2 ;
     }
+  }
 }

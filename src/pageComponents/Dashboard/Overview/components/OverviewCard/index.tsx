@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cx, valueToCurrency } from "../../../../utils/misc";
+import { cx, valueToCurrency } from "../../../../../utils/misc";
 import { AppIcon, LocalizedText } from "@/@types";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { Slider } from "@/components/ui/slider";

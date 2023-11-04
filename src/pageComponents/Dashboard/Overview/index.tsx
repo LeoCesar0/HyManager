@@ -1,24 +1,29 @@
-import { Section } from "./components/Section";
+import { Section, SectionContainer } from "../../../components/Section/Section";
 import { HiCurrencyDollar, HiTrendingDown } from "react-icons/hi";
 import { TargetIcon } from "@radix-ui/react-icons";
 import { IOverviewCard, OverviewCard } from "./components/OverviewCard";
-import useSWR from "swr";
+import BalanceChart from "./components/BalanceChart";
+import { useGlobalAuth } from "../../../contexts/GlobalAuth";
+import { useGlobalDashboardStore } from '../../../contexts/GlobalDashboardStore';
 
-const Dashboard = () => {
+export const DashboardOverView = () => {
+  const { currentBankAccount } = useGlobalDashboardStore();
+
   return (
-    <>
-      <Section sectionTitle="Geral" className="">
+    <SectionContainer>
+      <Section sectionTitle={{ en: "Overview", pt: "Geral" }}>
         <div className="flex gap-3 flex-wrap">
           {cards.map((card) => {
             return <OverviewCard key={card.id} {...card} />;
           })}
         </div>
       </Section>
-    </>
+      <Section sectionTitle={{ en: "Charts", pt: "Gráficos" }}>
+        <BalanceChart bankAccountId={currentBankAccount!.id} />
+      </Section>
+    </SectionContainer>
   );
 };
-
-export default Dashboard;
 
 const cards: IOverviewCard[] = [
   {

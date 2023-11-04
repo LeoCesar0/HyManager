@@ -1,24 +1,37 @@
 import { ReactNode } from "@/@types";
+import { BankAccount } from "@/server/models/BankAccount/schema";
 import { createContext, useContext, useState } from "react";
 
-interface IGlobalDashboardStore {
+interface IState {
   menuIsOpen: boolean;
-  toggleMenu: () => void;
+  currentBankAccount: BankAccount | null;
 }
 
-const initialValues = {
+interface IActions {
+  toggleMenu: () => void;
+  setCurrentBankAccount: (bank: BankAccount | null) => void;
+}
+
+interface IGlobalDashboardStore extends IState, IActions {}
+
+const initialValues: IState = {
   menuIsOpen: true,
+  currentBankAccount: null,
 };
 
 const Context = createContext<IGlobalDashboardStore>(
-  initialValues as IGlobalDashboardStore
+  {} as IGlobalDashboardStore
 );
 
 export const GlobalDashboardStore: ReactNode = ({ children }) => {
-  const [state, setState] = useState(initialValues);
+  const [state, setState] = useState<IState>(initialValues);
 
   const toggleMenu = () => {
     setState((prev) => ({ ...prev, menuIsOpen: !prev.menuIsOpen }));
+  };
+
+  const setCurrentBankAccount = (bankAccount: BankAccount | null) => {
+    setState((prev) => ({ ...prev, currentBankAccount: bankAccount }));
   };
 
   return (
@@ -26,6 +39,7 @@ export const GlobalDashboardStore: ReactNode = ({ children }) => {
       value={{
         ...state,
         toggleMenu,
+        setCurrentBankAccount,
       }}
     >
       {children}

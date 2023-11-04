@@ -6,25 +6,24 @@ import { FirebaseCollection } from "@server/firebase";
 import { FirebaseFilterFor } from "@/@types/index";
 import { sub } from "date-fns";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 
 import { dateOptions, IFilterDate, makeBalanceChartData } from "./controller";
+
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface IBalanceChart {
-  bankAccountId?: string;
+  bankAccountId: string;
 }
 
-const BalanceChart: React.FC<IBalanceChart> = (props) => {
-  const router = useRouter();
+const BalanceChart: React.FC<IBalanceChart> = ({ bankAccountId }) => {
   const [dateFilter, setDateFilter] = useState<IFilterDate>(
     dateOptions[dateOptions.length - 1]
   );
-  const bankAccountId =
-    props.bankAccountId || (router.query.bankAccountId as string);
 
   const cacheKey = `balanceChart-last-${dateFilter.value}-${bankAccountId}`;
+
+  console.log("bankAccountId -->", bankAccountId);
 
   /* --------------------------- transactionsFetcher -------------------------- */
   const transactionsFetcher = useCallback(() => {
@@ -60,7 +59,8 @@ const BalanceChart: React.FC<IBalanceChart> = (props) => {
     });
   }, [transactionReports, dateFilter]);
 
-  if (!bankAccountId) return null;
+  console.log("series -->", series);
+  console.log("options -->", options);
 
   return (
     <div className="bg-surface shadow-md rounded-md p-6 mt-4 mb-4 text-on-surface">
@@ -68,7 +68,7 @@ const BalanceChart: React.FC<IBalanceChart> = (props) => {
         <>
           <div className="flex gap-4 mb-4">
             {dateOptions.map((item) => {
-              const isSelected = dateFilter.label === item.label
+              const isSelected = dateFilter.label === item.label;
               return (
                 <Button
                   selected={isSelected}
