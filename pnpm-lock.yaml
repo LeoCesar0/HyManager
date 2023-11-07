@@ -13,6 +13,7 @@ specifiers:
   '@radix-ui/react-select': ^2.0.0
   '@radix-ui/react-slider': ^1.1.2
   '@radix-ui/react-slot': ^1.0.2
+  '@tanstack/react-table': ^8.10.7
   '@types/formidable': ^2.0.6
   '@types/gtag.js': ^0.0.12
   '@types/lodash': ^4.14.185
@@ -80,6 +81,7 @@ dependencies:
   '@radix-ui/react-select': 2.0.0_ok7klj2z2jf7yvfzlcsdnzqpcy
   '@radix-ui/react-slider': 1.1.2_ok7klj2z2jf7yvfzlcsdnzqpcy
   '@radix-ui/react-slot': 1.0.2_gvifxuufrqkj4gcqfnnwrb44ya
+  '@tanstack/react-table': 8.10.7_biqbaboplfbrettd7655fr4n2y
   '@types/multer': 1.4.8
   '@types/react-icons': 3.0.0_react@18.2.0
   '@types/uuid': 9.0.5
@@ -1685,6 +1687,23 @@ packages:
     resolution: {integrity: sha512-sJ902EfIzn1Fa+qYmjdQqh8tPsoxyBz+8yBKC2HKUxyezKJFwPGOn7pv4WY6QuQW//ySQi5lJjA/ZT9sNWWNTg==}
     dependencies:
       tslib: 2.6.2
+    dev: false
+
+  /@tanstack/react-table/8.10.7_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-bXhjA7xsTcsW8JPTTYlUg/FuBpn8MNjiEPhkNhIGCUR6iRQM2+WEco4OBpvDeVcR9SE+bmWLzdfiY7bCbCSVuA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/table-core': 8.10.7
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/table-core/8.10.7:
+    resolution: {integrity: sha512-KQk5OMg5OH6rmbHZxuNROvdI+hKDIUxANaHlV+dPlNN7ED3qYQ/WkpY2qlXww1SIdeMlkIhpN/2L00rof0fXFw==}
+    engines: {node: '>=12'}
     dev: false
 
   /@tsconfig/node16/1.0.4:

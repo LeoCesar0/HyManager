@@ -55,3 +55,8 @@ export type FirebaseFilterFor<T> = {
 export type RefetchCollection = (collection: FirebaseCollection[]) => void;
 
 export type AppIcon = React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>> | IconType
+
+export type Pagination = {
+  page: number;
+  limit: number;
+}
