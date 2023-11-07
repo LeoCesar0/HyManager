@@ -2,6 +2,7 @@
 
 import { Locale } from "@/@types/index";
 import { useRouter } from "next/router";
+import { setCookie } from "nookies";
 import React, {
   createContext,
   Dispatch,
@@ -45,6 +46,7 @@ export const GlobalContextProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const setLanguage = (lang: Locale) => {
+    setCookie(null, "NEXT_LOCALE", lang);
     router.push(router.pathname, undefined, { locale: lang, shallow: true });
   };
 

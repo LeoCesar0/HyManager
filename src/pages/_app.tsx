@@ -1,6 +1,5 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { GlobalContextProvider } from "../contexts/GlobalContext";
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
 import { APP_CONFIG } from "../static/appConfig";
@@ -9,10 +8,8 @@ import "../styles/tailwind.css";
 import "../styles/components.scss";
 import "react-toastify/dist/ReactToastify.css";
 
-import { GlobalAuthProvider } from "../contexts/GlobalAuth";
+import { appWithTranslation } from "next-i18next";
 import { ToastContainer } from "react-toastify";
-import { GlobalModalProvider } from "../contexts/GlobalModal";
-import { GlobalCacheProvider } from "@contexts/GlobalCache";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import ContextProviders from "@/contexts/ContextProviders";
 
@@ -68,18 +65,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           </div>
         )}
       </ContextProviders>
-
-      {/* <GlobalCacheProvider>
-        <GlobalAuthProvider>
-          <GlobalContextProvider>
-            <GlobalModalProvider>
-                {getLayout(<Component {...pageProps} />)}
-            </GlobalModalProvider>
-          </GlobalContextProvider>
-        </GlobalAuthProvider>
-      </GlobalCacheProvider> */}
     </>
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

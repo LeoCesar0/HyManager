@@ -18,11 +18,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 import Button from "@/components/Button";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "next-i18next";
+import { makeZodI18nMap } from "zod-i18n-map";
 
 const formSchema = createTransactionSchema;
 
+const testSchema = z.string().email();
+
 export const DashboardTransactionsAdd = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
+  const { t } = useTranslation();
+
+  z.setErrorMap(makeZodI18nMap({ t }));
+
+  const validation = testSchema.safeParse("foo");
+
+  if (!validation.success) console.log("validation", validation.error);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,7 +63,7 @@ export const DashboardTransactionsAdd = () => {
         >
           <>
             <FormProvider {...form}>
-              <Form onSubmit={form.handleSubmit(onSubmit)}  >
+              <Form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
                   control={form.control}
                   name="amount"

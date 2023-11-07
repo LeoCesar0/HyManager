@@ -38,11 +38,14 @@ specifiers:
   formidable: ^2.1.1
   formik: ^2.2.9
   framer-motion: ^10.2.4
+  i18next: ^23.6.0
   lodash: ^4.17.21
   multer: 1.4.5-lts.1
   next: 13.4.0
   next-auth: ^4.19.1
   next-connect: ^1.0.0
+  next-i18next: ^15.0.0
+  nookies: ^2.5.2
   p-throttle: ^5.0.0
   pdf2json: ^2.0.2
   pdfreader: ^3.0.0
@@ -52,6 +55,7 @@ specifiers:
   react-apexcharts: ^1.4.0
   react-dom: 18.2.0
   react-hook-form: ^7.46.1
+  react-i18next: ^13.3.1
   react-icons: ^4.3.1
   react-if: ^4.1.5
   react-toastify: ^9.1.1
@@ -66,6 +70,7 @@ specifiers:
   windstitch: ^0.3.0
   zod: ^3.21.4
   zod-formik-adapter: ^1.2.0
+  zod-i18n-map: ^2.21.0
   zustand: ^4.4.0
 
 dependencies:
@@ -96,11 +101,14 @@ dependencies:
   formidable: 2.1.2
   formik: 2.4.5_react@18.2.0
   framer-motion: 10.16.4_biqbaboplfbrettd7655fr4n2y
+  i18next: 23.6.0
   lodash: 4.17.21
   multer: 1.4.5-lts.1
   next: 13.4.0_gewzw7coau2uk5vixsbhkmwptu
   next-auth: 4.23.2_o36i5nnimpwjhlcn4bax4pcnvu
   next-connect: 1.0.0
+  next-i18next: 15.0.0_hdr5agd5n432xaby6gjlg4a5z4
+  nookies: 2.5.2
   p-throttle: 5.1.0
   pdf2json: 2.0.2
   pdfreader: 3.0.2
@@ -109,6 +117,7 @@ dependencies:
   react-apexcharts: 1.4.1_cu773y4hmwhxxc72qnukxv25pi
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.47.0_react@18.2.0
+  react-i18next: 13.3.1_hv3wqpusfuaxw6ocr52s2col5q
   react-icons: 4.11.0_react@18.2.0
   react-if: 4.1.5_react@18.2.0
   react-toastify: 9.1.3_biqbaboplfbrettd7655fr4n2y
@@ -121,6 +130,7 @@ dependencies:
   windstitch: 0.3.0_react@18.2.0
   zod: 3.22.4
   zod-formik-adapter: 1.2.0_formik@2.4.5+zod@3.22.4
+  zod-i18n-map: 2.21.0_i18next@23.6.0+zod@3.22.4
   zustand: 4.4.3_gvifxuufrqkj4gcqfnnwrb44ya
 
 devDependencies:
@@ -154,6 +164,13 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.0
+
+  /@babel/runtime/7.23.2:
+    resolution: {integrity: sha512-mM8eg4yl5D6i3lu2QKPuPH4FArvJ8KhTofbE7jwMUv9KX5mBvwPAqnV3MlyBNqdp9RyRKP6Yck8TrfYrPvX3bg==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.0
+    dev: false
 
   /@carbon/charts-react/1.13.6_fgjwgqpu535l3bghgmlsyrolua:
     resolution: {integrity: sha512-jOEwYkOiQVxq3D+n5NzzsYXhwbbjjJWi5F35TZYSeaHULj0QJSaA4k/VRf2IrQXAp/OBvG0sf0cqIA0ACuMeFQ==}
@@ -1033,7 +1050,7 @@ packages:
       '@types/react-dom':
         optional: true
     dependencies:
-      '@babel/runtime': 7.23.1
+      '@babel/runtime': 7.23.2
       '@radix-ui/react-primitive': 1.0.3_ok7klj2z2jf7yvfzlcsdnzqpcy
       '@types/react': 18.0.8
       '@types/react-dom': 18.0.0
@@ -1447,7 +1464,7 @@ packages:
       '@types/react-dom':
         optional: true
     dependencies:
-      '@babel/runtime': 7.23.1
+      '@babel/runtime': 7.23.2
       '@radix-ui/primitive': 1.0.1
       '@radix-ui/react-collection': 1.0.3_ok7klj2z2jf7yvfzlcsdnzqpcy
       '@radix-ui/react-compose-refs': 1.0.1_gvifxuufrqkj4gcqfnnwrb44ya
@@ -1588,7 +1605,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@babel/runtime': 7.23.1
+      '@babel/runtime': 7.23.2
       '@radix-ui/react-use-callback-ref': 1.0.1_gvifxuufrqkj4gcqfnnwrb44ya
       '@types/react': 18.0.8
       react: 18.2.0
@@ -1631,7 +1648,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@babel/runtime': 7.23.1
+      '@babel/runtime': 7.23.2
       '@radix-ui/rect': 1.0.1
       '@types/react': 18.0.8
       react: 18.2.0
@@ -1676,7 +1693,7 @@ packages:
   /@radix-ui/rect/1.0.1:
     resolution: {integrity: sha512-fyrgCaedtvMg9NK3en0pnOYJdtfwxUcNolezkNPUsoX57X8oQk+NkqcvzHXD2uKNij6GXmWU9NDru2IWjrO4BQ==}
     dependencies:
-      '@babel/runtime': 7.23.1
+      '@babel/runtime': 7.23.2
     dev: false
 
   /@rushstack/eslint-patch/1.5.1:
@@ -1753,6 +1770,13 @@ packages:
 
   /@types/hoist-non-react-statics/3.3.2:
     resolution: {integrity: sha512-YIQtIg4PKr7ZyqNPZObpxfHsHEmuB8dXCxd6qVcGuQVDK2bpsF7bYNnBJ4Nn7giuACZg+WewExgrtAJ3XnA4Xw==}
+    dependencies:
+      '@types/react': 18.0.8
+      hoist-non-react-statics: 3.3.2
+    dev: false
+
+  /@types/hoist-non-react-statics/3.3.5:
+    resolution: {integrity: sha512-SbcrWzkKBw2cdwRTwQAswfpB9g9LJWfjtUeW/jvNwbhC8cpmmNYVePa+ncbUe0rGTQ7G3Ff6mYUN2VMfLVr+Sg==}
     dependencies:
       '@types/react': 18.0.8
       hoist-non-react-statics: 3.3.2
@@ -2285,9 +2309,19 @@ packages:
       typedarray: 0.0.6
     dev: false
 
+  /cookie/0.4.2:
+    resolution: {integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==}
+    engines: {node: '>= 0.6'}
+    dev: false
+
   /cookie/0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /core-js/3.33.2:
+    resolution: {integrity: sha512-XeBzWI6QL3nJQiHmdzbAOiMYqjrb7hwU7A39Qhvd/POSa/t9E1AeZyEZx3fNvp/vtM8zXwhoL0FsiS0hD0pruQ==}
+    requiresBuild: true
     dev: false
 
   /core-util-is/1.0.3:
@@ -3454,12 +3488,28 @@ packages:
       react-is: 16.13.1
     dev: false
 
+  /html-parse-stringify/3.0.1:
+    resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
+    dependencies:
+      void-elements: 3.1.0
+    dev: false
+
   /html-to-image/1.11.11:
     resolution: {integrity: sha512-9gux8QhvjRO/erSnDPv28noDZcPZmYE7e1vFsBLKLlRlKDSqNJYebj6Qz1TGd5lsRV+X+xYyjCKjuZdABinWjA==}
     dev: false
 
   /http-parser-js/0.5.8:
     resolution: {integrity: sha512-SGeBX54F94Wgu5RH3X5jsDtf4eHyRogWX1XGT3b4HuW3tQPM4AaBzoUji/4AAJNXCEOWZ5O0DgZmJw1947gD5Q==}
+    dev: false
+
+  /i18next-fs-backend/2.2.0:
+    resolution: {integrity: sha512-VOPHhdDX0M/csRqEw+9Ectpf6wvTIg1MZDfAHxc3JKnAlJz7fcZSAKAeyDohOq0xuLx57esYpJopIvBaRb0Bag==}
+    dev: false
+
+  /i18next/23.6.0:
+    resolution: {integrity: sha512-z0Cxr0MGkt+kli306WS4nNNM++9cgt2b2VCMprY92j+AIab/oclgPxdwtTZVLP1zn5t5uo8M6uLsZmYrcjr3HA==}
+    dependencies:
+      '@babel/runtime': 7.23.1
     dev: false
 
   /iconv-lite/0.6.3:
@@ -3941,6 +3991,26 @@ packages:
       regexparam: 2.0.1
     dev: false
 
+  /next-i18next/15.0.0_hdr5agd5n432xaby6gjlg4a5z4:
+    resolution: {integrity: sha512-9iGEU4dt1YCC5CXh6H8YHmDpmeWKjxES6XfoABxy9mmfaLLJcqS92F56ZKmVuZUPXEOLtgY/JtsnxsHYom9J4g==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      i18next: ^23.6.0
+      next: '>= 12.0.0'
+      react: '>= 17.0.2'
+      react-i18next: ^13.3.1
+    dependencies:
+      '@babel/runtime': 7.23.2
+      '@types/hoist-non-react-statics': 3.3.5
+      core-js: 3.33.2
+      hoist-non-react-statics: 3.3.2
+      i18next: 23.6.0
+      i18next-fs-backend: 2.2.0
+      next: 13.4.0_gewzw7coau2uk5vixsbhkmwptu
+      react: 18.2.0
+      react-i18next: 13.3.1_hv3wqpusfuaxw6ocr52s2col5q
+    dev: false
+
   /next/13.4.0_gewzw7coau2uk5vixsbhkmwptu:
     resolution: {integrity: sha512-y3E+2ZjiVrphkz7zcJvd2rEG6miOekI8krPfWV4AZZ9TaF0LDuFdP/f+RQ5M9wRvsz6GWw8k8+7jsO860GxSqg==}
     engines: {node: '>=16.8.0'}
@@ -4002,6 +4072,13 @@ packages:
   /node-releases/2.0.13:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
     dev: true
+
+  /nookies/2.5.2:
+    resolution: {integrity: sha512-x0TRSaosAEonNKyCrShoUaJ5rrT5KHRNZ5DwPCuizjgrnkpE5DRf3VL7AyyQin4htict92X1EQ7ejDbaHDVdYA==}
+    dependencies:
+      cookie: 0.4.2
+      set-cookie-parser: 2.6.0
+    dev: false
 
   /normalize-path/3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
@@ -4399,6 +4476,26 @@ packages:
       react: 18.2.0
     dev: false
 
+  /react-i18next/13.3.1_hv3wqpusfuaxw6ocr52s2col5q:
+    resolution: {integrity: sha512-JAtYREK879JXaN9GdzfBI4yJeo/XyLeXWUsRABvYXiFUakhZJ40l+kaTo+i+A/3cKIED41kS/HAbZ5BzFtq/Og==}
+    peerDependencies:
+      i18next: '>= 23.2.3'
+      react: '>= 16.8.0'
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.23.2
+      html-parse-stringify: 3.0.1
+      i18next: 23.6.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
   /react-icons/4.11.0_react@18.2.0:
     resolution: {integrity: sha512-V+4khzYcE5EBk/BvcuYRq6V/osf11ODUM2J8hg2FDSswRrGvqiYUYPRy4OdrWaQOBj4NcpJfmHZLNaD+VH0TyA==}
     peerDependencies:
@@ -4666,6 +4763,10 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
+
+  /set-cookie-parser/2.6.0:
+    resolution: {integrity: sha512-RVnVQxTXuerk653XfuliOxBP81Sf0+qfQE73LIYKcyMYHG94AuH0kgrQpRDuTZnSmjpysHmzxJXKNfa6PjFhyQ==}
+    dev: false
 
   /set-function-name/2.0.1:
     resolution: {integrity: sha512-tMNCiqYVkXIZgc2Hnoy2IvC/f8ezc5koaRFkCjrpWzGpCd3qbZXPzVy9MAZzK1ch/X0jvSkojys3oqJN0qCmdA==}
@@ -5147,6 +5248,11 @@ packages:
     resolution: {integrity: sha512-ocyWc3bAHBB/guyqJQVI5o4BZkPhznPYUG2ea80Gond/BgNWpap8TOmLSeeQG7bnh2KMISxskdADG59j7zruhw==}
     dev: true
 
+  /void-elements/3.1.0:
+    resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /warning/3.0.0:
     resolution: {integrity: sha512-jMBt6pUrKn5I+OGgtQ4YZLdhIeJmObddh6CsibPxyQ5yPZm1XExSyzC1LCNX7BzhxWgiHmizBWJTHJIjMjTQYQ==}
     dependencies:
@@ -5315,6 +5421,16 @@ packages:
       zod: ^3.14.4
     dependencies:
       formik: 2.4.5_react@18.2.0
+      zod: 3.22.4
+    dev: false
+
+  /zod-i18n-map/2.21.0_i18next@23.6.0+zod@3.22.4:
+    resolution: {integrity: sha512-5yyL8m6GDfaNH2u9GC7QE3U8XTPYOGjXMFgxhXzK8N/HCTZHyBQR5X0Y76n4AscbHNmBfxLKXLwkjWXpx6JZaw==}
+    peerDependencies:
+      i18next: '>=21.3.0'
+      zod: '>=3.17.0'
+    dependencies:
+      i18next: 23.6.0
       zod: 3.22.4
     dev: false
 
