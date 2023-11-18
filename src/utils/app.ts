@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { Timestamp } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { AppError, AppModelResponse } from "../@types";
+import { useGlobalContext } from "../contexts/GlobalContext";
 
 export const showErrorToast = (error: AppError) => {
   const message = error?.message;
@@ -23,16 +24,15 @@ export const showErrorToast = (error: AppError) => {
 
 type IPromiseOptions = {
   loadingMessage: string;
-  errorMessage?: string;
+  defaultErrorMessage: string;
 };
+
 export async function handleToastPromise<T>(
   promise: Promise<T & AppModelResponse<any>>,
-  {
-    loadingMessage,
-    errorMessage = "Error: Something went wrong",
-  }: IPromiseOptions
+  { loadingMessage, defaultErrorMessage }: IPromiseOptions
 ): Promise<T> {
   const toastId = toast.loading(loadingMessage);
+
   return promise
     .then((results) => {
       console.log("handleToastPromise results -->", results);
@@ -45,7 +45,7 @@ export async function handleToastPromise<T>(
         });
       } else {
         toast.update(toastId, {
-          render: results?.error?.message || errorMessage,
+          render: results?.error?.message || defaultErrorMessage,
           type: "error",
           isLoading: false,
           autoClose: 5000,
@@ -56,7 +56,7 @@ export async function handleToastPromise<T>(
     .catch((error) => {
       console.log("handleToastPromise error -->", error);
       toast.update(toastId, {
-        render: errorMessage + "(Catch)",
+        render: defaultErrorMessage + "(Catch)",
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -76,9 +76,6 @@ export const slugify = (string: string) => {
 
   return newText;
 };
-
-
-
 
 export const makeCreatedAtFields = (
   date: Date

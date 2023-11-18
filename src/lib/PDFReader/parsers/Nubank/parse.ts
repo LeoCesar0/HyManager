@@ -1,14 +1,11 @@
 import {
   CreateTransaction,
-  Transaction,
   TransactionType,
 } from "src/server/models/Transaction/schema";
-import { Timestamp } from "firebase/firestore";
-import { makeDateFields, slugify } from "src/utils/app";
-import { numericFromAnyFormatToNumber } from "src/utils/misc";
+import {  slugify } from "src/utils/app";
 import { IPDFData } from "../../interfaces";
 import { IPDFRawData } from "../../rawDataTypes";
-import { makeTransactionSlug } from "@server/utils/makeTransactionSlug";
+import { numericStringToNumber } from "@/utils/numericStringToNumber";
 
 const headerMapping = {
   initialBalance: [20.921, 9.97],
@@ -79,7 +76,7 @@ export function parse(
 
         if (pageIndex === 0 && !checkingTransactions) {
           /* ---------------------------- CHECK FIRST PAGE INFO ---------------------------- */
-          const amount = numericFromAnyFormatToNumber(textValue);
+          const amount = numericStringToNumber(textValue);
           if (headerKey && amount !== null) {
             // @ts-ignoreount ?? true
             currentPDFData[headerKey] = amount;
@@ -172,7 +169,7 @@ export function parse(
           return;
         }
 
-        let amount = numericFromAnyFormatToNumber(textValue);
+        let amount = numericStringToNumber(textValue);
 
         if (!tempTransaction.creditor && !amount) {
           // CREDITOR

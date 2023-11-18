@@ -42,18 +42,13 @@ export const createTransactionSchema = z.object({
       url: z.string(),
     })
     .optional(),
-  creditor: z.string().optional(),
-  description: z
-    .string({ required_error: "Insert a description" })
-    .min(2, "Min 2 character"),
+  creditor: z.string().min(1),
+  description: z.string(),
   date: z.string({
     invalid_type_error: "Insert a date",
     required_error: "This field is required!",
   }),
-  amount: z.number({
-    invalid_type_error: "Insert a number",
-    required_error: "This field is required!",
-  }),
+  amount: z.number().min(0.01),
   color: z.string().optional(),
 });
 

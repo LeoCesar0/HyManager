@@ -32,7 +32,7 @@ const Button: React.FC<IButton> = ({
         ["px-4 py-2 text-lg", size === "lg"],
         `${textColor} bg-${theme} hover:bg-${theme}-hover`,
         [`drop-shadow-md ${bgColorSelected}`, !!selected],
-        "disabled:bg-disabled disabled:border-disabled-border disabled:text-disabled-text disabled:cursor-not-allowed",
+        `disabled:opacity-50 disabled:border-disabled-border disabled:text-disabled-text disabled:cursor-not-allowed`,
         classes,
       ])}
       {...rest}

@@ -1,13 +1,5 @@
 import { Section, SectionContainer } from "@/components/Section/Section";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import {
   createTransactionSchema,
   TransactionType,
@@ -17,23 +9,26 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 import Button from "@/components/Button";
-import { Input } from "@/components/ui/input";
 import { useTranslation } from "next-i18next";
 import { makeZodI18nMap } from "zod-i18n-map";
+import { FormFields } from "@/components/FormFields";
+import { formFields } from "./formFields";
+import { createTransaction } from "@/server/models/Transaction/create/createTransaction";
+import { useToastPromise } from "@/hooks/useToastPromise";
 
-const formSchema = createTransactionSchema;
-
-const testSchema = z.string().email();
+const formSchema = createTransactionSchema.merge(
+  z.object({
+    amount: z.number().max(100, { message: "Max 100" }),
+  })
+);
 
 export const DashboardTransactionsAdd = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const { t } = useTranslation();
 
+  const { handleToast, isLoading } = useToastPromise();
+
   z.setErrorMap(makeZodI18nMap({ t }));
-
-  const validation = testSchema.safeParse("foo");
-
-  if (!validation.success) console.log("validation", validation.error);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,10 +40,28 @@ export const DashboardTransactionsAdd = () => {
       type: TransactionType.debit,
       description: "",
     },
+    mode: "all",
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    handleToast(
+      createTransaction({
+        bankAccountId: currentBankAccount!.id,
+        values: {
+          ...values,
+        },
+      }),
+      {
+        defaultErrorMessage: {
+          pt: "Erro ao criar transação",
+          en: "Error creating transaction",
+        },
+        loadingMessage: {
+          pt: "Adicionando transação",
+          en: "Adding transaction",
+        },
+      }
+    );
   }
 
   return (
@@ -64,23 +77,14 @@ export const DashboardTransactionsAdd = () => {
           <>
             <FormProvider {...form}>
               <Form onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField
-                  control={form.control}
-                  name="amount"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Amount</FormLabel>
-                      <FormControl>
-                        <Input placeholder="100,00" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        This is your public display name.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit">Submit</Button>
+                <FormFields form={form} fields={formFields} />
+                <Button
+                  type="submit"
+                  disabled={isLoading || !form.formState.isValid}
+                  selected
+                >
+                  Submit
+                </Button>
               </Form>
             </FormProvider>
           </>

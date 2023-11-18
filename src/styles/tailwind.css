@@ -36,45 +36,17 @@
 
   /* ------------------------------- DARK THEME ------------------------------- */
 
-  /* .dark {
-    --background: hsl(220 11% 11%);
-    --foreground: hsl(233 80% 96%);
-    --card: hsl(24 9.8% 10%);
-    --card-foreground: hsl(0 0% 95%);
-    --popover: hsl(0 0% 9%);
-    --popover-foreground: hsl(0 0% 95%);
-    --primary: hsl(346.8 77.2% 49.8%);
-    --primary-foreground: hsl(355.7 100% 97.3%);
-    --secondary: hsl(240 3.7% 15.9%);
-    --secondary-foreground: hsl(0 0% 98%);
-    --muted: hsl(0 0% 15%);
-    --muted-foreground: hsl(240 5% 64.9%);
-    --accent: hsl(12 6.5% 15.1%);
-    --accent-foreground: hsl(0 0% 98%);
-    --destructive: hsl(0 62.8% 30.6%);
-    --destructive-foreground: hsl(0 85.7% 97.3%);
-    --border: hsl(240 0% 5%);
-    --input: var(--border);
-    --ring: hsl(346.8 75% 48%);
-  } */
-
   .dark {
-    --background: theme(colors.zinc.950);
-    --foreground: theme(colors.zinc.300);
-    /* --card: hsl(24, 9.8%, 10%); */
+    --background: theme(colors.stone.950);
+    --foreground: theme(colors.stone.300);
     --card: theme(colors.stone.900);
-    /* --card-foreground: hsl(0, 0%, 90%); */
-    --card-foreground: theme(colors.zinc.300);
+    --card-foreground: theme(colors.stone.300);
     --popover: hsl(0 0% 9%);
     --popover-foreground: hsl(0 0% 95%);
     --primary: hsl(346.8 77.2% 49.8%);
     --primary-foreground: hsl(346.8 0% 80%);
     --secondary: theme(colors.stone.800);
     --secondary-foreground: theme(colors.stone.300);
-    /* --secondary: hsl(240 3.7% 15.9%);
-    --secondary-foreground: hsl(0 0% 98%); */
-    /* --surface: #181818;
-    --surface-foreground: var(--foreground); */
     --surface: theme(colors.stone.900);;
     --surface-foreground: var(--foreground);
     --muted: theme(colors.zinc.900);

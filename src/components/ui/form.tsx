@@ -21,7 +21,7 @@ interface IForm extends React.FormHTMLAttributes<HTMLFormElement> {
 const Form: React.FC<IForm> = ({ children, className, ...rest }) => {
   return (
     <form
-      className={cx(["space-y-8 w-full max-w-[600px] px-4", className])}
+      className={cx(["space-y-4 w-full max-w-[600px] px-4", className])}
       {...rest}
     >
       {children}
@@ -92,7 +92,7 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+      <div ref={ref} className={cn("", className)} {...props} />
     </FormItemContext.Provider>
   );
 });

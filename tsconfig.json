@@ -43,7 +43,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/pages/api/test.ts"
+    "src/pages/api/testapi.ts"
 , "src/pages/api/pdf2json.ts"  ],
   "exclude": ["node_modules"]
 }
