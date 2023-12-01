@@ -3,7 +3,6 @@ import Link from "next/link";
 import { APP_PAGES } from "src/static/appPages";
 import { useGlobalAuth } from "../../../contexts/GlobalAuth";
 import { cx } from "../../../utils/misc";
-// import Button from "../../../components/Button";
 import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import AppLogo from "@/components/AppLogo";

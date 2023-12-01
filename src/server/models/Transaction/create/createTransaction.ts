@@ -47,9 +47,10 @@ interface ICreateTransaction {
       transactionSchema.parse(transaction);
   
       const batch = writeBatch(firebaseDB);
+      
       const transactionsRef = doc(
         firebaseDB,
-        FirebaseCollection.transactionReports,
+        FirebaseCollection.transactions,
         transaction.id
       );
   

@@ -1,4 +1,3 @@
-import Button from "@/components/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGlobalAuth } from "@/contexts/GlobalAuth";
 import {
@@ -8,6 +7,7 @@ import {
 import Link from "next/link";
 import useSwr from "swr";
 import { FirebaseCollection } from "../../server/firebase/index";
+import { Button } from "@/components/ui/button";
 
 const Test = () => {
   const { currentUser } = useGlobalAuth();

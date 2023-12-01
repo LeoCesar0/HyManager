@@ -70,7 +70,6 @@ export const DashboardMenu = () => {
             `w-[calc(4rem-2*1rem)] h-[calc(4rem-2*1rem)]`,
             ["mr-4", !menuIsOpen],
           ])}
-          // className="w-9"
           variant="outline"
           onClick={toggleMenu}
         >

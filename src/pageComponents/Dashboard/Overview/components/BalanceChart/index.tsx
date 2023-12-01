@@ -1,4 +1,3 @@
-import Button from "@components/Button";
 import useFetcher from "@hooks/useFetcher";
 import { listTransactionReportsBy } from "@models/TransactionReport/read/listTransactionReportBy";
 import { TransactionReport } from "@models/TransactionReport/schema";
@@ -9,6 +8,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useMemo, useState } from "react";
 
 import { dateOptions, IFilterDate, makeBalanceChartData } from "./controller";
+import { Button } from "@/components/ui/button";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -71,7 +71,6 @@ const BalanceChart: React.FC<IBalanceChart> = ({ bankAccountId }) => {
               const isSelected = dateFilter.label === item.label;
               return (
                 <Button
-                  selected={isSelected}
                   key={item.value}
                   onClick={() => {
                     setDateFilter(item);

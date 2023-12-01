@@ -24,11 +24,11 @@ const IconButton: React.FC<IButton> = ({
           ["px-2 py-2 text-base", size === "md"],
           ["px-3 py-3 text-lg", size === "lg"],
           [
-            "text-on-primary bg-zinc-800 hover:bg-zinc-900",
+            "text-card-foreground bg-card hover:bg-card/60",
             theme === "default",
           ],
           [
-            "text-on-primary bg-primary hover:bg-primary-hover",
+            "text- bg-primary hover:bg-primary-hover",
             theme === "primary",
           ],
           [

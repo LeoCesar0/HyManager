@@ -25,6 +25,7 @@ import useT from "@/hooks/useT";
 import { TransactionType } from "../../server/models/Transaction/schema";
 import { clsx } from "clsx";
 import { TransactionTypeRadio } from "../TransactionTypeRadio";
+import { DatePicker } from "../DatePicker/index";
 
 interface IMainProps {
   name: string;
@@ -34,6 +35,10 @@ interface IMainProps {
 interface IInput extends IMainProps {
   inputType: "input";
   props?: InputHTMLAttributes<HTMLInputElement>;
+}
+
+interface IDatePicker extends IMainProps {
+  inputType: "datePicker";
 }
 
 interface ITransactionType extends IMainProps {
@@ -57,6 +62,7 @@ interface ISelect extends IMainProps {
 
 export type IFormFieldItem =
   | IInput
+  | IDatePicker
   | ITextArea
   | ISelect
   | ICurrencyInput
@@ -109,6 +115,18 @@ export const FormFields: React.FC<IProps> = ({ fields, form }) => {
                             fieldName={item.name}
                             setValue={form.setValue}
                           />
+                        </>
+                      )}
+                      {item.inputType === "datePicker" && (
+                        <>
+                          <div>
+                            <DatePicker
+                              date={field.value}
+                              setDate={(date: Date) => {
+                                form.setValue(item.name, date);
+                              }}
+                            />
+                          </div>
                         </>
                       )}
                       {item.inputType === "select" && (

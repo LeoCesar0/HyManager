@@ -8,7 +8,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { useTranslation } from "next-i18next";
 import { makeZodI18nMap } from "zod-i18n-map";
 import { FormFields } from "@/components/FormFields";
@@ -35,7 +35,7 @@ export const DashboardTransactionsAdd = () => {
     defaultValues: {
       amount: 0,
       bankAccountId: currentBankAccount!.id,
-      date: "",
+      date: new Date(),
       creditor: "",
       type: TransactionType.debit,
       description: "",
@@ -73,6 +73,7 @@ export const DashboardTransactionsAdd = () => {
             en: "New Transaction",
           }}
           className="max-w-[600px]"
+          goBackLink="/dashboard/transactions"
         >
           <>
             <FormProvider {...form}>
@@ -81,7 +82,6 @@ export const DashboardTransactionsAdd = () => {
                 <Button
                   type="submit"
                   disabled={isLoading || !form.formState.isValid}
-                  selected
                 >
                   Submit
                 </Button>

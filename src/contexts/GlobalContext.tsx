@@ -1,6 +1,6 @@
-"use client";
-
 import { Locale } from "@/@types/index";
+import { Locale as DateLocale } from "date-fns";
+import { enUS, ptBR } from "date-fns/locale";
 import { useRouter } from "next/router";
 import { setCookie } from "nookies";
 import React, {
@@ -13,6 +13,7 @@ import React, {
 
 interface GlobalContextProps {
   currentLanguage: Locale;
+  currentDateLocale: DateLocale;
   menuIsOpen: boolean;
   setState: Dispatch<SetStateAction<GlobalContextProps>>;
   handleSetState: (newValues: {}) => void;
@@ -21,6 +22,7 @@ interface GlobalContextProps {
 }
 const initialValues = {
   currentLanguage: "en",
+  currentDateLocale: enUS,
   menuIsOpen: false,
 };
 const GlobalContext = createContext<GlobalContextProps>(
@@ -55,6 +57,7 @@ export const GlobalContextProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         ...state,
         currentLanguage: currentLanguage,
+        currentDateLocale: currentLanguage === "en" ? enUS : ptBR,
         setState,
         handleSetState,
         toggleMenu,

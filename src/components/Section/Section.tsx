@@ -2,6 +2,8 @@ import { cn } from "@/lib/utils";
 import { cx } from "@/utils/misc";
 import { LocalizedText } from "../../@types/index";
 import { useGlobalContext } from "../../contexts/GlobalContext";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 interface IProps {
   sectionTitle?: LocalizedText;
@@ -9,6 +11,7 @@ interface IProps {
   className?: string;
   actions?: React.ReactNode;
   headerBorder?: boolean;
+  goBackLink?: string;
 }
 
 export const Section: React.FC<IProps> = ({
@@ -17,6 +20,7 @@ export const Section: React.FC<IProps> = ({
   className = "",
   actions,
   headerBorder = false,
+  goBackLink,
 }) => {
   const { currentLanguage } = useGlobalContext();
   return (
@@ -27,6 +31,16 @@ export const Section: React.FC<IProps> = ({
           ["border-b pb-4", headerBorder],
         ])}
       >
+        {goBackLink && (
+          <Link href={goBackLink}>
+            {/* <Button>
+              <ArrowLeft />
+            </Button> */}
+            {/* <IconButton>
+              <ArrowLeft />
+            </IconButton> */}
+          </Link>
+        )}
         {sectionTitle && (
           <h4 className="text-2xl font-bold">
             {sectionTitle[currentLanguage]}

@@ -20,22 +20,6 @@ export const formFields: IFormFieldItem[] = [
       pt: "Tipo",
     },
     inputType: "transactionType",
-    // options: [
-    //   {
-    //     label: {
-    //       en: "Debit",
-    //       pt: "Débito",
-    //     },
-    //     value: TransactionType.debit,
-    //   },
-    //   {
-    //     label: {
-    //       en: "Credit",
-    //       pt: "Crédito",
-    //     },
-    //     value: TransactionType.credit,
-    //   },
-    // ],
   },
   {
     name: "creditor",
@@ -59,9 +43,17 @@ export const formFields: IFormFieldItem[] = [
       en: "Date",
       pt: "Data",
     },
-    props: {
-      type: "date",
-    },
-    inputType: "input",
+    inputType: "datePicker",
   },
+  // {
+  //   name: "date",
+  //   label: {
+  //     en: "Date",
+  //     pt: "Data",
+  //   },
+  //   props: {
+  //     type: "date",
+  //   },
+  //   inputType: "input",
+  // },
 ];
