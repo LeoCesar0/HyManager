@@ -4,6 +4,7 @@ import { LocalizedText } from "../../@types/index";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface IProps {
   sectionTitle?: LocalizedText;
@@ -33,12 +34,12 @@ export const Section: React.FC<IProps> = ({
       >
         {goBackLink && (
           <Link href={goBackLink}>
-            {/* <Button>
+            <Button
+                size={'iconLg'}
+                variant={'outline'}
+            >
               <ArrowLeft />
-            </Button> */}
-            {/* <IconButton>
-              <ArrowLeft />
-            </IconButton> */}
+            </Button>
           </Link>
         )}
         {sectionTitle && (
