@@ -32,6 +32,9 @@ const Header = () => {
           {APP_PAGES.map((item) => {
             let isSelected = pathname.includes(item.link);
             if (item.link === "/") isSelected = pathname === "/";
+
+            if(item.private && !currentUser) return null
+
             return (
               <Link key={item.label} href={item.link}>
                 <span
