@@ -3,7 +3,7 @@ import {
   MdStackedBarChart,
   MdDashboard,
   MdSettings,
-  MdPieChart,
+  MdCompareArrows
 } from "react-icons/md";
 
 interface MenuItem {
@@ -28,7 +28,7 @@ const menuItems: MenuItem[] = [
       pt: "Gráficos",
       en: "Charts",
     },
-    icon: MdPieChart,
+    icon: MdStackedBarChart,
     link: "/dashboard/charts",
   },
   {
@@ -36,7 +36,7 @@ const menuItems: MenuItem[] = [
       pt: "Transações",
       en: "Transactions",
     },
-    icon: MdStackedBarChart,
+    icon: MdCompareArrows,
     link: "/dashboard/transactions",
   },
   {

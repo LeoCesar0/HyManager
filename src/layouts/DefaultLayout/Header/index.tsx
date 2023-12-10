@@ -24,15 +24,17 @@ const Header = () => {
         <div>
           <AppLogo />
         </div>
-        <div className="flex-1 flex items-center px-4">
-          {currentUser && <p>Hello {currentUser.name}!</p>}
+        <div className="flex-1 items-center px-4 flex">
+          <div className="hidden md:flex">
+            {currentUser && <p>Hello {currentUser.name}!</p>}
+          </div>
         </div>
-        <nav className="flex gap-4 items-center justify-between px-4">
+        <nav className="gap-4 items-center justify-between px-4 hidden md:flex">
           {APP_PAGES.map((item) => {
             let isSelected = pathname.includes(item.link);
             if (item.link === "/") isSelected = pathname === "/";
 
-            if(item.private && !currentUser) return null
+            if (item.private && !currentUser) return null;
 
             return (
               <Link key={item.label} href={item.link}>

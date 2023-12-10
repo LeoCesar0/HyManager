@@ -23,8 +23,6 @@ const BalanceChart: React.FC<IBalanceChart> = ({ bankAccountId }) => {
 
   const cacheKey = `balanceChart-last-${dateFilter.value}-${bankAccountId}`;
 
-  console.log("bankAccountId -->", bankAccountId);
-
   /* --------------------------- transactionsFetcher -------------------------- */
   const transactionsFetcher = useCallback(() => {
     const now = new Date();
@@ -59,8 +57,6 @@ const BalanceChart: React.FC<IBalanceChart> = ({ bankAccountId }) => {
     });
   }, [transactionReports, dateFilter]);
 
-  console.log("series -->", series);
-  console.log("options -->", options);
 
   return (
     <div className="bg-surface shadow-md rounded-md p-6 mt-4 mb-4 text-on-surface">

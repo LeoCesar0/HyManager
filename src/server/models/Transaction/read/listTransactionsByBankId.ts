@@ -7,21 +7,25 @@ import { FirebaseCollection } from "src/server/firebase";
 import { firebaseList } from "src/server/firebase/firebaseList";
 import { debugDev } from "src/utils/dev";
 import { Transaction } from "../schema";
+import { firebasePaginatedList } from "../../../firebase/firebasePaginatedList";
+import { PaginationResult } from "../../../../@types/index";
 
 interface IListTransactionByBankId {
   id: string;
   filters?: FirebaseFilterFor<Transaction>[];
-  pagination?: Pagination;
+  pagination: Pagination;
 }
 export const listTransactionsByBankId = async ({
   id,
   filters = [],
   pagination,
-}: IListTransactionByBankId): Promise<AppModelResponse<Transaction[]>> => {
+}: IListTransactionByBankId): Promise<
+  AppModelResponse<PaginationResult<Transaction>>
+> => {
   const funcName = "listTransactionsByBankId";
 
   try {
-    const list = await firebaseList<Transaction>({
+    const list = await firebasePaginatedList<Transaction>({
       collection: FirebaseCollection.transactions,
       filters: [
         { field: "bankAccountId", operator: "==", value: id },

@@ -25,7 +25,6 @@ import { useGlobalAuth } from "../../../contexts/GlobalAuth";
 import { FirebaseCollection } from "../../../server/firebase/index";
 
 const { menuItems } = DASHBOARD_CONFIG;
-
 export const DashboardMenu = () => {
   const { currentLanguage } = useGlobalContext();
   const { currentUser } = useGlobalAuth();
@@ -53,6 +52,7 @@ export const DashboardMenu = () => {
   return (
     <aside
       className={cx([
+        "hidden md:block",
         "max-w-[300px] w-full min-h-screen border-r shadow-2xl border-border/25 bg-surface text-surface-foreground space-y-4",
         `p-4`,
         "transition-all translate-x-0",

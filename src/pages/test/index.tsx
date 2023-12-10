@@ -1,55 +1,46 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGlobalAuth } from "@/contexts/GlobalAuth";
-import {
-  listBankAccountByUserId,
-  ListBankAccountByUserIdReturnType,
-} from "@/server/models/BankAccount/read/listBankAccountByUserId";
-import Link from "next/link";
-import useSwr from "swr";
-import { FirebaseCollection } from "../../server/firebase/index";
-import { Button } from "@/components/ui/button";
+
+import { Section, SectionContainer } from "@/components/Section/Section";
+import DashboardLayout from '@/layouts/DashboardLayout';
+import { ReactElement } from "react";
 
 const Test = () => {
-  const { currentUser } = useGlobalAuth();
-
-  const { data, error, isLoading, isValidating, mutate } = useSwr<
-    ListBankAccountByUserIdReturnType,
-    any,
-    string[] | null
-  >(
-    currentUser?.id ? [FirebaseCollection.bankAccounts, currentUser.id] : null,
-    ([_, id]) => listBankAccountByUserId({ id: id })
-  );
-
   return (
     <>
-      <Link href="/">Home</Link>
-      <h1>Test Page</h1>
-      <p>Current User: {currentUser?.name}</p>
-      <p>Current User id: {currentUser?.id}</p>
-
-      <Card className="mt-4">
-        <CardHeader>
-          <CardTitle>Bank accounts by user</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <pre>data: {JSON.stringify(data, null, 2)}</pre>
-          <pre>loading: {isLoading}</pre>
-          <pre>error: {JSON.stringify(error, null, 2)}</pre>
-          <div>
-            <Button
-              onClick={() => {
-                mutate();
-              }}
-            >
-              Mutate
-            </Button>
-            <Button onClick={() => {}}>Test</Button>
+      <SectionContainer>
+        <Section>
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Amount</th>
+                  <th>Creditor</th>
+                  <th>Created at</th>
+                  <th>Updated at</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>id</td>
+                  <td>500</td>
+                  <td>Fulano</td>
+                  <td>today</td>
+                  <td>today</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </CardContent>
-      </Card>
+        </Section>
+      </SectionContainer>
     </>
   );
 };
 
+// Test.getLayout = (page: ReactElement) => (
+//   <DashboardLayout>{page}</DashboardLayout>
+// );
+
 export default Test;
+
+
+

@@ -7,7 +7,43 @@
 
   .custom-chart {
     .tooltip {
-        @apply bg-card text-card-foreground rounded-lg shadow-lg border border-border px-4 py-2 ;
+      @apply bg-card text-card-foreground rounded-lg shadow-lg border border-border px-4 py-2;
     }
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+td {
+  min-width: 200px;
+  padding: 4px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+table {
+}
+
+* {
+  &::-webkit-scrollbar-track {
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #555;
   }
 }
