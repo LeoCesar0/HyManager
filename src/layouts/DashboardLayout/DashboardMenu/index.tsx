@@ -52,12 +52,12 @@ export const DashboardMenu = () => {
   return (
     <aside
       className={cx([
-        "hidden md:block",
-        "max-w-[300px] w-full min-h-screen border-r shadow-2xl border-border/25 bg-surface text-surface-foreground space-y-4",
+        "hidden md:block absolute left-0 top-0 bottom-0 z-10",
+        "max-w-[var(--menu-width)] w-full min-h-screen border-r shadow-2xl border-border/25 bg-surface text-surface-foreground space-y-4",
         `p-4`,
         "transition-all translate-x-0",
         [
-          `translate-x-[calc(-100%+4rem)] mr-[calc(-300px+4rem)] px-0`,
+          `translate-x-[calc(-100%+var(--menu-closed-width))] mr-[calc(-var(--menu-width)+var(--menu-closed-width))] px-0`,
           !menuIsOpen,
         ],
       ])}
@@ -67,7 +67,7 @@ export const DashboardMenu = () => {
         <Button
           size={"icon"}
           className={cx([
-            `w-[calc(4rem-2*1rem)] h-[calc(4rem-2*1rem)]`,
+            `w-[calc(var(--menu-closed-width)-2*1rem)] h-[calc(var(--menu-closed-width)-2*1rem)]`,
             ["mr-4", !menuIsOpen],
           ])}
           variant="outline"
