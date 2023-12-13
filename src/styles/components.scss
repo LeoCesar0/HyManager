@@ -11,26 +11,6 @@
     }
   }
 }
-
-.table-container {
-  overflow-x: auto;
-  border-radius: 0.5rem;
-  width: 100%;
-}
-
-table {
-  width: 100%;
-}
-
-td {
-  min-width: 200px;
-  padding: 4px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-table {
-}
-
 * {
   &::-webkit-scrollbar-track {
     border-radius: 8px;

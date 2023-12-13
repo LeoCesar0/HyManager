@@ -49,7 +49,7 @@
     --primary-foreground: hsl(346.8 0% 80%);
     --secondary: theme(colors.stone.800);
     --secondary-foreground: theme(colors.stone.300);
-    --surface: theme(colors.stone.900);;
+    --surface: theme(colors.stone.900);
     --surface-foreground: var(--foreground);
     --muted: theme(colors.zinc.900);
     --muted-foreground: theme(colors.zinc.400);
@@ -71,4 +71,3 @@
     @apply bg-background text-foreground;
   }
 }
-
