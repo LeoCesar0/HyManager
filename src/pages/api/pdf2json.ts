@@ -25,13 +25,13 @@ export const handler = async (
   const readFilesPromise = new Promise((resolve, reject) => {
     form.parse(req, async (err, fields, { files }) => {
       const bankAccountId = fields.bankAccountId as string;
-      const uploadedFiles = JSON.parse(
-        fields.uploadedFiles as string
-      ) as FileInfo[];
+      // const uploadedFiles = JSON.parse(
+      //   fields.uploadedFiles as string
+      // ) as FileInfo[];
 
       const handleReject = (errorMessage = "Error reading pdf") => {
         console.log("Reject -->", errorMessage);
-        const response = {
+        const response: PDF2JSONResponse = {
           error: { message: errorMessage },
           done: false,
           data: null,
@@ -44,9 +44,9 @@ export const handler = async (
         handleReject("No bank account id provided");
       }
 
-      if (!uploadedFiles) {
-        handleReject("Error uploading files");
-      }
+      // if (!uploadedFiles) {
+      //   handleReject("Error uploading files");
+      // }
 
       if (err) {
         handleReject();
@@ -58,7 +58,7 @@ export const handler = async (
       const rawData = await pdfReader.read({ files: files });
 
       const parsedResults = pdfDataParser.parse(rawData, bankAccountId);
-      
+
       const valid = pdfDataParser.validateResults(parsedResults);
 
       if (!valid) {

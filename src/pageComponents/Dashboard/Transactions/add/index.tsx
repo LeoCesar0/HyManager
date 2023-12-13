@@ -44,24 +44,23 @@ export const DashboardTransactionsAdd = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    handleToast(
-      createTransaction({
-        bankAccountId: currentBankAccount!.id,
-        values: {
-          ...values,
-        },
-      }),
-      {
-        defaultErrorMessage: {
-          pt: "Erro ao criar transação",
-          en: "Error creating transaction",
-        },
-        loadingMessage: {
-          pt: "Adicionando transação",
-          en: "Adding transaction",
-        },
-      }
-    );
+    const promise = createTransaction({
+      bankAccountId: currentBankAccount!.id,
+      values: {
+        ...values,
+      },
+    });
+
+    handleToast(promise, {
+      defaultErrorMessage: {
+        pt: "Erro ao criar transação",
+        en: "Error creating transaction",
+      },
+      loadingMessage: {
+        pt: "Adicionando transação",
+        en: "Adding transaction",
+      },
+    });
   }
 
   return (

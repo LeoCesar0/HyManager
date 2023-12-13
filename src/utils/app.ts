@@ -27,8 +27,8 @@ type IPromiseOptions = {
   defaultErrorMessage: string;
 };
 
-export async function handleToastPromise<T>(
-  promise: Promise<T & AppModelResponse<any>>,
+export async function handleToastPromise<T extends AppModelResponse<any>>(
+  promise: Promise<T>,
   { loadingMessage, defaultErrorMessage }: IPromiseOptions
 ): Promise<T> {
   const toastId = toast.loading(loadingMessage);

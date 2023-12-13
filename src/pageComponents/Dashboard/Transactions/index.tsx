@@ -22,6 +22,7 @@ import { ITableColumn } from "@/@types/Table";
 import { Timestamp } from "firebase/firestore";
 import { formatTimestamp } from "@/utils/date/formatTimestamp";
 import { valueToCurrency } from "../../../utils/misc";
+import { UploadIcon } from "@radix-ui/react-icons";
 
 interface IProps {}
 
@@ -100,6 +101,19 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                       pt: "Adicionar",
                     })}
                   </>
+                </Button>
+              </Link>
+            </>
+          }
+          rightActions={
+            <>
+              <Link href="/dashboard/transactions/extract">
+                <Button variant={"secondary"}>
+                  <UploadIcon />
+                  {useT({
+                    en: "Import from Extract",
+                    pt: "Importar Extrato",
+                  })}
                 </Button>
               </Link>
             </>

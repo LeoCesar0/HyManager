@@ -27,7 +27,6 @@ const uploadSingleFile = async (
     id: fileId,
     name: file.name,
     url,
-    // file,
   };
 };
 
