@@ -10,6 +10,8 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -83,7 +85,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
   return (
     <>
       <SectionContainer>
-        {/* <Section
+        <Section
           sectionTitle={{
             pt: "Transações",
             en: "Transactions",
@@ -92,65 +94,69 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
             <>
               <Link href="/dashboard/transactions/add">
                 <Button>
-                  {useT({
-                    en: "Add new",
-                    pt: "Adicionar",
-                  })}
+                  <>
+                    {useT({
+                      en: "Add new",
+                      pt: "Adicionar",
+                    })}
+                  </>
                 </Button>
               </Link>
             </>
           }
         >
           <>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {columns.map((columns) => {
+            <TableContainer>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    {columns.map((columns) => {
+                      return (
+                        <TableHead key={columns.key}>{columns.label}</TableHead>
+                      );
+                    })}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {pagination?.data?.list?.map((transaction) => {
                     return (
-                      <TableHead key={columns.key}>{columns.label}</TableHead>
+                      <TableRow key={transaction.id}>
+                        {columns.map((column) => {
+                          if (transaction[column.key] instanceof Timestamp) {
+                            const value = transaction[column.key] as Timestamp;
+                            const label = formatTimestamp(value);
+                            return (
+                              <TableCell key={column.key}>{label}</TableCell>
+                            );
+                          }
+
+                          if (column.key === "amount") {
+                            const value = transaction.amount;
+                            const label = valueToCurrency(value);
+                            return (
+                              <TableCell key={column.key}>{label}</TableCell>
+                            );
+                          }
+
+                          return (
+                            <TableCell key={column.key}>
+                              {transaction[column.key] as string}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
                     );
                   })}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {pagination?.data?.list?.map((transaction) => {
-                  return (
-                    <TableRow key={transaction.id}>
-                      {columns.map((column) => {
-                        if (transaction[column.key] instanceof Timestamp) {
-                          const value = transaction[column.key] as Timestamp;
-                          const label = formatTimestamp(value);
-                          return (
-                            <TableCell key={column.key}>{label}</TableCell>
-                          );
-                        }
-
-                        if (column.key === "amount") {
-                          const value = transaction.amount;
-                          const label = valueToCurrency(value);
-                          return (
-                            <TableCell key={column.key}>{label}</TableCell>
-                          );
-                        }
-
-                        return (
-                          <TableCell key={column.key}>
-                            {transaction[column.key] as string}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-            <div className="w-full bg-primary text-primary-foreground p-2">
-              <strong>Total:</strong> {valueToCurrency(total)}
-            </div>
+                </TableBody>
+              </Table>
+              <TableFooter>
+                <strong>Total:</strong> {valueToCurrency(total)}
+              </TableFooter>
+            </TableContainer>
           </>
-        </Section> */}
+        </Section>
 
-        <Section>
+        {/* <Section>
           <div className="table-container">
             <table>
               <thead>
@@ -173,7 +179,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
               </tbody>
             </table>
           </div>
-        </Section>
+        </Section> */}
       </SectionContainer>
     </>
   );
