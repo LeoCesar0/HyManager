@@ -2,11 +2,26 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+const TableContainer = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    className={cn(
+      "relative w-full overflow-x-auto   rounded-sm bg-card text-card-foreground flex flex-col",
+      className
+    )}
+    ref={ref}
+    {...props}
+  />
+));
+TableContainer.displayName = "TableContainer";
+
 const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="relative overflow-x-auto mb-4 min-h-[40vh]">
+  <div className="min-h-[40vh] p-2">
     <table
       ref={ref}
       className={cn("caption-bottom text-sm w-full ", className)}
@@ -40,9 +55,12 @@ const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tfoot
+  <footer
     ref={ref}
-    className={cn("bg-primary font-medium text-primary-foreground", className)}
+    className={cn(
+      "block mt-auto bg-primary font-medium text-primary-foreground p-2",
+      className
+    )}
     {...props}
   />
 ));
@@ -85,7 +103,7 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] h-[60px]",
+      "p-2 py-3 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] truncate ",
       className
     )}
     {...props}
@@ -106,6 +124,7 @@ const TableCaption = React.forwardRef<
 TableCaption.displayName = "TableCaption";
 
 export {
+  TableContainer,
   Table,
   TableHeader,
   TableBody,
