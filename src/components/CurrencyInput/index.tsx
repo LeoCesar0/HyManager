@@ -55,7 +55,15 @@ export const CurrencyInput: React.FC<CurrencyInputProps> = ({
   value,
   ...inputProps
 }) => {
-  const inputValue = useRef<string>(typeof value === 'string' ? value : typeof value === 'number' ? value.toString() : '');
+  const inputValue = useRef<string>(
+    value === 0
+      ? ""
+      : typeof value === "string"
+      ? value
+      : typeof value === "number"
+      ? value.toString()
+      : ""
+  );
 
   const defaultOptions =
     currency === "BRL"
