@@ -18,7 +18,7 @@ import { useToastPromise } from "@/hooks/useToastPromise";
 
 const formSchema = createTransactionSchema.merge(
   z.object({
-    amount: z.number().max(100, { message: "Max 100" }),
+    amount: z.number(),
   })
 );
 
