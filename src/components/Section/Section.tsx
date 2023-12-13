@@ -11,6 +11,7 @@ interface IProps {
   children: React.ReactNode;
   className?: string;
   actions?: React.ReactNode;
+  rightActions?: React.ReactNode;
   headerBorder?: boolean;
   goBackLink?: string;
 }
@@ -20,6 +21,7 @@ export const Section: React.FC<IProps> = ({
   children,
   className = "",
   actions,
+  rightActions,
   headerBorder = false,
   goBackLink,
 }) => {
@@ -28,16 +30,13 @@ export const Section: React.FC<IProps> = ({
     <section className={cn(className)}>
       <header
         className={cx([
-          "flex gap-4 items-center mb-4 ",
+          "flex gap-4 items-center mb-4 flex-wrap",
           ["border-b pb-4", headerBorder],
         ])}
       >
         {goBackLink && (
           <Link href={goBackLink}>
-            <Button
-                size={'iconLg'}
-                variant={'outline'}
-            >
+            <Button size={"iconLg"} variant={"outline"}>
               <ArrowLeft />
             </Button>
           </Link>
@@ -47,7 +46,8 @@ export const Section: React.FC<IProps> = ({
             {sectionTitle[currentLanguage]}
           </h4>
         )}
-        <div className="flex items-center gap-2">{actions}</div>
+        <div className="flex items-center gap-2 flex-1">{actions}</div>
+        <div className="flex items-center gap-2">{rightActions}</div>
       </header>
       <div>{children}</div>
     </section>
