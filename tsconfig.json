@@ -2,7 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -12,30 +16,60 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "isolatedModules": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@pageComponents/*": ["src/pageComponents/*"],
-      "@types": ["src/@types"],
-      "@types/*": ["src/@types/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@utils/*": ["src/utils/*"],
-      "@styles/*": ["src/styles/*"],
-      "@contexts/*": ["src/contexts/*"],
-      "@constants": ["src/assets/constants"],
-      "@static": ["src/assets/static"],
-      "@models": ["src/server/models"],
-      "@models/*": ["src/server/models/*"],
-      "@server": ["src/server"],
-      "@server/*": ["src/server/*"],
+      "@/*": [
+        "src/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@pageComponents/*": [
+        "src/pageComponents/*"
+      ],
+      "@types": [
+        "src/@types"
+      ],
+      "@types/*": [
+        "src/@types/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@contexts/*": [
+        "src/contexts/*"
+      ],
+      "@constants": [
+        "src/assets/constants"
+      ],
+      "@static": [
+        "src/assets/static"
+      ],
+      "@models": [
+        "src/server/models"
+      ],
+      "@models/*": [
+        "src/server/models/*"
+      ],
+      "@server": [
+        "src/server"
+      ],
+      "@server/*": [
+        "src/server/*"
+      ]
     }
   },
   "include": [
@@ -43,7 +77,14 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/pages/api/testapi.ts"
-, "src/pages/api/pdf2json.ts"  ],
-  "exclude": ["node_modules"]
+    "src/pages/api/testapi.ts",
+    "src/pages/api/pdf2json.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "ts-node": {
+    // Tell ts-node CLI to install the --loader automatically, explained below
+    "esm": true
+  }
 }
