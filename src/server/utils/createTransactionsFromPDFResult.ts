@@ -5,7 +5,7 @@ import { createTransactionReport } from "@models/TransactionReport/create/create
 import { TransactionReport } from "@models/TransactionReport/schema";
 import { makeDateFields } from "@utils/app";
 import { Timestamp } from "firebase/firestore";
-import { IPDFData } from "src/lib/PDFReader/interfaces";
+import { IPDFData } from "@/services/PDFReader/interfaces";
 
 interface ICreateTransactionsFromPDFResult {
   pdfReadResult: IPDFData[];

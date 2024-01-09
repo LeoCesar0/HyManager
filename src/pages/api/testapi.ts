@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { IPDFRawData } from "src/lib/PDFReader/rawDataTypes";
+import { IPDFRawData } from "@/services/PDFReader/rawDataTypes";
 const PDFParser = require("pdf2json");
 
 // export const config = {

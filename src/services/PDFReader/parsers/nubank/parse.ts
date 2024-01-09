@@ -2,10 +2,10 @@ import {
   CreateTransaction,
   TransactionType,
 } from "src/server/models/Transaction/schema";
-import {  slugify } from "src/utils/app";
 import { IPDFData } from "../../interfaces";
 import { IPDFRawData } from "../../rawDataTypes";
 import { numericStringToNumber } from "@/utils/numericStringToNumber";
+import { slugify } from "@/utils/app";
 
 const headerMapping = {
   initialBalance: [20.921, 9.97],
@@ -221,7 +221,7 @@ export function parse(
           type: tempTransaction.type as TransactionType,
           amount: amount,
           bankAccountId: bankAccountId,
-          date: date.toISOString(),
+          date: date,
           // ...makeDateFields(date),
         };
         currentPDFTransactions.push(transaction);

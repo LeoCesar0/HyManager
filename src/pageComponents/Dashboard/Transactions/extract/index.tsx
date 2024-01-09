@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { useToastPromise } from "@/hooks/useToastPromise";
 import TransactionsFileInput from "@/components/TransactionsFileInput";
 import { useGlobalAuth } from "../../../../contexts/GlobalAuth";
-import { PDF2JSONResponse } from "@/pages/api/pdf2json";
 import { useState } from "react";
 import useT from "@/hooks/useT";
 import { UploadIcon } from "@radix-ui/react-icons";
 import { createTransactionsFromPDFResult } from "../../../../server/utils/createTransactionsFromPDFResult";
 import { uploadFilesToStorage } from "@/components/TransactionsFileInput/uploadFilesToStorage";
+import { PDF2JSONResponse } from "@/server/routes/readPDFRoute";
 
 export const DashboardTransactionsExtract = () => {
   const [PDFResult, setPDFResult] = useState<PDF2JSONResponse | null>(null);
