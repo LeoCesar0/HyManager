@@ -37,7 +37,6 @@ export const getPDFRawData = async ({
       // --------------------------
 
       reader.on("pdfParser_dataReady", (pdfRawData: IPDFRawData) => {
-        console.log("DATA SUCCESS!");
         clearTimeout(timer);
         resolve(pdfRawData);
       });
