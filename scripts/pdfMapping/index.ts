@@ -1,13 +1,10 @@
-// const { getPDFRawData } = require( "../../src/services/PDFReader/getPDFRawData");
-// const { decodeText } = require( "../../src/services/PDFReader/parsers/nubank/decodeText");
-// const { TEST_CONFIG } = require( "../../src/static/testConfig");
-// const { compareStrings } = require( "../../src/utils/compareStrings");
 import { decodeText } from "../../src/services/PDFReader/parsers/nubank/decodeText";
 import { TEST_CONFIG } from "../../src/static/testConfig";
 import { compareStrings } from "../../src/utils/compareStrings";
 import formidable from "formidable";
 import { IPDFRawData } from "../../src/services/PDFReader/rawDataTypes";
 const PDF2JSON = require("pdf2json");
+const fs = require("fs");
 
 interface IGetPDFRawData {
   file: formidable.File | { filepath: string };
@@ -110,6 +107,14 @@ const getPDFMapping = async () => {
       });
     });
   });
+
+  const outputData = result.reduce((acc, entry) => {
+    console.log(entry)
+    acc[entry.key] = entry.coords;
+    return acc
+  }, {} as any);
+
+  fs.writeFileSync("./scripts/pdfMapping/output.json", JSON.stringify(outputData, null, 2));
 
   console.table(result);
 };

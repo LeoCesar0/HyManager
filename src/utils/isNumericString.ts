@@ -3,7 +3,7 @@ export const isNumericString = (value: string) => {
 
     if(!value || typeof value !== "string") return false
 
-  const regex = /^[0-9,.]*$/;
+    const regex = /^-?[0-9,.]*$/;
 
   const hasMultiplesComma =
     value.split("").filter((item) => item === ",").length > 1;

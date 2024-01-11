@@ -1,5 +1,5 @@
 import { fileInfoSchema } from "@/@types/File";
-import { timestampSchema } from "src/server/firebase";
+import { timestampSchema } from "@/server/firebase";
 import { z } from "zod";
 
 export enum TransactionType {
@@ -48,7 +48,29 @@ export const createTransactionSchema = z.object({
     invalid_type_error: "Insert a date",
     required_error: "This field is required!",
   }),
-  amount: z.number().min(0.01),
+  amount: z.number(),
+  color: z.string().optional(),
+});
+
+export const createTransactionFromPDFSchema = z.object({
+  slug: z.string().optional(),
+  idFromBank: z.string().optional(),
+  bankAccountId: z.string().optional(),
+  type: z.enum([TransactionType.credit, TransactionType.debit]),
+  file: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      url: z.string(),
+    })
+    .optional(),
+  creditor: z.string(),
+  description: z.string(),
+  date: z.date({
+    invalid_type_error: "Insert a date",
+    required_error: "This field is required!",
+  }),
+  amount: z.number(),
   color: z.string().optional(),
 });
 

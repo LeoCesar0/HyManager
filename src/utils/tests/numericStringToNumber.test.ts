@@ -5,6 +5,16 @@ describe("numericStringToNumber", () => {
     expect(numericStringToNumber("123")).toBe(123);
   });
 
+  test("it should ignore + symbol", () => {
+    expect(numericStringToNumber("+123")).toBe(123);
+    expect(numericStringToNumber("+ 123.5")).toBe(123.5);
+  });
+
+  test("it should treat - symbol as negative", () => {
+    expect(numericStringToNumber("-123")).toBe(-123);
+    expect(numericStringToNumber("- 123.5")).toBe(-123.5);
+  });
+
   test("it should return zero with empty string", () => {
     expect(numericStringToNumber("")).toBe(0);
   });

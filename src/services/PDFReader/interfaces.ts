@@ -1,7 +1,6 @@
 import {
-  createTransactionSchema,
-  transactionSchema,
-} from "src/server/models/Transaction/schema";
+  createTransactionFromPDFSchema,
+} from "@/server/models/Transaction/schema";
 import { z } from "zod";
 import { IPDFRawData } from "./rawDataTypes";
 
@@ -11,7 +10,7 @@ export const PDFDataSchema = z.object({
   totalCredit: z.number(),
   totalDebit: z.number(),
   finalBalance: z.number(),
-  transactions: z.array(createTransactionSchema),
+  transactions: z.array(createTransactionFromPDFSchema),
 });
 
 export type IPDFData = z.infer<typeof PDFDataSchema>;

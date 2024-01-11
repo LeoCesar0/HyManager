@@ -6,6 +6,7 @@ import { IPDFData } from "../../interfaces";
 import { IPDFRawData } from "../../rawDataTypes";
 import { numericStringToNumber } from "@/utils/numericStringToNumber";
 import { slugify } from "@/utils/app";
+import { decodeText } from "./decodeText";
 
 const headerMapping = {
   initialBalance: [20.921, 9.97],
@@ -29,7 +30,6 @@ export function parse(
 ): IPDFData[] {
   const finalResult: IPDFData[] = [];
 
-  const now = new Date();
   let afterTransXValues: number[] = [];
 
   PDFsRawData.forEach((rawPDFData) => {
@@ -59,15 +59,17 @@ export function parse(
         } = undefined;
 
     Pages.forEach(({ Texts }, pageIndex) => {
-      Texts.forEach(({ R, x, y }, textIndex) => {
-        const textValue = decodeURIComponent(R[0].T || "").trim();
+      Texts.forEach((textData, textIndex) => {
+        const { R, x, y } = textData;
+        const rawText = R[0].T || "";
+        const currentText = decodeText(rawText);
         let headerKey = axisMap.get(y.toString()) as keyof IPDFData;
 
         let prevTransactionAlreadyCompleted =
           tempTransaction && typeof tempTransaction.amount === "number";
         const foundDescriptionX = x === transactionDescriptionX;
 
-        if (textValue === "Movimentações") {
+        if (currentText === "Movimentações") {
           checkingTransactions = true;
           // console.log(
           //   "----------------- START TRANSACTIONS ---------------------"
@@ -76,9 +78,9 @@ export function parse(
 
         if (pageIndex === 0 && !checkingTransactions) {
           /* ---------------------------- CHECK FIRST PAGE INFO ---------------------------- */
-          const amount = numericStringToNumber(textValue);
+          const amount = numericStringToNumber(currentText);
           if (headerKey && amount !== null) {
-            // @ts-ignoreount ?? true
+            // @ts-ignore
             currentPDFData[headerKey] = amount;
             return;
           }
@@ -88,7 +90,7 @@ export function parse(
         }
 
         /* --------------------------- CHECK TRANSACTIONS --------------------------- */
-        const foundDate = parseBrazilianDate(textValue);
+        const foundDate = parseBrazilianDate(currentText);
 
         if (
           prevTransactionAlreadyCompleted &&
@@ -126,7 +128,7 @@ export function parse(
 
         if (!tempTransaction.type || prevTransactionAlreadyCompleted) {
           // HAS NOT ENTER IN TRANSACTION YET
-          if (slugify(textValue) === slugify("Total de entradas")) {
+          if (slugify(currentText) === slugify("Total de entradas")) {
             // console.log("Step 2 - Found New Type");
             // console.log("textValue -->", textValue);
             // console.log("----------------- CREDIT LIST ---------------------");
@@ -136,7 +138,7 @@ export function parse(
             };
             return;
           }
-          if (slugify(textValue) === slugify("Total de saídas")) {
+          if (slugify(currentText) === slugify("Total de saídas")) {
             // console.log("Step 2");
             // console.log("textValue -->", textValue);
             // console.log("----------------- DEBIT LIST ---------------------");
@@ -156,7 +158,7 @@ export function parse(
           tempTransaction = {
             date: tempTransaction.date,
             type: tempTransaction.type,
-            description: textValue,
+            description: currentText,
           };
           // console.log("Step 3 - Found new Description");
           // console.log("textValue -->", textValue);
@@ -169,15 +171,14 @@ export function parse(
           return;
         }
 
-        let amount = numericStringToNumber(textValue);
+        let amount = numericStringToNumber(currentText);
 
         if (!tempTransaction.creditor && !amount) {
-          // CREDITOR
-
-          let creditor = textValue;
+          let creditor = currentText;
           let i = textIndex;
           while (Texts[i + 1] && Texts[i + 1].x === transactionDescriptionX) {
-            creditor += Texts[i + 1].R[0].T;
+            const text = decodeText(Texts[i + 1].R[0].T);
+            creditor += text;
             i++;
           }
 

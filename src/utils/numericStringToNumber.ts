@@ -1,14 +1,17 @@
 import { isNumericString } from "./isNumericString";
 
 export const numericStringToNumber = (string: string) => {
-  if(string === '') string = '0'
+  if (string === "") string = "0";
 
-  if (!string || !isNumericString(string)) {
-    return null
+  if (!string) return null;
+
+  string = string.replace("+", "");
+  string = string.replace(" ", "");
+
+  if (!isNumericString(string)) {
+    return null;
     // throw new Error(`string is not a numeric string --> ${string}`);
   }
-
-  string = string.replace('+', '')
 
   const hasComma = string.includes(",");
   const hasDot = string.includes(".");
