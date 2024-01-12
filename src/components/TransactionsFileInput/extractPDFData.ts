@@ -20,7 +20,7 @@ export const extractPDFData = async ({
   formData.append("bankAccountId", bankAccountId);
 
   try {
-    const res = await fetch("/api/pdf2json", {
+    const res = await fetch("/api/read-pdf-files", {
       method: "POST",
       body: formData,
     });

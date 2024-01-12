@@ -21,7 +21,6 @@ export const handler: NextApiHandler = async (req, res) => {
         reject(null);
       });
       pdfParser.on("pdfParser_dataReady", (pdfData: IPDFRawData) => {
-        // fs.writeFile("./pdf2json/test/F1040EZ.json", JSON.stringify(pdfData));
         resolve(pdfData);
       });
       pdfParser.loadPDF(TEST_CONFIG.pdf["2023-06"].path);

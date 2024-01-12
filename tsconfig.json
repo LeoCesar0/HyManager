@@ -78,7 +78,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/pages/api/testapi.ts",
-    "src/pages/api/pdf2json.ts"
+    "src/pages/api/read-pdf-files.ts"
   ],
   "exclude": [
     "node_modules"

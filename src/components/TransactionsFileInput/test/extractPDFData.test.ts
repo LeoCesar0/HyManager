@@ -39,7 +39,7 @@ describe("Test extractPDFData", () => {
 
   //   test("extractPDFData sends correct request and returns data on success", async () => {
   //     const mockResponse = { data: [], done: true };
-  //     fetchMock.post("/api/pdf2json", mockResponse);
+  //     fetchMock.post("/api/read-pdf-files", mockResponse);
 
   //     const result = await extractPDFData({
   //       bankAccountId: "123",
@@ -47,14 +47,14 @@ describe("Test extractPDFData", () => {
   //     });
 
   //     expect(fetchMock).toHaveBeenLastCalledWith(
-  //       "/api/pdf2json",
+  //       "/api/read-pdf-files",
   //       expect.objectContaining({ method: "POST" })
   //     );
   //     expect(result).toEqual(mockResponse);
   //   });
 
   //   test("extractPDFData returns error on failure", async () => {
-  //     fetchMock.post("/api/pdf2json", 500);
+  //     fetchMock.post("/api/read-pdf-files", 500);
 
   //     const result = await extractPDFData({
   //       bankAccountId: "123",
@@ -62,7 +62,7 @@ describe("Test extractPDFData", () => {
   //     });
 
   //     expect(fetchMock).toHaveBeenLastCalledWith(
-  //       "/api/pdf2json",
+  //       "/api/read-pdf-files",
   //       expect.objectContaining({ method: "POST" })
   //     );
   //     expect(result).toEqual({
