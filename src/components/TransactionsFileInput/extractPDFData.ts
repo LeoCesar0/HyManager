@@ -1,4 +1,4 @@
-import { PDF2JSONResponse } from "@/server/routes/readPDFRoute";
+import { PDF2JSONResponse } from "@/server/routes/readPdfFilesRoute";
 import { AppModelResponse } from "../../@types/index";
 import { IPDFData } from "../../services/PDFReader/interfaces";
 

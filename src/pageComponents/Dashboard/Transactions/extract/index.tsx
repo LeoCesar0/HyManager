@@ -9,7 +9,7 @@ import useT from "@/hooks/useT";
 import { UploadIcon } from "@radix-ui/react-icons";
 import { createTransactionsFromPDFResult } from "../../../../server/utils/createTransactionsFromPDFResult";
 import { uploadFilesToStorage } from "@/components/TransactionsFileInput/uploadFilesToStorage";
-import { PDF2JSONResponse } from "@/server/routes/readPDFRoute";
+import { PDF2JSONResponse } from "@/server/routes/readPdfFilesRoute";
 
 export const DashboardTransactionsExtract = () => {
   const [PDFResult, setPDFResult] = useState<PDF2JSONResponse | null>(null);

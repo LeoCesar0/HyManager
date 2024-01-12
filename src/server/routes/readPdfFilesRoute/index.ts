@@ -7,7 +7,7 @@ import NubankPDFParser from "@/services/PDFReader/parsers/nubank/NubankPDFParser
 
 export type PDF2JSONResponse = AppModelResponse<IPDFData[]>;
 
-export const readPDFRoute = async (
+export const readPdfFilesRoute = async (
   req: NextApiRequest,
   res: NextApiResponse<PDF2JSONResponse>
 ) => {

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PDF2JSONResponse, readPDFRoute } from "@/server/routes/readPDFRoute";
+import { PDF2JSONResponse, readPdfFilesRoute } from "@/server/routes/readPdfFilesRoute";
 
 export const config = {
   api: {
@@ -11,7 +11,7 @@ export const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<PDF2JSONResponse>
 ) => {
-  return await readPDFRoute(req, res);
+  return await readPdfFilesRoute(req, res);
 };
 
 export default handler;
