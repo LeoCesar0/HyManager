@@ -3,11 +3,10 @@ import { ChangeEvent, InputHTMLAttributes, useRef } from "react";
 import { readPDFFiles } from "./readPDFFiles";
 import useT from "@/hooks/useT";
 import { useToastPromise } from "@/hooks/useToastPromise";
-import { IPDFData } from "../../lib/PDFReader/interfaces";
+import { IPDFData } from "../../services/PDFReader/interfaces";
 import { AppModelResponse } from "../../@types/index";
 import { extractPDFData } from "./extractPDFData";
 import { showErrorToast } from "@/utils/app";
-import { FileInfo } from "@/@types/File";
 
 interface ITransactionsFileInput extends InputHTMLAttributes<HTMLInputElement> {
   currentBankId: string;
@@ -53,7 +52,6 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
 
     const promise = extractPDFData({
       bankAccountId: currentBankId,
-      userId: userId,
       files: loadedFiles,
     });
 

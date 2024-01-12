@@ -1,17 +1,14 @@
-import { PDF2JSONResponse } from "@/pages/api/pdf2json";
-import { uploadFilesToStorage } from "./uploadFilesToStorage";
-import { AppModelResponse } from '../../@types/index';
-import { IPDFData } from '../../lib/PDFReader/interfaces';
+import { PDF2JSONResponse } from "@/server/routes/readPDFRoute";
+import { AppModelResponse } from "../../@types/index";
+import { IPDFData } from "../../services/PDFReader/interfaces";
 
 export interface IExtractPDFData {
   bankAccountId: string;
-  userId: string;
   files: File[];
 }
 
 export const extractPDFData = async ({
   bankAccountId,
-  userId,
   files,
 }: IExtractPDFData): Promise<AppModelResponse<IPDFData[]>> => {
   const formData = new FormData();
@@ -21,7 +18,6 @@ export const extractPDFData = async ({
   });
 
   formData.append("bankAccountId", bankAccountId);
-  // formData.append("uploadedFiles", JSON.stringify(uploadedFiles));
 
   try {
     const res = await fetch("/api/pdf2json", {

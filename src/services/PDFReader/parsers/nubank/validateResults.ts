@@ -6,7 +6,6 @@ export const validateResults = (parsedResults: IPDFData[]) => {
   let valid = true;
 
   parsedResults.forEach((pdfResult, index) => {
-    console.log("---> validateResults PDF " + index);
 
     const totalsByTransactions = pdfResult.transactions.reduce(
       (acc, entry) => {

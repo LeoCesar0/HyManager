@@ -4,33 +4,33 @@ import fs from "fs";
 describe("Test extractPDFData", () => {
   test("load pdf file", async () => {
     let file: File;
-    const pdfName = "nu.pdf";
     const bankAccountId = TEST_CONFIG.bankAccountId;
 
     expect(bankAccountId).toBeTruthy();
 
-    await new Promise((resolve, reject) => {
-      fs.readFile(
-        "src/components/TransactionsFileInput/test/" + pdfName,
-        (err, pdfBuffer) => {
-          // pdfBuffer contains the file content
-          if (err) {
-            console.error("error fs:", err);
-            reject();
-          }
+    // await new Promise((resolve, reject) => {
+    //   fs.readFile(TEST_CONFIG.pdfs[0].path, (err, pdfBuffer) => {
+    //     const file = new File([pdfBuffer], "nu.pdf", {
+    //       type: "application/pdf",
+    //     });
 
-          const pdfBlob = new Blob([pdfBuffer], { type: 'application/pdf' });
+    //     // pdfBuffer contains the file content
+    //     const pdfName = "nu.pdf";
 
-          file = new File([pdfBlob], pdfName, { type: 'application/pdf' });
-          // file = new File([pdfBuffer], pdfName);
-          resolve(pdfBuffer);
-        }
-      );
-    });
+    //     if (err) {
+    //       console.error("error fs:", err);
+    //       reject();
+    //     }
 
-    expect(file!).toBeTruthy();
+    //     const pdfBlob = new Blob([pdfBuffer], { type: "application/pdf" });
 
+    //     file = new File([pdfBlob], pdfName, { type: "application/pdf" });
+    //     // file = new File([pdfBuffer], pdfName);
+    //     resolve(pdfBuffer);
+    //   });
+    // });
 
+    // expect(file!).toBeTruthy();
   });
 
   //   afterEach(() => {

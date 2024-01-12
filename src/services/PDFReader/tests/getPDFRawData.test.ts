@@ -3,7 +3,7 @@ import { getPDFRawData } from "../getPDFRawData";
 
 describe("Test get pdf raw data", () => {
   test("should resolve with pdf raw data", async () => {
-    const file = { filepath: TEST_CONFIG.pdfs[0].path };
+    const file = { filepath: TEST_CONFIG.pdf['2023-06'].path };
     const rawData = await getPDFRawData({ file });
     expect(rawData?.Pages).toBeTruthy();
   });

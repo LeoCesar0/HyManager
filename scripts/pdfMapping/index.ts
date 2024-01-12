@@ -81,7 +81,7 @@ const getPDFRawData = async ({ file, timeout = 105000 }: IGetPDFRawData) => {
 
 const getPDFMapping = async () => {
   const rawPDFData = await getPDFRawData({
-    file: { filepath: TEST_CONFIG.pdfs[0].path },
+    file: { filepath: TEST_CONFIG.pdf['2023-06'].path },
   });
 
   if (!rawPDFData) {

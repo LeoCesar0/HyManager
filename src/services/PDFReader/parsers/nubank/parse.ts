@@ -249,7 +249,6 @@ export function parse(
   });
 
   console.table(finalResult);
-  console.log("afterTransXValues -->", afterTransXValues);
   return finalResult;
 }
 
