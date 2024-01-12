@@ -7,7 +7,7 @@
     "build": "NODE_ENV=production next build",
     "start": "NODE_ENV=production next start",
     "lint": "next lint",
-    "test": "jest",
+    "test": "jest --silent",
     "map-pdf": "tsc scripts/pdfMapping/index.ts --outdir ./dist || true && node dist/scripts/pdfMapping/index.js"
   },
   "dependencies": {
