@@ -1,5 +1,6 @@
 import { NextApiHandler } from "next";
 import { IPDFRawData } from "@/services/PDFReader/rawDataTypes";
+import { TEST_CONFIG } from "@/static/testConfig";
 const PDFParser = require("pdf2json");
 
 // export const config = {
@@ -23,7 +24,7 @@ export const handler: NextApiHandler = async (req, res) => {
         // fs.writeFile("./pdf2json/test/F1040EZ.json", JSON.stringify(pdfData));
         resolve(pdfData);
       });
-      pdfParser.loadPDF("public/nu_pdf_fev.pdf");
+      pdfParser.loadPDF(TEST_CONFIG.pdf["2023-06"].path);
     }
   );
 

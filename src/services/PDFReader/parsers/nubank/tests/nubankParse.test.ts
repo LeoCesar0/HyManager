@@ -51,7 +51,6 @@ describe("Test Nubank parse", () => {
       expect(pdfData.totalCredit).toBe(5203.75);
       expect(pdfData.totalDebit).toBe(-9742.24);
       expect(pdfData.transactions.length).toBe(51);
-
     })
     // --------------------------
     // pdf 2023-07

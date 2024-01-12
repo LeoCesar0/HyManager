@@ -6,7 +6,7 @@ export const pdftest = async (req, res) => {
   let data = []
 
   const promise = new Promise((resolve, reject) => {
-    fs.readFile("public/nu_pdf_fev.pdf", (err, pdfBuffer) => {
+    fs.readFile("public/test/pdfs/2023-06.pdf", (err, pdfBuffer) => {
       // pdfBuffer contains the file content
       if (err) {
         console.error("error fs:", err);
