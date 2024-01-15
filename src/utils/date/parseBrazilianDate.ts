@@ -29,9 +29,8 @@ export function parseBrazilianDate(text: string) {
   
     if (!day || month === undefined || !year) return false;
   
-    const date = new Date(year, month, day);
+    const date = new Date(Date.UTC(year, month, day, 3, 0, 0));
   
-    // Check that the date is valid and matches the input (to avoid overflow problems, like "99 FEV 2023" becoming "10 MAR 2023")
     if (
       date &&
       date.getDate() === day &&
