@@ -66,13 +66,13 @@ export const createTransactionFromPDFSchema = z.object({
     .optional(),
   creditor: z.string(),
   description: z.string(),
-  date: z.date({
-    invalid_type_error: "Insert a date",
-    required_error: "This field is required!",
-  }),
+  date: z.date().or(z.string()),
   amount: z.number(),
   color: z.string().optional(),
 });
 
 export type Transaction = z.infer<typeof transactionSchema>;
+
 export type CreateTransaction = z.infer<typeof createTransactionSchema>;
+
+export type CreateTransactionFromPDF = z.infer<typeof createTransactionFromPDFSchema>;

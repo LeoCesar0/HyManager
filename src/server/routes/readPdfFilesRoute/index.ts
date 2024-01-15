@@ -15,18 +15,10 @@ export const readPdfFilesRoute = async (
   const pdfDataParser = new NubankPDFParser();
   const pdfReader = new PDFReader({ parser: pdfDataParser });
 
-  console.log('ENTER READ PDF FILES ROUTE')
 
   const readFilesPromise = new Promise((resolve, reject) => {
-    console.log('ENTER PROMISE')
     form.parse(req, async (err, fields, { files }) => {
-      console.log('ENTER PARSE')
-      console.log('fields', fields)
-      console.log('files', files)
       const bankAccountId = fields.bankAccountId as string;
-      console.log('bankAccountId', bankAccountId)
-
-      // console.log('files', files.toString())
 
       // --------------------------
       // Handle Reject Function

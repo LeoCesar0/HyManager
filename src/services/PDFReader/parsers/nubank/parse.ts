@@ -1,5 +1,6 @@
 import {
   CreateTransaction,
+  CreateTransactionFromPDF,
   TransactionType,
 } from "src/server/models/Transaction/schema";
 import { IPDFData } from "../../interfaces";
@@ -34,7 +35,7 @@ export function parse(
   let afterTransXValues: number[] = [];
 
   PDFsRawData.forEach((rawPDFData) => {
-    const currentPDFTransactions: CreateTransaction[] = [];
+    const currentPDFTransactions: CreateTransactionFromPDF[] = [];
 
     let currentPDFData: IPDFData = {
       finalBalance: 0,
@@ -72,9 +73,9 @@ export function parse(
 
         if (currentText === "Movimentações") {
           checkingTransactions = true;
-          // console.log(
-          //   "----------------- START TRANSACTIONS ---------------------"
-          // );
+          // --------------------------
+          // START TRANSACTIONS
+          // --------------------------
         }
 
         if (pageIndex === 0 && !checkingTransactions) {
@@ -98,14 +99,6 @@ export function parse(
           !foundDate &&
           !foundDescriptionX
         ) {
-          // console.log(
-          //   "HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE --> HERE <--"
-          // );
-          // console.log("tempTransaction -->", tempTransaction);
-          // console.log("TextValue -->", textValue);
-          // console.log("foundDate -->", foundDate);
-          // console.log("foundDescriptionX -->", foundDescriptionX);
-          // console.log("x -->", x);
           // console.log("--------------------------------");
           return;
         }
@@ -115,13 +108,11 @@ export function parse(
             date: foundDate,
           };
           // console.log("Step 1 - Found new Date");
-          // console.log("textValue -->", textValue);
           // console.log("------------------------------------------------");
           return;
         }
 
         if (!tempTransaction || !tempTransaction.date) {
-          // console.log("SKIPPED date -->", textValue);
           return;
         }
 
@@ -131,7 +122,6 @@ export function parse(
           // HAS NOT ENTER IN TRANSACTION YET
           if (slugify(currentText) === slugify("Total de entradas")) {
             // console.log("Step 2 - Found New Type");
-            // console.log("textValue -->", textValue);
             // console.log("----------------- CREDIT LIST ---------------------");
             tempTransaction = {
               date: tempTransaction.date,
@@ -141,7 +131,6 @@ export function parse(
           }
           if (slugify(currentText) === slugify("Total de saídas")) {
             // console.log("Step 2");
-            // console.log("textValue -->", textValue);
             // console.log("----------------- DEBIT LIST ---------------------");
             tempTransaction = {
               date: tempTransaction.date,
@@ -152,7 +141,6 @@ export function parse(
         }
 
         if (!tempTransaction.type) {
-          // console.log("SKIPPED type -->", textValue);
           return;
         }
         if (foundDescriptionX) {
@@ -162,7 +150,6 @@ export function parse(
             description: currentText,
           };
           // console.log("Step 3 - Found new Description");
-          // console.log("textValue -->", textValue);
           // console.log("------------------------------------------------");
           return;
         }
@@ -190,7 +177,6 @@ export function parse(
             creditor: creditor,
           };
           // console.log("Step 4 - Found new Creditor");
-          // console.log("textValue -->", textValue);
           // console.log("------------------------------------------------");
           return;
         }
@@ -201,6 +187,9 @@ export function parse(
           return;
         }
         // MAKE TRANSACTION OBJECT
+        // --------------------------
+        // MAKE TRANSACTION OBJECT
+        // --------------------------
         if (tempTransaction.type === "debit" && amount > 0) amount = -amount;
         tempTransaction = {
           date: tempTransaction.date,
@@ -211,20 +200,14 @@ export function parse(
         };
         const date = tempTransaction.date!;
 
-        // const slugId = makeTransactionSlug({
-        //   date: date.toISOString(),
-        //   amount: amount.toString(),
-        //   idFromBank: "",
-        //   creditor: tempTransaction.creditor || "",
-        // });
-        const transaction: CreateTransaction = {
+
+        const transaction: CreateTransactionFromPDF = {
           creditor: tempTransaction.creditor || "",
           description: tempTransaction.description || "",
           type: tempTransaction.type as TransactionType,
           amount: amount,
           bankAccountId: bankAccountId,
           date: date,
-          // ...makeDateFields(date),
         };
         currentPDFTransactions.push(transaction);
         if (Texts[textIndex + 1]) {
@@ -232,24 +215,24 @@ export function parse(
             afterTransXValues.push(Texts[textIndex + 1].x);
           }
         }
-        // console.log("Step 5 FINAL");
-        // console.log("textValue -->", textValue);
-        // console.log("Inserted tempTransaction -->", transaction);
-        // console.log("------------------------------------------------");
 
         return;
       });
 
-      // END PDF PAGE
+      // --------------------------
+      // END OF PAGE
+      // --------------------------
+
       // tempTransaction = undefined;
     });
-    // END PDF FILE
+    // --------------------------
+    // END OF ILE
+    // --------------------------
     currentPDFData.transactions = currentPDFTransactions;
 
     finalResult.push(currentPDFData);
   });
 
-  console.table(finalResult);
   return finalResult;
 }
 
