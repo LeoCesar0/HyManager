@@ -1,7 +1,7 @@
 import { makeDateFields } from "@/utils/date/makeDateFields";
 import { timestampToDate } from "@/utils/date/timestampToDate";
 import { Timestamp } from "firebase/firestore";
-import { Transaction } from "src/server/models/Transaction/schema";
+import { Transaction } from "@/server/models/Transaction/schema";
 import { TransactionMin, TransactionReport } from "../schema";
 import { makeTransactionReportSlugId } from "./makeTransactionReportSlugId";
 

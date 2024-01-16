@@ -1,7 +1,7 @@
 import { FirebaseCollection } from "@server/firebase";
 import { firebaseList } from "@server/firebase/firebaseList";
 import { AppModelResponse } from "@/@types/index";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { BankAccount } from "../schema";
 import { z } from "zod";
 

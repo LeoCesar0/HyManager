@@ -1,7 +1,7 @@
 import { FirebaseCollection } from "@server/firebase";
 import { firebaseDelete } from "@server/firebase/firebaseDelete";
 import { AppModelResponse } from "@/@types/index";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 
 interface IDeleteTransactionReport {
   id: string;

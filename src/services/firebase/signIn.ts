@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
 import { debugDev } from "../../utils/dev";
-import { User } from "src/server/models/User/schema";
+import { User } from "@/server/models/User/schema";
 import { firebaseAuth } from ".";
 import { getUserById } from "@models/User/read/getUserById";
 import { createUser } from "@models/User/create/createUser";

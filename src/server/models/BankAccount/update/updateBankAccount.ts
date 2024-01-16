@@ -1,7 +1,7 @@
 import { FirebaseCollection } from "@server/firebase";
 import { firebaseUpdate } from "@server/firebase/firebaseUpdate";
 import { AppModelResponse } from "@/@types/index";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { BankAccount } from "../schema";
 
 type PartialItem = Partial<BankAccount>

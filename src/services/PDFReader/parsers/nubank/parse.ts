@@ -2,7 +2,7 @@ import {
   CreateTransaction,
   CreateTransactionFromPDF,
   TransactionType,
-} from "src/server/models/Transaction/schema";
+} from "@/server/models/Transaction/schema";
 import { IPDFData } from "../../interfaces";
 import { IPDFRawData } from "../../rawDataTypes";
 import { numericStringToNumber } from "@/utils/numericStringToNumber";

@@ -1,5 +1,5 @@
 import { doc, setDoc } from "firebase/firestore";
-import { firebaseDB } from "src/services/firebase";
+import { firebaseDB } from "@/services/firebase";
 import { FirebaseCollection } from ".";
 
 export const updateData = (

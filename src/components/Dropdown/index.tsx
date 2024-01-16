@@ -1,6 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ButtonHTMLAttributes, Fragment } from "react";
-import { cx } from "src/utils/misc";
+import { cx } from "@/utils/misc";
 
 interface IItem {
   label: string;

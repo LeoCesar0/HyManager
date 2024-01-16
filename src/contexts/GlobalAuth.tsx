@@ -9,10 +9,10 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { BankAccount } from "src/server/models/BankAccount/schema";
-import { User } from "src/server/models/User/schema";
-import { signIn } from "src/services/firebase/signIn";
-import { signOut } from "src/services/firebase/signOut";
+import { BankAccount } from "@/server/models/BankAccount/schema";
+import { User } from "@/server/models/User/schema";
+import { signIn } from "@/services/firebase/signIn";
+import { signOut } from "@/services/firebase/signOut";
 import { firebaseAuth } from "../services/firebase";
 import { showErrorToast } from "../utils/app";
 

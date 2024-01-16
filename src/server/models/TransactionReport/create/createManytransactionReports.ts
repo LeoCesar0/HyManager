@@ -1,8 +1,8 @@
 import { AppModelResponse } from "@/@types/index";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { TransactionReport, transactionReportSchema } from "../schema";
 import { doc, writeBatch } from "firebase/firestore";
-import { firebaseDB } from "src/services/firebase";
+import { firebaseDB } from "@/services/firebase";
 import { makeTransactionReportSlugId } from "../utils/makeTransactionReportSlugId";
 import { FirebaseCollection } from "@server/firebase";
 import { timestampToDate } from "@/utils/date/timestampToDate";

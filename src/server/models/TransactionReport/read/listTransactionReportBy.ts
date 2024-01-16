@@ -1,7 +1,7 @@
 import { FirebaseCollection } from "@server/firebase";
 import { firebaseList } from "@server/firebase/firebaseList";
 import { AppModelResponse, FirebaseFilterFor } from "@/@types";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { TransactionReport } from "../schema";
 
 interface IListTransactionReport {

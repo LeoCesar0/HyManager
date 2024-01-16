@@ -1,5 +1,5 @@
 import { AnyObject, AppModelResponse } from "@/@types";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { FirebaseCollection } from ".";
 import { v4 as uuid } from "uuid";
 import { addData } from "./addData";

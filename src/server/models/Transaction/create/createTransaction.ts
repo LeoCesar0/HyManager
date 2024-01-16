@@ -1,13 +1,13 @@
 import { AppModelResponse } from "@/@types/index";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { CreateTransaction, Transaction, transactionSchema } from "../schema";
 import {
   doc,
   Timestamp,
   writeBatch,
 } from "firebase/firestore";
-import { slugify } from "src/utils/app";
-import { firebaseDB } from "src/services/firebase";
+import { slugify } from "@/utils/app";
+import { firebaseDB } from "@/services/firebase";
 import { FirebaseCollection } from "@server/firebase";
 import { makeTransactionSlug } from "@server/utils/makeTransactionSlug";
 import { batchManyTransactionReports } from "@models/TransactionReport/create/batchManyTransactionsReport";

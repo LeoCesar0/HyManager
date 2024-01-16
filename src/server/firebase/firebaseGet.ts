@@ -1,5 +1,5 @@
 import { AppModelResponse } from "@/@types";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { FirebaseCollection } from ".";
 import { getDataById } from "./getDataById";
 

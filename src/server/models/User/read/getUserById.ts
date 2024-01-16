@@ -1,7 +1,7 @@
 import { FirebaseCollection } from "@server/firebase";
 import { firebaseGet } from "@server/firebase/firebaseGet";
 import { AppModelResponse } from "@/@types/index";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { User } from "../schema";
 
 interface IGetUserById {

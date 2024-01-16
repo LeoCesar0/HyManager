@@ -1,5 +1,5 @@
 import { AppModelResponse } from "@/@types/index";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { TransactionReport, transactionReportSchema } from "../schema";
 import { firebaseCreate } from "@server/firebase/firebaseCreate";
 import { FirebaseCollection } from "@server/firebase";

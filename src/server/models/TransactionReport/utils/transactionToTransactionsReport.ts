@@ -1,4 +1,4 @@
-import { Transaction } from "src/server/models/Transaction/schema";
+import { Transaction } from "@/server/models/Transaction/schema";
 import currency from "currency.js";
 import { TransactionMin, TransactionReport } from "../schema";
 import { makeTransactionReportFields } from "./makeTransactionReportFields";

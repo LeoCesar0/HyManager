@@ -3,9 +3,9 @@ import {
   FirebaseFilterFor,
   Pagination,
 } from "@/@types/index";
-import { FirebaseCollection } from "src/server/firebase";
-import { firebaseList } from "src/server/firebase/firebaseList";
-import { debugDev } from "src/utils/dev";
+import { FirebaseCollection } from "@/server/firebase";
+import { firebaseList } from "@/server/firebase/firebaseList";
+import { debugDev } from "@/utils/dev";
 import { Transaction } from "../schema";
 import { firebasePaginatedList } from "../../../firebase/firebasePaginatedList";
 import { PaginationResult } from "../../../../@types/index";

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { APP_PAGES } from "src/static/appPages";
+import { APP_PAGES } from "@/static/appPages";
 import { useGlobalAuth } from "../../../contexts/GlobalAuth";
 import { cx } from "../../../utils/misc";
 import { useRouter } from "next/router";

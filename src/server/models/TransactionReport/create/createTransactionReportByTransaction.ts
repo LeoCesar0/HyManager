@@ -1,5 +1,5 @@
 import { AppModelResponse } from "@/@types/index";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { TransactionReport, transactionReportSchema } from "../schema";
 import { Transaction } from "../../Transaction/schema";
 import { makeTransactionReportFields } from "../utils/makeTransactionReportFields";

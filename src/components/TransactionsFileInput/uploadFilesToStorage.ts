@@ -1,7 +1,7 @@
 import { FileInfo } from "@/@types/File";
 import { getFilePath } from "@utils/getFilePath";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { firebaseStorage } from "src/services/firebase";
+import { firebaseStorage } from "@/services/firebase";
 import { v4 as uuid } from "uuid";
 
 interface IUploadFilesToStorage {

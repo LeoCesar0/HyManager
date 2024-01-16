@@ -1,11 +1,11 @@
-import { TransactionReport } from "src/server/models/TransactionReport/schema";
+import { TransactionReport } from "@/server/models/TransactionReport/schema";
 import { ApexOptions } from "apexcharts";
-import { PRIMARY_COLORS } from "src/static/appConfig";
+import { PRIMARY_COLORS } from "@/static/appConfig";
 
 import {
   valueToCurrency,
-} from "src/utils/misc";
-import { APEX_DEFAULT_OPTIONS, APEX_LOCALES } from "src/static/apexConfig";
+} from "@/utils/misc";
+import { APEX_DEFAULT_OPTIONS, APEX_LOCALES } from "@/static/apexConfig";
 import { formatAnyDate } from "@/utils/date/formatAnyDate";
 import { timestampToDate } from "@/utils/date/timestampToDate";
 

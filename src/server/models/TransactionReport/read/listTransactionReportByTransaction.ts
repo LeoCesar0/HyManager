@@ -1,7 +1,7 @@
 import { Transaction } from "@models/Transaction/schema";
 import { FirebaseCollection } from "@server/firebase";
 import { firebaseList } from "@server/firebase/firebaseList";
-import { debugDev } from "src/utils/dev";
+import { debugDev } from "@/utils/dev";
 import { TransactionReport } from "../schema";
 
 export const listTransactionReportByTransaction = async ({

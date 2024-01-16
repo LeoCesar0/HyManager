@@ -1,5 +1,5 @@
 import { doc, getDoc } from "firebase/firestore";
-import { firebaseDB } from "src/services/firebase";
+import { firebaseDB } from "@/services/firebase";
 import { FirebaseCollection } from ".";
 
 export const getDataById = (collectionName: FirebaseCollection, id: string) => {

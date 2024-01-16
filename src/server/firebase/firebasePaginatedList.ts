@@ -16,8 +16,8 @@ import {
   getCountFromServer,
   Index,
 } from "firebase/firestore";
-import { firebaseDB } from "src/services/firebase";
-import { debugDev } from "src/utils/dev";
+import { firebaseDB } from "@/services/firebase";
+import { debugDev } from "@/utils/dev";
 import { FirebaseCollection } from ".";
 import { PaginationResult } from "../../@types/index";
 
