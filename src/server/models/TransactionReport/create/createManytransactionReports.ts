@@ -6,6 +6,7 @@ import { firebaseDB } from "@/services/firebase";
 import { makeTransactionReportSlugId } from "../utils/makeTransactionReportSlugId";
 import { FirebaseCollection } from "@server/firebase";
 import { timestampToDate } from "@/utils/date/timestampToDate";
+import { createDocRef } from "@/server/utils/createDocRef";
 
 interface ICreateManyTransactionReports {
   values: TransactionReport[];
@@ -30,7 +31,10 @@ export const createManyTransactionReports = async ({
       });
       transactionReportSchema.parse(transactionReportInputs);
       const id = transactionReportInputs.id;
-      const docRef = doc(firebaseDB, FirebaseCollection.transactionReports, id);
+      const docRef = createDocRef({
+        collection: FirebaseCollection.transactionReports,
+        id: id
+      })
       batch.set(docRef, transactionReportInputs);
       createdTransactionReportsIds.push({ id: id });
     });

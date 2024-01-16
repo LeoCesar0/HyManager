@@ -1,7 +1,7 @@
 import { deleteDoc, doc } from "firebase/firestore";
-import { firebaseDB } from "@/services/firebase";
 import { debugDev } from "@/utils/dev";
 import { FirebaseCollection } from ".";
+import { createDocRef } from "../utils/createDocRef";
 
 type IFirebaseDelete = {
   collection: FirebaseCollection;
@@ -20,7 +20,10 @@ export const firebaseDelete = async ({
       collectionName,
     },
   });
-  const docRef = doc(firebaseDB, collectionName, id);
+  const docRef = createDocRef({
+    collection: collectionName,
+    id: id
+  })
   await deleteDoc(docRef);
   
 };

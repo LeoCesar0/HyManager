@@ -12,6 +12,7 @@ import { makeTransactionSlug } from "@server/utils/makeTransactionSlug";
 import { CreateTransaction, Transaction, transactionSchema } from "../schema";
 import { batchManyTransactionReports } from "@models/TransactionReport/create/batchManyTransactionsReport";
 import { makeDateFields } from "@/utils/date/makeDateFields";
+import { createDocRef } from "@/server/utils/createDocRef";
 
 interface ICreateManyTransactions {
   transactions: CreateTransaction[];
@@ -51,7 +52,11 @@ export const createManyTransactions = async ({
       if (transaction.creditor)
         transaction.creditorSlug = slugify(transaction.creditor);
       transactionSchema.parse(transaction);
-      const docRef = doc(firebaseDB, FirebaseCollection.transactions, slugId);
+
+      const docRef = createDocRef({
+        collection: FirebaseCollection.transactions,
+        id: slugId
+      })
 
       if (!transactionsOnCreate.some((item) => item.id === transaction.id)) {
         transactionsOnCreate.push(transaction);
