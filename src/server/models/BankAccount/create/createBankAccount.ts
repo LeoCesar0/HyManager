@@ -25,18 +25,23 @@ export const createBankAccount = async ({
       collection: FirebaseCollection.bankAccounts,
       data: item,
     });
+    if (result) {
+      return {
+        data: result,
+        done: true,
+        error: null,
+      };
+    }
     return {
-      data: result || null,
-      done: !!result,
-      error: result
-        ? null
-        : {
-            message: debugDev({
-              type: "error",
-              name: funcName,
-              value: "Error",
-            }),
-          },
+      data: null,
+      done: false,
+      error: {
+        message: debugDev({
+          type: "error",
+          name: funcName,
+          value: "Error",
+        }),
+      },
     };
   } catch (error) {
     const errorMessage = debugDev({

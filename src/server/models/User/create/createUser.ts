@@ -19,22 +19,27 @@ export const createUser = async ({
     updatedAt: Timestamp.fromDate(new Date()),
   };
   try {
-    const result = await firebaseCreate<User>({
+    const data = await firebaseCreate<User>({
       collection: FirebaseCollection.users,
       data: item,
     });
+    if (data) {
+      return {
+        data: data,
+        done: true,
+        error: null,
+      };
+    }
     return {
-      data: result || null,
-      done: !!result,
-      error: result
-        ? null
-        : {
-            message: debugDev({
-              type: "error",
-              name: funcName,
-              value: "Error",
-            }),
-          },
+      data: null,
+      done: false,
+      error: {
+        message: debugDev({
+          type: "error",
+          name: funcName,
+          value: "Error",
+        }),
+      },
     };
   } catch (error) {
     const errorMessage = debugDev({

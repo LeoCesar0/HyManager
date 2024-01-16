@@ -18,18 +18,23 @@ export const getTransactionById = async ({
       collection: FirebaseCollection.transactions,
       id: id,
     });
+    if (data) {
+      return {
+        data: data,
+        done: true,
+        error: null,
+      };
+    }
     return {
-      data: data || null,
-      done: !!data,
-      error: data
-        ? null
-        : {
-            message: debugDev({
-              type: "error",
-              name: funcName,
-              value: "Error",
-            }),
-          },
+      data: null,
+      done: false,
+      error: {
+        message: debugDev({
+          type: "error",
+          name: funcName,
+          value: "Error",
+        }),
+      },
     };
   } catch (error) {
     const errorMessage = debugDev({

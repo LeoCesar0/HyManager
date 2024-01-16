@@ -23,20 +23,27 @@ export const createTransactionReportByTransaction = async ({
 
     transactionReportSchema.parse(newTransactionReport);
 
-    const result = await firebaseCreate<TransactionReport>({
+    const data = await firebaseCreate<TransactionReport>({
       collection: FirebaseCollection.transactionReports,
       data: newTransactionReport,
     });
+    if (data) {
+      return {
+        data: data,
+        done: true,
+        error: null,
+      };
+    }
     return {
-      done: !!result,
-      data: result || null,
-      error: result ? null : {
+      data: null,
+      done: false,
+      error: {
         message: debugDev({
+          type: "error",
           name: funcName,
-          type: 'error',
-          value: 'Error'
-        })
-      }
+          value: "Error",
+        }),
+      },
     };
   } catch (error) {
     const errorMessage = debugDev({

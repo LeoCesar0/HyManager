@@ -1,20 +1,17 @@
 import {
-    GoogleAuthProvider,
-    signInWithPopup,
-    setPersistence,
-    browserLocalPersistence,
-  } from "firebase/auth";
-  import { v4 as uuidv4 } from "uuid";
-  import { debugDev } from "../../utils/dev";
-  import { AppModelResponse } from "../../@types";
-  import { User } from "src/server/models/User/schema";
+  GoogleAuthProvider,
+  signInWithPopup,
+  setPersistence,
+  browserLocalPersistence,
+} from "firebase/auth";
+import { v4 as uuidv4 } from "uuid";
+import { debugDev } from "../../utils/dev";
+import { User } from "src/server/models/User/schema";
 import { firebaseAuth } from ".";
 import { getUserById } from "@models/User/read/getUserById";
 import { createUser } from "@models/User/create/createUser";
 
-export type SignIn = AppModelResponse<User>;
-
-export const signIn = async (): Promise<SignIn> => {
+export const signIn = async () => {
   const googleProvider = new GoogleAuthProvider();
   setPersistence(firebaseAuth, browserLocalPersistence);
 
@@ -66,9 +63,10 @@ export const signIn = async (): Promise<SignIn> => {
             imageUrl: userByFirebase.photoURL,
           },
         });
-        console.log('--> newUserResponse -->', newUserResponse)
-        const newUser = (newUserResponse.data || null) as User | null;
+        console.log("--> newUserResponse -->", newUserResponse);
+        // return newUserResponse as AppModelResponse<User>
 
+        const newUser = (newUserResponse.data || null) as User | null;
         return {
           data: newUser,
           error: newUserResponse.error,
