@@ -27,7 +27,7 @@ interface ICreateTransaction {
     const now = new Date();
     const slugId = makeTransactionSlug({
       date: values.date,
-      amount: values.amount.toString(),
+      amount: values.amount,
       idFromBank: values.idFromBank,
       creditor: values.creditor || "",
     });

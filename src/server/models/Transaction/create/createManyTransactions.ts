@@ -27,15 +27,13 @@ export const createManyTransactions = async ({
     const batch = writeBatch(firebaseDB);
     const transactionsOnCreate: Transaction[] = [];
 
-    console.log("values -->", values);
-
     values.forEach((transactionInputs) => {
       const date = new Date(transactionInputs.date);
       const firebaseTimestamp = Timestamp.fromDate(date);
       const now = new Date();
       const slugId = makeTransactionSlug({
         date: transactionInputs.date,
-        amount: transactionInputs.amount.toString(),
+        amount: transactionInputs.amount,
         idFromBank: transactionInputs.idFromBank,
         creditor: transactionInputs.creditor || "",
       });
@@ -60,7 +58,6 @@ export const createManyTransactions = async ({
       }
     });
 
-    console.log("createdTransactions -->", transactionsOnCreate);
 
     /* ------------------------------ COMMIT BATCH ------------------------------ */
 

@@ -208,6 +208,7 @@ export function parse(
           amount: amount,
           bankAccountId: bankAccountId,
           date: date,
+          idFromBank: 'pdf'
         };
         currentPDFTransactions.push(transaction);
         if (Texts[textIndex + 1]) {

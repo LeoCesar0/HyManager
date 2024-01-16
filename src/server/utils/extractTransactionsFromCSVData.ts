@@ -99,7 +99,7 @@ const parseTransactions = (
       const dateObject = parse(dateAsLocaleString, "P", new Date(), {
         locale: ptBR,
       });
-      const dateIso = dateObject.toISOString();
+      // const dateIso = dateObject.toISOString();
       const description = item["description"] || "";
       const creditor = (description.split("-")[1] || "").trim();
       const idFromBank = item["idFromBank"];
@@ -108,12 +108,12 @@ const parseTransactions = (
         bankAccountId: bankAccountId,
         amount: amount,
         type: type,
-        date: dateIso,
+        date: dateObject,
         creditor: creditor,
         description: description,
         slug: makeTransactionSlug({
-          date: dateIso,
-          amount: amount.toString(),
+          date: dateObject,
+          amount: amount,
           idFromBank,
           creditor: creditor,
         }),

@@ -3,11 +3,11 @@ import { ApexOptions } from "apexcharts";
 import { PRIMARY_COLORS } from "src/static/appConfig";
 
 import {
-  formatAnyDate,
-  timestampToDate,
   valueToCurrency,
 } from "src/utils/misc";
 import { APEX_DEFAULT_OPTIONS, APEX_LOCALES } from "src/static/apexConfig";
+import { formatAnyDate } from "@/utils/date/formatAnyDate";
+import { timestampToDate } from "@/utils/date/timestampToDate";
 
 export interface IFilterDate {
   label: string;

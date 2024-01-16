@@ -1,8 +1,9 @@
 import { format } from "date-fns";
-import { slugify } from "src/utils/app";
+import { slugify } from "@/utils/app";
+import { formatAnyDate } from "@/utils/date/formatAnyDate";
 
 interface IMakeTransactionSlug {
-  amount: string;
+  amount: number;
   date: string | Date;
   idFromBank?: string;
   creditor: string;
@@ -13,12 +14,14 @@ export const makeTransactionSlug = ({
   idFromBank,
   creditor,
 }: IMakeTransactionSlug) => {
-  if (date instanceof Date) date = format(date, "MM-dd-yyyy");
+  if(typeof date !== 'string' || date.includes('T')){
+    date = formatAnyDate(date, "yyyy-MM-dd")
+  }
 
   const creditorSlug = creditor ? slugify(creditor) : "";
-  let slug = `$$${slugify(amount)}`;
-  slug += "&&";
-  slug += slugify(date.slice(0, 10));
+  let slug = `$$${amount.toString()}`;
+  slug += "TT";
+  slug += date
   if (creditorSlug) {
     slug += "@@";
     slug += creditorSlug;
