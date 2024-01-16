@@ -2,3 +2,5 @@
 import '@testing-library/jest-dom'
 import 'isomorphic-fetch'
 import "isomorphic-form-data";
+import 'dotenv/config'
+// require('dotenv').config();
