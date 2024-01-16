@@ -3,9 +3,9 @@ import { debugDev } from "src/utils/dev";
 import { TransactionReport, transactionReportSchema } from "../schema";
 import { doc, writeBatch } from "firebase/firestore";
 import { firebaseDB } from "src/services/firebase";
-import { timestampToDate } from "src/utils/misc";
 import { makeTransactionReportSlugId } from "../utils/makeTransactionReportSlugId";
 import { FirebaseCollection } from "@server/firebase";
+import { timestampToDate } from "@/utils/date/timestampToDate";
 
 interface ICreateManyTransactionReports {
   values: TransactionReport[];

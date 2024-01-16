@@ -1,4 +1,4 @@
-import { makeDateFields } from "src/utils/app";
+import { makeDateFields } from "@/utils/date/makeDateFields";
 import { TransactionReport } from "../schema";
 
 export const makeTransactionReportSlugId = ({

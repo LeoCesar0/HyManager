@@ -5,12 +5,13 @@ import {
   Timestamp,
   writeBatch,
 } from "firebase/firestore";
-import { makeDateFields, slugify } from "src/utils/app";
+import { slugify } from "src/utils/app";
 import { firebaseDB } from "src/services/firebase";
 import { FirebaseCollection } from "@server/firebase";
 import { makeTransactionSlug } from "@server/utils/makeTransactionSlug";
 import { CreateTransaction, Transaction, transactionSchema } from "../schema";
 import { batchManyTransactionReports } from "@models/TransactionReport/create/batchManyTransactionsReport";
+import { makeDateFields } from "@/utils/date/makeDateFields";
 
 interface ICreateManyTransactions {
   transactions: CreateTransaction[];

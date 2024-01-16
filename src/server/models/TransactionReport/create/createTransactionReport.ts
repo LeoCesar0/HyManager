@@ -32,19 +32,25 @@ export const createTransactionReport = async ({
       collection: FirebaseCollection.transactionReports,
       data: data,
     });
-    return {
-      done: !!result,
-      data: result || null,
-      error: result
-        ? null
-        : {
-            message: debugDev({
-              name: funcName,
-              type: "error",
-              value: "Error",
-            }),
-          },
-    };
+    if (result) {
+      return {
+        done: true,
+        data: result,
+        error: null,
+      };
+    } else {
+      return {
+        done: false,
+        data: null,
+        error: {
+          message: debugDev({
+            name: funcName,
+            type: "error",
+            value: "Error",
+          }),
+        },
+      };
+    }
   } catch (error) {
     const errorMessage = debugDev({
       type: "error",

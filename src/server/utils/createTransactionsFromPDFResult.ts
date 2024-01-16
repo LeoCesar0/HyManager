@@ -3,9 +3,9 @@ import { createManyTransactions } from "@models/Transaction/create/createManyTra
 import { CreateTransaction, TransactionType } from "@models/Transaction/schema";
 import { createTransactionReport } from "@models/TransactionReport/create/createTransactionReport";
 import { TransactionReport } from "@models/TransactionReport/schema";
-import { makeDateFields } from "@utils/app";
 import { Timestamp } from "firebase/firestore";
 import { IPDFData } from "@/services/PDFReader/interfaces";
+import { makeDateFields } from "@/utils/date/makeDateFields";
 
 interface ICreateTransactionsFromPDFResult {
   pdfReadResult: IPDFData[];
@@ -48,9 +48,11 @@ export const createTransactionsFromPDFResult = async ({
     const relativeFile = uploadedFiles[index];
     // GET RELATIVE FILE TO EACH TRANSACTION
     pdfResult.transactions.forEach((transaction) => {
+      const date = new Date(transaction.date);
       transactionsToCreate.push({
         ...transaction,
         file: relativeFile,
+        date: date
       });
     });
   });

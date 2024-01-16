@@ -77,41 +77,5 @@ export const slugify = (string: string) => {
   return newText;
 };
 
-export const makeCreatedAtFields = (
-  date: Date
-): {
-  createdAtDay: string;
-  createdAtMonth: string;
-  createdAtYear: string;
-  createdAtWeek: string;
-} => {
-  const day = format(date, "dd");
-  const month = format(date, "MM");
-  const year = format(date, "yyyy");
-  const week = format(date, "Q");
-  return {
-    createdAtDay: day,
-    createdAtMonth: month,
-    createdAtYear: year,
-    createdAtWeek: week,
-  };
-};
-export const makeDateFields = (
-  date: Date
-): {
-  dateDay: string;
-  dateMonth: string;
-  dateYear: string;
-  dateWeek: string;
-} => {
-  const day = format(date, "dd");
-  const month = format(date, "MM");
-  const year = format(date, "yyyy");
-  const week = format(date, "Q");
-  return {
-    dateDay: day,
-    dateMonth: month,
-    dateYear: year,
-    dateWeek: week,
-  };
-};
+
+
