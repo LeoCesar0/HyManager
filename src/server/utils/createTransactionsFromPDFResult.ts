@@ -9,7 +9,7 @@ import { makeDateFields } from "@/utils/date/makeDateFields";
 
 interface ICreateTransactionsFromPDFResult {
   pdfReadResult: IPDFData[];
-  uploadedFiles: FileInfo[];
+  uploadedFiles?: FileInfo[];
   bankAccountId: string;
 }
 
@@ -21,40 +21,44 @@ export const createTransactionsFromPDFResult = async ({
   const transactionsToCreate: CreateTransaction[] = [];
 
   pdfReadResult.forEach(async (pdfResult, index) => {
-    const { initialBalance } = pdfResult;
+    // const { initialBalance } = pdfResult;
 
-    const reportDate = new Date(pdfResult.transactions[0].date);
+    // const reportDate = new Date(pdfResult.transactions[0].date);
 
-    const types: TransactionReport["type"][] = ["month", "day"];
+    // const types: TransactionReport["type"][] = ["month", "day"];
 
-    for (const type of types) {
-      await createTransactionReport({
-        transactionReport: {
-          amount: 0,
-          bankAccountId,
-          type: type,
-          initialBalance: initialBalance,
-          updatedAt: Timestamp.now(),
-          createdAt: Timestamp.now(),
-          id: "willBeReplaced",
-          finalBalance: 0,
-          transactions: [],
-          date: Timestamp.fromDate(reportDate),
-          ...makeDateFields(reportDate),
-        },
-      });
+    // for (const type of types) {
+    //   await createTransactionReport({
+    //     transactionReport: {
+    //       amount: 0,
+    //       bankAccountId,
+    //       type: type,
+    //       initialBalance: initialBalance,
+    //       updatedAt: Timestamp.now(),
+    //       createdAt: Timestamp.now(),
+    //       id: "willBeReplaced",
+    //       finalBalance: 0,
+    //       transactions: [],
+    //       date: Timestamp.fromDate(reportDate),
+    //       ...makeDateFields(reportDate),
+    //     },
+    //   });
+    // }
+
+    if (uploadedFiles) {
+      const relativeFile = uploadedFiles[index];
+      // GET RELATIVE FILE TO EACH TRANSACTION
+      if (relativeFile) {
+        pdfResult.transactions.forEach((transaction) => {
+          const date = new Date(transaction.date);
+          transactionsToCreate.push({
+            ...transaction,
+            file: relativeFile,
+            date: date,
+          });
+        });
+      }
     }
-
-    const relativeFile = uploadedFiles[index];
-    // GET RELATIVE FILE TO EACH TRANSACTION
-    pdfResult.transactions.forEach((transaction) => {
-      const date = new Date(transaction.date);
-      transactionsToCreate.push({
-        ...transaction,
-        file: relativeFile,
-        date: date
-      });
-    });
   });
 
   const createResult = await createManyTransactions({
