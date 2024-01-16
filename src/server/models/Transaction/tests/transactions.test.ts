@@ -4,13 +4,21 @@ import { TEST_CONFIG } from "@/static/testConfig";
 import { getTransactionById } from "../read/getTransactionById";
 import { timestampToDate } from "@/utils/date/timestampToDate";
 import { formatAnyDate } from "../../../../utils/date/formatAnyDate";
+import { firebaseAuth } from "@/services/firebase";
+import { listTransactionReportsBy } from "../../TransactionReport/read/listTransactionReportBy";
+import { listTransactionReportByTransaction } from "../../TransactionReport/read/listTransactionReportByTransaction";
 
 describe("Test transaction CRUD", () => {
   let createdTransaction: Transaction;
   const bankAccountId = TEST_CONFIG.bankAccountId;
 
+  // --------------------------
+  // CREATE
+  // --------------------------
+
   it("should create a transaction", async () => {
     console.log("--> START TEST 1");
+
     const result = await createTransaction({
       bankAccountId,
       values: {
@@ -23,15 +31,19 @@ describe("Test transaction CRUD", () => {
         bankAccountId,
       },
     });
+    if (result.error) console.log("Error", result.error);
     expect(result.data).toBeTruthy();
     expect(result.data?.id).toBeTruthy();
     expect(result.done).toBe(true);
     expect(result.error).toBe(null);
     if (result.data) createdTransaction = result.data;
-    console.log("--> END TEST 1");
   });
+
+  // --------------------------
+  // GET TRANSACTION AND ITS REPORT
+  // --------------------------
+
   it("should get created transaction", async () => {
-    console.log("--> START TEST 2", createdTransaction);
     const result = await getTransactionById({
       id: createdTransaction.id,
     });
@@ -48,5 +60,14 @@ describe("Test transaction CRUD", () => {
       expect(date.getMonth()).toBe(0);
       expect(date.getDate()).toBe(25);
     }
+  });
+
+  it("should get created transaction report", async () => {
+    const result = await listTransactionReportByTransaction({
+      transaction: createdTransaction,
+    });
+    expect(result.data?.length).toBe(2);
+    expect(result.done).toBe(true);
+    expect(result.error).toBe(null);
   });
 });

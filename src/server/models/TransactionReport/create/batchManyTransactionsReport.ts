@@ -6,6 +6,7 @@ import { listTransactionReportsBy } from "../read/listTransactionReportBy";
 import { TransactionReport } from "../schema";
 import calculateAccountBalance from "../utils/calculateAccountBalance";
 import { transactionsToTransactionsReport } from "../utils/transactionToTransactionsReport";
+import { createDocRef } from "@/server/utils/createDocRef";
 
 interface IBatchManyTransactionReports {
   batch: WriteBatch;
@@ -49,11 +50,10 @@ export const batchManyTransactionReports = async ({
   let finalItems: TransactionReport[] = [];
 
   reports.forEach((transactionReport) => {
-    const docRef = doc(
-      firebaseDB,
-      FirebaseCollection.transactionReports,
-      transactionReport.id
-    );
+    const docRef = createDocRef({
+      collection: FirebaseCollection.transactionReports,
+      id: transactionReport.id,
+    });
 
     // let updatedItem: Omit<TransactionReport, "amount" | "transactions"> & {
     //   amount: any;

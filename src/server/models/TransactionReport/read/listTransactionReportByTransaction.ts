@@ -3,29 +3,37 @@ import { FirebaseCollection } from "@server/firebase";
 import { firebaseList } from "@server/firebase/firebaseList";
 import { debugDev } from "@/utils/dev";
 import { TransactionReport } from "../schema";
+import { FirebaseFilterFor } from "@/@types";
+
+type ListTransactionReportByTransactionProps = {
+  transaction: Transaction;
+  type?: TransactionReport["type"];
+};
 
 export const listTransactionReportByTransaction = async ({
   transaction,
   type,
-}: {
-  transaction: Transaction;
-  type: TransactionReport["type"];
-}) => {
+}: ListTransactionReportByTransactionProps) => {
   const funcName = "listTransactionReportByTransaction";
+
+  const filters: FirebaseFilterFor<TransactionReport>[] = [
+    { field: "dateMonth", operator: "==", value: transaction.dateMonth },
+    { field: "dateYear", operator: "==", value: transaction.dateYear },
+    {
+      field: "bankAccountId",
+      operator: "==",
+      value: transaction.bankAccountId,
+    },
+  ];
+
+  if (type && !filters.find((filter) => filter.field === "type")) {
+    filters.push({ field: "type", operator: "==", value: type });
+  }
 
   try {
     const list = await firebaseList<TransactionReport>({
       collection: FirebaseCollection.transactionReports,
-      filters: [
-        { field: "type", operator: "==", value: type },
-        { field: "dateMonth", operator: "==", value: transaction.dateMonth },
-        { field: "dateYear", operator: "==", value: transaction.dateYear },
-        {
-          field: "bankAccountId",
-          operator: "==",
-          value: transaction.bankAccountId,
-        },
-      ],
+      filters: filters,
     });
     return {
       data: list,

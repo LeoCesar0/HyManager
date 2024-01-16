@@ -19,8 +19,6 @@ const calculateAccountBalance = ({
     }
   }
 
-  console.log("allReports -->", allReports);
-
   const types: TransactionReport["type"][] = ["month", "day"];
 
   for (const type of types) {

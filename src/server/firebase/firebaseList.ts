@@ -36,6 +36,17 @@ export const firebaseList = async <T>({
     },
   });
   const ref = collection(firebaseDB, collectionName);
+
+  filters = filters.reduce((acc,entry) => {
+    // --------------------------
+    // Remove duplicates
+    // --------------------------
+    if (!acc.find(filter => filter.field === entry.field)) {
+      acc.push(entry)
+    }
+    return acc
+  },[] as typeof filters)
+
   let whereList = filters.map(({ field, operator = "==", value }) =>
     where(field as string, operator, value)
   );
