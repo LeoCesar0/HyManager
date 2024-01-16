@@ -63,8 +63,6 @@ export const signIn = async () => {
             imageUrl: userByFirebase.photoURL,
           },
         });
-        console.log("--> newUserResponse -->", newUserResponse);
-        // return newUserResponse as AppModelResponse<User>
 
         const newUser = (newUserResponse.data || null) as User | null;
         return {
