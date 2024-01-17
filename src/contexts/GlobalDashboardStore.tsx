@@ -1,15 +1,17 @@
 import { ReactNode } from "@/@types";
 import { BankAccount } from "@/server/models/BankAccount/schema";
-import { createContext, useContext, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
 
 interface IState {
   menuIsOpen: boolean;
   currentBankAccount: BankAccount | null;
+  shouldCreateBankAccount: boolean
 }
 
 interface IActions {
   toggleMenu: () => void;
   setCurrentBankAccount: (bank: BankAccount | null) => void;
+  setState: Dispatch<SetStateAction<IState>>;
 }
 
 interface IGlobalDashboardStore extends IState, IActions {}
@@ -17,6 +19,7 @@ interface IGlobalDashboardStore extends IState, IActions {}
 const initialValues: IState = {
   menuIsOpen: true,
   currentBankAccount: null,
+  shouldCreateBankAccount: false,
 };
 
 const Context = createContext<IGlobalDashboardStore>(
@@ -39,6 +42,7 @@ export const GlobalDashboardStore: ReactNode = ({ children }) => {
       value={{
         ...state,
         toggleMenu,
+        setState,
         setCurrentBankAccount,
       }}
     >
