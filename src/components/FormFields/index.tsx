@@ -1,4 +1,9 @@
-import { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import {
+  ChangeEvent,
+  InputHTMLAttributes,
+  TextareaHTMLAttributes,
+  useState,
+} from "react";
 import { LocalizedText } from "../../@types/index";
 import {
   FormControl,
@@ -8,9 +13,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "@/components/ui/input";
-import { Control, UseFormReturn } from "react-hook-form";
 import { useGlobalContext } from "@/contexts/GlobalContext";
-import { If } from "react-if";
 import { Textarea } from "../ui/textarea";
 import {
   Select,
@@ -19,148 +22,136 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { ISelectOption } from "@/@types/Select";
 import { CurrencyInput } from "../CurrencyInput/index";
-import useT from "@/hooks/useT";
-import { TransactionType } from "../../server/models/Transaction/schema";
-import { clsx } from "clsx";
 import { TransactionTypeRadio } from "../TransactionTypeRadio";
 import { DatePicker } from "../DatePicker/index";
+import Image from "next/image";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { getImageData } from "@/utils/getImageData";
+import { IFormFieldProps } from "./@types";
 
-interface IMainProps {
-  name: string;
-  label: LocalizedText;
-}
 
-interface IInput extends IMainProps {
-  inputType: "input";
-  props?: InputHTMLAttributes<HTMLInputElement>;
-}
-
-interface IDatePicker extends IMainProps {
-  inputType: "datePicker";
-}
-
-interface ITransactionType extends IMainProps {
-  inputType: "transactionType";
-}
-
-interface ICurrencyInput extends IMainProps {
-  inputType: "currency";
-  props?: InputHTMLAttributes<HTMLInputElement>;
-}
-
-interface ITextArea extends IMainProps {
-  inputType: "textarea";
-  props?: TextareaHTMLAttributes<HTMLTextAreaElement>;
-}
-
-interface ISelect extends IMainProps {
-  inputType: "select";
-  options: ISelectOption[];
-}
-
-export type IFormFieldItem =
-  | IInput
-  | IDatePicker
-  | ITextArea
-  | ISelect
-  | ICurrencyInput
-  | ITransactionType;
-
-interface IProps {
-  fields: IFormFieldItem[];
-  form: UseFormReturn<any, any, undefined>;
-}
-
-export const FormFields: React.FC<IProps> = ({ fields, form }) => {
+export const FormFields: React.FC<IFormFieldProps> = ({ fields, form }) => {
   const { currentLanguage } = useGlobalContext();
 
   return (
     <>
-      {fields.map((item) => {
+      {fields.map((itemField) => {
         return (
           <FormField
-            key={item.name}
+            key={itemField.name}
             control={form.control}
-            name={item.name}
-            render={({ field }) => (
-              <>
-                <FormItem>
-                  <FormLabel>{item.label[currentLanguage]}</FormLabel>
-                  <FormControl>
-                    <>
-                      {item.inputType === "input" && (
-                        <Input {...field} {...(item.props || {})} />
-                      )}
-                      {item.inputType === "currency" && (
-                        <>
-                          <CurrencyInput
-                            currency="BRL"
-                            onValueChange={(value) => {
-                              form.setValue(item.name, value);
-                            }}
-                            {...field}
-                            {...(item.props || {})}
-                          />
-                        </>
-                      )}
-                      {item.inputType === "textarea" && (
-                        <Textarea {...field} {...(item.props || {})} />
-                      )}
-                      {item.inputType === "transactionType" && (
-                        <>
-                          <TransactionTypeRadio
-                            currentValue={field.value}
-                            fieldName={item.name}
-                            setValue={form.setValue}
-                          />
-                        </>
-                      )}
-                      {item.inputType === "datePicker" && (
-                        <>
-                          <div>
-                            <DatePicker
-                              date={field.value}
-                              setDate={(date: Date) => {
-                                form.setValue(item.name, date);
+            name={itemField.name}
+            render={({ field }) => {
+              return (
+                <>
+                  <FormItem>
+                    <FormLabel>{itemField.label[currentLanguage]}</FormLabel>
+                    <FormControl>
+                      <>
+                        {itemField.inputType === "input" && (
+                          <Input {...field} {...(itemField.props || {})} />
+                        )}
+                        {itemField.inputType === "imageInput" && (
+                          <div className="flex gap-2 flex-wrap">
+                            {itemField.tempImages.map((imageUrl) => {
+                              return (
+                                <Image
+                                  src={imageUrl.previewUrl}
+                                  key={imageUrl.previewUrl}
+                                  alt="image preview"
+                                  width={64}
+                                  height={64}
+                                  className="rounded-md cursor-pointer"
+                                />
+                              );
+                            })}
+                            <label htmlFor={itemField.name}>
+                              <PlusIcon className="h-16 w-16 rounded-md border cursor-pointer text-muted-foreground" />
+                            </label>
+                            <Input
+                              className="hidden"
+                              type="file"
+                              {...(itemField.props || {})}
+                              name={itemField.name}
+                              id={itemField.name}
+                              onChange={(event) => {
+                                const { tempImages } = getImageData(event);
+
+                                itemField.setTempImages(tempImages);
                               }}
                             />
                           </div>
-                        </>
-                      )}
-                      {item.inputType === "select" && (
-                        <>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                            defaultValue={field.value}
-                          >
-                            <SelectTrigger className="text-sm font-semibold uppercase w-full max-w-[300px] ">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {item.options.map((option) => {
-                                return (
-                                  <SelectItem
-                                    className="uppercase"
-                                    key={option.value}
-                                    value={option.value}
-                                  >
-                                    {option.label[currentLanguage]}
-                                  </SelectItem>
-                                );
-                              })}
-                            </SelectContent>
-                          </Select>
-                        </>
-                      )}
-                    </>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              </>
-            )}
+                        )}
+                        {itemField.inputType === "currency" && (
+                          <>
+                            <CurrencyInput
+                              currency="BRL"
+                              onValueChange={(value) => {
+                                form.setValue(itemField.name, value);
+                              }}
+                              {...field}
+                              {...(itemField.props || {})}
+                            />
+                          </>
+                        )}
+                        {itemField.inputType === "textarea" && (
+                          <Textarea {...field} {...(itemField.props || {})} />
+                        )}
+                        {itemField.inputType === "transactionType" && (
+                          <>
+                            <TransactionTypeRadio
+                              currentValue={field.value}
+                              fieldName={itemField.name}
+                              setValue={form.setValue}
+                            />
+                          </>
+                        )}
+                        {itemField.inputType === "datePicker" && (
+                          <>
+                            <div>
+                              <DatePicker
+                                date={field.value}
+                                setDate={(date: Date) => {
+                                  form.setValue(itemField.name, date);
+                                }}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {itemField.inputType === "select" && (
+                          <>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                              defaultValue={field.value}
+                            >
+                              <SelectTrigger className="text-sm font-semibold uppercase w-full max-w-[300px] ">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {itemField.options.map((option) => {
+                                  return (
+                                    <SelectItem
+                                      className="uppercase"
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label[currentLanguage]}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectContent>
+                            </Select>
+                          </>
+                        )}
+                      </>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                </>
+              );
+            }}
           />
         );
       })}

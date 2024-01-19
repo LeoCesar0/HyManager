@@ -7,16 +7,14 @@ import { v4 as uuid } from "uuid";
 interface IUploadFilesToStorage {
   files: File[];
   bankAccountId: string;
-  userId: string;
 }
 
-const uploadSingleFile = async (
+export const uploadSingleFile = async (
   file: File,
   bankAccountId: string,
-  userId: string
 ): Promise<FileInfo> => {
   const fileId = uuid();
-  const path = getFilePath({ bankAccountId, file, fileId, userId });
+  const path = getFilePath({ bankAccountId, file, fileId });
 
   const storageRef = ref(firebaseStorage, path);
   await uploadBytes(storageRef, file);
@@ -33,9 +31,8 @@ const uploadSingleFile = async (
 export const uploadFilesToStorage = async ({
   bankAccountId,
   files,
-  userId,
 }: IUploadFilesToStorage): Promise<FileInfo[]> => {
   return Promise.all(
-    files.map((file) => uploadSingleFile(file, bankAccountId, userId))
+    files.map((file) => uploadSingleFile(file, bankAccountId))
   );
 };

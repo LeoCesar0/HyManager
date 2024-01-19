@@ -1,13 +1,12 @@
 export const getFilePath = ({
-  userId,
   bankAccountId,
   fileId,
   file,
 }: {
-  userId: string;
   fileId: string;
   bankAccountId: string;
   file: File;
 }) => {
-  return `${userId}/${bankAccountId}/${fileId}`;
+  const fileName = file.name.split('.')[0]
+  return `${bankAccountId}/${fileName}_${fileId}`;
 };

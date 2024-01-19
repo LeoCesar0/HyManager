@@ -62,7 +62,6 @@ export const DashboardMenu = () => {
           isOpen: true,
           children: <CreateBankAccountForm />,
           title: "Create Bank Account",
-          description: "Creating",
           autoToggle: false
         });
 

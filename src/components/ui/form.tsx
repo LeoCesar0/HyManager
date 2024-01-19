@@ -179,6 +179,20 @@ const FormMessage = React.forwardRef<
 });
 FormMessage.displayName = "FormMessage";
 
+export const FormActions = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({children, className, ...props}, ref) => {
+  return (
+    <footer
+      ref={ref}
+      className={cn("mt-2 flex gap-1 flex-wrap justify-end items-center", className)}
+      {...props}
+    >
+      {children}
+    </footer>
+  );
+})
+
+FormActions.displayName = 'FormActions'
+
 export {
   useFormField,
   FormProvider,

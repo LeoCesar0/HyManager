@@ -7,4 +7,10 @@ export const fileInfoSchema = z.object({
   });
 
 export type FileInfo = z.infer<typeof fileInfoSchema>;
+
 export type FileInfoWithFile = FileInfo & {file: File}
+
+export type TempImage = {
+  file: File;
+  previewUrl: string;
+}

@@ -1,4 +1,4 @@
-import { IFormFieldItem } from "@/components/FormFields";
+import { IFormFieldItem } from "@/components/FormFields/@types";
 import { TransactionType } from "../../../../server/models/Transaction/schema";
 
 export const formFields: IFormFieldItem[] = [
