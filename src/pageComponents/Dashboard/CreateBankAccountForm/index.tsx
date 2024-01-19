@@ -61,6 +61,7 @@ export const CreateBankAccountForm = () => {
     return {
       ...values,
       image: imageInfo,
+      users: [{id: currentUser!.id}],
     };
   };
 
