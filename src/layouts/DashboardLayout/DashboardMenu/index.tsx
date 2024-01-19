@@ -30,15 +30,9 @@ const { menuItems } = DASHBOARD_CONFIG;
 export const DashboardMenu = () => {
   const { currentLanguage } = useGlobalContext();
   const { currentUser } = useGlobalAuth();
-  const {
-    menuIsOpen,
-    toggleMenu,
-    currentBankAccount,
-    setCurrentBankAccount,
-    setState: setDashboardState,
-  } = useGlobalDashboardStore();
+  const { menuIsOpen, toggleMenu, currentBankAccount, setCurrentBankAccount } =
+    useGlobalDashboardStore();
   const { setModalProps } = useGlobalModal();
-  const [hasBankAccount, setHasBankAccount] = useState(true);
 
   const bankAccountsFetch = useSwr<
     ListBankAccountByUserIdReturnType,
@@ -51,19 +45,17 @@ export const DashboardMenu = () => {
         if (data.data && data.data.length > 0) {
           setCurrentBankAccount(data.data[0]);
         }
-        setHasBankAccount(!data.data || data.data.length > 0);
+        console.log('data.data', data.data)
+        const shouldCreateBankAccount = !data.data || data.data.length > 0;
 
-        setDashboardState((prev) => ({
-          ...prev,
-          shouldCreateBankAccount: !hasBankAccount,
-        }));
-
-        setModalProps({
-          isOpen: true,
-          children: <CreateBankAccountForm />,
-          title: "Create Bank Account",
-          autoToggle: false
-        });
+        if (!shouldCreateBankAccount) {
+          setModalProps({
+            isOpen: true,
+            children: <CreateBankAccountForm />,
+            title: "Create Bank Account",
+            autoToggle: false,
+          });
+        }
 
         return data;
       });
@@ -71,6 +63,8 @@ export const DashboardMenu = () => {
   );
 
   const bankAccounts = bankAccountsFetch.data?.data ?? [];
+
+  console.log('bankAccounts', bankAccounts)
 
   return (
     <>

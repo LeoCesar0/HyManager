@@ -20,6 +20,7 @@ import { firebaseDB } from "@/services/firebase";
 import { debugDev } from "@/utils/dev";
 import { FirebaseCollection } from ".";
 import { PaginationResult } from "../../@types/index";
+import { createCollectionRef } from "../utils/createCollectionRef";
 
 type IProps<T> = {
   collection: FirebaseCollection;
@@ -39,7 +40,7 @@ export const firebasePaginatedList = async <T>({
       collectionName,
     },
   });
-  const ref = collection(firebaseDB, collectionName);
+  const ref = createCollectionRef({ collectionName });
   let whereList = filters.map(({ field, operator = "==", value }) =>
     where(field as string, operator, value)
   );

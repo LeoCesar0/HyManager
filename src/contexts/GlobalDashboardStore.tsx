@@ -5,7 +5,6 @@ import { createContext, Dispatch, SetStateAction, useContext, useState } from "r
 interface IState {
   menuIsOpen: boolean;
   currentBankAccount: BankAccount | null;
-  shouldCreateBankAccount: boolean
 }
 
 interface IActions {
@@ -19,7 +18,6 @@ interface IGlobalDashboardStore extends IState, IActions {}
 const initialValues: IState = {
   menuIsOpen: true,
   currentBankAccount: null,
-  shouldCreateBankAccount: false,
 };
 
 const Context = createContext<IGlobalDashboardStore>(

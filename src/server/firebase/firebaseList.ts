@@ -18,6 +18,7 @@ import {
 import { firebaseDB } from "@/services/firebase";
 import { debugDev } from "@/utils/dev";
 import { FirebaseCollection } from ".";
+import { createCollectionRef } from "../utils/createCollectionRef";
 
 type IFirebaseList<T> = {
   collection: FirebaseCollection;
@@ -35,7 +36,7 @@ export const firebaseList = async <T>({
       collectionName,
     },
   });
-  const ref = collection(firebaseDB, collectionName);
+  const ref = createCollectionRef({ collectionName });
 
   filters = filters.reduce((acc,entry) => {
     // --------------------------
