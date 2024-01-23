@@ -51,7 +51,6 @@ specifiers:
   jest: ^29.7.0
   jest-environment-jsdom: ^29.7.0
   lodash: ^4.17.21
-  lucide-react: ^0.294.0
   multer: 1.4.5-lts.1
   next: 13.4.0
   next-auth: ^4.19.1
@@ -121,7 +120,6 @@ dependencies:
   framer-motion: 10.16.4_biqbaboplfbrettd7655fr4n2y
   i18next: 23.6.0
   lodash: 4.17.21
-  lucide-react: 0.294.0_react@18.2.0
   multer: 1.4.5-lts.1
   next: 13.4.0_gewzw7coau2uk5vixsbhkmwptu
   next-auth: 4.23.2_o36i5nnimpwjhlcn4bax4pcnvu
@@ -5906,14 +5904,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
-
-  /lucide-react/0.294.0_react@18.2.0:
-    resolution: {integrity: sha512-V7o0/VECSGbLHn3/1O67FUgBwWB+hmzshrgDVRJQhMh8uj5D3HBuIvhuAmQTtlupILSplwIZg5FTc4tTKMA2SA==}
-    peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: 18.2.0
-    dev: false
 
   /lz-string/1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}

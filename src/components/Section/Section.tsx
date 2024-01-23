@@ -3,8 +3,8 @@ import { cx } from "@/utils/misc";
 import { LocalizedText } from "../../@types/index";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
 
 interface IProps {
   sectionTitle?: LocalizedText;
@@ -37,7 +37,7 @@ export const Section: React.FC<IProps> = ({
         {goBackLink && (
           <Link href={goBackLink}>
             <Button size={"iconLg"} variant={"outline"}>
-              <ArrowLeft />
+              <ArrowLeftIcon />
             </Button>
           </Link>
         )}

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -12,6 +11,7 @@ import {
 import useT from "@/hooks/useT";
 import { useFormatDate } from "@/hooks/useFormatDate";
 import { useGlobalContext } from "@/contexts/GlobalContext";
+import { CalendarIcon } from "@radix-ui/react-icons";
 
 interface IProps {
   date: Date;
