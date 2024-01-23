@@ -107,7 +107,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
           }
           rightActions={
             <>
-              <Link href="/dashboard/transactions/extract">
+              <Link href="/dashboard/transactions/import-extract">
                 <Button variant={"secondary"}>
                   <UploadIcon />
                   {useT({

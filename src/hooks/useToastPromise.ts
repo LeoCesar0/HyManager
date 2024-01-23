@@ -12,12 +12,14 @@ export function useToastPromise() {
     param2: {
       defaultErrorMessage: LocalizedText;
       loadingMessage: LocalizedText;
+      successMessage: LocalizedText
     }
   ) => {
     setIsLoading(true);
     return handleToastPromise<T>(param1, {
       loadingMessage: param2?.loadingMessage[currentLanguage],
       defaultErrorMessage: param2?.defaultErrorMessage[currentLanguage],
+      successMessage: param2?.successMessage[currentLanguage],
     }).finally(() => setIsLoading(false));
   };
 

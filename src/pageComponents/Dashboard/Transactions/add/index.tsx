@@ -15,12 +15,11 @@ import { FormFields } from "@/components/FormFields";
 import { formFields } from "./formFields";
 import { createTransaction } from "@/server/models/Transaction/create/createTransaction";
 import { useToastPromise } from "@/hooks/useToastPromise";
+import { UploadIcon } from "@radix-ui/react-icons";
+import useT from "@/hooks/useT";
+import Link from "next/link";
 
-const formSchema = createTransactionSchema.merge(
-  z.object({
-    amount: z.number(),
-  })
-);
+const formSchema = createTransactionSchema;
 
 export const DashboardTransactionsAdd = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -71,8 +70,22 @@ export const DashboardTransactionsAdd = () => {
             pt: "Nova transação",
             en: "New Transaction",
           }}
-          className="max-w-[600px]"
           goBackLink="/dashboard/transactions"
+          actions={
+            <>
+              <Link href={`/dashboard/transactions/import-extract`}>
+                <Button disabled={isLoading}
+                  variant={'secondary'}
+                >
+                  <UploadIcon />
+                  {useT({
+                    en: "Import PDF",
+                    pt: "Importar PDF",
+                  })}
+                </Button>
+              </Link>
+            </>
+          }
         >
           <>
             <FormProvider {...form}>

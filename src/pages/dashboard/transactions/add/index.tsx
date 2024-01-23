@@ -16,8 +16,10 @@ const DashboardTransactionsAddPage = () => {
   return <DashboardTransactionsAdd />;
 };
 
-export default DashboardTransactionsAddPage;
-
 DashboardTransactionsAddPage.getLayout = (page: ReactElement) => (
   <DashboardLayout>{page}</DashboardLayout>
 );
+
+export default DashboardTransactionsAddPage;
+
+

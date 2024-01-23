@@ -57,12 +57,16 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
 
     const result = await handleToast(promise, {
       loadingMessage: {
-        en: "Loading data",
-        pt: "Carregando dados",
+        en: "Loading extract",
+        pt: "Carregando extrato",
       },
       defaultErrorMessage: {
         en: "Error extracting data",
         pt: "Erro ao extrair dados",
+      },
+      successMessage: {
+        en: "Transactions Loaded",
+        pt: "Transações carregadas",
       },
     });
 

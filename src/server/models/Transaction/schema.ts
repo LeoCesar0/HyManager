@@ -52,6 +52,28 @@ export const createTransactionSchema = z.object({
   color: z.string().optional(),
 });
 
+export const createTransactionSchemaPT = z.object({
+  slug: z.string().optional(),
+  idFromBank: z.string().optional(),
+  bankAccountId: z.string().optional(),
+  type: z.enum([TransactionType.credit, TransactionType.debit]),
+  file: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      url: z.string(),
+    })
+    .optional(),
+  creditor: z.string().min(1),
+  description: z.string(),
+  date: z.date({
+    invalid_type_error: "Insira uma data",
+    required_error: "Campo obrigatório",
+  }),
+  amount: z.number(),
+  color: z.string().optional(),
+});
+
 export const createTransactionFromPDFSchema = z.object({
   slug: z.string().optional(),
   idFromBank: z.string().optional(),

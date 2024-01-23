@@ -27,10 +27,10 @@ export const Section: React.FC<IProps> = ({
 }) => {
   const { currentLanguage } = useGlobalContext();
   return (
-    <section className={cn(className)}>
+    <section className={cn('w-full', className)}>
       <header
         className={cx([
-          "flex gap-4 items-center mb-4 flex-wrap",
+          "flex gap-4 items-center mb-4 flex-wrap w-full",
           ["border-b pb-4", headerBorder],
         ])}
       >

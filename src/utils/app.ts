@@ -24,21 +24,21 @@ export const showErrorToast = (error: AppError) => {
 
 type IPromiseOptions = {
   loadingMessage: string;
+  successMessage: string;
   defaultErrorMessage: string;
 };
 
 export async function handleToastPromise<T extends AppModelResponse<any>>(
   promise: Promise<T>,
-  { loadingMessage, defaultErrorMessage }: IPromiseOptions
+  { loadingMessage, defaultErrorMessage, successMessage }: IPromiseOptions
 ): Promise<T> {
   const toastId = toast.loading(loadingMessage);
 
   return promise
     .then((results) => {
-      console.log("handleToastPromise results -->", results);
       if (results.done) {
         toast.update(toastId, {
-          render: "Success!",
+          render: successMessage || 'Success',
           type: "success",
           isLoading: false,
           autoClose: 5000,
