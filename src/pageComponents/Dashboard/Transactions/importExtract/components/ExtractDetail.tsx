@@ -1,12 +1,13 @@
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { IPDFData } from "@/services/PDFReader/interfaces";
 import selectT from "@/utils/selectT";
-import { formatAnyDate } from "../../../../utils/date/formatAnyDate";
-import { valueToCurrency } from "../../../../utils/misc";
+import { formatAnyDate } from "../../../../../utils/date/formatAnyDate";
+import { valueToCurrency } from "../../../../../utils/misc";
 import { TRANSACTION_TYPE_LABELS } from "@/static/staticLabels";
-import { TransactionRow } from "./components/TransactionRow";
-import { TransactionCell } from "./components/TransactionCell";
-import { Title } from "./components/Title";
+import { TransactionRow } from "./TransactionRow";
+import { TransactionCell } from "./TransactionCell";
+import { Title } from "./Title";
+import { ExtractGeneralInfo } from "./ExtractGeneralInfo";
 
 type ExtractDetailProps = {
   pdfData: IPDFData;
@@ -19,32 +20,9 @@ export const ExtractDetail = ({ pdfData, pdfIndex }: ExtractDetailProps) => {
   return (
     <>
       <div>
-        <Title>
-          {selectT(currentLanguage, {
-            en: "General Information",
-            pt: "Informações Gerais",
-          })}
-        </Title>
-        <div>
-          <span>
-            {selectT(currentLanguage, {
-              en: "Initial Balance",
-              pt: "Saldo Inicial",
-            })}
-          </span>
-          {": "}
-          {pdfData.initialBalance}
-        </div>
-        <div>
-          <span>
-            {selectT(currentLanguage, {
-              en: "Final Balance",
-              pt: "Saldo Final",
-            })}
-          </span>
-          {": "}
-          {pdfData.finalBalance}
-        </div>
+        <ExtractGeneralInfo pdfData={pdfData} />
+      </div>
+      <div>
         <Title>
           {selectT(currentLanguage, {
             en: "Transactions",
@@ -71,14 +49,10 @@ export const ExtractDetail = ({ pdfData, pdfIndex }: ExtractDetailProps) => {
                 <TransactionCell width={150} label="Tipo">
                   {transactionTypeLabel}
                 </TransactionCell>
-                <TransactionCell label="Descrição"
-                  width={350}
-                >
+                <TransactionCell label="Descrição" width={350}>
                   {transaction.description}
                 </TransactionCell>
-                <TransactionCell label="Data">
-                  {formattedDate}
-                </TransactionCell>
+                <TransactionCell label="Data">{formattedDate}</TransactionCell>
               </TransactionRow>
             );
           })}
@@ -87,6 +61,3 @@ export const ExtractDetail = ({ pdfData, pdfIndex }: ExtractDetailProps) => {
     </>
   );
 };
-
-
-
