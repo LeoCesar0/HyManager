@@ -57,7 +57,7 @@ export function parse(
           description?: string;
           creditor?: string;
           amount?: number;
-          type?: "debit" | "credit";
+          type?: "debit" | "deposit";
         } = undefined;
 
     Pages.forEach(({ Texts }, pageIndex) => {
@@ -125,7 +125,7 @@ export function parse(
             // console.log("----------------- CREDIT LIST ---------------------");
             tempTransaction = {
               date: tempTransaction.date,
-              type: "credit",
+              type: "deposit",
             };
             return;
           }

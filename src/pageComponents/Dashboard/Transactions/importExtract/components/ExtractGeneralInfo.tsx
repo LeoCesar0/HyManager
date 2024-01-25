@@ -59,8 +59,8 @@ const infos: {
   {
     key: "totalCredit",
     label: {
-      en: "Total Credit",
-      pt: "Crédito Total",
+      en: "Total Deposit",
+      pt: "Depósito Total",
     },
   },
   {

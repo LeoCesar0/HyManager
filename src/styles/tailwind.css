@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* ------------------------------- ROOT COLORS ------------------------------ */
-    --credit: theme(colors.blue.600);
+    --deposit: theme(colors.blue.600);
     --debit: theme(colors.red.500);
     --menu-width: 300px;
     --menu-closed-width: 4rem;

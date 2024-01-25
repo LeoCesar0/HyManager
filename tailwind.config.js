@@ -22,7 +22,7 @@ module.exports = {
         ring: "var(--ring)",
         background: "var(--background)",
         foreground: "var(--foreground)",
-        credit: "var(--credit)",
+        deposit: "var(--deposit)",
         debit: "var(--debit)",
         primary: {
           DEFAULT: "var(--primary)",

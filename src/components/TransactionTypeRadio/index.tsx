@@ -39,17 +39,17 @@ export const TransactionTypeRadio: React.FC<IProps> = ({
         }
       </div>
       <div
-        className={clsx("bg-credit rounded-r-sm", commonClassName, [
-          currentValue !== TransactionType.credit && "opacity-50",
+        className={clsx("bg-deposit rounded-r-sm", commonClassName, [
+          currentValue !== TransactionType.deposit && "opacity-50",
         ])}
         onClick={() => {
-          setValue(fieldName, TransactionType.credit);
+          setValue(fieldName, TransactionType.deposit);
         }}
       >
         {
           {
-            en: "Credit",
-            pt: "Crédito",
+            en: "Deposit",
+            pt: "Depósito",
           }[currentLanguage]
         }
       </div>

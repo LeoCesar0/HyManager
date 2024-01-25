@@ -3,7 +3,7 @@ import { timestampSchema } from "@/server/firebase";
 import { z } from "zod";
 
 export enum TransactionType {
-  credit = "credit",
+  deposit = "deposit",
   debit = "debit",
 }
 
@@ -15,7 +15,7 @@ export const transactionSchema = z.object({
   idFromBank: z.string().optional(),
   bankAccountId: z.string(),
   amount: z.number(),
-  type: z.enum([TransactionType.credit, TransactionType.debit]),
+  type: z.enum([TransactionType.deposit, TransactionType.debit]),
   file: fileInfoSchema.optional(),
   creditor: z.string().optional(),
   creditorSlug: z.string().optional(),
@@ -34,7 +34,7 @@ export const createTransactionSchema = z.object({
   slug: z.string().optional(),
   idFromBank: z.string().optional(),
   bankAccountId: z.string().optional(),
-  type: z.enum([TransactionType.credit, TransactionType.debit]),
+  type: z.enum([TransactionType.deposit, TransactionType.debit]),
   file: z
     .object({
       id: z.string(),
@@ -56,7 +56,7 @@ export const createTransactionSchemaPT = z.object({
   slug: z.string().optional(),
   idFromBank: z.string().optional(),
   bankAccountId: z.string().optional(),
-  type: z.enum([TransactionType.credit, TransactionType.debit]),
+  type: z.enum([TransactionType.deposit, TransactionType.debit]),
   file: z
     .object({
       id: z.string(),
@@ -78,7 +78,7 @@ export const createTransactionFromPDFSchema = z.object({
   slug: z.string().optional(),
   idFromBank: z.string().optional(),
   bankAccountId: z.string().optional(),
-  type: z.enum([TransactionType.credit, TransactionType.debit]),
+  type: z.enum([TransactionType.deposit, TransactionType.debit]),
   file: z
     .object({
       id: z.string(),

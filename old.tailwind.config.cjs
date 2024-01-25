@@ -43,7 +43,7 @@ module.exports = {
         'disabled-border': "var(--color-disabled-border)",
         'disabled-text': "var(--color-disabled-text)",
         debit: theme.colors.red[500],
-        credit: theme.colors.blue[600]
+        deposit: theme.colors.blue[600]
       }),
     },
   },

@@ -92,7 +92,7 @@ const parseTransactions = (
     try {
       const type =
         Number(item.amount) > 0
-          ? TransactionType.credit
+          ? TransactionType.deposit
           : TransactionType.debit;
       const amount = currency(item.amount).value;
       const dateAsLocaleString = item["date"];

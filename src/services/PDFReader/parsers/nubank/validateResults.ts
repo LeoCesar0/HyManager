@@ -12,7 +12,7 @@ export const validateResults = (parsedResults: IPDFData[]) => {
         if (entry.type === TransactionType.debit) {
           acc.totalDebit = currency(acc.totalDebit).add(entry.amount).value;
         }
-        if (entry.type === TransactionType.credit) {
+        if (entry.type === TransactionType.deposit) {
           acc.totalCredit = currency(acc.totalCredit).add(entry.amount).value;
         }
         return acc;

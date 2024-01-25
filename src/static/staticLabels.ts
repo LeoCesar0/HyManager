@@ -1,9 +1,9 @@
 import { TransactionType } from "@/server/models/Transaction/schema";
 
 export const TRANSACTION_TYPE_LABELS = {
-  [TransactionType.credit]: {
-    en: "Credit",
-    pt: "Crédito",
+  [TransactionType.deposit]: {
+    en: "Deposit",
+    pt: "Depósito",
   },
   [TransactionType.debit]: {
     en: "Debit",

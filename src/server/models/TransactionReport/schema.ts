@@ -5,7 +5,7 @@ import { TransactionType } from "../Transaction/schema";
 export const transactionMinSchema = z.object({
   id: z.string(),
   amount: z.number(),
-  type: z.enum([TransactionType.credit, TransactionType.debit]),
+  type: z.enum([TransactionType.deposit, TransactionType.debit]),
   creditor: z.string().optional(),
   creditorSlug: z.string().optional(),
 });

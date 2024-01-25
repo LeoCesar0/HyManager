@@ -18,14 +18,14 @@ export const TransactionCell = ({
     <div
       className={cx([
         `px-2 py-1 rounded-sm line-clamp-2 flex items-start justify-start gap-2 text-sm`,
-        ["text-credit", transactionType === TransactionType.credit],
+        ["text-deposit", transactionType === TransactionType.deposit],
         ["text-debit", transactionType === TransactionType.debit],
       ])}
       style={{
         width: `${width}px`,
       }}
     >
-      {transactionType && transactionType === TransactionType.credit && (
+      {transactionType && transactionType === TransactionType.deposit && (
         <ArrowUpIcon className="h-4 w-4" />
       )}
       {transactionType && transactionType === TransactionType.debit && (
