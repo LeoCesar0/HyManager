@@ -23,11 +23,14 @@ import { Timestamp } from "firebase/firestore";
 import { formatTimestamp } from "@/utils/date/formatTimestamp";
 import { valueToCurrency } from "../../../utils/misc";
 import { UploadIcon } from "@radix-ui/react-icons";
+import { useGlobalContext } from "@/contexts/GlobalContext";
+import selectT from "@/utils/selectT";
 
 interface IProps {}
 
 export const DashboardTransactions: React.FC<IProps> = ({}) => {
   const { currentBankAccount } = useGlobalDashboardStore();
+  const { currentLanguage } = useGlobalContext();
 
   const router = useRouter();
 
@@ -50,28 +53,28 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
   const columns: ITableColumn<Transaction>[] = [
     {
       key: "creditor",
-      label: useT({
+      label: selectT(currentLanguage, {
         en: "Creditor",
         pt: "Credor",
       }),
     },
     {
       key: "amount",
-      label: useT({
+      label: selectT(currentLanguage, {
         en: "Amount",
         pt: "Valor",
       }),
     },
     {
       key: "createdAt",
-      label: useT({
+      label: selectT(currentLanguage, {
         en: "Created at",
         pt: "Criado em",
       }),
     },
     {
       key: "updatedAt",
-      label: useT({
+      label: selectT(currentLanguage, {
         en: "Updated at",
         pt: "Atualizado em",
       }),
@@ -96,7 +99,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
               <Link href="/dashboard/transactions/add">
                 <Button>
                   <>
-                    {useT({
+                    {selectT(currentLanguage, {
                       en: "Add new",
                       pt: "Adicionar",
                     })}
@@ -110,7 +113,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
               <Link href="/dashboard/transactions/import-extract">
                 <Button variant={"secondary"}>
                   <UploadIcon />
-                  {useT({
+                  {selectT(currentLanguage, {
                     en: "Import from Extract",
                     pt: "Importar Extrato",
                   })}

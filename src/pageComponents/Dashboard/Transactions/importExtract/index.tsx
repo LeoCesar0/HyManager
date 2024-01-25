@@ -12,6 +12,8 @@ import { ExtractDetail } from "./components/ExtractDetail";
 import { PDF2JSONResponse } from "@/server/routes/readPdfFilesRoute";
 import { createTransactionsFromPDFResult } from "@/server/utils/createTransactionsFromPDFResult";
 import { uploadFilesToStorage } from "@/components/TransactionsFileInput/uploadFilesToStorage";
+import selectT from "@/utils/selectT";
+import { useGlobalContext } from "@/contexts/GlobalContext";
 
 export const DashboardTransactionsImportExtract = () => {
   const [loadedFiles, setLoadedFiles] = useState<File[]>([]);
@@ -19,6 +21,7 @@ export const DashboardTransactionsImportExtract = () => {
     useState<PDF2JSONResponse | null>(null);
   const { currentBankAccount } = useGlobalDashboardStore();
   const { currentUser } = useGlobalAuth();
+  const {currentLanguage} = useGlobalContext()
 
   const { handleToast, isLoading } = useToastPromise();
 
@@ -71,7 +74,7 @@ export const DashboardTransactionsImportExtract = () => {
                 onClick={() => submitTransactions()}
               >
                 <UploadIcon />
-                {useT({
+                {selectT(currentLanguage,{
                   en: "Upload Transactions",
                   pt: "Enviar Transações",
                 })}

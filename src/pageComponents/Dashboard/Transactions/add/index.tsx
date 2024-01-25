@@ -18,12 +18,16 @@ import { useToastPromise } from "@/hooks/useToastPromise";
 import { UploadIcon } from "@radix-ui/react-icons";
 import useT from "@/hooks/useT";
 import Link from "next/link";
+import selectT from "@/utils/selectT";
+import { useGlobalContext } from '../../../../contexts/GlobalContext';
 
 const formSchema = createTransactionSchema;
 
 export const DashboardTransactionsAdd = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const { t } = useTranslation();
+
+  const {currentLanguage} = useGlobalContext()
 
   const { handleToast, isLoading } = useToastPromise();
 
@@ -78,7 +82,7 @@ export const DashboardTransactionsAdd = () => {
                   variant={'secondary'}
                 >
                   <UploadIcon />
-                  {useT({
+                  {selectT(currentLanguage,{
                     en: "Import PDF",
                     pt: "Importar PDF",
                   })}

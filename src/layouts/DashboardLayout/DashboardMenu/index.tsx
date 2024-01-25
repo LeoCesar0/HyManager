@@ -25,6 +25,7 @@ import { FirebaseCollection } from "../../../server/firebase/index";
 import { useGlobalModal } from "../../../contexts/GlobalModal";
 import { CreateBankAccountForm } from "../../../pageComponents/Dashboard/CreateBankAccountForm/index";
 import { useEffect, useState } from "react";
+import selectT from "@/utils/selectT";
 
 const { menuItems } = DASHBOARD_CONFIG;
 export const DashboardMenu = () => {
@@ -45,7 +46,7 @@ export const DashboardMenu = () => {
         if (data.data && data.data.length > 0) {
           setCurrentBankAccount(data.data[0]);
         }
-        console.log('data.data', data.data)
+        console.log("data.data", data.data);
         const shouldCreateBankAccount = !data.data || data.data.length > 0;
 
         if (!shouldCreateBankAccount) {
@@ -64,7 +65,7 @@ export const DashboardMenu = () => {
 
   const bankAccounts = bankAccountsFetch.data?.data ?? [];
 
-  console.log('bankAccounts', bankAccounts)
+  console.log("bankAccounts", bankAccounts);
 
   return (
     <>
@@ -109,7 +110,7 @@ export const DashboardMenu = () => {
               className={cx(["transition-all", ["hidden", !menuIsOpen]])}
             >
               <SelectValue
-                placeholder={useT({
+                placeholder={selectT(currentLanguage, {
                   pt: "Selecione um banco",
                   en: "Select a bank",
                 })}
