@@ -96,10 +96,10 @@ export const DashboardTransactionsImportExtract = () => {
                 <Tabs defaultValue="pdf-0" className="w-full">
                   <TabsList>
                     {!!generalInfo && (
-                      <TabsTrigger value={"general"}>
+                      <TabsTrigger value={"all"}>
                         {selectT(currentLanguage, {
-                          en: "General",
-                          pt: "Geral ",
+                          en: "All",
+                          pt: "Todos",
                         })}
                       </TabsTrigger>
                     )}
@@ -119,7 +119,7 @@ export const DashboardTransactionsImportExtract = () => {
                     })}
                   </TabsList>
                   {!!generalInfo && (
-                    <TabsContent value={"general"}>
+                    <TabsContent value={"all"}>
                       <ExtractPage pdfData={generalInfo} pdfKey={"geral"} />
                     </TabsContent>
                   )}
