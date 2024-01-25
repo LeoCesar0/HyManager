@@ -1,26 +1,27 @@
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { IPDFData } from "@/services/PDFReader/interfaces";
 import selectT from "@/utils/selectT";
-import { formatAnyDate } from "../../../../../utils/date/formatAnyDate";
-import { valueToCurrency } from "../../../../../utils/misc";
+import { formatAnyDate } from "@/utils/date/formatAnyDate";
+import { valueToCurrency } from "@/utils/misc";
 import { TRANSACTION_TYPE_LABELS } from "@/static/staticLabels";
 import { TransactionRow } from "./TransactionRow";
 import { TransactionCell } from "./TransactionCell";
 import { Title } from "./Title";
-import { ExtractGeneralInfo } from "./ExtractGeneralInfo";
+import { GeneralInfo } from "../@types";
+import { ExtractSummary } from "./ExtractSummary";
 
-type ExtractDetailProps = {
-  pdfData: IPDFData;
-  pdfIndex: number;
+type ExtractPageProps = {
+  pdfData: IPDFData | GeneralInfo;
+  pdfKey: number | string;
 };
 
-export const ExtractDetail = ({ pdfData, pdfIndex }: ExtractDetailProps) => {
+export const ExtractPage = ({ pdfData, pdfKey }: ExtractPageProps) => {
   const { currentLanguage } = useGlobalContext();
 
   return (
     <>
-      <div>
-        <ExtractGeneralInfo pdfData={pdfData} />
+      <div className="my-4">
+        <ExtractSummary pdfData={pdfData} />
       </div>
       <div>
         <Title>
@@ -42,7 +43,7 @@ export const ExtractDetail = ({ pdfData, pdfIndex }: ExtractDetailProps) => {
               transactionTypeObjectLanguage
             );
             return (
-              <TransactionRow key={`trans-${pdfIndex}-${index}`}>
+              <TransactionRow key={`trans-${pdfKey}-${index}`}>
                 <TransactionCell width={150} transactionType={transaction.type}>
                   {amountFormatted}
                 </TransactionCell>

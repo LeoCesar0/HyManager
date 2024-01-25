@@ -20,6 +20,7 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
   userId,
   onTransactionsLoaded,
   onFilesLoaded,
+  className = '',
   ...rest
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -84,7 +85,7 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
   };
 
   return (
-    <div className="">
+    <div className={className}>
       <input
         multiple
         accept=".pdf"

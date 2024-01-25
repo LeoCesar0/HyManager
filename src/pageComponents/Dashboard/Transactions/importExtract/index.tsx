@@ -6,14 +6,17 @@ import { UploadIcon } from "@radix-ui/react-icons";
 import useT from "@/hooks/useT";
 import TransactionsFileInput from "@/components/TransactionsFileInput";
 import { useGlobalAuth } from "@/contexts/GlobalAuth";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { If, Then } from "react-if";
-import { ExtractDetail } from "./components/ExtractDetail";
+import { ExtractPage } from "./components/ExtractPage";
 import { PDF2JSONResponse } from "@/server/routes/readPdfFilesRoute";
 import { createTransactionsFromPDFResult } from "@/server/utils/createTransactionsFromPDFResult";
 import { uploadFilesToStorage } from "@/components/TransactionsFileInput/uploadFilesToStorage";
 import selectT from "@/utils/selectT";
 import { useGlobalContext } from "@/contexts/GlobalContext";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GeneralInfo } from "./@types";
+import { IPDFData } from "../../../../services/PDFReader/interfaces";
 
 export const DashboardTransactionsImportExtract = () => {
   const [loadedFiles, setLoadedFiles] = useState<File[]>([]);
@@ -21,7 +24,7 @@ export const DashboardTransactionsImportExtract = () => {
     useState<PDF2JSONResponse | null>(null);
   const { currentBankAccount } = useGlobalDashboardStore();
   const { currentUser } = useGlobalAuth();
-  const {currentLanguage} = useGlobalContext()
+  const { currentLanguage } = useGlobalContext();
 
   const { handleToast, isLoading } = useToastPromise();
 
@@ -40,12 +43,6 @@ export const DashboardTransactionsImportExtract = () => {
         done: false,
       };
     }
-
-    // const result = await createTransactionsFromPDFResult({
-    //   bankAccountId: currentBankAccount!.id,
-    //   pdfReadResult: extractResponse.data,
-    //   uploadedFiles: uploadedFiles,
-    // });
   }
 
   const onTransactionsLoaded = (result: PDF2JSONResponse) => {
@@ -57,6 +54,10 @@ export const DashboardTransactionsImportExtract = () => {
   };
 
   const extractResult = extractResponse?.data || null;
+
+  const generalInfo = useMemo(() => {
+    return getGeneralInfo(extractResult);
+  }, [extractResult]);
 
   return (
     <>
@@ -74,7 +75,7 @@ export const DashboardTransactionsImportExtract = () => {
                 onClick={() => submitTransactions()}
               >
                 <UploadIcon />
-                {selectT(currentLanguage,{
+                {selectT(currentLanguage, {
                   en: "Upload Transactions",
                   pt: "Enviar Transações",
                 })}
@@ -88,23 +89,82 @@ export const DashboardTransactionsImportExtract = () => {
               userId={currentUser!.id}
               onFilesLoaded={onFilesLoaded}
               onTransactionsLoaded={onTransactionsLoaded}
+              className="mb-4"
             />
             <If condition={!!extractResult}>
               <Then>
-                <div>
+                <Tabs defaultValue="pdf-0" className="w-full">
+                  <TabsList>
+                    {!!generalInfo && (
+                      <TabsTrigger value={"general"}>
+                        {selectT(currentLanguage, {
+                          en: "General",
+                          pt: "Geral ",
+                        })}
+                      </TabsTrigger>
+                    )}
+                    {extractResult?.map((_, pdfIndex) => {
+                      const num = pdfIndex + 1;
+                      return (
+                        <TabsTrigger
+                          key={"pdf-" + pdfIndex}
+                          value={"pdf-" + pdfIndex}
+                        >
+                          {selectT(currentLanguage, {
+                            en: "Extract " + num,
+                            pt: "Extrato " + num,
+                          })}
+                        </TabsTrigger>
+                      );
+                    })}
+                  </TabsList>
+                  {!!generalInfo && (
+                    <TabsContent value={"general"}>
+                      <ExtractPage pdfData={generalInfo} pdfKey={"geral"} />
+                    </TabsContent>
+                  )}
                   {extractResult?.map((pdfData, pdfIndex) => {
+                    const key = "pdf-" + pdfIndex;
                     return (
-                      <React.Fragment key={"pdf-" + pdfIndex}>
-                        <ExtractDetail pdfData={pdfData} pdfIndex={pdfIndex} />
-                      </React.Fragment>
+                      <TabsContent key={key} value={key}>
+                        <ExtractPage pdfData={pdfData} pdfKey={pdfIndex} />
+                      </TabsContent>
                     );
                   })}
-                </div>
+                </Tabs>
               </Then>
             </If>
           </>
         </Section>
       </SectionContainer>
     </>
+  );
+};
+
+
+// --------------------------
+// HELPERS
+// --------------------------
+
+const getGeneralInfo = (extractResult: PDF2JSONResponse["data"]) => {
+  if (!extractResult) return null;
+  return extractResult.reduce(
+    (acc, entry, index) => {
+      acc.totalCredit = acc.totalCredit + entry.totalCredit;
+      acc.totalDebit = acc.totalDebit + entry.totalDebit;
+      acc.income = acc.income + entry.income;
+
+      acc.transactions = [...acc.transactions, ...entry.transactions];
+      acc.transactions.sort((a, b) => {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      });
+      return acc;
+    },
+    {
+      income: 0,
+      totalCredit: 0,
+      totalDebit: 0,
+      transactions: [],
+    } as GeneralInfo
   );
 };
