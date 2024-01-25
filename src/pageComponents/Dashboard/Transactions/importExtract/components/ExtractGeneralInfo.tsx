@@ -7,6 +7,7 @@ import { TRANSACTION_TYPE_LABELS } from "@/static/staticLabels";
 import { TransactionRow } from "./TransactionRow";
 import { TransactionCell } from "./TransactionCell";
 import { Title } from "./Title";
+import { LocalizedText } from "@/@types";
 
 type ExtractGeneralInfoProps = {
   pdfData: IPDFData;
@@ -23,26 +24,57 @@ export const ExtractGeneralInfo = ({ pdfData }: ExtractGeneralInfoProps) => {
           pt: "Informações Gerais",
         })}
       </Title>
-      <div>
-        <span>
-          {selectT(currentLanguage, {
-            en: "Initial Balance",
-            pt: "Saldo Inicial",
-          })}
-        </span>
-        {": "}
-        {pdfData.initialBalance}
-      </div>
-      <div>
-        <span>
-          {selectT(currentLanguage, {
-            en: "Final Balance",
-            pt: "Saldo Final",
-          })}
-        </span>
-        {": "}
-        {pdfData.finalBalance}
-      </div>
+
+      {infos.map(({ key, label }) => {
+        return (
+          <div key={key}>
+            <span>{selectT(currentLanguage, label)}</span>
+            {": "}
+            {valueToCurrency(pdfData[key] as number)}
+          </div>
+        );
+      })}
     </>
   );
 };
+
+const infos: {
+  label: LocalizedText;
+  key: keyof IPDFData;
+}[] = [
+  {
+    key: "initialBalance",
+    label: {
+      en: "Initial Balance",
+      pt: "Saldo Inicial",
+    },
+  },
+  {
+    key: "income",
+    label: {
+      en: "Income",
+      pt: "Renda",
+    },
+  },
+  {
+    key: "totalCredit",
+    label: {
+      en: "Total Credit",
+      pt: "Crédito Total",
+    },
+  },
+  {
+    key: "totalDebit",
+    label: {
+      en: "Total Debit",
+      pt: "Débito Total",
+    },
+  },
+  {
+    key: "finalBalance",
+    label: {
+      en: "Final Balance",
+      pt: "Saldo Final",
+    },
+  },
+];
