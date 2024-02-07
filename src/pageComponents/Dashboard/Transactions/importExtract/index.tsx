@@ -31,18 +31,36 @@ export const DashboardTransactionsImportExtract = () => {
   async function submitTransactions() {
     if (!extractResponse?.data) return;
 
-    const uploadedFiles = await uploadFilesToStorage({
-      bankAccountId: currentBankAccount!.id,
-      files: loadedFiles,
+    const promise = async () => {
+      const uploadedFiles = await uploadFilesToStorage({
+        bankAccountId: currentBankAccount!.id,
+        files: loadedFiles,
+      });
+
+      const response = await createTransactionsFromPDFResult({
+        bankAccountId: currentBankAccount!.id,
+        pdfReadResult: extractResponse.data,
+        uploadedFiles: uploadedFiles,
+      });
+      return response;
+    };
+
+    const finalResponse = await handleToast(promise(), {
+      defaultErrorMessage: {
+        en: "Error generating transactions",
+        pt: "Erro ao gerar transações",
+      },
+      loadingMessage: {
+        en: "Generating transactions",
+        pt: "Gerando Transações",
+      },
+      successMessage: {
+        en: "Transactions generated successfully",
+        pt: "Transações geradas com sucesso",
+      },
     });
 
-    if (uploadedFiles.length === 0) {
-      return {
-        error: { message: "Error uploading files to storage" },
-        data: null,
-        done: false,
-      };
-    }
+    console.log('finalResponse', finalResponse)
   }
 
   const onTransactionsLoaded = (result: PDF2JSONResponse) => {

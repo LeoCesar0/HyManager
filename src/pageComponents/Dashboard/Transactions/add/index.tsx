@@ -52,7 +52,7 @@ export const DashboardTransactionsAdd = () => {
       values: {
         ...values,
       },
-    });
+    })
 
     handleToast(promise, {
       defaultErrorMessage: {
@@ -63,6 +63,10 @@ export const DashboardTransactionsAdd = () => {
         pt: "Adicionando transação",
         en: "Adding transaction",
       },
+      successMessage:{
+        pt: "Transação adicionada",
+        en: "Transaction added",
+      }
     });
   }
 
