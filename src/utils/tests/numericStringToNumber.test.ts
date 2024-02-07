@@ -1,4 +1,4 @@
-import { numericStringToNumber } from "../numericStringToNumber";
+import { numericStringToNumber } from "../format/numericStringToNumber";
 
 describe("numericStringToNumber", () => {
   test("it should convert a string with only digits to a number", () => {

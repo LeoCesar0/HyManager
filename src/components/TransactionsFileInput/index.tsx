@@ -1,5 +1,5 @@
 import { useGlobalCache } from "@contexts/GlobalCache";
-import { ChangeEvent, InputHTMLAttributes, useRef } from "react";
+import { ChangeEvent, InputHTMLAttributes, useRef, useState } from "react";
 import { readPDFFiles } from "./readPDFFiles";
 import useT from "@/hooks/useT";
 import { useToastPromise } from "@/hooks/useToastPromise";
@@ -7,6 +7,8 @@ import { IPDFData } from "../../services/PDFReader/interfaces";
 import { AppModelResponse } from "../../@types/index";
 import { extractPDFData } from "./extractPDFData";
 import { showErrorToast } from "@/utils/app";
+import { cx } from "@/utils/misc";
+import clsx from "clsx";
 
 interface ITransactionsFileInput extends InputHTMLAttributes<HTMLInputElement> {
   currentBankId: string;
@@ -20,13 +22,13 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
   userId,
   onTransactionsLoaded,
   onFilesLoaded,
-  className = '',
+  className = "",
   ...rest
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { refetchCollection } = useGlobalCache();
-
   const { handleToast, isLoading } = useToastPromise();
+  const [draggingOver, setDraggingOver] = useState(false);
 
   function handleButtonClick() {
     fileInputRef.current!.click();
@@ -42,6 +44,22 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
       event,
     });
 
+    await proceedFiles(loadedFiles);
+  };
+
+  const onDrop = async (dragEvent: DragEvent) => {
+    dragEvent.preventDefault();
+    console.log("ON DROP");
+
+    if (dragEvent.dataTransfer) {
+      const files = Array.from(dragEvent.dataTransfer.files).filter(
+        (file) => file.type === "application/pdf"
+      );
+      await proceedFiles(files);
+    }
+  };
+
+  const proceedFiles = async (loadedFiles: File[] | null) => {
     if (!loadedFiles) {
       showErrorToast({
         message: "Error loading files!",
@@ -72,15 +90,6 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
     });
 
     onTransactionsLoaded(result);
-
-    // .then((result) => {
-    //   if (result.done) {
-    //     refetchCollection([
-    //       FirebaseCollection.transactions,
-    //       FirebaseCollection.transactionReports,
-    //     ]);
-    //   }
-    // });
     fileInputRef.current!.value = "";
   };
 
@@ -96,8 +105,23 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
         {...rest}
       />
       <button
-        className="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded"
+        className={clsx(
+          "border border-dashed rounded-xl w-full min-h-[250px] flex items-center justify-center transition-all"
+        )}
         onClick={handleButtonClick}
+        onDragOver={(event) => {
+          event.preventDefault();
+        }}
+        onDrop={(event) => {
+          // @ts-expect-error
+          onDrop(event);
+        }}
+        onDragEnter={() => {
+          setDraggingOver(true);
+        }}
+        onDragLeave={() => {
+          setDraggingOver(false);
+        }}
       >
         {label}
       </button>

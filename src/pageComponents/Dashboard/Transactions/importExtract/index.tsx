@@ -7,7 +7,7 @@ import useT from "@/hooks/useT";
 import TransactionsFileInput from "@/components/TransactionsFileInput";
 import { useGlobalAuth } from "@/contexts/GlobalAuth";
 import React, { useMemo, useState } from "react";
-import { If, Then } from "react-if";
+import { Else, If, Then } from "react-if";
 import { ExtractPage } from "./components/ExtractPage";
 import { PDF2JSONResponse } from "@/server/routes/readPdfFilesRoute";
 import { createTransactionsFromPDFResult } from "@/server/utils/createTransactionsFromPDFResult";
@@ -80,17 +80,20 @@ export const DashboardTransactionsImportExtract = () => {
                   pt: "Enviar Transações",
                 })}
               </Button>
+              <Button
+                disabled={!extractResponse?.data}
+                onClick={() => setExtractResponse(null)}
+                variant="outline"
+              >
+                {selectT(currentLanguage, {
+                  en: "Redo",
+                  pt: "Refazer",
+                })}
+              </Button>
             </>
           }
         >
           <>
-            <TransactionsFileInput
-              currentBankId={currentBankAccount!.id}
-              userId={currentUser!.id}
-              onFilesLoaded={onFilesLoaded}
-              onTransactionsLoaded={onTransactionsLoaded}
-              className="mb-4"
-            />
             <If condition={!!extractResult}>
               <Then>
                 <Tabs defaultValue="pdf-0" className="w-full">
@@ -133,6 +136,15 @@ export const DashboardTransactionsImportExtract = () => {
                   })}
                 </Tabs>
               </Then>
+              <Else>
+                <TransactionsFileInput
+                  currentBankId={currentBankAccount!.id}
+                  userId={currentUser!.id}
+                  onFilesLoaded={onFilesLoaded}
+                  onTransactionsLoaded={onTransactionsLoaded}
+                  className="mb-4"
+                />
+              </Else>
             </If>
           </>
         </Section>
@@ -140,7 +152,6 @@ export const DashboardTransactionsImportExtract = () => {
     </>
   );
 };
-
 
 // --------------------------
 // HELPERS

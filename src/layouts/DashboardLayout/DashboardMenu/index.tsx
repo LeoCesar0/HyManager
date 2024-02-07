@@ -11,7 +11,6 @@ import {
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { DASHBOARD_CONFIG } from "../../../static/dashboardConfig";
-import useT from "../../../hooks/useT";
 import Link from "next/link";
 import { cx } from "@/utils/misc";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
@@ -24,48 +23,49 @@ import { useGlobalAuth } from "../../../contexts/GlobalAuth";
 import { FirebaseCollection } from "../../../server/firebase/index";
 import { useGlobalModal } from "../../../contexts/GlobalModal";
 import { CreateBankAccountForm } from "../../../pageComponents/Dashboard/CreateBankAccountForm/index";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import selectT from "@/utils/selectT";
 
 const { menuItems } = DASHBOARD_CONFIG;
-export const DashboardMenu = () => {
+
+const Component = () => {
   const { currentLanguage } = useGlobalContext();
   const { currentUser } = useGlobalAuth();
   const { menuIsOpen, toggleMenu, currentBankAccount, setCurrentBankAccount } =
     useGlobalDashboardStore();
   const { setModalProps } = useGlobalModal();
 
+  const bankAccountsKey = useMemo(() => {
+    return currentUser?.id
+      ? [FirebaseCollection.bankAccounts, currentUser.id]
+      : null;
+  }, [currentUser?.id]);
+
   const bankAccountsFetch = useSwr<
     ListBankAccountByUserIdReturnType,
     any,
     string[] | null
-  >(
-    currentUser?.id ? [FirebaseCollection.bankAccounts, currentUser.id] : null,
-    ([_, id]) => {
-      return listBankAccountByUserId({ id: id }).then((data) => {
-        if (data.data && data.data.length > 0) {
-          setCurrentBankAccount(data.data[0]);
-        }
-        console.log("data.data", data.data);
-        const shouldCreateBankAccount = !data.data || data.data.length > 0;
+  >(bankAccountsKey, ([_, id]) => {
+    return listBankAccountByUserId({ id: id }).then((data) => {
+      if (data.data && data.data.length > 0) {
+        setCurrentBankAccount(data.data[0]);
+      }
+      const shouldCreateBankAccount = !data.data || data.data.length > 0;
 
-        if (!shouldCreateBankAccount) {
-          setModalProps({
-            isOpen: true,
-            children: <CreateBankAccountForm />,
-            title: "Create Bank Account",
-            autoToggle: false,
-          });
-        }
+      if (!shouldCreateBankAccount) {
+        setModalProps({
+          isOpen: true,
+          children: <CreateBankAccountForm />,
+          title: "Create Bank Account",
+          autoToggle: false,
+        });
+      }
 
-        return data;
-      });
-    }
-  );
+      return data;
+    });
+  });
 
   const bankAccounts = bankAccountsFetch.data?.data ?? [];
-
-  console.log("bankAccounts", bankAccounts);
 
   return (
     <>
@@ -158,3 +158,5 @@ export const DashboardMenu = () => {
     </>
   );
 };
+
+export const DashboardMenu = memo(Component);

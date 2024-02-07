@@ -1,9 +1,11 @@
+// ex "-100.100,50"
+
+import { isNumericDigit } from "./isNumericDigit";
+
 export const isNumericString = (value: string) => {
-  // only numbers, comma and dot
 
-    if(!value || typeof value !== "string") return false
+  if (!value || typeof value !== "string") return false;
 
-    const regex = /^-?[0-9,.]*$/;
 
   const hasMultiplesComma =
     value.split("").filter((item) => item === ",").length > 1;
@@ -12,5 +14,5 @@ export const isNumericString = (value: string) => {
 
   if (hasMultiplesComma && hasMultiplesDots) return false;
 
-  return regex.test(value);
+  return isNumericDigit(value);
 };

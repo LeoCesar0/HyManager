@@ -1,4 +1,4 @@
-import { isNumericString } from "../isNumericString";
+import { isNumericString } from "../checks/isNumericString";
 
 describe("isNumericString", () => {
   it("should return true for valid numeric strings", () => {

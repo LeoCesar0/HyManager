@@ -1,4 +1,4 @@
-import { isNumericString } from "./isNumericString";
+import { isNumericString } from "../checks/isNumericString";
 
 export const numericStringToNumber = (string: string) => {
   if (string === "") string = "0";

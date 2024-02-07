@@ -1,5 +1,4 @@
 import { Section } from "@/components/Section/Section";
-import useT from "@/hooks/useT";
 import { SectionContainer } from "../../../components/Section/Section";
 import { Transaction } from "@/server/models/Transaction/schema";
 import useSwr from "swr";
@@ -25,6 +24,7 @@ import { valueToCurrency } from "../../../utils/misc";
 import { UploadIcon } from "@radix-ui/react-icons";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import selectT from "@/utils/selectT";
+import { getColumns } from "./getColumns";
 
 interface IProps {}
 
@@ -50,36 +50,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
     }
   );
 
-  const columns: ITableColumn<Transaction>[] = [
-    {
-      key: "creditor",
-      label: selectT(currentLanguage, {
-        en: "Creditor",
-        pt: "Credor",
-      }),
-    },
-    {
-      key: "amount",
-      label: selectT(currentLanguage, {
-        en: "Amount",
-        pt: "Valor",
-      }),
-    },
-    {
-      key: "createdAt",
-      label: selectT(currentLanguage, {
-        en: "Created at",
-        pt: "Criado em",
-      }),
-    },
-    {
-      key: "updatedAt",
-      label: selectT(currentLanguage, {
-        en: "Updated at",
-        pt: "Atualizado em",
-      }),
-    },
-  ];
+  const columns: ITableColumn<Transaction>[] = getColumns({ currentLanguage });
 
   const total: number =
     pagination?.data?.list.reduce((acc, entry) => {
@@ -172,31 +143,6 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
             </TableContainer>
           </>
         </Section>
-
-        {/* <Section>
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Amount</th>
-                  <th>Creditor</th>
-                  <th>Created at</th>
-                  <th>Updated at</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>id</td>
-                  <td>500</td>
-                  <td>Fulano</td>
-                  <td>today</td>
-                  <td>today</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </Section> */}
       </SectionContainer>
     </>
   );

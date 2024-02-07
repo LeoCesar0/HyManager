@@ -5,7 +5,7 @@ import {
 } from "@/server/models/Transaction/schema";
 import { IPDFData } from "../../interfaces";
 import { IPDFRawData } from "../../rawDataTypes";
-import { numericStringToNumber } from "@/utils/numericStringToNumber";
+import { numericStringToNumber } from "@/utils/format/numericStringToNumber";
 import { slugify } from "@/utils/app";
 import { decodeText } from "./decodeText";
 import { parseBrazilianDate } from "@/utils/date/parseBrazilianDate";
