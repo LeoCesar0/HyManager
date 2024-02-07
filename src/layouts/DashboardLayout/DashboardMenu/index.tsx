@@ -23,7 +23,7 @@ import { useGlobalAuth } from "../../../contexts/GlobalAuth";
 import { FirebaseCollection } from "../../../server/firebase/index";
 import { useGlobalModal } from "../../../contexts/GlobalModal";
 import { CreateBankAccountForm } from "../../../pageComponents/Dashboard/CreateBankAccountForm/index";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useMemo } from "react";
 import selectT from "@/utils/selectT";
 
 const { menuItems } = DASHBOARD_CONFIG;

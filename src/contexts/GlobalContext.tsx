@@ -1,6 +1,8 @@
 import { Locale } from "@/@types/index";
+import { firebaseApp } from "@/services/firebase";
 import { Locale as DateLocale } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
+import { getPerformance } from "firebase/performance";
 import { useRouter } from "next/router";
 import { setCookie } from "nookies";
 import React, {
@@ -8,6 +10,7 @@ import React, {
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
@@ -51,6 +54,10 @@ export const GlobalContextProvider: React.FC<{ children: React.ReactNode }> = ({
     setCookie(null, "NEXT_LOCALE", lang);
     router.push(router.pathname, undefined, { locale: lang, shallow: true });
   };
+
+  useEffect(() => {
+    const perf = getPerformance(firebaseApp)
+  },[])
 
   return (
     <GlobalContext.Provider

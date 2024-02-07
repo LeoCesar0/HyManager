@@ -6,7 +6,6 @@ import React, {
   Dispatch,
   SetStateAction,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import { BankAccount } from "@/server/models/BankAccount/schema";
@@ -131,9 +130,9 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  useEffect(() => {
-    getUserBankAccounts();
-  }, [currentUser?.id]);
+  // useEffect(() => {
+  //   getUserBankAccounts();
+  // }, [currentUser?.id]);
 
   return (
     <GlobalAuth.Provider
@@ -143,7 +142,6 @@ export const GlobalAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         handleSignOut,
         handleSignIn,
         getUserBankAccounts,
-        // transactionsReport,
       }}
     >
       {children}
