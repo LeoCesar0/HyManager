@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { numericStringToNumber } from "@/utils/numericStringToNumber";
+import { numericStringToNumber } from "@/utils/format/numericStringToNumber";
 import React, { InputHTMLAttributes, useRef } from "react";
 import MaskedInput from "react-text-mask";
 import createNumberMask from "text-mask-addons/dist/createNumberMask";
@@ -47,69 +47,67 @@ const defaultUSDMask: MaskOptions = {
   allowLeadingZeroes: false,
 };
 
-export const CurrencyInput: React.FC<CurrencyInputProps> = ({
-  maskOptions,
-  className,
-  currency,
-  onValueChange,
-  value,
-  ...inputProps
-}) => {
-  const inputValue = useRef<string>(
-    value === 0
+export const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
+  (
+    { maskOptions, className, currency, onValueChange, value, ...inputProps },
+    ref
+  ) => {
+    const [localValue, setLocalValue] = React.useState<string>(value === 0
       ? ""
       : typeof value === "string"
       ? value
       : typeof value === "number"
       ? value.toString()
-      : ""
-  );
+      : "");
 
-  const defaultOptions =
-    currency === "BRL"
-      ? defaultBRLMask
-      : currency === "USD"
-      ? defaultUSDMask
-      : {};
+    const defaultOptions =
+      currency === "BRL"
+        ? defaultBRLMask
+        : currency === "USD"
+        ? defaultUSDMask
+        : {};
 
-  const options = {
-    ...defaultOptions,
-    ...maskOptions,
-  };
-  const currencyMask = createNumberMask({
-    ...options,
-  });
+    const options = {
+      ...defaultOptions,
+      ...maskOptions,
+    };
+    const currencyMask = createNumberMask({
+      ...options,
+    });
 
-  const handleOnChange: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    let stringValue = event.target.value;
-    inputValue.current = stringValue;
+    const handleOnChange: React.ChangeEventHandler<HTMLInputElement> = (
+      event
+    ) => {
+      let stringValue = event.target.value;
+      setLocalValue(stringValue)
 
-    stringValue = stringValue
-      .replace(options.prefix || "", "")
-      .replace(options.suffix || "", "")
-      .replace(options.thousandsSeparatorSymbol || "", "")
-      .replace(options.decimalSymbol || "", ".");
+      stringValue = stringValue
+        .replace(options.prefix || "", "")
+        .replace(options.suffix || "", "")
+        .replace(options.thousandsSeparatorSymbol || "", "")
+        .replace(options.decimalSymbol || "", ".");
 
-    const number = numericStringToNumber(stringValue);
+      const number = numericStringToNumber(stringValue);
 
-    if (typeof number === "number") {
-      onValueChange(number);
-    }
-  };
+      if (typeof number === "number") {
+        onValueChange(number);
+      }
+    };
 
-  return (
-    <MaskedInput
-      mask={currencyMask}
-      className={cn(INPUT_BASE_CLASS, className)}
-      inputMode="numeric"
-      {...inputProps}
-      value={inputValue.current}
-      onChange={handleOnChange}
-    />
-  );
-};
+    return (
+      <MaskedInput
+        mask={currencyMask}
+        className={cn(INPUT_BASE_CLASS, className)}
+        inputMode="numeric"
+        {...inputProps}
+        value={localValue}
+        onChange={handleOnChange}
+      />
+    );
+  }
+);
+
+CurrencyInput.displayName = "CurrencyInput";
 
 CurrencyInput.defaultProps = {
   maskOptions: defaultBRLMask,
