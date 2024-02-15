@@ -9,6 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
+import {isMobile} from 'react-device-detect';
 
 export type PaginationControllerProps = {
   paginationResult: PaginationResult<any>;
@@ -20,7 +21,7 @@ export const PaginationController = ({
   paginationResult,
   onPageSelected,
 }: PaginationControllerProps) => {
-  const offset = 3;
+  const offset = isMobile ? 1 : 3;
   const currentPage = paginationResult.currentPage;
 
   const { pages } = useMemo(() => {
@@ -43,8 +44,10 @@ export const PaginationController = ({
 
   return (
     <>
-      <Pagination>
-        <PaginationContent>
+      <Pagination className="w-full" >
+        <PaginationContent
+          className="flex flex-wrap mx-auto my-0"
+        >
           {currentPage > 1 && (
             <PaginationItem>
               <PaginationPrevious

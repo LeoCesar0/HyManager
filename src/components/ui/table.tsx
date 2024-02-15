@@ -29,7 +29,7 @@ const TableContainer = React.forwardRef<HTMLDivElement, ITableContainer>(
         <>
           {children}
           {paginationResult && (
-            <div className="p-2">
+            <div className="p-2 w-full">
               <PaginationController
                 paginationResult={paginationResult}
                 onPageSelected={pagination.onPageSelected}

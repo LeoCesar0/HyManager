@@ -23,19 +23,11 @@ export const getColumns = ({
         pt: "Credor",
       }),
     },
-
     {
-      key: "createdAt",
+      key: "date",
       label: selectT(currentLanguage, {
-        en: "Created at",
-        pt: "Criado em",
-      }),
-    },
-    {
-      key: "updatedAt",
-      label: selectT(currentLanguage, {
-        en: "Updated at",
-        pt: "Atualizado em",
+        en: "Transaction date",
+        pt: "Data da transação",
       }),
     },
   ];
