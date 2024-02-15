@@ -60,7 +60,6 @@ export const PaginationController = ({
                 </PaginationItem>
               );
             }
-
             return (
               <PaginationItem key={`page-${page}`}>
                 <PaginationLink
