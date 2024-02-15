@@ -14,9 +14,6 @@ export const updateBankAccountBalance = async ({
     type: "month",
   });
 
-  console.log("ENTER UPDATE BANK ACCOUNT BALANCE");
-
-  console.log("response", response.data);
 
   if (!response.data) {
     return {
@@ -34,8 +31,6 @@ export const updateBankAccountBalance = async ({
     (acc, report) => acc + report.amount,
     0
   );
-
-  console.log("balance", balance);
 
   const updateResponse = await updateBankAccount({
     id: bankAccountId,
