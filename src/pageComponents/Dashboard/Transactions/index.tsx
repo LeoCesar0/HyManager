@@ -21,10 +21,12 @@ import { ITableColumn } from "@/@types/Table";
 import { Timestamp } from "firebase/firestore";
 import { formatTimestamp } from "@/utils/date/formatTimestamp";
 import { valueToCurrency } from "../../../utils/misc";
-import { UploadIcon } from "@radix-ui/react-icons";
+import { ArrowUpIcon, UploadIcon, ArrowDownIcon } from "@radix-ui/react-icons";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import selectT from "@/utils/selectT";
 import { getColumns } from "./getColumns";
+import { useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 interface IProps {}
 
@@ -37,9 +39,14 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
   const page = router.query.page ? Number(router.query.page) : 1;
   const limit = router.query.limit ? Number(router.query.limit) : 10;
 
+  const argsKey:[string, string, number, number] = ["transactions-table", currentBankAccount?.id || '', page, limit]
+  const listKey = currentBankAccount ? argsKey  : null
+
   const { data: pagination } = useSwr(
-    currentBankAccount ? ["transactions-table", currentBankAccount.id] : null,
-    ([_, id]) => {
+    listKey,
+    (args) => {
+      console.log('args', args)
+      const [_, id, page, limit] = args as typeof argsKey
       return listTransactionsByBankId({
         id: id,
         pagination: {
@@ -56,6 +63,25 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
     pagination?.data?.list.reduce((acc, entry) => {
       return acc + entry.amount;
     }, 0) || 0;
+
+  const onPageSelected = (_page: number, _limit: number = limit) => {
+    router.push(
+      `/dashboard/transactions?page=${_page}&limit=${_limit}`,
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  useEffect(() => {
+    onPageSelected(page, limit);
+  }, [page, limit]);
+
+  const paginationControl = pagination?.data
+    ? {
+        onPageSelected: onPageSelected,
+        paginationResult: pagination?.data,
+      }
+    : undefined;
 
   return (
     <>
@@ -94,7 +120,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
           }
         >
           <>
-            <TableContainer>
+            <TableContainer pagination={paginationControl}>
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -121,8 +147,25 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                           if (column.key === "amount") {
                             const value = transaction.amount;
                             const label = valueToCurrency(value);
+                            const isDeposit = value > 0;
                             return (
-                              <TableCell key={column.key}>{label}</TableCell>
+                              <TableCell key={column.key}>
+                                <div className="flex items-center gap-2">
+                                  <div
+                                    className={cn({
+                                      "text-deposit": isDeposit,
+                                      "text-debit": !isDeposit,
+                                    })}
+                                  >
+                                    {isDeposit ? (
+                                      <ArrowUpIcon className="h-4 w-4" />
+                                    ) : (
+                                      <ArrowDownIcon className="h-4 w-4" />
+                                    )}
+                                  </div>
+                                  {label}
+                                </div>
+                              </TableCell>
                             );
                           }
 
@@ -138,7 +181,20 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                 </TableBody>
               </Table>
               <TableFooter>
-                <strong>Total:</strong> {valueToCurrency(total)}
+                <p
+                  className={cn(
+                    "font-bold text-lg tracking-wide text-foreground",
+                    {
+                      "text-deposit": total > 0,
+                      "text-debit": total < 0,
+                    }
+                  )}
+                >
+                  <span className="font-medium text-base text-foreground">
+                    Total:
+                  </span>{" "}
+                  {valueToCurrency(total)}
+                </p>
               </TableFooter>
             </TableContainer>
           </>

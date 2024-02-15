@@ -83,6 +83,10 @@ export const CreateBankAccountForm = () => {
         pt: "Criando banco",
         en: "Creating bank",
       },
+      successMessage:{
+        pt: "Banco criado com sucesso",
+        en: "Bank created successfully"
+      }
     });
 
     setModalProps({

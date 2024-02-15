@@ -1,30 +1,56 @@
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
+import {
+  PaginationController,
+  PaginationControllerProps,
+} from "../PaginationController";
 
-const TableContainer = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    className={cn(
-      "relative w-full overflow-x-auto   rounded-sm bg-card text-card-foreground flex flex-col",
-      className
-    )}
-    ref={ref}
-    {...props}
-  />
-));
+const rowHeight = '45xp'
+
+
+type ITableContainer = {
+  pagination?: PaginationControllerProps;
+} & React.HTMLAttributes<HTMLDivElement>;
+
+const TableContainer = React.forwardRef<HTMLDivElement, ITableContainer>(
+  ({ className, children, pagination, ...props }, ref) => {
+    const paginationResult = pagination?.paginationResult;
+
+    return (
+      <div
+        className={cn(
+          "relative w-full overflow-x-auto rounded-sm bg-card text-card-foreground",
+          "flex flex-col ",
+          className
+        )}
+        ref={ref}
+        {...props}
+      >
+        <>
+          {children}
+          {paginationResult && (
+            <div className="p-2">
+              <PaginationController
+                paginationResult={paginationResult}
+                onPageSelected={pagination.onPageSelected}
+              />
+            </div>
+          )}
+        </>
+      </div>
+    );
+  }
+);
 TableContainer.displayName = "TableContainer";
 
 const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="min-h-[40vh] p-2">
+  <div className="min-h-[492px] block p-2">
     <table
       ref={ref}
-      className={cn("caption-bottom text-sm w-full ", className)}
+      className={cn("caption-bottom text-sm w-full", className)}
       {...props}
     />
   </div>
@@ -58,7 +84,8 @@ const TableFooter = React.forwardRef<
   <footer
     ref={ref}
     className={cn(
-      "block mt-auto bg-primary font-medium text-primary-foreground p-2",
+      // "block mt-auto bg-primary font-medium text-primary-foreground p-2",
+      "block font-medium text-primary-foreground px-4 py-2 border-b ",
       className
     )}
     {...props}
@@ -73,7 +100,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "w-[100px] border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
+      "w-full border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
       className
     )}
     {...props}
@@ -99,15 +126,19 @@ TableHead.displayName = "TableHead";
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
-  <td
-    ref={ref}
-    className={cn(
-      "p-2 py-3 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] truncate ",
-      className
-    )}
-    {...props}
-  />
+>(({ className, children, ...props }, ref) => (
+  <>
+    <td
+      ref={ref}
+      className={cn(
+        "p-2 py-3 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] truncate",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </td>
+  </>
 ));
 TableCell.displayName = "TableCell";
 

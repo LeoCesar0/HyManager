@@ -15,6 +15,7 @@ specifiers:
   '@radix-ui/react-slider': ^1.1.2
   '@radix-ui/react-slot': ^1.0.2
   '@radix-ui/react-tabs': ^1.0.4
+  '@radix-ui/react-tooltip': ^1.0.7
   '@tanstack/react-table': ^8.10.7
   '@testing-library/jest-dom': ^6.1.4
   '@testing-library/react': ^14.1.0
@@ -104,6 +105,7 @@ dependencies:
   '@radix-ui/react-slider': 1.1.2_ok7klj2z2jf7yvfzlcsdnzqpcy
   '@radix-ui/react-slot': 1.0.2_gvifxuufrqkj4gcqfnnwrb44ya
   '@radix-ui/react-tabs': 1.0.4_ok7klj2z2jf7yvfzlcsdnzqpcy
+  '@radix-ui/react-tooltip': 1.0.7_ok7klj2z2jf7yvfzlcsdnzqpcy
   '@tanstack/react-table': 8.10.7_biqbaboplfbrettd7655fr4n2y
   '@types/multer': 1.4.8
   '@types/react-icons': 3.0.0_react@18.2.0
@@ -2227,6 +2229,38 @@ packages:
       '@radix-ui/react-primitive': 1.0.3_ok7klj2z2jf7yvfzlcsdnzqpcy
       '@radix-ui/react-roving-focus': 1.0.4_ok7klj2z2jf7yvfzlcsdnzqpcy
       '@radix-ui/react-use-controllable-state': 1.0.1_gvifxuufrqkj4gcqfnnwrb44ya
+      '@types/react': 18.0.8
+      '@types/react-dom': 18.0.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@radix-ui/react-tooltip/1.0.7_ok7klj2z2jf7yvfzlcsdnzqpcy:
+    resolution: {integrity: sha512-lPh5iKNFVQ/jav/j6ZrWq3blfDJ0OH9R6FlNUHPMqdLuQ9vwDgFsRxvl8b7Asuy5c8xmoojHUxKHQSOAvMHxyw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.23.2
+      '@radix-ui/primitive': 1.0.1
+      '@radix-ui/react-compose-refs': 1.0.1_gvifxuufrqkj4gcqfnnwrb44ya
+      '@radix-ui/react-context': 1.0.1_gvifxuufrqkj4gcqfnnwrb44ya
+      '@radix-ui/react-dismissable-layer': 1.0.5_ok7klj2z2jf7yvfzlcsdnzqpcy
+      '@radix-ui/react-id': 1.0.1_gvifxuufrqkj4gcqfnnwrb44ya
+      '@radix-ui/react-popper': 1.1.3_ok7klj2z2jf7yvfzlcsdnzqpcy
+      '@radix-ui/react-portal': 1.0.4_ok7klj2z2jf7yvfzlcsdnzqpcy
+      '@radix-ui/react-presence': 1.0.1_ok7klj2z2jf7yvfzlcsdnzqpcy
+      '@radix-ui/react-primitive': 1.0.3_ok7klj2z2jf7yvfzlcsdnzqpcy
+      '@radix-ui/react-slot': 1.0.2_gvifxuufrqkj4gcqfnnwrb44ya
+      '@radix-ui/react-use-controllable-state': 1.0.1_gvifxuufrqkj4gcqfnnwrb44ya
+      '@radix-ui/react-visually-hidden': 1.0.3_ok7klj2z2jf7yvfzlcsdnzqpcy
       '@types/react': 18.0.8
       '@types/react-dom': 18.0.0
       react: 18.2.0
