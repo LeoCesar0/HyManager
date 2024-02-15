@@ -9,7 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
-import {isMobile} from 'react-device-detect';
+import { isMobile } from "react-device-detect";
 
 export type PaginationControllerProps = {
   paginationResult: PaginationResult<any>;
@@ -28,14 +28,19 @@ export const PaginationController = ({
     const allPages: (number | string)[] = new Array(paginationResult.pages)
       .fill(undefined)
       .map((_, index) => index + 1);
+
     const pages = allPages.filter((item) => {
       return item >= currentPage - offset && item <= currentPage + offset;
     });
     if (allPages[currentPage - 1 - offset]) pages.unshift("...");
     if (allPages[currentPage - 1 + offset]) pages.push("...");
     if (pages[0] !== 1) pages.unshift(1);
-    if (pages[pages.length - 1] !== paginationResult.pages)
+    if (
+      pages[pages.length - 1] !== paginationResult.pages &&
+      paginationResult.pages > 1
+    ) {
       pages.push(paginationResult.pages);
+    }
 
     return {
       pages,
@@ -44,10 +49,8 @@ export const PaginationController = ({
 
   return (
     <>
-      <Pagination className="w-full" >
-        <PaginationContent
-          className="flex flex-wrap mx-auto my-0"
-        >
+      <Pagination className="w-full">
+        <PaginationContent className="flex flex-wrap mx-auto my-0">
           {currentPage > 1 && (
             <PaginationItem>
               <PaginationPrevious

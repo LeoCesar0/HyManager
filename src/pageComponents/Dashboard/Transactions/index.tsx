@@ -52,6 +52,10 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
         pagination: {
           limit: limit,
           page: page,
+          orderBy: {
+            direction: "desc",
+            field: 'date'
+          },
         },
       });
     }
@@ -131,7 +135,9 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                     })}
                   </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody
+                hasNoItems={!pagination?.data?.list.length}
+                >
                   {pagination?.data?.list?.map((transaction) => {
                     return (
                       <TableRow key={transaction.id}>

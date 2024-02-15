@@ -4,9 +4,10 @@ import {
   PaginationController,
   PaginationControllerProps,
 } from "../PaginationController";
+import { useGlobalContext } from "@/contexts/GlobalContext";
+import selectT from "@/utils/selectT";
 
-const rowHeight = '45xp'
-
+const rowHeight = "45xp";
 
 type ITableContainer = {
   pagination?: PaginationControllerProps;
@@ -65,16 +66,34 @@ const TableHeader = React.forwardRef<
 ));
 TableHeader.displayName = "TableHeader";
 
+type TableBodyProps = {
+  hasNoItems: boolean;
+};
+
 const TableBody = React.forwardRef<
   HTMLTableSectionElement,
-  React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
-  <tbody
-    ref={ref}
-    className={cn("[&_tr:last-child]:border-0 w-full", className)}
-    {...props}
-  />
-));
+  React.HTMLAttributes<HTMLTableSectionElement> & TableBodyProps
+>(({ className, children, hasNoItems, ...props }, ref) => {
+  const { currentLanguage } = useGlobalContext();
+
+  const hasNoItemsText = selectT(currentLanguage, {
+    en: "No items found",
+    pt: "Nenhum item encontrado",
+  });
+
+  return (
+    <tbody
+      ref={ref}
+      className={cn("[&_tr:last-child]:border-0 w-full", className)}
+      {...props}
+    >
+      <>
+        {hasNoItems && <h2 className="p-4 text-lg">{hasNoItemsText}</h2>}
+        {children}
+      </>
+    </tbody>
+  );
+});
 TableBody.displayName = "TableBody";
 
 const TableFooter = React.forwardRef<
