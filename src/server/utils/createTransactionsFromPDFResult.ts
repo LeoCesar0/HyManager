@@ -21,30 +21,6 @@ export const createTransactionsFromPDFResult = async ({
   const transactionsToCreate: CreateTransaction[] = [];
 
   pdfReadResult.forEach(async (pdfResult, index) => {
-    // const { initialBalance } = pdfResult;
-
-    // const reportDate = new Date(pdfResult.transactions[0].date);
-
-    // const types: TransactionReport["type"][] = ["month", "day"];
-
-    // for (const type of types) {
-    //   await createTransactionReport({
-    //     transactionReport: {
-    //       amount: 0,
-    //       bankAccountId,
-    //       type: type,
-    //       initialBalance: initialBalance,
-    //       updatedAt: Timestamp.now(),
-    //       createdAt: Timestamp.now(),
-    //       id: "willBeReplaced",
-    //       finalBalance: 0,
-    //       transactions: [],
-    //       date: Timestamp.fromDate(reportDate),
-    //       ...makeDateFields(reportDate),
-    //     },
-    //   });
-    // }
-
     if (uploadedFiles) {
       const relativeFile = uploadedFiles[index];
       // GET RELATIVE FILE TO EACH TRANSACTION

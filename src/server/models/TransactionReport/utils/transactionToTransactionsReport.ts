@@ -49,7 +49,6 @@ export const transactionsToTransactionsReport = (
           type
         );
 
-        console.log('--> transactionReport -->', transactionReport)
 
         const currentReportInDatabase = existingReportsOnDatabaseMap.get(
           transactionReport.id

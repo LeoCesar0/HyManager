@@ -20,6 +20,7 @@ import useT from "@/hooks/useT";
 import Link from "next/link";
 import selectT from "@/utils/selectT";
 import { useGlobalContext } from '../../../../contexts/GlobalContext';
+import { createManyTransactions } from '../../../../server/models/Transaction/create/createManyTransactions';
 
 const formSchema = createTransactionSchema;
 
@@ -47,11 +48,10 @@ export const DashboardTransactionsAdd = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const promise = createTransaction({
+
+    const promise = createManyTransactions({
       bankAccountId: currentBankAccount!.id,
-      values: {
-        ...values,
-      },
+      transactions: [values]
     })
 
     handleToast(promise, {

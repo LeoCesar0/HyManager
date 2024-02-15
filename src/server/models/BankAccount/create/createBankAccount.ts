@@ -19,6 +19,7 @@ export const createBankAccount = async ({
     id: uuid(),
     createdAt: Timestamp.fromDate(new Date()),
     updatedAt: Timestamp.fromDate(new Date()),
+    balance: 0
   };
   try {
     const result = await firebaseCreate<BankAccount>({

@@ -16,7 +16,7 @@ import selectT from "@/utils/selectT";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GeneralInfo } from "./@types";
-import { IPDFData } from "../../../../services/PDFReader/interfaces";
+import { useRouter } from "next/navigation";
 
 export const DashboardTransactionsImportExtract = () => {
   const [loadedFiles, setLoadedFiles] = useState<File[]>([]);
@@ -25,8 +25,11 @@ export const DashboardTransactionsImportExtract = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const { currentUser } = useGlobalAuth();
   const { currentLanguage } = useGlobalContext();
+  const router = useRouter();
 
   const { handleToast, isLoading } = useToastPromise();
+
+  const goBackLink = "/dashboard/transactions";
 
   async function submitTransactions() {
     if (!extractResponse?.data) return;
@@ -60,7 +63,9 @@ export const DashboardTransactionsImportExtract = () => {
       },
     });
 
-    console.log('finalResponse', finalResponse)
+    if (finalResponse.done) {
+      router.push(goBackLink);
+    }
   }
 
   const onTransactionsLoaded = (result: PDF2JSONResponse) => {
@@ -85,7 +90,7 @@ export const DashboardTransactionsImportExtract = () => {
             pt: "Importar Extrato Bancário",
             en: "Import extract",
           }}
-          goBackLink="/dashboard/transactions"
+          goBackLink={goBackLink}
           actions={
             <>
               <Button

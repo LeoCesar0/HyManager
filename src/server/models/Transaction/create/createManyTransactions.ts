@@ -1,10 +1,6 @@
 import { AppModelResponse } from "@/@types/index";
 import { debugDev } from "@/utils/dev";
-import {
-  doc,
-  Timestamp,
-  writeBatch,
-} from "firebase/firestore";
+import { doc, Timestamp, writeBatch } from "firebase/firestore";
 import { slugify } from "@/utils/app";
 import { firebaseDB } from "@/services/firebase";
 import { FirebaseCollection } from "@server/firebase";
@@ -13,6 +9,7 @@ import { CreateTransaction, Transaction, transactionSchema } from "../schema";
 import { batchManyTransactionReports } from "@models/TransactionReport/create/batchManyTransactionsReport";
 import { makeDateFields } from "@/utils/date/makeDateFields";
 import { createDocRef } from "@/server/utils/createDocRef";
+import { updateBankAccountBalance } from "../../../utils/updateBankAccountBalance";
 
 interface ICreateManyTransactions {
   transactions: CreateTransaction[];
@@ -55,15 +52,14 @@ export const createManyTransactions = async ({
 
       const docRef = createDocRef({
         collection: FirebaseCollection.transactions,
-        id: slugId
-      })
+        id: slugId,
+      });
 
       if (!transactionsOnCreate.some((item) => item.id === transaction.id)) {
         transactionsOnCreate.push(transaction);
         batch.set(docRef, transaction, { merge: true });
       }
     });
-
 
     /* ------------------------------ COMMIT BATCH ------------------------------ */
 
@@ -78,6 +74,11 @@ export const createManyTransactions = async ({
     const createdTransactionsIds = transactionsOnCreate.map((item) => ({
       id: item.id,
     }));
+
+    await updateBankAccountBalance({
+      bankAccountId: bankAccountId,
+    });
+
     return {
       data: createdTransactionsIds,
       done: true,

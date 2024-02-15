@@ -10,6 +10,7 @@ export const bankAccountSchema = z.object({
   users: z.array(z.object({ id: z.string() })),
   createdAt: timestampSchema,
   updatedAt: timestampSchema,
+  balance: z.number(),
 });
 
 export const createBankAccountSchema = z.object({

@@ -7,9 +7,11 @@ import { formatAnyDate } from "../../../../utils/date/formatAnyDate";
 import { firebaseAuth } from "@/services/firebase";
 import { listTransactionReportsBy } from "../../TransactionReport/read/listTransactionReportBy";
 import { listTransactionReportByTransaction } from "../../TransactionReport/read/listTransactionReportByTransaction";
+import { createManyTransactions } from "../create/createManyTransactions";
 
 describe("Test transaction CRUD", () => {
   let createdTransaction: Transaction;
+  let createdTransactionId: string = "null";
   const bankAccountId = TEST_CONFIG.bankAccountId;
 
   // --------------------------
@@ -19,24 +21,28 @@ describe("Test transaction CRUD", () => {
   it("should create a transaction", async () => {
     console.log("--> START TEST 1");
 
-    const result = await createTransaction({
+    const values = {
+      amount: -100.5,
+      date: new Date(2020, 0, 25),
+      creditor: "test",
+      idFromBank: "test",
+      type: TransactionType.debit,
+      description: "test",
       bankAccountId,
-      values: {
-        amount: -100.5,
-        date: new Date(2020, 0, 25),
-        creditor: "test",
-        idFromBank: "test",
-        type: TransactionType.debit,
-        description: "test",
-        bankAccountId,
-      },
+    };
+
+    const result = await createManyTransactions({
+      bankAccountId,
+      transactions: [values],
     });
     if (result.error) console.log("Error", result.error);
+    const transactionId = result.data?.[0]?.id;
     expect(result.data).toBeTruthy();
-    expect(result.data?.id).toBeTruthy();
+    expect(transactionId).toBeTruthy();
     expect(result.done).toBe(true);
     expect(result.error).toBe(null);
-    if (result.data) createdTransaction = result.data;
+
+    if (transactionId) createdTransactionId = transactionId;
   });
 
   // --------------------------
@@ -45,13 +51,14 @@ describe("Test transaction CRUD", () => {
 
   it("should get created transaction", async () => {
     const result = await getTransactionById({
-      id: createdTransaction.id,
+      id: createdTransactionId,
     });
     expect(result.data?.id).toBeTruthy();
     expect(result.done).toBe(true);
     expect(result.error).toBe(null);
     if (result.data) {
-      expect(result.data.id).toBe(createdTransaction.id);
+      createdTransaction = result.data;
+      expect(result.data.id).toBe(createdTransactionId);
       expect(result.data.amount).toBe(-100.5);
       const date = timestampToDate(result.data.date);
       const formattedDate = formatAnyDate(date, "dd/MM/yyyy");
