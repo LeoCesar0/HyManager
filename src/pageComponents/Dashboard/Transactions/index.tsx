@@ -142,9 +142,17 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                     return (
                       <TableRow key={transaction.id}>
                         {columns.map((column) => {
+
                           if (transaction[column.key] instanceof Timestamp) {
                             const value = transaction[column.key] as Timestamp;
                             const label = formatTimestamp(value);
+                            return (
+                              <TableCell key={column.key}>{label}</TableCell>
+                            );
+                          }
+
+                          if (column.key === 'creditor') {
+                            const label = transaction.creditor ? transaction.creditor : transaction.description
                             return (
                               <TableCell key={column.key}>{label}</TableCell>
                             );
