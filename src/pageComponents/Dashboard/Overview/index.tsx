@@ -1,10 +1,12 @@
 import { Section, SectionContainer } from "../../../components/Section/Section";
-import { HiCurrencyDollar, HiTrendingDown } from "react-icons/hi";
-import { TargetIcon } from "@radix-ui/react-icons";
-import { IOverviewCard, OverviewCard } from "./components/OverviewCard";
 import BalanceChart from "./components/BalanceChart";
-import { useGlobalAuth } from "../../../contexts/GlobalAuth";
-import { useGlobalDashboardStore } from '../../../contexts/GlobalDashboardStore';
+import { useGlobalDashboardStore } from "../../../contexts/GlobalDashboardStore";
+import { BalanceCard } from "./components/Cards/BalanceCard";
+import { GoalCard, GoalCardProps } from "./components/Cards/GoalCard";
+import {
+  ExpensesCardProps,
+  ExpensesCard,
+} from "./components/Cards/ExpensesCard";
 
 export const DashboardOverView = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -13,8 +15,12 @@ export const DashboardOverView = () => {
     <SectionContainer>
       <Section sectionTitle={{ en: "Overview", pt: "Geral" }}>
         <div className="flex gap-3 flex-wrap">
-          {cards.map((card) => {
-            return <OverviewCard key={card.id} {...card} />;
+          <BalanceCard />
+          {expensesCards.map((card) => {
+            return <ExpensesCard key={card.title.en} {...card} />;
+          })}
+          {goalCards.map((card) => {
+            return <GoalCard key={card.title.en} {...card} />;
           })}
         </div>
       </Section>
@@ -24,24 +30,12 @@ export const DashboardOverView = () => {
     </SectionContainer>
   );
 };
-
-const cards: IOverviewCard[] = [
+export const expensesCards: ExpensesCardProps[] = [
   {
-    id: "total-balance",
-    title: {
-      pt: "Balanço Total",
-      en: "Total Balance",
-    },
-    Icon: HiCurrencyDollar,
-    value: "R$ 1.200,00",
-  },
-  {
-    id: "expenses",
     title: {
       pt: "Gastos",
       en: "Expenses",
     },
-    Icon: HiTrendingDown,
     values: [
       {
         value: "R$110,00",
@@ -66,8 +60,10 @@ const cards: IOverviewCard[] = [
       },
     ],
   },
+];
+
+export const goalCards: GoalCardProps[] = [
   {
-    id: "saving-goals",
     title: {
       pt: "Meta de economia",
       en: "Saving goals",
@@ -76,7 +72,6 @@ const cards: IOverviewCard[] = [
       pt: "esse anterior",
       en: "this month",
     },
-    Icon: TargetIcon,
     slider: {
       from: 0,
       current: 1658,
@@ -84,7 +79,6 @@ const cards: IOverviewCard[] = [
     },
   },
   {
-    id: "saving-goals-last-month",
     title: {
       pt: "Meta de economia",
       en: "Saving goals",
@@ -93,7 +87,6 @@ const cards: IOverviewCard[] = [
       pt: "mês anterior",
       en: "last month",
     },
-    Icon: TargetIcon,
     slider: {
       from: 0,
       current: 3298,
