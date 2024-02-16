@@ -50,6 +50,9 @@ export const ExtractPage = ({ pdfData, pdfKey }: ExtractPageProps) => {
                 <TransactionCell width={150} label="Tipo">
                   {transactionTypeLabel}
                 </TransactionCell>
+                <TransactionCell label="Credor" width={350}>
+                  {transaction.creditor}
+                </TransactionCell>
                 <TransactionCell label="Descrição" width={350}>
                   {transaction.description}
                 </TransactionCell>
