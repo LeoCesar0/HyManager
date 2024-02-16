@@ -71,7 +71,7 @@ const Component = () => {
     <>
       <aside
         className={cx([
-          "hidden md:block absolute left-0 top-0 bottom-0 z-10",
+          "hidden md:block fixed left-0 top-0 bottom-0 z-10",
           "max-w-[var(--menu-width)] w-full min-h-screen border-r shadow-2xl border-border/25 bg-surface text-surface-foreground space-y-4",
           `p-4`,
           "transition-all translate-x-0",
