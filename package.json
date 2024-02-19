@@ -10,7 +10,7 @@
     "map-pdf": "tsc scripts/pdfMapping/index.ts --outdir ./dist || true && node dist/scripts/pdfMapping/index.js",
     "test": "NODE_ENV=development jest",
     "test:inspect": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand",
-    "test:debug": "pnpm test src/server/utils/test/calculateTransactionsSummary.test.ts -- --watch"
+    "test:debug": "pnpm test src/server/utils/test/calculateDashboardSummary.test.ts -- --watch"
   },
   "dependencies": {
     "@anatine/zod-mock": "^3.13.3",

@@ -29,14 +29,6 @@ export const batchManyTransactionReports = async ({
 
   const existingReportsOnDatabase = listResults.data || [];
 
-  // const existingReportsOnDatabaseMap = existingReportsOnDatabase.reduce(
-  //   (acc, entry) => {
-  //     acc.set(entry.id, entry);
-  //     return acc;
-  //   },
-  //   new Map<string, TransactionReport>()
-  // );
-
   const newReportsMap = transactionsToTransactionsReport(
     transactionsOnCreate,
     existingReportsOnDatabase
@@ -55,51 +47,10 @@ export const batchManyTransactionReports = async ({
       id: transactionReport.id,
     });
 
-    // let updatedItem: Omit<TransactionReport, "amount" | "transactions"> & {
-    //   amount: any;
-    //   transactions: any;
-    // } = {
-    //   ...transactionReport,
-    //   updatedAt: Timestamp.fromDate(now),
-    // };
-    // if (transactionReport.transactions.length > 0) {
-    //   updatedItem = {
-    //     ...updatedItem,
-    //     transactions: arrayUnion(...transactionReport.transactions),
-    //   };
-    // }
     transactionReport.updatedAt = Timestamp.fromDate(now);
 
     finalItems.push(transactionReport);
 
     batch.set(docRef, transactionReport, { merge: true });
   });
-
-  // newReportsMap.forEach(async (transactionReport) => {
-  //   const docRef = doc(
-  //     firebaseDB,
-  //     FirebaseCollection.transactionReports,
-  //     transactionReport.id
-  //   );
-
-  //   const incrementAmount = increment(transactionReport.amount);
-  //   let updatedItem: Omit<TransactionReport, "amount" | "transactions"> & {
-  //     amount: any;
-  //     transactions: any;
-  //   } = {
-  //     ...transactionReport,
-  //     amount: incrementAmount,
-  //     updatedAt: Timestamp.fromDate(now),
-  //   };
-  //   if (transactionReport.transactions.length > 0) {
-  //     updatedItem = {
-  //       ...updatedItem,
-  //       transactions: arrayUnion(...transactionReport.transactions),
-  //     };
-  //   }
-
-  //   finalItems.push(updatedItem);
-
-  //   batch.set(docRef, updatedItem, { merge: true });
-  // });
 };

@@ -6,6 +6,7 @@ import differenceInDays from 'date-fns/differenceInDays'
 type ICalculateDashboardSummary = {
   bankAccountId: string;
   dateBreakPoints?: number[];
+  _listTransactionReportsBy?: typeof listTransactionReportsBy
 };
 
 export type SummaryExpenses = {
@@ -15,6 +16,7 @@ export type SummaryExpenses = {
 export const calculateDashboardSummary = async ({
   bankAccountId,
   dateBreakPoints = [7, 30, 60],
+  _listTransactionReportsBy = listTransactionReportsBy
 }: ICalculateDashboardSummary) => {
 
     const earliestBreakPoint = dateBreakPoints.reduce((acc, current) => {
@@ -27,7 +29,7 @@ export const calculateDashboardSummary = async ({
         days: earliestBreakPoint
     });
 
-  const response = await listTransactionReportsBy({
+  const response = await _listTransactionReportsBy({
     bankAccountId: bankAccountId,
     type: "day",
     filters:[{field: "date", operator: ">=", value: pastDate}]
