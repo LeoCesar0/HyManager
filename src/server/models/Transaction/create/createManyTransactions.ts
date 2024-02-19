@@ -1,15 +1,13 @@
 import { AppModelResponse } from "@/@types/index";
 import { debugDev } from "@/utils/dev";
-import { doc, Timestamp, writeBatch } from "firebase/firestore";
-import { slugify } from "@/utils/app";
+import { writeBatch } from "firebase/firestore";
 import { firebaseDB } from "@/services/firebase";
 import { FirebaseCollection } from "@server/firebase";
-import { makeTransactionSlug } from "@server/utils/makeTransactionSlug";
-import { CreateTransaction, Transaction, transactionSchema } from "../schema";
+import { CreateTransaction, Transaction } from "../schema";
 import { batchManyTransactionReports } from "@models/TransactionReport/create/batchManyTransactionsReport";
-import { makeDateFields } from "@/utils/date/makeDateFields";
 import { createDocRef } from "@/server/utils/createDocRef";
 import { updateBankAccountBalance } from "../../../utils/updateBankAccountBalance";
+import { makeTransactionFields } from "../utils/makeTransactionFields";
 
 interface ICreateManyTransactions {
   transactions: CreateTransaction[];
@@ -27,32 +25,14 @@ export const createManyTransactions = async ({
     const transactionsOnCreate: Transaction[] = [];
 
     values.forEach((transactionInputs) => {
-      const date = new Date(transactionInputs.date);
-      const firebaseTimestamp = Timestamp.fromDate(date);
-      const now = new Date();
-      const slugId = makeTransactionSlug({
-        date: transactionInputs.date,
-        amount: transactionInputs.amount,
-        idFromBank: transactionInputs.idFromBank,
-        creditor: transactionInputs.creditor || "",
-      });
-      const transaction: Transaction = {
-        ...transactionInputs,
+      const transaction = makeTransactionFields({
+        transactionInputs: transactionInputs,
         bankAccountId: bankAccountId,
-        id: slugId,
-        slug: slugId,
-        date: firebaseTimestamp,
-        createdAt: Timestamp.fromDate(now),
-        updatedAt: Timestamp.fromDate(now),
-        ...makeDateFields(date),
-      };
-      if (transaction.creditor)
-        transaction.creditorSlug = slugify(transaction.creditor);
-      transactionSchema.parse(transaction);
+      });
 
       const docRef = createDocRef({
         collection: FirebaseCollection.transactions,
-        id: slugId,
+        id: transaction.id,
       });
 
       if (!transactionsOnCreate.some((item) => item.id === transaction.id)) {

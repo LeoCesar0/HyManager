@@ -9,6 +9,7 @@ import { makeTransactionSlug } from "@server/utils/makeTransactionSlug";
 import { batchManyTransactionReports } from "@models/TransactionReport/create/batchManyTransactionsReport";
 import { makeDateFields } from "@/utils/date/makeDateFields";
 import { createDocRef } from "@/server/utils/createDocRef";
+import { makeTransactionFields } from "../utils/makeTransactionFields";
 
 interface ICreateTransaction {
   values: CreateTransaction;
@@ -20,27 +21,12 @@ export const createTransaction = async ({
   bankAccountId,
 }: ICreateTransaction): Promise<AppModelResponse<Transaction>> => {
   const funcName = "createTransaction";
-  const date = new Date(values.date);
-  const firebaseTimestamp = Timestamp.fromDate(date);
-  const now = new Date();
-  const slugId = makeTransactionSlug({
-    date: values.date,
-    amount: values.amount,
-    idFromBank: values.idFromBank,
-    creditor: values.creditor || "",
-  });
-  const transaction: Transaction = {
-    ...values,
+
+  const transaction = makeTransactionFields({
+    transactionInputs: values,
     bankAccountId: bankAccountId,
-    id: slugId,
-    slug: slugId,
-    date: firebaseTimestamp,
-    createdAt: Timestamp.fromDate(now),
-    updatedAt: Timestamp.fromDate(now),
-    ...makeDateFields(date),
-  };
-  if (transaction.creditor)
-    transaction.creditorSlug = slugify(transaction.creditor);
+  });
+
   try {
     transactionSchema.parse(transaction);
 
