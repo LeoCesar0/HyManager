@@ -10,6 +10,13 @@ export const transactionMinSchema = z.object({
   creditorSlug: z.string().optional(),
 });
 
+export const transactionsSummarySchema = z.object({
+  biggestDebit: transactionMinSchema,
+  biggestDeposit:  transactionMinSchema,
+  totalExpenses: z.number(),
+  totalDeposits: z.number(),
+})
+
 export const transactionReportSchema = z.object({
   id: z.string(),
   bankAccountId: z.string(),
@@ -25,8 +32,11 @@ export const transactionReportSchema = z.object({
   createdAt: timestampSchema,
   updatedAt: timestampSchema,
   transactions: z.array(transactionMinSchema),
+  summary: transactionsSummarySchema
 });
 
 export type TransactionReport = z.infer<typeof transactionReportSchema>;
 
 export type TransactionMin = z.infer<typeof transactionMinSchema>;
+
+export type TransactionsSummary = z.infer<typeof transactionsSummarySchema>;

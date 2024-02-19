@@ -4,6 +4,7 @@ import { Timestamp } from "firebase/firestore";
 import { Transaction } from "@/server/models/Transaction/schema";
 import { TransactionMin, TransactionReport } from "../schema";
 import { makeTransactionReportSlugId } from "./makeTransactionReportSlugId";
+import { calculateTransactionsSummary } from '../../../utils/calculateTransactionsSummary';
 
 export const makeTransactionReportFields = (
   transaction: Transaction,
@@ -37,6 +38,9 @@ export const makeTransactionReportFields = (
     updatedAt: nowTimestamp,
     date: dateTimestamp,
     type: type,
+    summary: calculateTransactionsSummary({
+      transactions: [transaction]
+    }),
     transactions: [transactionMin],
     ...makeDateFields(date),
   };
