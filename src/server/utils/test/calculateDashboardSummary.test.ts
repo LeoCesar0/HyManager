@@ -1,4 +1,3 @@
-import { listTransactionReportsBy } from "@/server/models/TransactionReport/read/listTransactionReportBy";
 import {
   calculateDashboardSummary,
   DateBreakPoint,
@@ -6,20 +5,13 @@ import {
 import { mockTransactionsReport } from "./utils/mockTransactionsReport";
 import { getTestPDFData } from "./utils/getTestPDFData";
 import { TEST_CONFIG } from "@/static/testConfig";
-import {
-  Transaction,
-  TransactionType,
-} from "@/server/models/Transaction/schema";
+import { Transaction } from "@/server/models/Transaction/schema";
 import { makeTransactionFields } from "../../models/Transaction/utils/makeTransactionFields";
-import differenceInDays from "date-fns/differenceInDays";
-import currency from "currency.js";
 import { sub } from "date-fns";
 
-const _listTransactionReportsBy: typeof listTransactionReportsBy = async (
-  args
-) => {
+const _listTransactionReportsBy = async (filePathList: string[]) => {
   const result = await getTestPDFData({
-    filePathList: [TEST_CONFIG.pdf["2023-06"].path],
+    filePathList,
   });
   const transactions: Transaction[] = result
     .map((item) => {
@@ -39,33 +31,34 @@ const _listTransactionReportsBy: typeof listTransactionReportsBy = async (
     transactions,
   }).filter((item) => item.type === "day");
 
-  return {
-    data: reports,
-    done: true,
-    error: null,
-  };
+  return reports;
 };
 
 describe("Test calculateDashboardSummary", () => {
   test("should calculate dashboard summary", async () => {
-    const forcedNowDate = new Date(2023, 5, 29);
+    const endDate = new Date(2023, 5, 29);
 
     const breakPoints: DateBreakPoint[] = [
       {
         key: "last-7",
-        start: sub(forcedNowDate, { days: 7 }),
+        start: sub(endDate, { days: 7 }),
+        end: endDate,
       },
       {
         key: "last-30",
-        start: sub(forcedNowDate, { days: 30 }),
+        start: sub(endDate, { days: 30 }),
+        end: endDate,
       },
     ];
 
-    const result = await calculateDashboardSummary({
+    const reports = await _listTransactionReportsBy([
+      TEST_CONFIG.pdf["2023-06"].path,
+    ]);
+
+    const result = calculateDashboardSummary({
       bankAccountId: "123",
       dateBreakPoints: breakPoints,
-      forcedNowDate,
-      _listTransactionReportsBy: _listTransactionReportsBy,
+      reports,
     });
 
     expect(result["last-7"]).toBeTruthy();

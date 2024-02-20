@@ -3,46 +3,29 @@ import BalanceChart from "./components/BalanceChart";
 import { useGlobalDashboardStore } from "../../../contexts/GlobalDashboardStore";
 import { BalanceCard } from "./components/Cards/BalanceCard";
 import { GoalCard, GoalCardProps } from "./components/Cards/GoalCard";
-import {
-  ExpensesCardProps,
-  ExpensesCard,
-} from "./components/Cards/ExpensesCard";
-import { useEffect, useState } from "react";
-import {
-  calculateDashboardSummary,
-  DashboardSummary,
-} from "@/server/utils/calculateDashboardSummary";
+import { ExpensesCard } from "./components/Cards/ExpensesCard";
+import { useEffect, useMemo, useState } from "react";
+import { DashboardSummary } from "@/server/utils/calculateDashboardSummary";
 import { getCardExpenses } from "./utils/getCardExpenses";
-import { startOfMonth, startOfWeek } from "date-fns";
-import differenceInDays from "date-fns/differenceInDays";
-
-const getBreakPoints = () => {
-  const today = new Date();
-  const startOfThisWeek = startOfWeek(today);
-  const startOfThisMonth = startOfMonth(today);
-  const startLastMonth = startOfMonth(startOfThisMonth);
-
-  const weekBreakPoint = differenceInDays(today, startOfThisWeek);
-  const monthBreakPoint = differenceInDays(today, startOfThisMonth);
-  const lastMonthBreakPoint = differenceInDays(today, startOfMonth(startOfThisMonth));
-
-};
+import { getDateBreakPoints } from "./utils/getDateBreakPoints";
+import { handleGetSummary } from "./utils/handleGetSummary";
 
 export const DashboardOverView = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const [summary, setSummary] = useState<null | DashboardSummary>(null);
 
+  const breakPoints = useMemo(() => getDateBreakPoints(), []);
+
   useEffect(() => {
-    if (currentBankAccount?.id) {
-      calculateDashboardSummary({
+    if (currentBankAccount?.id && breakPoints.length > 0) {
+      handleGetSummary({
         bankAccountId: currentBankAccount.id,
-        dateBreakPoints: [7, 30, 60],
+        dateBreakPoints: breakPoints,
       }).then((result) => {
-        console.log("result", result);
         setSummary(result);
       });
     }
-  }, [currentBankAccount?.id]);
+  }, [currentBankAccount?.id, breakPoints]);
 
   const expensesCards = getCardExpenses(summary);
 
