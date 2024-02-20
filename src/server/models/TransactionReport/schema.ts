@@ -11,8 +11,8 @@ export const transactionMinSchema = z.object({
 });
 
 export const transactionsSummarySchema = z.object({
-  biggestDebit: transactionMinSchema,
-  biggestDeposit:  transactionMinSchema,
+  biggestDebit: transactionMinSchema.nullable(),
+  biggestDeposit:  transactionMinSchema.nullable(),
   totalExpenses: z.number(),
   totalDeposits: z.number(),
 })

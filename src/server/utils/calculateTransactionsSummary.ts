@@ -12,15 +12,16 @@ export const calculateTransactionsSummary = ({
   const result = transactions.reduce(
     (acc, current) => {
       const amount = Math.abs(current.amount);
+
       if (current.type === TransactionType.debit) {
-        if (amount > Math.abs(acc.biggestDebit.amount)) {
+        if (amount > Math.abs(acc.biggestDebit?.amount || 0)) {
           acc.biggestDebit = makeTransactionMin(current);
         }
         acc.totalExpenses += current.amount;
       }
 
       if (current.type === TransactionType.deposit) {
-        if (amount > acc.biggestDeposit.amount) {
+        if (amount > (acc.biggestDeposit?.amount || 0)) {
           acc.biggestDeposit = makeTransactionMin(current);
         }
         acc.totalDeposits += current.amount;
@@ -28,8 +29,8 @@ export const calculateTransactionsSummary = ({
       return acc;
     },
     {
-      biggestDebit: makeTransactionMin(transactions[0]),
-      biggestDeposit: makeTransactionMin(transactions[0]),
+      biggestDebit: null,
+      biggestDeposit: null,
       totalDeposits: 0,
       totalExpenses: 0,
     } as TransactionsSummary

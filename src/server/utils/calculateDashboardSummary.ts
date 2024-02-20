@@ -2,6 +2,7 @@ import { sub } from "date-fns";
 import { listTransactionReportsBy } from "../models/TransactionReport/read/listTransactionReportBy";
 import { TransactionsSummary } from "../models/TransactionReport/schema";
 import differenceInDays from "date-fns/differenceInDays";
+import currency from "currency.js";
 
 type ICalculateDashboardSummary = {
   bankAccountId: string;
@@ -36,9 +37,14 @@ export const calculateDashboardSummary = async ({
     filters: [{ field: "date", operator: ">=", value: pastDate }],
   });
 
-  const reports = response.data || [];
+  let reports = response.data || [];
 
   const result: SummaryExpenses = reports.reduce((acc, report) => {
+
+    if(report.dateDay === '13'){
+      console.log('report', report)
+    }
+
     dateBreakPoints.forEach((breakPoint) => {
       const key = breakPoint.toString();
 
@@ -46,8 +52,40 @@ export const calculateDashboardSummary = async ({
 
       if (diff <= breakPoint) {
         if (!acc[key]) {
-          acc[key] = report.summary;
+          acc[key] = {
+            biggestDebit: null,
+            biggestDeposit: null,
+            totalDeposits: 0,
+            totalExpenses: 0,
+          };
         }
+
+        // --------------------------
+        // Check for biggestDebit and biggestDeposit
+        // --------------------------
+        if (
+          report.summary.biggestDebit &&
+          Math.abs(report.summary.biggestDebit.amount) >
+            Math.abs(acc[key].biggestDebit?.amount || 0)
+        ) {
+          acc[key].biggestDebit = report.summary.biggestDebit;
+        }
+
+        if (
+          report.summary.biggestDeposit &&
+          report.summary.biggestDeposit.amount >
+            (acc[key].biggestDeposit?.amount || 0)
+        ) {
+          acc[key].biggestDeposit = report.summary.biggestDeposit;
+        }
+
+
+        acc[key].totalDeposits = currency(acc[key].totalDeposits).add(
+          report.summary.totalDeposits
+        ).value;
+        acc[key].totalExpenses = currency(acc[key].totalExpenses).add(
+          report.summary.totalExpenses
+        ).value;
       }
     });
 

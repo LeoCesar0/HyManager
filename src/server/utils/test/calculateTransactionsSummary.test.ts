@@ -18,7 +18,6 @@ describe("Test calculateTransactionsSummary", () => {
 
   beforeAll(() => {
     transactions = mockTransactions({ count: 12 });
-
     result = calculateTransactionsSummary({ transactions });
   });
 
@@ -62,8 +61,8 @@ describe("Test calculateTransactionsSummary", () => {
       transactions.find((item) => item.type === TransactionType.deposit)
     );
 
-    expect(biggestDeposit?.id).toBe(result.biggestDeposit.id);
-    expect(biggestDeposit?.amount).toBe(result.biggestDeposit.amount);
+    expect(biggestDeposit?.id).toBe(result.biggestDeposit?.id);
+    expect(biggestDeposit?.amount).toBe(result.biggestDeposit?.amount);
   });
 
   test("should get the correct biggest debit", () => {
@@ -81,7 +80,7 @@ describe("Test calculateTransactionsSummary", () => {
       transactions.find((item) => item.type === TransactionType.debit)
     );
 
-    expect(biggestDebit?.id).toBe(result.biggestDebit.id);
-    expect(biggestDebit?.amount).toBe(result.biggestDebit.amount);
+    expect(biggestDebit?.id).toBe(result.biggestDebit?.id);
+    expect(biggestDebit?.amount).toBe(result.biggestDebit?.amount);
   });
 });
