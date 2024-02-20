@@ -7,20 +7,55 @@ import {
   ExpensesCardProps,
   ExpensesCard,
 } from "./components/Cards/ExpensesCard";
+import { useEffect, useState } from "react";
+import {
+  calculateDashboardSummary,
+  DashboardSummary,
+} from "@/server/utils/calculateDashboardSummary";
+import { getCardExpenses } from "./utils/getCardExpenses";
+import { startOfMonth, startOfWeek } from "date-fns";
+import differenceInDays from "date-fns/differenceInDays";
+
+const getBreakPoints = () => {
+  const today = new Date();
+  const startOfThisWeek = startOfWeek(today);
+  const startOfThisMonth = startOfMonth(today);
+  const startLastMonth = startOfMonth(startOfThisMonth);
+
+  const weekBreakPoint = differenceInDays(today, startOfThisWeek);
+  const monthBreakPoint = differenceInDays(today, startOfThisMonth);
+  const lastMonthBreakPoint = differenceInDays(today, startOfMonth(startOfThisMonth));
+
+};
 
 export const DashboardOverView = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
+  const [summary, setSummary] = useState<null | DashboardSummary>(null);
+
+  useEffect(() => {
+    if (currentBankAccount?.id) {
+      calculateDashboardSummary({
+        bankAccountId: currentBankAccount.id,
+        dateBreakPoints: [7, 30, 60],
+      }).then((result) => {
+        console.log("result", result);
+        setSummary(result);
+      });
+    }
+  }, [currentBankAccount?.id]);
+
+  const expensesCards = getCardExpenses(summary);
 
   return (
     <SectionContainer>
       <Section sectionTitle={{ en: "Overview", pt: "Geral" }}>
         <div className="flex gap-3 flex-wrap">
           <BalanceCard />
-          {expensesCards.map((card) => {
-            return <ExpensesCard key={card.title.en} {...card} />;
+          {expensesCards.map((card, index) => {
+            return <ExpensesCard key={`${card.title.en}-${index}`} {...card} />;
           })}
-          {goalCards.map((card) => {
-            return <GoalCard key={card.title.en} {...card} />;
+          {goalCards.map((card, index) => {
+            return <GoalCard key={`${card.title.en}-${index}`} {...card} />;
           })}
         </div>
       </Section>
@@ -30,37 +65,6 @@ export const DashboardOverView = () => {
     </SectionContainer>
   );
 };
-export const expensesCards: ExpensesCardProps[] = [
-  {
-    title: {
-      pt: "Gastos",
-      en: "Expenses",
-    },
-    values: [
-      {
-        value: "R$110,00",
-        title: {
-          pt: "Essa semana",
-          en: "This Week",
-        },
-      },
-      {
-        value: "R$268,00",
-        title: {
-          pt: "Esse mês",
-          en: "This month",
-        },
-      },
-      {
-        value: "R$3250,50",
-        title: {
-          pt: "Último Mês",
-          en: "Last month",
-        },
-      },
-    ],
-  },
-];
 
 export const goalCards: GoalCardProps[] = [
   {

@@ -1,65 +1,82 @@
-import { sub } from "date-fns";
+import { isWithinInterval, sub } from "date-fns";
 import { listTransactionReportsBy } from "../models/TransactionReport/read/listTransactionReportBy";
 import { TransactionsSummary } from "../models/TransactionReport/schema";
-import differenceInDays from "date-fns/differenceInDays";
 import currency from "currency.js";
+
+export type DateBreakPoint = {
+  key: string;
+  start: Date;
+  end?: Date;
+};
 
 type ICalculateDashboardSummary = {
   bankAccountId: string;
-  dateBreakPoints?: number[];
+  dateBreakPoints?: DateBreakPoint[];
   _listTransactionReportsBy?: typeof listTransactionReportsBy;
   forcedNowDate?: Date;
 };
 
-export type SummaryExpenses = {
+export type DashboardSummary = {
   [key: string]: TransactionsSummary;
+};
+
+const defaultBreakPoints: DateBreakPoint[] = [
+  { key: "last-7", start: new Date() },
+  { key: "last-30", start: new Date() },
+  { key: "last-60", start: new Date() },
+];
+
+const getBreakPointEnd = (breakPoint: DateBreakPoint, now: Date) => {
+  return breakPoint.end ?? now;
 };
 
 export const calculateDashboardSummary = async ({
   bankAccountId,
-  dateBreakPoints = [7, 30, 60],
+  dateBreakPoints = defaultBreakPoints,
   forcedNowDate,
   _listTransactionReportsBy = listTransactionReportsBy,
 }: ICalculateDashboardSummary) => {
-  const earliestBreakPoint = dateBreakPoints.reduce((acc, current) => {
-    if (current > acc) acc = current;
+  const earliestBreakPoint = dateBreakPoints.reduce((acc, entry) => {
+    if (entry.start.getTime() < acc.start.getTime()) acc = entry;
     return acc;
-  }, 0);
+  }, defaultBreakPoints[0]);
 
   const now = forcedNowDate ?? new Date();
-  const pastDate = sub(now, {
-    days: earliestBreakPoint,
-  });
 
   const response = await _listTransactionReportsBy({
     bankAccountId: bankAccountId,
     type: "day",
-    filters: [{ field: "date", operator: ">=", value: pastDate }],
+    filters: [
+      { field: "date", operator: ">=", value: earliestBreakPoint.start },
+    ],
   });
 
   let reports = response.data || [];
 
-  const result: SummaryExpenses = reports.reduce((acc, report) => {
-
-    if(report.dateDay === '13'){
-      console.log('report', report)
-    }
+  const result: DashboardSummary = reports.reduce((acc, report) => {
+    const reportDate = report.date.toDate();
 
     dateBreakPoints.forEach((breakPoint) => {
-      const key = breakPoint.toString();
+      const key = breakPoint.key;
 
-      const diff = differenceInDays(now, report.date.toDate());
+      const breakPointStart = breakPoint.start;
+      const breakPointEnd = getBreakPointEnd(breakPoint, now);
 
-      if (diff <= breakPoint) {
-        if (!acc[key]) {
-          acc[key] = {
-            biggestDebit: null,
-            biggestDeposit: null,
-            totalDeposits: 0,
-            totalExpenses: 0,
-          };
-        }
+      const isBetweenIntervals = isWithinInterval(reportDate, {
+        end: breakPointEnd,
+        start: breakPointStart,
+      });
 
+      if (!acc[key]) {
+        acc[key] = {
+          biggestDebit: null,
+          biggestDeposit: null,
+          totalDeposits: 0,
+          totalExpenses: 0,
+        };
+      }
+
+      if (isBetweenIntervals) {
         // --------------------------
         // Check for biggestDebit and biggestDeposit
         // --------------------------
@@ -79,7 +96,6 @@ export const calculateDashboardSummary = async ({
           acc[key].biggestDeposit = report.summary.biggestDeposit;
         }
 
-
         acc[key].totalDeposits = currency(acc[key].totalDeposits).add(
           report.summary.totalDeposits
         ).value;
@@ -90,7 +106,7 @@ export const calculateDashboardSummary = async ({
     });
 
     return acc;
-  }, {} as SummaryExpenses);
+  }, {} as DashboardSummary);
 
   return result;
 };

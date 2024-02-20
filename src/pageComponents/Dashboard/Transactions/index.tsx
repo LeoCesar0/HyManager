@@ -45,7 +45,6 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
   const { data: pagination } = useSwr(
     listKey,
     (args) => {
-      console.log('args', args)
       const [_, id, page, limit] = args as typeof argsKey
       return listTransactionsByBankId({
         id: id,
