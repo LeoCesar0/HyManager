@@ -56,7 +56,7 @@ export const goalCards: GoalCardProps[] = [
       en: "Saving goals",
     },
     strong: {
-      pt: "esse anterior",
+      pt: "esse mês",
       en: "this month",
     },
     slider: {
