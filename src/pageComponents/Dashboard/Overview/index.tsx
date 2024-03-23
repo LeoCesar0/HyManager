@@ -4,31 +4,51 @@ import { useGlobalDashboardStore } from "../../../contexts/GlobalDashboardStore"
 import { BalanceCard } from "./components/Cards/BalanceCard";
 import { GoalCard, GoalCardProps } from "./components/Cards/GoalCard";
 import { ExpensesCard } from "./components/Cards/ExpensesCard";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { DashboardSummary } from "@/server/utils/calculateDashboardSummary";
 import { getCardExpenses } from "./utils/getCardExpenses";
 import { getDateBreakPoints } from "./utils/getDateBreakPoints";
-import { handleGetSummary } from "./utils/handleGetSummary";
+import { DashboardOverviewData, getDashboardOverviewData } from "./utils/getDashboardOverviewData";
+import { BarChart } from "../../../components/Charts/BarChart";
+import ExpensesChart from "./components/ExpensesChart";
+import { sub, startOfMonth } from 'date-fns';
+import { listTransactionReportsBy } from '../../../server/models/TransactionReport/read/listTransactionReportBy';
+import useFetcher from "@/hooks/useFetcher";
+import { TransactionReport } from '../../../server/models/TransactionReport/schema';
+import { FirebaseCollection } from '../../../server/firebase/index';
+import { FirebaseFilterFor } from "@/@types";
 
 export const DashboardOverView = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
-  const [summary, setSummary] = useState<null | DashboardSummary>(null);
+  const [overviewData, setOverviewData] = useState<null | DashboardOverviewData>(null);
+
+  const bankAccountId = currentBankAccount?.id || ''
+
+  // --------------------------
+  // SUMMARY / EXPENSES
+  // --------------------------
 
   const breakPoints = useMemo(() => getDateBreakPoints(), []);
 
   useEffect(() => {
-    if (currentBankAccount?.id && breakPoints.length > 0) {
-      handleGetSummary({
-        bankAccountId: currentBankAccount.id,
+    if (bankAccountId && breakPoints.length > 0) {
+      getDashboardOverviewData({
+        bankAccountId: bankAccountId,
         dateBreakPoints: breakPoints,
       }).then((result) => {
-        setSummary(result);
+        setOverviewData(result)
       });
     }
-  }, [currentBankAccount?.id, breakPoints]);
+  }, [bankAccountId, breakPoints]);
+
+  const summary = overviewData?.dashboardSummary || null
 
   const expensesCards = getCardExpenses(summary);
 
+  // --------------------------
+  // TRANSACTIONS REPORT 
+  // --------------------------
+  
   return (
     <SectionContainer>
       <Section sectionTitle={{ en: "Overview", pt: "Geral" }}>
@@ -43,7 +63,8 @@ export const DashboardOverView = () => {
         </div>
       </Section>
       <Section sectionTitle={{ en: "Charts", pt: "Gráficos" }}>
-        <BalanceChart bankAccountId={currentBankAccount!.id} />
+        {overviewData && <ExpensesChart transactionReports={overviewData.transactionReports} />}
+        {/* <BalanceChart bankAccountId={currentBankAccount!.id} /> */}
       </Section>
     </SectionContainer>
   );

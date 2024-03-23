@@ -1,77 +1,49 @@
 import { TransactionReport } from "@/server/models/TransactionReport/schema";
 import { ApexOptions } from "apexcharts";
-import { PRIMARY_COLORS } from "@/static/appConfig";
-
-import {
-  valueToCurrency,
-} from "@/utils/misc";
-import { APEX_DEFAULT_OPTIONS, APEX_LOCALES } from "@/static/apexConfig";
+import { APP_CONFIG, COLORS, PRIMARY_COLORS } from "@/static/appConfig";
+import { valueToCurrency } from "@/utils/misc";
+import { APEX_LOCALES } from "@/static/apexConfig";
 import { formatAnyDate } from "@/utils/date/formatAnyDate";
-import { timestampToDate } from "@/utils/date/timestampToDate";
+import { ChartSerie, ChartSerieData } from "@/@types/Chart";
+import { Timestamp } from "firebase/firestore";
+import { format } from "date-fns";
+import { numericStringToNumber } from '../../../../../utils/format/numericStringToNumber';
 
-export interface IFilterDate {
-  label: string;
-  value: number;
-  type: "days" | "months";
+const BPKeys = ["this-week", "this-month", "last-month"] as const;
+
+export interface IMakeExpensesChartData {
+  transactionReports: TransactionReport[];
+  title: string
 }
 
-export const dateOptions: IFilterDate[] = [
-  {
-    label: "Last 7 days",
-    value: 7,
-    type: "days",
-  },
-  {
-    label: "Last month",
-    value: 1,
-    type: "months",
-  },
-  {
-    label: "Last 3 months",
-    value: 3,
-    type: "months",
-  },
-  {
-    label: "Last 12 months",
-    value: 12,
-    type: "months",
-  },
-];
-
-export const makeBalanceChartData = ({
+export const makeExpensesChartData = ({
   transactionReports,
-  dateLapse,
-}: {
-  transactionReports: TransactionReport[];
-  dateLapse: IFilterDate;
-}) => {
+  title
+}: IMakeExpensesChartData) => {
   const dateFormat = "dd/MM";
+  const chartBy = "yyyy-MM-dd";
 
-  const { dates, balances } = transactionReports.reduce(
+  const seriesData = transactionReports.reduce<ChartSerieData[]>(
     (acc, entry) => {
-      const date = timestampToDate(entry.date).getTime();
-      const periodFinalBalance = entry.finalBalance;
-
-      if (acc.dates.length === 0) {
+      if(entry.amount >= 0) return acc;
+      const date = entry.date.toDate();
+      const dateKey = format(date, chartBy);
+      const prev = acc.find((item) => item.x === dateKey);
+      const amount = Math.abs(entry.amount);
+      if (prev) {
+        prev.y += amount;
+      } else {
+        acc.push({ x: dateKey, y: amount });
       }
-      acc.balances = [...acc.balances, periodFinalBalance];
-      acc.dates = [...acc.dates, date];
-
       return acc;
     },
-    {
-      dates: [],
-      balances: [],
-    } as {
-      dates: number[];
-      balances: number[];
-    }
+    []
   );
 
-  const series = [
+  const series: ChartSerie[] = [
     {
-      name: "balance",
-      data: balances,
+      name: "expenses",
+      data: seriesData,
     },
   ];
 
@@ -85,11 +57,11 @@ export const makeBalanceChartData = ({
     markers: {
       size: 3,
       colors: PRIMARY_COLORS,
-      strokeColors: ['var(--primary-foreground)']
+      strokeColors: ["var(--primary-foreground)"],
     },
     xaxis: {
       tickAmount: 12,
-      categories: dates,
+      // categories: dates,
       labels: {
         formatter: (value) => {
           return formatAnyDate(value, dateFormat);
@@ -110,15 +82,20 @@ export const makeBalanceChartData = ({
       },
     },
     title: {
-      text: "Balance Chart",
+      text: title,
       style: {
         color: "currentColor",
       },
     },
     stroke: {
-      colors: PRIMARY_COLORS,
-      curve: 'smooth'
+      curve: "smooth",
     },
+    dataLabels:{
+      formatter: (value: number) => {
+        return value.toLocaleString()
+      }
+    },
+    colors: [APP_CONFIG.colors.debit],
     tooltip: {
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         return (

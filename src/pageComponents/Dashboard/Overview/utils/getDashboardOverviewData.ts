@@ -1,18 +1,25 @@
 import { listTransactionReportsBy } from "@/server/models/TransactionReport/read/listTransactionReportBy";
+import { TransactionReport } from '@/server/models/TransactionReport/schema';
 import {
   calculateDashboardSummary,
+  DashboardSummary,
   DateBreakPoint,
 } from "@/server/utils/calculateDashboardSummary";
 
-type IHandleGetSummary = {
+type IGetDashboardOverviewData = {
   dateBreakPoints: DateBreakPoint[];
   bankAccountId: string;
 };
 
-export const handleGetSummary = async ({
+export type DashboardOverviewData = {
+  transactionReports: TransactionReport[]
+  dashboardSummary: DashboardSummary
+}
+
+export const getDashboardOverviewData = async ({
   dateBreakPoints,
   bankAccountId,
-}: IHandleGetSummary) => {
+}: IGetDashboardOverviewData): Promise<DashboardOverviewData> => {
   const earliestBreakPoint = dateBreakPoints.reduce((acc, entry) => {
     if (entry.start.getTime() < acc.start.getTime()) acc = entry;
     return acc;
@@ -26,13 +33,16 @@ export const handleGetSummary = async ({
     ],
   });
 
-  let reports = response.data || [];
+  let transactionReports = response.data || [];
 
-  const result = calculateDashboardSummary({
+  const dashboardSummary = calculateDashboardSummary({
     bankAccountId: bankAccountId,
     dateBreakPoints: dateBreakPoints,
-    reports,
+    reports: transactionReports,
   });
 
-  return result;
+    return {
+      transactionReports,
+      dashboardSummary
+    };
 };

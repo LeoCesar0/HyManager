@@ -1,5 +1,5 @@
 import { DateBreakPoint } from "@/server/utils/calculateDashboardSummary";
-import { startOfMonth, startOfWeek, sub } from "date-fns";
+import { endOfMonth, startOfMonth, startOfWeek, sub } from "date-fns";
 
 
 export const getDateBreakPoints = (): DateBreakPoint[] => {
@@ -18,7 +18,7 @@ export const getDateBreakPoints = (): DateBreakPoint[] => {
       {
         key: "last-month",
         start: startLastMonth,
-        end: sub(startOfThisMonth, { days: 1 }),
+        end: endOfMonth(startLastMonth),
       },
     ];
     
