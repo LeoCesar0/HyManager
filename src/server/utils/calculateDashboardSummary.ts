@@ -1,4 +1,4 @@
-import { isWithinInterval } from "date-fns";
+import { format, isWithinInterval } from "date-fns";
 import {
   TransactionReport,
   TransactionsSummary,
@@ -33,10 +33,14 @@ export const calculateDashboardSummary = ({
 
   const result: DashboardSummary = reports.reduce((acc, report) => {
     const reportDate = report.date.toDate();
+    
+    // console.log('report', report)
 
     dateBreakPoints.forEach((breakPoint) => {
       const key = breakPoint.key;
- 
+
+      // console.log('breakPoint', breakPoint)
+
       const breakPointStart = breakPoint.start;
       const breakPointEnd = getBreakPointEnd(breakPoint, now);
 
@@ -77,11 +81,22 @@ export const calculateDashboardSummary = ({
         acc[key].totalDeposits = currency(acc[key].totalDeposits).add(
           report.summary.totalDeposits
         ).value;
+        console.log('key', key)
+        console.log('reportDate', format(reportDate, 'dd/MM/yyyy'))
+        console.log('INIT acc[key].totalExpenses', acc[key].totalExpenses)
+
+        console.log('report.summary', report.summary)
+        console.log('report.summary.totalExpenses', report.summary.totalExpenses)
+
         acc[key].totalExpenses = currency(acc[key].totalExpenses).add(
           report.summary.totalExpenses
         ).value;
+        console.log('acc[key].totalExpenses', acc[key].totalExpenses)
+        console.log('---------------------------------------------------------------------')
       }
+      // console.log('--')
     });
+    // console.log('----------')
 
     return acc;
   }, {} as DashboardSummary);

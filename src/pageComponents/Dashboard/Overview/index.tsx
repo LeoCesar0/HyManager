@@ -36,6 +36,7 @@ export const DashboardOverView = () => {
         bankAccountId: bankAccountId,
         dateBreakPoints: breakPoints,
       }).then((result) => {
+        console.log('result', result)
         setOverviewData(result)
       });
     }

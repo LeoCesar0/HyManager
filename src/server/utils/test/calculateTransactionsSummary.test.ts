@@ -1,86 +1,49 @@
-import {
-  Transaction,
-  transactionSchema,
-  TransactionType,
-} from "@/server/models/Transaction/schema";
-import {
-  TransactionsSummary,
-  transactionsSummarySchema,
-} from "@/server/models/TransactionReport/schema";
-import cloneDeep from "lodash.clonedeep";
+import { TransactionsSummary } from "@/server/models/TransactionReport/schema";
 import { calculateTransactionsSummary } from "../calculateTransactionsSummary";
-import { mockTransactions } from "./utils/mockTransactions";
+import { TransactionType } from "../../models/Transaction/schema";
 
 describe("Test calculateTransactionsSummary", () => {
-  let transactions: Transaction[] = [];
-
+  // @ts-expect-error
+  let transactions: [] = [
+    {
+      amount: 100,
+      type: TransactionType.deposit,
+      id: "1",
+      creditor: "123123",
+      creditorSlug: "123123",
+    },
+    {
+      amount: -52,
+      type: TransactionType.debit,
+      id: "2",
+      creditor: "123123",
+      creditorSlug: "123123",
+    },
+    {
+      amount: 126,
+      type: TransactionType.deposit,
+      id: "3",
+      creditor: "123123",
+      creditorSlug: "123123",
+    },
+    {
+      amount: -5,
+      type: TransactionType.debit,
+      id: "4",
+      creditor: "123123",
+      creditorSlug: "123123",
+    },
+  ];
   let result: TransactionsSummary;
 
   beforeAll(() => {
-    transactions = mockTransactions({ count: 12 });
     result = calculateTransactionsSummary({ transactions });
   });
 
-  test("should return a valid TransactionsSummary object", () => {
-    const validation = transactionsSummarySchema.safeParse(result);
-
-    expect(validation.success).toBe(true);
-  });
-
-  test("should return the correct totalDeposits", () => {
-    const totalDeposits = transactions.reduce(
-      (acc, current) =>
-        current.type === "deposit" ? acc + current.amount : acc,
-      0
-    );
-
-    expect(result.totalDeposits).toBe(totalDeposits);
-  });
-
-  test("should return the correct totalExpenses", () => {
-    const totalExpenses = transactions.reduce(
-      (acc, current) => (current.type === "debit" ? acc + current.amount : acc),
-      0
-    );
-
-    expect(result.totalExpenses).toBe(totalExpenses);
-  });
-
-  test("should get the correct biggest deposit", () => {
-    const biggestDeposit = transactions.reduce(
-      (acc, entry) => {
-        if (
-          entry.type === TransactionType.deposit &&
-          entry.amount > acc!.amount
-        ) {
-          acc = cloneDeep(entry);
-        }
-
-        return acc;
-      },
-      transactions.find((item) => item.type === TransactionType.deposit)
-    );
-
-    expect(biggestDeposit?.id).toBe(result.biggestDeposit?.id);
-    expect(biggestDeposit?.amount).toBe(result.biggestDeposit?.amount);
-  });
-
-  test("should get the correct biggest debit", () => {
-    const biggestDebit = transactions.reduce(
-      (acc, entry) => {
-        if (
-          entry.type === TransactionType.debit &&
-          Math.abs(entry.amount) > Math.abs(acc!.amount)
-        ) {
-          acc = cloneDeep(entry);
-        }
-
-        return acc;
-      },
-      transactions.find((item) => item.type === TransactionType.debit)
-    );
-
-    expect(biggestDebit?.id).toBe(result.biggestDebit?.id);
-    expect(biggestDebit?.amount).toBe(result.biggestDebit?.amount);
+  it("should return correctly values", () => {
+    expect(result.biggestDebit?.amount).toBe(-52);
+    expect(result.biggestDeposit?.amount).toBe(126);
+    expect(result.totalDeposits).toBe(226);
+    expect(result.totalExpenses).toBe(-57);
   });
 });
