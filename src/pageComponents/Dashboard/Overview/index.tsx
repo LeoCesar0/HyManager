@@ -6,23 +6,28 @@ import { GoalCard, GoalCardProps } from "./components/Cards/GoalCard";
 import { ExpensesCard } from "./components/Cards/ExpensesCard";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DashboardSummary } from "@/server/utils/calculateDashboardSummary";
-import { getCardExpenses } from "./utils/getCardExpenses";
+import { getExpensesCards } from "./utils/getExpensesCards";
 import { getDateBreakPoints } from "./utils/getDateBreakPoints";
-import { DashboardOverviewData, getDashboardOverviewData } from "./utils/getDashboardOverviewData";
+import {
+  DashboardOverviewData,
+  getDashboardOverviewData,
+} from "./utils/getDashboardOverviewData";
 import { BarChart } from "../../../components/Charts/BarChart";
 import ExpensesChart from "./components/ExpensesChart";
-import { sub, startOfMonth } from 'date-fns';
-import { listTransactionReportsBy } from '../../../server/models/TransactionReport/read/listTransactionReportBy';
+import { sub, startOfMonth } from "date-fns";
+import { listTransactionReportsBy } from "../../../server/models/TransactionReport/read/listTransactionReportBy";
 import useFetcher from "@/hooks/useFetcher";
-import { TransactionReport } from '../../../server/models/TransactionReport/schema';
-import { FirebaseCollection } from '../../../server/firebase/index';
+import { TransactionReport } from "../../../server/models/TransactionReport/schema";
+import { FirebaseCollection } from "../../../server/firebase/index";
 import { FirebaseFilterFor } from "@/@types";
+import { getGoalsCards } from "./utils/getGoalsCards";
 
 export const DashboardOverView = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
-  const [overviewData, setOverviewData] = useState<null | DashboardOverviewData>(null);
+  const [overviewData, setOverviewData] =
+    useState<null | DashboardOverviewData>(null);
 
-  const bankAccountId = currentBankAccount?.id || ''
+  const bankAccountId = currentBankAccount?.id || "";
 
   // --------------------------
   // SUMMARY / EXPENSES
@@ -36,20 +41,28 @@ export const DashboardOverView = () => {
         bankAccountId: bankAccountId,
         dateBreakPoints: breakPoints,
       }).then((result) => {
-        console.log('result', result)
-        setOverviewData(result)
+        console.log("result", result);
+        setOverviewData(result);
       });
     }
   }, [bankAccountId, breakPoints]);
 
-  const summary = overviewData?.dashboardSummary || null
+  const summary = overviewData?.dashboardSummary || null;
 
-  const expensesCards = getCardExpenses(summary);
+  const expensesCards = getExpensesCards(summary);
 
   // --------------------------
-  // TRANSACTIONS REPORT 
+  // TRANSACTIONS REPORT
   // --------------------------
-  
+
+  // TODO change maxExpenses
+  const goalCards = getGoalsCards({
+    goals: {
+      maxExpenses: 4900,
+    },
+    summary: summary,
+  });
+
   return (
     <SectionContainer>
       <Section sectionTitle={{ en: "Overview", pt: "Geral" }}>
@@ -64,42 +77,11 @@ export const DashboardOverView = () => {
         </div>
       </Section>
       <Section sectionTitle={{ en: "Charts", pt: "Gráficos" }}>
-        {overviewData && <ExpensesChart transactionReports={overviewData.transactionReports} />}
+        {overviewData && (
+          <ExpensesChart transactionReports={overviewData.transactionReports} />
+        )}
         {/* <BalanceChart bankAccountId={currentBankAccount!.id} /> */}
       </Section>
     </SectionContainer>
   );
 };
-
-export const goalCards: GoalCardProps[] = [
-  {
-    title: {
-      pt: "Meta de economia",
-      en: "Saving goals",
-    },
-    strong: {
-      pt: "esse mês",
-      en: "this month",
-    },
-    slider: {
-      from: 0,
-      current: 1658,
-      to: 3500,
-    },
-  },
-  {
-    title: {
-      pt: "Meta de economia",
-      en: "Saving goals",
-    },
-    strong: {
-      pt: "mês anterior",
-      en: "last month",
-    },
-    slider: {
-      from: 0,
-      current: 3298,
-      to: 3500,
-    },
-  },
-];
