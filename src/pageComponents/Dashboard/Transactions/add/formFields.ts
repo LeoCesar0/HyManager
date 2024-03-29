@@ -1,7 +1,7 @@
-import { IFormFieldItem } from "@/components/FormFields/@types";
-import { TransactionType } from "../../../../server/models/Transaction/schema";
+import { MakeFormFields } from "@/components/FormFields/@types";
+import { CreateTransaction } from "@/server/models/Transaction/schema";
 
-export const formFields: IFormFieldItem[] = [
+export const formFields: MakeFormFields<CreateTransaction> = [
   {
     name: "amount",
     label: {

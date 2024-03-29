@@ -6,7 +6,7 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ["media.graphassets.com", "cdn.midjourney.com"],
+    domains: ["firebasestorage.googleapis.com"],
   },
   typescript: {
     ignoreBuildErrors: false,

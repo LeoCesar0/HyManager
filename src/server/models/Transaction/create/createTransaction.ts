@@ -1,13 +1,10 @@
 import { AppModelResponse } from "@/@types/index";
 import { debugDev } from "@/utils/dev";
 import { CreateTransaction, Transaction, transactionSchema } from "../schema";
-import { doc, Timestamp, writeBatch } from "firebase/firestore";
-import { slugify } from "@/utils/app";
+import {  writeBatch } from "firebase/firestore";
 import { firebaseDB } from "@/services/firebase";
 import { FirebaseCollection } from "@server/firebase";
-import { makeTransactionSlug } from "@server/utils/makeTransactionSlug";
 import { batchManyTransactionReports } from "@models/TransactionReport/create/batchManyTransactionsReport";
-import { makeDateFields } from "@/utils/date/makeDateFields";
 import { createDocRef } from "@/server/utils/createDocRef";
 import { makeTransactionFields } from "../utils/makeTransactionFields";
 

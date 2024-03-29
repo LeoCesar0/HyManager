@@ -19,8 +19,8 @@ import { UploadIcon } from "@radix-ui/react-icons";
 import useT from "@/hooks/useT";
 import Link from "next/link";
 import selectT from "@/utils/selectT";
-import { useGlobalContext } from '../../../../contexts/GlobalContext';
-import { createManyTransactions } from '../../../../server/models/Transaction/create/createManyTransactions';
+import { useGlobalContext } from '@/contexts/GlobalContext';
+import { createManyTransactions } from '@/server/models/Transaction/create/createManyTransactions';
 
 const formSchema = createTransactionSchema;
 

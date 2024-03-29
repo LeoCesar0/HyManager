@@ -2,7 +2,7 @@ import { Locale } from "@/@types";
 import { MakeFormFields } from "@/components/FormFields/@types";
 import selectT from "@/utils/selectT";
 import { useState } from "react";
-import { FileInfo, TempImage } from "../../../@types/File";
+import { TempImage } from "@/@types/File";
 import { CreateBankAccount } from "@/server/models/BankAccount/schema";
 
 export const useGetFormFields = (currentLanguage: Locale): MakeFormFields<CreateBankAccount> => {

@@ -37,9 +37,7 @@ export type LocalizedText = {
   [key in Locale]: string;
 };
 
-export type AnyObject = {
-  [key: string | number | symbol]: any;
-};
+export type AnyObject = Record<string, any>
 
 export type FirebaseFilterFor<T> = {
   field: keyof T;

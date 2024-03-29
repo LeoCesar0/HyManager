@@ -13,7 +13,7 @@ export function getImageData(event: ChangeEvent<HTMLInputElement>) {
 
       tempImages.push({
         file: image,
-        previewUrl: displayUrl
+        url: displayUrl
       })
     });
 

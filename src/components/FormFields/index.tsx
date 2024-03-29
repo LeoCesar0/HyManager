@@ -1,11 +1,4 @@
 import {
-  ChangeEvent,
-  InputHTMLAttributes,
-  TextareaHTMLAttributes,
-  useState,
-} from "react";
-import { LocalizedText } from "../../@types/index";
-import {
   FormControl,
   FormField,
   FormItem,
@@ -25,11 +18,8 @@ import {
 import { CurrencyInput } from "../CurrencyInput/index";
 import { TransactionTypeRadio } from "../TransactionTypeRadio";
 import { DatePicker } from "../DatePicker/index";
-import Image from "next/image";
-import { PlusIcon } from "@radix-ui/react-icons";
-import { getImageData } from "@/utils/getImageData";
 import { IFormFieldProps } from "./@types";
-
+import { ImageInput } from "./ImageInput";
 
 export const FormFields: React.FC<IFormFieldProps> = ({ fields, form }) => {
   const { currentLanguage } = useGlobalContext();
@@ -53,35 +43,7 @@ export const FormFields: React.FC<IFormFieldProps> = ({ fields, form }) => {
                           <Input {...field} {...(itemField.props || {})} />
                         )}
                         {itemField.inputType === "imageInput" && (
-                          <div className="flex gap-2 flex-wrap">
-                            {itemField.tempImages.map((imageUrl) => {
-                              return (
-                                <Image
-                                  src={imageUrl.previewUrl}
-                                  key={imageUrl.previewUrl}
-                                  alt="image preview"
-                                  width={64}
-                                  height={64}
-                                  className="rounded-md cursor-pointer"
-                                />
-                              );
-                            })}
-                            <label htmlFor={itemField.name}>
-                              <PlusIcon className="h-16 w-16 rounded-md border cursor-pointer text-muted-foreground" />
-                            </label>
-                            <Input
-                              className="hidden"
-                              type="file"
-                              {...(itemField.props || {})}
-                              name={itemField.name}
-                              id={itemField.name}
-                              onChange={(event) => {
-                                const { tempImages } = getImageData(event);
-
-                                itemField.setTempImages(tempImages);
-                              }}
-                            />
-                          </div>
+                          <ImageInput itemField={itemField} formValues={form.getValues()} />
                         )}
                         {itemField.inputType === "currency" && (
                           <>
