@@ -3,7 +3,8 @@ import {
   MdStackedBarChart,
   MdDashboard,
   MdSettings,
-  MdCompareArrows
+  MdCompareArrows,
+  MdCategory,
 } from "react-icons/md";
 
 interface MenuItem {
@@ -38,6 +39,14 @@ const menuItems: MenuItem[] = [
     },
     icon: MdCompareArrows,
     link: "/dashboard/transactions",
+  },
+  {
+    label: {
+      pt: "Categorias",
+      en: "Categories",
+    },
+    icon: MdCategory,
+    link: "/dashboard/categories",
   },
   {
     label: {

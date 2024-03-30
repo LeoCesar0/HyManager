@@ -1,20 +1,20 @@
 import { FirebaseCollection } from "@/server/firebase";
-import { CategoryByCreditor, CreateCategoryByCreditor, categoryByCreditorSchema, createCategoryByCreditorSchema } from "../schema";
+import { BankCreditor, CreateBankCreditor, bankCreditorSchema, createBankCreditorSchema } from "../schema";
 import { firebaseCreate } from "@/server/firebase/firebaseCreate";
 import { debugDev } from "@/utils/dev";
 
-export type ICreateCategoryByCreditor = {
-  values: CreateCategoryByCreditor;
+export type ICreateBankCreditor = {
+  values: CreateBankCreditor;
 };
 
-export const createCategoryByCreditor = async ({
+export const createBankCreditor = async ({
   values,
-}: ICreateCategoryByCreditor) => {
-  const funcName = "createCategoryByCreditor";
+}: ICreateBankCreditor) => {
+  const funcName = "createBankCreditor";
 
   try {
-    const item = createCategoryByCreditorSchema.parse(values);
-    const result = await firebaseCreate<CategoryByCreditor>({
+    const item = createBankCreditorSchema.parse(values);
+    const result = await firebaseCreate<BankCreditor>({
       collection: FirebaseCollection.categoryByCreditor,
       data: {
         ...item,

@@ -2,22 +2,22 @@ import { FirebaseCollection } from "@server/firebase";
 import { firebaseUpdate } from "@server/firebase/firebaseUpdate";
 import { AppModelResponse } from "@/@types/index";
 import { debugDev } from "@/utils/dev";
-import { CategoryByCreditor } from "../schema";
+import { BankCreditor } from "../schema";
 
-interface IUpdateCategoryByCreditor {
+interface IUpdateBankCreditor {
   values: {
-    categorySlug: CategoryByCreditor["categorySlug"];
+    categorySlug: BankCreditor["categorySlug"];
   };
   id: string;
 }
 
-export const updateCategoryByCreditor = async ({
+export const updateBankCreditor = async ({
   values,
   id,
-}: IUpdateCategoryByCreditor): Promise<AppModelResponse<CategoryByCreditor>> => {
-  const funcName = "updateCategoryByCreditor";
+}: IUpdateBankCreditor): Promise<AppModelResponse<BankCreditor>> => {
+  const funcName = "updateBankCreditor";
   try {
-    const result = await firebaseUpdate<CategoryByCreditor>({
+    const result = await firebaseUpdate<BankCreditor>({
       collection: FirebaseCollection.categoryByCreditor,
       data: values,
       id: id,

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { DASHBOARD_CONFIG } from "../../../static/dashboardConfig";
+import { DASHBOARD_CONFIG } from "@/static/dashboardConfig";
 import Link from "next/link";
 import { cx } from "@/utils/misc";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
@@ -18,11 +18,11 @@ import useSwr from "swr";
 import {
   ListBankAccountByUserIdReturnType,
   listBankAccountByUserId,
-} from "../../../server/models/BankAccount/read/listBankAccountByUserId";
-import { useGlobalAuth } from "../../../contexts/GlobalAuth";
-import { FirebaseCollection } from "../../../server/firebase/index";
-import { useGlobalModal } from "../../../contexts/GlobalModal";
-import { CreateBankAccountForm } from "../../../pageComponents/Dashboard/CreateBankAccountForm/index";
+} from "@/server/models/BankAccount/read/listBankAccountByUserId";
+import { useGlobalAuth } from "@/contexts/GlobalAuth";
+import { FirebaseCollection } from "@/server/firebase/index";
+import { useGlobalModal } from "@/contexts/GlobalModal";
+import { CreateBankAccountForm } from "@/pageComponents/Dashboard/CreateBankAccountForm/index";
 import { memo, useMemo } from "react";
 import selectT from "@/utils/selectT";
 

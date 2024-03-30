@@ -1,40 +1,29 @@
-import { CategoryByCreditor } from "../schema";
+import { BankCreditor } from "../schema";
 import { FirebaseCollection } from "@/server/firebase";
-import { firebaseGetWhere } from "@/server/firebase/firebaseGetWhere";
+import { firebaseList } from "@/server/firebase/firebaseList";
 import { debugDev } from "@/utils/dev";
 
-export type IGetCategoryByCreditor = {
-  creditorSlug: string;
+export type IListBankCreditors = {
   bankAccountId: string;
 };
 
-export const getCategoryByCreditor = async ({
-  creditorSlug,
+export const listBankCreditors = async ({
   bankAccountId,
-}: IGetCategoryByCreditor) => {
-  const funcName = "getCategoryByCreditor";
+}: IListBankCreditors) => {
+  const funcName = "listBankCreditors";
 
   try {
     if (!bankAccountId) {
       throw new Error("Bank Account Id is required");
     }
-    if (!creditorSlug) {
-      throw new Error("CreditorSlug is required");
-    }
-
-    const data = await firebaseGetWhere<CategoryByCreditor>({
+    const data = await firebaseList<BankCreditor>({
       collection: FirebaseCollection.categoryByCreditor,
       filters: [
         {
-          field: "creditorSlug",
+          field: "bankAccountId",
           operator: "==",
-          value: creditorSlug,
+          value: bankAccountId,
         },
-        {
-            field: "bankAccountId",
-            operator: "==",
-            value: bankAccountId,
-          },
       ],
     });
     if (data) {
