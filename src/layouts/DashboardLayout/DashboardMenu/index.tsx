@@ -25,6 +25,7 @@ import { useGlobalModal } from "@/contexts/GlobalModal";
 import { CreateBankAccountForm } from "@/pageComponents/Dashboard/CreateBankAccountForm/index";
 import { memo, useMemo } from "react";
 import selectT from "@/utils/selectT";
+import useT from "@/hooks/useT";
 
 const { menuItems } = DASHBOARD_CONFIG;
 
@@ -67,6 +68,11 @@ const Component = () => {
 
   const bankAccounts = bankAccountsFetch.data?.data ?? [];
 
+  const selectLabel = useT({
+    en: 'Bank Account',
+    pt: 'Conta Bancária'
+  })
+
   return (
     <>
       <aside
@@ -96,7 +102,7 @@ const Component = () => {
           </Button>
         </div>
         <div className="!mb-8">
-          <Label>Bank Account</Label>
+          <Label>{selectLabel}</Label>
           <Select
             value={currentBankAccount?.id ?? ""}
             onValueChange={(value) => {

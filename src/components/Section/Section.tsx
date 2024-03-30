@@ -8,6 +8,7 @@ import { ArrowLeftIcon } from "@radix-ui/react-icons";
 
 interface IProps {
   sectionTitle?: LocalizedText;
+  sectionSubTitle?: LocalizedText;
   children: React.ReactNode;
   className?: string;
   actions?: React.ReactNode;
@@ -18,6 +19,7 @@ interface IProps {
 
 export const Section: React.FC<IProps> = ({
   sectionTitle,
+  sectionSubTitle,
   children,
   className = "",
   actions,
@@ -27,7 +29,7 @@ export const Section: React.FC<IProps> = ({
 }) => {
   const { currentLanguage } = useGlobalContext();
   return (
-    <section className={cn('w-full', className)}>
+    <section className={cn("w-full", className)}>
       <header
         className={cx([
           "flex gap-4 items-center mb-4 flex-wrap w-full",
@@ -42,8 +44,13 @@ export const Section: React.FC<IProps> = ({
           </Link>
         )}
         {sectionTitle && (
-          <h4 className="text-2xl font-bold">
+          <h3 className="text-2xl font-bold">
             {sectionTitle[currentLanguage]}
+          </h3>
+        )}
+        {sectionSubTitle && (
+          <h4 className="text-lg font-bold">
+            {sectionSubTitle[currentLanguage]}
           </h4>
         )}
         <div className="flex items-center gap-2 flex-1">{actions}</div>
