@@ -6,18 +6,21 @@ export const categorySchema = z.object({
   name: z.string(),
   slug: z.string(),
   color: z.string(),
+  isDefault: z.boolean()
 });
+
+export const bankAccountUsersSchema = z.array(z.object({ id: z.string() }))
 
 export const bankAccountSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
   image: fileInfoSchema.nullable(),
-  users: z.array(z.object({ id: z.string() })),
+  users: bankAccountUsersSchema,
   createdAt: timestampSchema,
   updatedAt: timestampSchema,
   balance: z.number(),
-  // categories: z.array(categorySchema),
+  categories: z.array(categorySchema),
 });
 
 export const createBankAccountSchema = z.object({
@@ -26,18 +29,18 @@ export const createBankAccountSchema = z.object({
     .min(3, "Name is required"),
   description: z.string(),
   image: fileInfoSchema.nullable(),
-  users: z.array(z.object({ id: z.string() })),
-  // categories: z.array(categorySchema),
+  users: bankAccountUsersSchema,
+  categories: z.array(categorySchema),
 });
 
-export const createBankAccountSchemaPT = z.object({
+export const createBankAccountSchemaPT: typeof createBankAccountSchema = z.object({
   name: z
     .string({ required_error: "Nome é obrigatório" })
     .min(3, "Nome é obrigatório"),
   description: z.string(),
   image: fileInfoSchema.nullable(),
-  users: z.array(z.object({ id: z.string() })),
-  // categories: z.array(categorySchema),
+  users: bankAccountUsersSchema,
+  categories: z.array(categorySchema),
 });
 
 export type BankAccount = z.infer<typeof bankAccountSchema>;

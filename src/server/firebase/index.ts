@@ -10,6 +10,7 @@ export const timestampSchema = z.custom<Timestamp>((value: any) => {
     bankAccounts = "bankAccounts",
     transactions = "transactions",
     transactionReports = "transactionReports",
+    categoryByCreditor = 'categoryByCreditor',
   }
   
   export const firebaseCollections = Object.values(FirebaseCollection);

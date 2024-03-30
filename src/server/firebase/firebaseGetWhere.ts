@@ -1,21 +1,17 @@
 import { FirebaseFilterFor } from "@/@types";
-import {
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { getDocs, query, where } from "firebase/firestore";
 import { debugDev } from "@/utils/dev";
 import { FirebaseCollection } from ".";
 import { createCollectionRef } from "../utils/createCollectionRef";
 
-type IFirebaseList<T> = {
+type IFIrebaseGetWhere<T> = {
   collection: FirebaseCollection;
-  filters?: FirebaseFilterFor<T>[];
+  filters: FirebaseFilterFor<T>[];
 };
-export const firebaseList = async <T>({
+export const firebaseGetWhere = async <T>({
   collection: collectionName,
-  filters = [],
-}: IFirebaseList<T>): Promise<T[]> => {
+  filters,
+}: IFIrebaseGetWhere<T>): Promise<T> => {
   const funcName = "firebaseList";
   debugDev({
     name: funcName,
@@ -26,15 +22,15 @@ export const firebaseList = async <T>({
   });
   const ref = createCollectionRef({ collectionName });
 
-  filters = filters.reduce((acc,entry) => {
+  filters = filters.reduce((acc, entry) => {
     // --------------------------
     // Remove duplicates
     // --------------------------
-    if (!acc.find(filter => filter.field === entry.field)) {
-      acc.push(entry)
+    if (!acc.find((filter) => filter.field === entry.field)) {
+      acc.push(entry);
     }
-    return acc
-  },[] as typeof filters)
+    return acc;
+  }, [] as typeof filters);
 
   let whereList = filters.map(({ field, operator = "==", value }) =>
     where(field as string, operator, value)
@@ -45,9 +41,7 @@ export const firebaseList = async <T>({
   let firebaseQuery = query(ref, ...whereList);
 
   snapShot = await getDocs(firebaseQuery);
-  const list: T[] = [];
-  snapShot.forEach((doc) => {
-    list.push(doc.data() as T);
-  });
-  return list;
+  const item: T = snapShot.docs[0].data() as T;
+
+  return item;
 };

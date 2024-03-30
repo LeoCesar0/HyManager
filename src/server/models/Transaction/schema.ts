@@ -28,7 +28,6 @@ export const transactionSchema = z.object({
   dateMonth: z.string(),
   dateYear: z.string(),
   dateWeek: z.string(),
-  category: z.string().optional(),
 });
 
 export const createTransactionSchema = z.object({
@@ -50,11 +49,9 @@ export const createTransactionSchema = z.object({
     required_error: "This field is required!",
   }),
   amount: z.number(),
-  color: z.string().optional(),
-  category: z.string().optional(),
 });
 
-export const createTransactionSchemaPT = z.object({
+export const createTransactionSchemaPT: typeof createTransactionSchema = z.object({
   slug: z.string().optional(),
   idFromBank: z.string().optional(),
   bankAccountId: z.string().optional(),
@@ -73,8 +70,6 @@ export const createTransactionSchemaPT = z.object({
     required_error: "Campo obrigatório",
   }),
   amount: z.number(),
-  color: z.string().optional(),
-  category: z.string().optional(),
 });
 
 export const createTransactionFromPDFSchema = z.object({
@@ -93,8 +88,6 @@ export const createTransactionFromPDFSchema = z.object({
   description: z.string(),
   date: z.date().or(z.string()),
   amount: z.number(),
-  color: z.string().optional(),
-  category: z.string().optional(),
 });
 
 export type Transaction = z.infer<typeof transactionSchema>;

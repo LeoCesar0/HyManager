@@ -1,5 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
-import { firebaseDB } from "@/services/firebase";
+import { getDoc } from "firebase/firestore";
 import { FirebaseCollection } from ".";
 import { createDocRef } from '../utils/createDocRef';
 
