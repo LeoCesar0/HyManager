@@ -13,7 +13,6 @@ import { useTranslation } from "next-i18next";
 import { makeZodI18nMap } from "zod-i18n-map";
 import { FormFields } from "@/components/FormFields";
 import { formFields } from "./formFields";
-import { createTransaction } from "@/server/models/Transaction/create/createTransaction";
 import { useToastPromise } from "@/hooks/useToastPromise";
 import { UploadIcon } from "@radix-ui/react-icons";
 import useT from "@/hooks/useT";

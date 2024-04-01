@@ -1,11 +1,8 @@
 import { Transaction, TransactionType } from "../schema";
-import { createTransaction } from "../create/createTransaction";
 import { TEST_CONFIG } from "@/static/testConfig";
 import { getTransactionById } from "../read/getTransactionById";
 import { timestampToDate } from "@/utils/date/timestampToDate";
 import { formatAnyDate } from "../../../../utils/date/formatAnyDate";
-import { firebaseAuth } from "@/services/firebase";
-import { listTransactionReportsBy } from "../../TransactionReport/read/listTransactionReportBy";
 import { listTransactionReportByTransaction } from "../../TransactionReport/read/listTransactionReportByTransaction";
 import { createManyTransactions } from "../create/createManyTransactions";
 
@@ -19,7 +16,6 @@ describe("Test transaction CRUD", () => {
   // --------------------------
 
   it("should create a transaction", async () => {
-    console.log("--> START TEST 1");
 
     const values = {
       amount: -100.5,
