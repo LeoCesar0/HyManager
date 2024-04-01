@@ -15,7 +15,7 @@ export const createBankCreditor = async ({
   try {
     const item = createBankCreditorSchema.parse(values);
     const result = await firebaseCreate<BankCreditor>({
-      collection: FirebaseCollection.categoryByCreditor,
+      collection: FirebaseCollection.bankCreditor,
       data: {
         ...item,
         id: `${item.creditorSlug}@@${item.bankAccountId}`

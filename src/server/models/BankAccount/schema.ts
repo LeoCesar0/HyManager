@@ -10,7 +10,6 @@ export const bankCategorySchema = z.object({
   isDefault: z.boolean()
 });
 
-
 export const bankAccountUsersSchema = z.array(z.object({ id: z.string() }))
 
 export const bankAccountSchema = z.object({

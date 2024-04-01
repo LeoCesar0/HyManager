@@ -17,7 +17,7 @@ export const listBankCreditors = async ({
       throw new Error("Bank Account Id is required");
     }
     const data = await firebaseList<BankCreditor>({
-      collection: FirebaseCollection.categoryByCreditor,
+      collection: FirebaseCollection.bankCreditor,
       filters: [
         {
           field: "bankAccountId",

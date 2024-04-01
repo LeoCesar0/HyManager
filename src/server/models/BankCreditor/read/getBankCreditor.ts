@@ -23,7 +23,7 @@ export const getBankCreditor = async ({
     }
 
     const data = await firebaseGetWhere<BankCreditor>({
-      collection: FirebaseCollection.categoryByCreditor,
+      collection: FirebaseCollection.bankCreditor,
       filters: [
         {
           field: "creditorSlug",
