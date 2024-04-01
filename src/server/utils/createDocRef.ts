@@ -1,6 +1,7 @@
 import { firebaseDB } from "@/services/firebase";
 import { doc } from "firebase/firestore";
 import { FirebaseCollection } from "../firebase/index";
+import { getServerPath } from "./getServerPath";
 
 export const createDocRef = ({
   collection,
@@ -9,12 +10,7 @@ export const createDocRef = ({
   collection: FirebaseCollection;
   id: string;
 }) => {
-  let path = "test";
-  if (process.env.NODE_ENV === "production") {
-    path = "production";
-  } else if (process.env.NODE_ENV === "development") {
-    path = "development";
-  } // Add more conditions if needed
+  const path = getServerPath();
 
   const ref = doc(firebaseDB, `env/${path}/${collection}/${id}`);
 
