@@ -8,7 +8,9 @@
     "start": "NODE_ENV=production next start",
     "lint": "next lint",
     "map-pdf": "tsc scripts/pdfMapping/index.ts --outdir ./dist || true && node dist/scripts/pdfMapping/index.js",
-    "test": "NODE_ENV=test jest",
+    "test:pos": "NODE_ENV=test jest",
+    "test:pre": "NODE_ENV=test next dev",
+    "test": "npx concurrently \"pnpm test:pre\" \"pnpm test:pos\"",
     "test:inspect": "NODE_ENV=test node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand",
     "test:debug": "NODE_ENV=test npx jest -- --watch",
     "test:debug:this": "NODE_ENV=test npx jest --testNamePattern=#this --watch"
@@ -97,6 +99,7 @@
     "@types/react-dom": "18.0.0",
     "@types/text-mask-addons": "^3.8.4",
     "autoprefixer": "^10.4.13",
+    "concurrently": "^8.2.2",
     "eslint": "8.14.0",
     "eslint-config-next": "13.4.0",
     "isomorphic-fetch": "^3.0.0",
