@@ -18,7 +18,7 @@ export const updateBankCreditor = async ({
   const funcName = "updateBankCreditor";
   try {
     const result = await firebaseUpdate<BankCreditor>({
-      collection: FirebaseCollection.bankCreditor,
+      collection: FirebaseCollection.bankCreditors,
       data: values,
       id: id,
     });

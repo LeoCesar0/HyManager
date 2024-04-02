@@ -1,7 +1,9 @@
 import { FileInfo } from "@/@types/File";
 import { createManyTransactions } from "@models/Transaction/create/createManyTransactions";
-import { CreateTransaction, TransactionType } from "@models/Transaction/schema";
+import { CreateTransaction } from "@models/Transaction/schema";
 import { IPDFData } from "@/services/PDFReader/interfaces";
+import { listBankCreditors } from "../models/BankCreditor/read/listBankCreditors";
+import { slugify } from "@/utils/app";
 
 interface ICreateTransactionsFromPDFResult {
   pdfReadResult: IPDFData[];
@@ -37,6 +39,7 @@ export const createTransactionsFromPDFResult = async ({
     bankAccountId,
     transactions: transactionsToCreate,
   });
+
 
   return createResult;
 };

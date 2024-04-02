@@ -1,7 +1,7 @@
 import { DefaultBankCategory } from "./schema";
 
-export const DEFAULT_BANK_CATEGORIES: DefaultBankCategory[] = [
-  {
+export const DEFAULT_CATEGORY = {
+  "home-bills-default": {
     color: "#f1c7a0",
     isDefault: true,
     name: {
@@ -10,7 +10,7 @@ export const DEFAULT_BANK_CATEGORIES: DefaultBankCategory[] = [
     },
     slug: "home-bills-default",
   },
-  {
+  "grocery-default": {
     color: "#c7f1a0",
     isDefault: true,
     name: {
@@ -19,7 +19,7 @@ export const DEFAULT_BANK_CATEGORIES: DefaultBankCategory[] = [
     },
     slug: "grocery-default",
   },
-  {
+  "fun-default": {
     color: "#c7a0f1",
     isDefault: true,
     name: {
@@ -28,7 +28,7 @@ export const DEFAULT_BANK_CATEGORIES: DefaultBankCategory[] = [
     },
     slug: "fun-default",
   },
-  {
+  "other-default": {
     color: "#a0c7f1",
     isDefault: true,
     name: {
@@ -37,4 +37,7 @@ export const DEFAULT_BANK_CATEGORIES: DefaultBankCategory[] = [
     },
     slug: "other-default",
   },
-];
+} as const;
+
+export const DEFAULT_CATEGORIES: DefaultBankCategory[] =
+  Object.values(DEFAULT_CATEGORY);

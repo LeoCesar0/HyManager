@@ -1,8 +1,5 @@
-import { format } from "date-fns";
-import { Timestamp } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { AppError, AppModelResponse } from "../@types";
-import { useGlobalContext } from "../contexts/GlobalContext";
 
 export const showErrorToast = (error: AppError) => {
   const message = error?.message;

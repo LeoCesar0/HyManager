@@ -1,5 +1,3 @@
-import { handler } from "@/pages/api/read-pdf-files";
-import { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import { TEST_CONFIG } from "@/static/testConfig";
 import { PDF2JSONResponse } from "../readPdfFilesRoute";

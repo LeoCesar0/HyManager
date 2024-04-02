@@ -8,6 +8,7 @@ import { batchManyTransactionReports } from "@models/TransactionReport/create/ba
 import { createDocRef } from "@/server/utils/createDocRef";
 import { updateBankAccountBalance } from "../../../utils/updateBankAccountBalance";
 import { makeTransactionFields } from "../utils/makeTransactionFields";
+import { handleCreditorsOnBatchTransactions } from "../utils/handleCreditorsOnBatchTransactions";
 
 interface ICreateManyTransactions {
   transactions: CreateTransaction[];
@@ -48,6 +49,12 @@ export const createManyTransactions = async ({
       batch,
       transactionsOnCreate,
     });
+
+    await handleCreditorsOnBatchTransactions({
+      bankAccountId,
+      batch,
+      transactionsOnCreate,
+    })
 
     await batch.commit();
 
