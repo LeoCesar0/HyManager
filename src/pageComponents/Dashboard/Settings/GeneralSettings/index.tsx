@@ -35,15 +35,18 @@ export const GeneralSettings = () => {
 
   const formFields = useGetFormFields(currentLanguage);
 
+  const defaultValues: CreateBankAccount = {
+    description: currentBankAccount?.description || "",
+    image: currentBankAccount?.image || null,
+    name: currentBankAccount?.name || "",
+    users: currentBankAccount?.users || [],
+    categories: currentBankAccount?.categories || [],
+    userLanguage: currentLanguage,
+  };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      //   categories: currentBankAccount?.categories || [],
-      description: currentBankAccount?.description || "",
-      image: currentBankAccount?.image || null,
-      name: currentBankAccount?.name || "",
-      users: currentBankAccount?.users || [],
-    },
+    defaultValues: defaultValues,
     mode: "onChange",
     reValidateMode: "onChange",
   });

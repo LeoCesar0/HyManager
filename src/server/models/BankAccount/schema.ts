@@ -1,4 +1,4 @@
-import { LocalizedText } from "@/@types";
+import { Locale, LocalizedText } from "@/@types";
 import { fileInfoSchema } from "@/@types/File";
 import { timestampSchema } from "@server/firebase";
 import { z } from "zod";
@@ -7,10 +7,10 @@ export const bankCategorySchema = z.object({
   name: z.string(),
   slug: z.string(),
   color: z.string(),
-  isDefault: z.boolean()
+  isDefault: z.boolean(),
 });
 
-export const bankAccountUsersSchema = z.array(z.object({ id: z.string() }))
+export const bankAccountUsersSchema = z.array(z.object({ id: z.string() }));
 
 export const bankAccountSchema = z.object({
   id: z.string(),
@@ -22,6 +22,7 @@ export const bankAccountSchema = z.object({
   updatedAt: timestampSchema,
   balance: z.number(),
   categories: z.array(bankCategorySchema),
+  userLanguage: z.nativeEnum(Locale),
 });
 
 export const createBankAccountSchema = z.object({
@@ -32,25 +33,28 @@ export const createBankAccountSchema = z.object({
   image: fileInfoSchema.nullable(),
   users: bankAccountUsersSchema,
   categories: z.array(bankCategorySchema),
+  userLanguage: z.nativeEnum(Locale),
 });
 
-export const createBankAccountSchemaPT: typeof createBankAccountSchema = z.object({
-  name: z
-    .string({ required_error: "Nome é obrigatório" })
-    .min(3, "Nome é obrigatório"),
-  description: z.string(),
-  image: fileInfoSchema.nullable(),
-  users: bankAccountUsersSchema,
-  categories: z.array(bankCategorySchema),
-});
+export const createBankAccountSchemaPT: typeof createBankAccountSchema =
+  z.object({
+    name: z
+      .string({ required_error: "Nome é obrigatório" })
+      .min(3, "Nome é obrigatório"),
+    description: z.string(),
+    image: fileInfoSchema.nullable(),
+    users: bankAccountUsersSchema,
+    categories: z.array(bankCategorySchema),
+    userLanguage: z.nativeEnum(Locale),
+  });
 
 export type BankAccount = z.infer<typeof bankAccountSchema>;
 
 export type CreateBankAccount = z.infer<typeof createBankAccountSchema>;
 
-export type BankCategory = z.infer<typeof bankCategorySchema>
+export type BankCategory = z.infer<typeof bankCategorySchema>;
 
-export type DefaultBankCategory = Omit<BankCategory, 'isDefault' | 'name'> & {
-  isDefault: true,
-  name: LocalizedText
-}
+export type DefaultBankCategory = Omit<BankCategory, "isDefault" | "name"> & {
+  isDefault: true;
+  name: LocalizedText;
+};

@@ -14,8 +14,6 @@ import { z } from "zod";
 import useSelectT from "@/hooks/useSelectT";
 import { useGetFormFields } from "./useGetFormFields";
 import { useGlobalContext } from "@/contexts/GlobalContext";
-import { IImageInput } from "../../../components/FormFields/@types";
-import { uploadSingleFile } from "@/components/TransactionsFileInput/uploadFilesToStorage";
 import { useGlobalAuth } from "../../../contexts/GlobalAuth";
 import { FormActions } from "../../../components/ui/form";
 import { useGlobalModal } from "../../../contexts/GlobalModal";
@@ -32,14 +30,18 @@ export const CreateBankAccountForm = () => {
     pt: createBankAccountSchemaPT,
   });
 
+  const defaultValues: CreateBankAccount = {
+    description: "",
+    image: null,
+    name: "",
+    users: [],
+    categories: [],
+    userLanguage: currentLanguage,
+  };
+
   const form = useForm<z.infer<typeof validationSchema>>({
     resolver: zodResolver(validationSchema),
-    defaultValues: {
-      image: null,
-      description: "",
-      name: "",
-      users: [],
-    },
+    defaultValues: defaultValues,
     mode: "all",
   });
 
@@ -48,7 +50,6 @@ export const CreateBankAccountForm = () => {
   const handleSubmitValues = async (
     values: z.infer<typeof validationSchema>
   ) => {
-
     // const imageField = formFields.find(
     //   (field) => field.inputType === "imageInput"
     // ) as IImageInput<CreateBankAccount> | undefined;
@@ -60,15 +61,21 @@ export const CreateBankAccountForm = () => {
     //   imageInfo = await uploadSingleFile(imageData.file, currentUser!.id);
     // }
 
-    const files = await imagesToFileInfo({
+    const values_ = await imagesToFileInfo({
       formFields: formFields,
       bankAccountId: currentUser!.id,
+      formValues: values,
+      imageFields: [
+        {
+          multiple: false,
+          name: "image",
+        },
+      ],
     });
 
     return {
-      ...values,
-      image: files.image[0],
-      users: [{id: currentUser!.id}],
+      ...values_,
+      users: [{ id: currentUser!.id }],
     };
   };
 
@@ -90,10 +97,10 @@ export const CreateBankAccountForm = () => {
         pt: "Criando banco",
         en: "Creating bank",
       },
-      successMessage:{
+      successMessage: {
         pt: "Banco criado com sucesso",
-        en: "Bank created successfully"
-      }
+        en: "Bank created successfully",
+      },
     });
 
     setModalProps({

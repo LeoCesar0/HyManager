@@ -53,11 +53,16 @@ const Component = () => {
       }
       const shouldCreateBankAccount = !data.data || data.data.length > 0;
 
+      const formTitle = selectT(currentLanguage, {
+        en: "Create Bank Account",
+        pt: "Crie sua conta bancária",
+      });
+
       if (!shouldCreateBankAccount) {
         setModalProps({
           isOpen: true,
           children: <CreateBankAccountForm />,
-          title: "Create Bank Account",
+          title: formTitle,
           autoToggle: false,
         });
       }
@@ -69,9 +74,9 @@ const Component = () => {
   const bankAccounts = bankAccountsFetch.data?.data ?? [];
 
   const selectLabel = useT({
-    en: 'Bank Account',
-    pt: 'Conta Bancária'
-  })
+    en: "Bank Account",
+    pt: "Conta Bancária",
+  });
 
   return (
     <>

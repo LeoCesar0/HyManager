@@ -5,6 +5,7 @@ import { Timestamp } from "firebase/firestore";
 import { firebaseCreate } from "@server/firebase/firebaseCreate";
 import { FirebaseCollection } from "@server/firebase";
 import { BankAccount, CreateBankAccount } from "../schema";
+import { DEFAULT_CATEGORIES } from "../static";
 
 interface ICreateBankAccount {
   values: CreateBankAccount;
@@ -13,14 +14,22 @@ interface ICreateBankAccount {
 export const createBankAccount = async ({
   values,
 }: ICreateBankAccount): Promise<AppModelResponse<BankAccount>> => {
-  const funcName = "getBankAccountById";
+  const funcName = "createBankAccount";
   const item: BankAccount = {
     ...values,
     id: uuid(),
     createdAt: Timestamp.fromDate(new Date()),
     updatedAt: Timestamp.fromDate(new Date()),
-    balance: 0
+    balance: 0,
   };
+  if (!item.categories) {
+    item.categories = DEFAULT_CATEGORIES.map((item) => {
+      return {
+        ...item,
+        name: item.name.pt,
+      };
+    });
+  }
   try {
     const result = await firebaseCreate<BankAccount>({
       collection: FirebaseCollection.bankAccounts,
