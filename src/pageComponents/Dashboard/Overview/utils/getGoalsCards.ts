@@ -12,7 +12,7 @@ type IGetGoalsCards = {
 };
 
 export const getGoalsCards = ({ goals, summary }: IGetGoalsCards) => {
-  if(!summary) return []
+  if (!summary) return [];
 
   const { enLastMonth, enThisMonth, ptLastMonth, ptThisMonth } =
     getMonthLabels();
@@ -29,7 +29,7 @@ export const getGoalsCards = ({ goals, summary }: IGetGoalsCards) => {
       },
       slider: {
         from: 0,
-        current: Math.abs(summary['this-month'].totalExpenses),
+        current: Math.abs(summary["this-month"]?.totalExpenses || 0),
         to: goals.maxExpenses,
       },
     },
@@ -44,7 +44,7 @@ export const getGoalsCards = ({ goals, summary }: IGetGoalsCards) => {
       },
       slider: {
         from: 0,
-        current: Math.abs(summary['last-month'].totalExpenses),
+        current: Math.abs(summary["last-month"]?.totalExpenses || 0),
         to: goals.maxExpenses,
       },
     },

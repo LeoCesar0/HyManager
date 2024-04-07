@@ -1,25 +1,16 @@
 import { Section, SectionContainer } from "../../../components/Section/Section";
-import BalanceChart from "./components/BalanceChart";
 import { useGlobalDashboardStore } from "../../../contexts/GlobalDashboardStore";
 import { BalanceCard } from "./components/Cards/BalanceCard";
 import { GoalCard, GoalCardProps } from "./components/Cards/GoalCard";
 import { ExpensesCard } from "./components/Cards/ExpensesCard";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { DashboardSummary } from "@/server/utils/calculateDashboardSummary";
+import { useEffect, useMemo, useState } from "react";
 import { getExpensesCards } from "./utils/getExpensesCards";
 import { getDateBreakPoints } from "./utils/getDateBreakPoints";
 import {
   DashboardOverviewData,
   getDashboardOverviewData,
 } from "./utils/getDashboardOverviewData";
-import { BarChart } from "../../../components/Charts/BarChart";
 import ExpensesChart from "./components/ExpensesChart";
-import { sub, startOfMonth } from "date-fns";
-import { listTransactionReportsBy } from "../../../server/models/TransactionReport/read/listTransactionReportBy";
-import useFetcher from "@/hooks/useFetcher";
-import { TransactionReport } from "../../../server/models/TransactionReport/schema";
-import { FirebaseCollection } from "../../../server/firebase/index";
-import { FirebaseFilterFor } from "@/@types";
 import { getGoalsCards } from "./utils/getGoalsCards";
 
 export const DashboardOverView = () => {
