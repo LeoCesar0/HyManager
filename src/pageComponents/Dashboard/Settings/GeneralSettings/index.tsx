@@ -71,20 +71,7 @@ export const GeneralSettings = () => {
       },
     });
 
-    handleToast(promise, {
-      defaultErrorMessage: {
-        pt: "Erro ao criar transação",
-        en: "Error creating transaction",
-      },
-      loadingMessage: {
-        pt: "Adicionando transação",
-        en: "Adding transaction",
-      },
-      successMessage: {
-        pt: "Transação adicionada",
-        en: "Transaction added",
-      },
-    });
+    handleToast(promise, "updateMessages");
   }
 
   return (

@@ -19,7 +19,7 @@ export const showErrorToast = (error: AppError) => {
   }
 };
 
-type IPromiseOptions = {
+export type ToastPromiseLoadingMessages = {
   loadingMessage: string;
   successMessage: string;
   defaultErrorMessage: string;
@@ -27,7 +27,11 @@ type IPromiseOptions = {
 
 export async function handleToastPromise<T extends AppModelResponse<any>>(
   promise: Promise<T>,
-  { loadingMessage, defaultErrorMessage, successMessage }: IPromiseOptions
+  {
+    loadingMessage,
+    defaultErrorMessage,
+    successMessage,
+  }: ToastPromiseLoadingMessages
 ): Promise<T> {
   const toastId = toast.loading(loadingMessage);
 
@@ -35,7 +39,7 @@ export async function handleToastPromise<T extends AppModelResponse<any>>(
     .then((results) => {
       if (results.done) {
         toast.update(toastId, {
-          render: successMessage || 'Success',
+          render: successMessage || "Success",
           type: "success",
           isLoading: false,
           autoClose: 5000,
@@ -73,6 +77,3 @@ export const slugify = (string: string) => {
 
   return newText;
 };
-
-
-

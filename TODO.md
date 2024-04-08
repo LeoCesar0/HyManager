@@ -1,5 +1,3 @@
-
-
 # REFACTOR IMAGE/FILE INPUT SYSTEM
 
 - Make possible delete images
