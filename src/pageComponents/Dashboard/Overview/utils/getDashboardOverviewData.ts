@@ -1,5 +1,5 @@
 import { listTransactionReportsBy } from "@/server/models/TransactionReport/read/listTransactionReportBy";
-import { TransactionReport } from '@/server/models/TransactionReport/schema';
+import { TransactionReport } from "@/server/models/TransactionReport/schema";
 import {
   calculateDashboardSummary,
   DashboardSummary,
@@ -12,9 +12,9 @@ type IGetDashboardOverviewData = {
 };
 
 export type DashboardOverviewData = {
-  transactionReports: TransactionReport[]
-  dashboardSummary: DashboardSummary
-}
+  transactionReports: TransactionReport[];
+  dashboardSummary: DashboardSummary;
+};
 
 export const getDashboardOverviewData = async ({
   dateBreakPoints,
@@ -34,6 +34,7 @@ export const getDashboardOverviewData = async ({
   });
 
   let transactionReports = response.data || [];
+  transactionReports.sort((a, b) => a.date.seconds - b.date.seconds);
 
   const dashboardSummary = calculateDashboardSummary({
     bankAccountId: bankAccountId,
@@ -41,8 +42,8 @@ export const getDashboardOverviewData = async ({
     reports: transactionReports,
   });
 
-    return {
-      transactionReports,
-      dashboardSummary
-    };
+  return {
+    transactionReports,
+    dashboardSummary,
+  };
 };

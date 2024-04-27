@@ -5,27 +5,23 @@ import { valueToCurrency } from "@/utils/misc";
 import { APEX_LOCALES } from "@/static/apexConfig";
 import { formatAnyDate } from "@/utils/date/formatAnyDate";
 import { ChartSerie, ChartSerieData } from "@/@types/Chart";
-import { Timestamp } from "firebase/firestore";
 import { format } from "date-fns";
-import { numericStringToNumber } from '../../../../../utils/format/numericStringToNumber';
-
-const BPKeys = ["this-week", "this-month", "last-month"] as const;
 
 export interface IMakeExpensesChartData {
   transactionReports: TransactionReport[];
-  title: string
+  title: string;
 }
 
 export const makeExpensesChartData = ({
   transactionReports,
-  title
+  title,
 }: IMakeExpensesChartData) => {
   const dateFormat = "dd/MM";
   const chartBy = "yyyy-MM-dd";
 
   const seriesData = transactionReports.reduce<ChartSerieData[]>(
     (acc, entry) => {
-      if(entry.amount >= 0) return acc;
+      if (entry.amount >= 0) return acc;
       const date = entry.date.toDate();
       const dateKey = format(date, chartBy);
       const prev = acc.find((item) => item.x === dateKey);
@@ -90,10 +86,10 @@ export const makeExpensesChartData = ({
     stroke: {
       curve: "smooth",
     },
-    dataLabels:{
+    dataLabels: {
       formatter: (value: number) => {
-        return value.toLocaleString()
-      }
+        return value.toLocaleString();
+      },
     },
     colors: [APP_CONFIG.colors.debit],
     tooltip: {

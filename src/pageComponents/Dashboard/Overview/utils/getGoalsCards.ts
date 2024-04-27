@@ -1,7 +1,4 @@
 import { DashboardSummary } from "@/server/utils/calculateDashboardSummary";
-import { valueToCurrency } from "@/utils/misc";
-import { sub } from "date-fns";
-import { capitalizeString } from "../../../../utils/capitalizeString";
 import { GoalCardProps } from "../components/Cards/GoalCard";
 import { ExpenseGoal } from "../../../../@types/Goals";
 import { getMonthLabels } from "./getMonthLabels";
@@ -29,7 +26,7 @@ export const getGoalsCards = ({ goals, summary }: IGetGoalsCards) => {
       },
       slider: {
         from: 0,
-        current: Math.abs(summary["this-month"]?.totalExpenses || 0),
+        current: Math.abs(summary.thisMonth?.totalExpenses || 0),
         to: goals.maxExpenses,
       },
     },
@@ -44,7 +41,7 @@ export const getGoalsCards = ({ goals, summary }: IGetGoalsCards) => {
       },
       slider: {
         from: 0,
-        current: Math.abs(summary["last-month"]?.totalExpenses || 0),
+        current: Math.abs(summary.lastMonth?.totalExpenses || 0),
         to: goals.maxExpenses,
       },
     },

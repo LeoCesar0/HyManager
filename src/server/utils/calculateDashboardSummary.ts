@@ -1,12 +1,20 @@
-import { format, isWithinInterval } from "date-fns";
+import { isWithinInterval } from "date-fns";
 import {
   TransactionReport,
   TransactionsSummary,
 } from "../models/TransactionReport/schema";
 import currency from "currency.js";
 
+export type SummaryBreakPointKey = "thisMonth" | "lastMonth" | "thisWeek";
+
+export const SUMMARY_BREAK_POINTS: SummaryBreakPointKey[] = [
+  "thisMonth",
+  "lastMonth",
+  "thisWeek",
+];
+
 export type DateBreakPoint = {
-  key: string;
+  key: SummaryBreakPointKey;
   start: Date;
   end?: Date;
 };
@@ -18,7 +26,11 @@ type ICalculateDashboardSummary = {
 };
 
 export type DashboardSummary = {
-  [key: string]: TransactionsSummary;
+  [key in SummaryBreakPointKey]?: TransactionsSummary;
+  // thisMonth: TransactionsSummary;
+  // lastMonth: TransactionsSummary;
+  // prevLastMonth: TransactionsSummary;
+  // thisWeek: TransactionsSummary;
 };
 
 const getBreakPointEnd = (breakPoint: DateBreakPoint, now: Date) => {
@@ -39,16 +51,6 @@ export const calculateDashboardSummary = ({
     dateBreakPoints.forEach((breakPoint) => {
       const key = breakPoint.key;
 
-      // console.log('breakPoint', breakPoint)
-
-      const breakPointStart = breakPoint.start;
-      const breakPointEnd = getBreakPointEnd(breakPoint, now);
-
-      const isBetweenIntervals = isWithinInterval(reportDate, {
-        end: breakPointEnd,
-        start: breakPointStart,
-      });
-
       if (!acc[key]) {
         acc[key] = {
           biggestDebit: null,
@@ -58,6 +60,16 @@ export const calculateDashboardSummary = ({
         };
       }
 
+      const entry = acc[key]!;
+
+      const breakPointStart = breakPoint.start;
+      const breakPointEnd = getBreakPointEnd(breakPoint, now);
+
+      const isBetweenIntervals = isWithinInterval(reportDate, {
+        end: breakPointEnd,
+        start: breakPointStart,
+      });
+
       if (isBetweenIntervals) {
         // --------------------------
         // Check for biggestDebit and biggestDeposit
@@ -65,24 +77,24 @@ export const calculateDashboardSummary = ({
         if (
           report.summary.biggestDebit &&
           Math.abs(report.summary.biggestDebit.amount) >
-            Math.abs(acc[key].biggestDebit?.amount || 0)
+            Math.abs(entry.biggestDebit?.amount || 0)
         ) {
-          acc[key].biggestDebit = report.summary.biggestDebit;
+          entry.biggestDebit = report.summary.biggestDebit;
         }
 
         if (
           report.summary.biggestDeposit &&
           report.summary.biggestDeposit.amount >
-            (acc[key].biggestDeposit?.amount || 0)
+            (entry.biggestDeposit?.amount || 0)
         ) {
-          acc[key].biggestDeposit = report.summary.biggestDeposit;
+          entry.biggestDeposit = report.summary.biggestDeposit;
         }
 
-        acc[key].totalDeposits = currency(acc[key].totalDeposits).add(
+        entry.totalDeposits = currency(entry.totalDeposits).add(
           report.summary.totalDeposits
         ).value;
 
-        acc[key].totalExpenses = currency(acc[key].totalExpenses).add(
+        entry.totalExpenses = currency(entry.totalExpenses).add(
           report.summary.totalExpenses
         ).value;
       }

@@ -12,10 +12,10 @@ export const getDateBreakPoints = (): DateBreakPoint[] => {
     // { key: "last-7", start: sub(today, { days: 7 }) },
     // { key: "last-30", start: sub(today, { days: 30 }) },
     // { key: "last-60", start: sub(today, { days: 60 }) },
-    { key: "this-week", start: startOfThisWeek },
-    { key: "this-month", start: startOfThisMonth },
+    { key: "thisWeek", start: startOfThisWeek },
+    { key: "thisMonth", start: startOfThisMonth },
     {
-      key: "last-month",
+      key: "lastMonth",
       start: startLastMonth,
       end: endOfMonth(startLastMonth),
     },

@@ -5,13 +5,9 @@ import { capitalizeString } from "../../../../utils/capitalizeString";
 import { getMonthLabels } from "./getMonthLabels";
 
 export const getExpensesCards = (summary: DashboardSummary | null) => {
-  const thisWeek = valueToCurrency(summary?.["this-week"]?.totalExpenses || 0);
-  const thisMonth = valueToCurrency(
-    summary?.["this-month"]?.totalExpenses || 0
-  );
-  const lastMonth = valueToCurrency(
-    summary?.["last-month"]?.totalExpenses || 0
-  );
+  const thisWeek = valueToCurrency(summary?.thisWeek?.totalExpenses || 0);
+  const thisMonth = valueToCurrency(summary?.thisMonth?.totalExpenses || 0);
+  const lastMonth = valueToCurrency(summary?.lastMonth?.totalExpenses || 0);
 
   const { enLastMonth, enThisMonth, ptLastMonth, ptThisMonth } =
     getMonthLabels();
@@ -28,12 +24,13 @@ export const getExpensesCards = (summary: DashboardSummary | null) => {
       },
       values: [
         {
-          value: thisWeek,
+          value: lastMonth,
           title: {
-            pt: "Essa semana",
-            en: "This Week",
+            pt: capitalizeString(ptLastMonth),
+            en: capitalizeString(enLastMonth),
           },
         },
+
         {
           value: thisMonth,
           title: {
@@ -42,10 +39,10 @@ export const getExpensesCards = (summary: DashboardSummary | null) => {
           },
         },
         {
-          value: lastMonth,
+          value: thisWeek,
           title: {
-            pt: capitalizeString(ptLastMonth),
-            en: capitalizeString(enLastMonth),
+            pt: "Essa semana",
+            en: "This Week",
           },
         },
       ],
