@@ -6,7 +6,6 @@ import { FirebaseCollection } from "@server/firebase";
 import { CreateTransaction, Transaction } from "../schema";
 import { batchManyTransactionReports } from "@models/TransactionReport/create/batchManyTransactionsReport";
 import { createDocRef } from "@/server/utils/createDocRef";
-import { updateBankAccountBalance } from "../../../utils/updateBankAccountBalance";
 import { makeTransactionFields } from "../utils/makeTransactionFields";
 import { handleCreditorsOnBatchTransactions } from "../utils/handleCreditorsOnBatchTransactions";
 
@@ -24,6 +23,7 @@ export const createManyTransactions = async ({
   try {
     const batch = writeBatch(firebaseDB);
     const transactionsOnCreate: Transaction[] = [];
+    const transactionsOnCreateIds = new Set<string>();
 
     values.forEach((transactionInputs) => {
       const transaction = makeTransactionFields({
@@ -36,7 +36,8 @@ export const createManyTransactions = async ({
         id: transaction.id,
       });
 
-      if (!transactionsOnCreate.some((item) => item.id === transaction.id)) {
+      if (!transactionsOnCreateIds.has(transaction.id)) {
+        transactionsOnCreateIds.add(transaction.id);
         transactionsOnCreate.push(transaction);
         batch.set(docRef, transaction, { merge: true });
       }
@@ -54,7 +55,7 @@ export const createManyTransactions = async ({
       bankAccountId,
       batch,
       transactionsOnCreate,
-    })
+    });
 
     await batch.commit();
 
@@ -62,9 +63,6 @@ export const createManyTransactions = async ({
       id: item.id,
     }));
 
-    await updateBankAccountBalance({
-      bankAccountId: bankAccountId,
-    });
 
     return {
       data: createdTransactionsIds,

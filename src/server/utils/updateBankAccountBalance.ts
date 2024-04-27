@@ -14,7 +14,6 @@ export const updateBankAccountBalance = async ({
     type: "month",
   });
 
-
   if (!response.data) {
     return {
       data: null,
@@ -38,7 +37,6 @@ export const updateBankAccountBalance = async ({
       balance: balance,
     },
   });
-
 
   if (!updateResponse.done) {
     return {

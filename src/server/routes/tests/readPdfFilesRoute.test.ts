@@ -6,7 +6,7 @@ import "isomorphic-fetch";
 import "isomorphic-form-data";
 import { z } from "zod";
 
-describe("API Route: read-pdf-files", () => {
+describe("API Route: read-pdf-files #current", () => {
   describe("Test 2023-06 pdf", () => {
     let res: Response;
     let resData: PDF2JSONResponse;
@@ -35,10 +35,6 @@ describe("API Route: read-pdf-files", () => {
     }, 10000);
 
     it("should return valid values", (done) => {
-      // resData.data?.forEach((pdfData) => {
-      //   pdfData.transactions.forEach((trans) => {
-      //   });
-      // });
       const validation = z.array(PDFDataSchema).safeParse(resData.data);
       if (!validation.success)
         console.log(

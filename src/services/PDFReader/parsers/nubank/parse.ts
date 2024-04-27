@@ -1,5 +1,4 @@
 import {
-  CreateTransaction,
   CreateTransactionFromPDF,
   TransactionType,
 } from "@/server/models/Transaction/schema";
@@ -9,6 +8,8 @@ import { numericStringToNumber } from "@/utils/format/numericStringToNumber";
 import { slugify } from "@/utils/app";
 import { decodeText } from "./decodeText";
 import { parseBrazilianDate } from "@/utils/date/parseBrazilianDate";
+import { makePDFSlug } from "../../makePDFSlug";
+import currency from "currency.js";
 
 const headerMapping = {
   initialBalance: [20.921, 9.97],
@@ -38,12 +39,15 @@ export function parse(
     const currentPDFTransactions: CreateTransactionFromPDF[] = [];
 
     let currentPDFData: IPDFData = {
+      slug: "",
       finalBalance: 0,
       income: 0,
       initialBalance: 0,
       totalCredit: 0,
       totalDebit: 0,
       transactions: [],
+      startDate: "",
+      endDate: "",
     };
 
     const { Pages } = rawPDFData;
@@ -200,6 +204,11 @@ export function parse(
         };
         const date = tempTransaction.date!;
 
+        const prevTransaction =
+          currentPDFTransactions[currentPDFTransactions.length - 1];
+
+        const prevTransBalance =
+          prevTransaction?.updatedBalance || currentPDFData.initialBalance || 0;
 
         const transaction: CreateTransactionFromPDF = {
           creditor: tempTransaction.creditor || "",
@@ -208,7 +217,8 @@ export function parse(
           amount: amount,
           bankAccountId: bankAccountId,
           date: date,
-          idFromBank: 'pdf'
+          idFromBank: "pdf",
+          updatedBalance: currency(prevTransBalance).add(amount).value,
         };
         currentPDFTransactions.push(transaction);
         if (Texts[textIndex + 1]) {
@@ -227,8 +237,30 @@ export function parse(
       // tempTransaction = undefined;
     });
     // --------------------------
-    // END OF ILE
+    // END OF FILE
     // --------------------------
+    const firstTrans = currentPDFTransactions[0];
+    const lastTrans = currentPDFTransactions[currentPDFTransactions.length - 1];
+
+    const dateStart =
+      typeof firstTrans.date === "string"
+        ? firstTrans.date
+        : firstTrans.date.toISOString();
+    const dateEnd =
+      typeof lastTrans.date === "string"
+        ? lastTrans.date
+        : lastTrans.date.toISOString();
+
+    const pdfSlug = makePDFSlug({
+      startDate: dateStart,
+      endDate: dateEnd,
+      bankAccountId: bankAccountId,
+    });
+
+    currentPDFData.slug = pdfSlug;
+    currentPDFData.startDate = dateStart;
+    currentPDFData.endDate = dateEnd;
+
     currentPDFData.transactions = currentPDFTransactions;
 
     finalResult.push(currentPDFData);
@@ -236,8 +268,6 @@ export function parse(
 
   return finalResult;
 }
-
-
 
 // const isAValidNumber = (value: string) => {
 //   const regex = /^[0-9,.+\-]+$/; // ACCEPT ANY NUMBER, COMMA, DOT, MINUS, PLUS

@@ -1,4 +1,4 @@
-import { Transaction, TransactionType } from "../schema";
+import { CreateTransaction, Transaction, TransactionType } from "../schema";
 import { TEST_CONFIG } from "@/static/testConfig";
 import { getTransactionById } from "../read/getTransactionById";
 import { timestampToDate } from "@/utils/date/timestampToDate";
@@ -16,8 +16,7 @@ describe("Test transaction CRUD", () => {
   // --------------------------
 
   it("should create a transaction", async () => {
-
-    const values = {
+    const values: CreateTransaction = {
       amount: -100.5,
       date: new Date(2020, 0, 25),
       creditor: "test",
@@ -25,6 +24,7 @@ describe("Test transaction CRUD", () => {
       type: TransactionType.debit,
       description: "test",
       bankAccountId,
+      updatedBalance: -100.5,
     };
 
     const result = await createManyTransactions({

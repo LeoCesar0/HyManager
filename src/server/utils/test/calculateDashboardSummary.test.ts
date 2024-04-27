@@ -22,6 +22,7 @@ const _listTransactionReportsBy = async (filePathList: string[]) => {
             ...transactionInputs,
             date: new Date(transactionInputs.date),
           },
+          
         })
       );
     })

@@ -3,12 +3,11 @@ import { HiCurrencyDollar } from "react-icons/hi";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 import { valueToCurrency } from "@/utils/misc";
 
-type BalanceCardProps = {};
+type BalanceCardProps = {
+  balance: number
+};
 
-export const BalanceCard = (card: BalanceCardProps) => {
-  const { currentBankAccount } = useGlobalDashboardStore();
-
-  const amount = currentBankAccount?.balance || 0;
+export const BalanceCard = ({balance}: BalanceCardProps) => {
 
   return (
     <>
@@ -19,7 +18,7 @@ export const BalanceCard = (card: BalanceCardProps) => {
           en: "Total Balance",
         }}
       >
-        {<h4 className="text-2xl font-bold">{valueToCurrency(amount)}</h4>}
+        {<h4 className="text-2xl font-bold">{valueToCurrency(balance)}</h4>}
       </CardRoot>
     </>
   );

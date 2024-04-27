@@ -1,9 +1,11 @@
 import { Transaction } from "@models/Transaction/schema";
 import { FirebaseCollection } from "@server/firebase";
 import { Timestamp, WriteBatch } from "firebase/firestore";
+import { listTransactionReportsBy } from "../read/listTransactionReportBy";
 import { TransactionReport } from "../schema";
+import calculateAccountBalance from "../utils/calculateAccountBalance";
+import { transactionsToTransactionsReport } from "../utils/transactionToTransactionsReport";
 import { createDocRef } from "@/server/utils/createDocRef";
-import { makeTransactionReports } from "../utils/makeTransactionReports";
 
 interface IBatchManyTransactionReports {
   batch: WriteBatch;
@@ -18,24 +20,23 @@ export const batchManyTransactionReports = async ({
 }: IBatchManyTransactionReports) => {
   const now = new Date();
 
-  // const allTransactionMonths = transactionsOnCreate.reduce(
-  //   (acc, transaction) => {
-  //     const month = `${transaction.dateYear}-${transaction.dateMonth}`;
-  //     if (!acc.has(month)) {
-  //       acc.add(month);
-  //     }
-  //     return acc;
-  //   },
-  //   new Set<string>()
-  // );
-
-  const reports: TransactionReport[] = makeTransactionReports({
-    transactions: transactionsOnCreate,
-    bankAccountId,
+  const listResults = await listTransactionReportsBy({
+    bankAccountId: bankAccountId,
   });
-  // --------------------------
-  // BATCH SET
-  // --------------------------
+
+  const existingReportsOnDatabase = listResults.data || [];
+
+  const newReportsMap = transactionsToTransactionsReport(
+    transactionsOnCreate,
+    existingReportsOnDatabase
+  );
+
+  const reports = calculateAccountBalance({
+    existingReports: existingReportsOnDatabase,
+    newReportsMap: newReportsMap,
+  });
+
+  let finalItems: TransactionReport[] = [];
 
   reports.forEach((transactionReport) => {
     const docRef = createDocRef({
@@ -44,6 +45,8 @@ export const batchManyTransactionReports = async ({
     });
 
     transactionReport.updatedAt = Timestamp.fromDate(now);
+
+    finalItems.push(transactionReport);
 
     batch.set(docRef, transactionReport, { merge: true });
   });

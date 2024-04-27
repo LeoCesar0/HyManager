@@ -1,7 +1,5 @@
-import {
-  createTransactionFromPDFSchema,
-} from "@/server/models/Transaction/schema";
-import { z } from "zod";
+import { createTransactionFromPDFSchema } from "@/server/models/Transaction/schema";
+import { date, z } from "zod";
 import { IPDFRawData } from "./rawDataTypes";
 
 export const PDFDataSchema = z.object({
@@ -11,6 +9,9 @@ export const PDFDataSchema = z.object({
   totalDebit: z.number(),
   finalBalance: z.number(),
   transactions: z.array(createTransactionFromPDFSchema),
+  slug: z.string(),
+  startDate: z.string(),
+  endDate: z.string(),
 });
 
 export type IPDFData = z.infer<typeof PDFDataSchema>;
@@ -18,4 +19,3 @@ export type IPDFData = z.infer<typeof PDFDataSchema>;
 export interface IPDFDataParser {
   parse(data: IPDFRawData[], bankAccountId: string): IPDFData[];
 }
-

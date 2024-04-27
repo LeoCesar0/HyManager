@@ -4,44 +4,69 @@ import { Timestamp } from "firebase/firestore";
 import { Transaction } from "@/server/models/Transaction/schema";
 import { TransactionMin, TransactionReport } from "../schema";
 import { makeTransactionReportSlugId } from "./makeTransactionReportSlugId";
-import { calculateTransactionsSummary } from '../../../utils/calculateTransactionsSummary';
+import { calculateTransactionsSummary } from "../../../utils/calculateTransactionsSummary";
+import currency from "currency.js";
 
-export const makeTransactionReportFields = (
-  transaction: Transaction,
-  type: TransactionReport["type"]
-): TransactionReport => {
+export const makeTransactionReportFields = ({
+  transactions,
+  type,
+  bankAccountId,
+}: {
+  transactions: Transaction[];
+  type: TransactionReport["type"];
+  bankAccountId: string;
+}): TransactionReport => {
   const now = new Date();
   const nowTimestamp = Timestamp.fromDate(now);
 
-  let date = timestampToDate(transaction.date); // if type === day
-  let dateTimestamp = transaction.date;
+  transactions.sort((a, b) => a.date.seconds - b.date.seconds);
 
-  const transactionMin: TransactionMin = {
-    amount: transaction.amount,
-    id: transaction.id,
-    type: transaction.type,
-    creditor: transaction.creditor || "",
-    creditorSlug: transaction.creditorSlug || "",
-  };
+  const refTransaction = transactions[0];
+
+  let date = timestampToDate(refTransaction.date);
+  let dateTimestamp = refTransaction.date;
+
+  const transactionMins: TransactionMin[] = transactions.map((transaction) => {
+    return {
+      amount: transaction.amount,
+      id: transaction.id,
+      type: transaction.type,
+      creditor: transaction.creditor || "",
+      creditorSlug: transaction.creditorSlug || "",
+    };
+  });
+
+  const summary = calculateTransactionsSummary({
+    transactions: transactions,
+  });
+
+  const totalExpenses = Math.abs(summary.totalExpenses);
+  const amount = currency(summary.totalDeposits).subtract(totalExpenses).value;
+
+  const firstTrans = transactions[0];
+
+  const initialBalance = currency(firstTrans.updatedBalance).subtract(
+    firstTrans.amount
+  ).value;
+
+  const finalBalance = transactions[transactions.length - 1].updatedBalance;
 
   const newTransactionReport: TransactionReport = {
     id: makeTransactionReportSlugId({
-      backAccountId: transaction.bankAccountId,
+      backAccountId: bankAccountId,
       date: date,
       type,
     }),
-    amount: transaction.amount,
-    finalBalance: transaction.amount,
-    initialBalance: 0,
-    bankAccountId: transaction.bankAccountId,
+    amount: amount,
+    initialBalance: initialBalance,
+    finalBalance: finalBalance,
+    bankAccountId: bankAccountId,
     createdAt: nowTimestamp,
     updatedAt: nowTimestamp,
     date: dateTimestamp,
     type: type,
-    summary: calculateTransactionsSummary({
-      transactions: [transaction]
-    }),
-    transactions: [transactionMin],
+    summary: summary,
+    transactions: transactionMins,
     ...makeDateFields(date),
   };
   return newTransactionReport;

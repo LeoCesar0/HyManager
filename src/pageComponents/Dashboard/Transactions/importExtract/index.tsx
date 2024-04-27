@@ -198,6 +198,9 @@ const getGeneralInfo = (extractResult: PDF2JSONResponse["data"]) => {
       totalCredit: 0,
       totalDebit: 0,
       transactions: [],
+      startDate: extractResult[0].startDate,
+      endDate: extractResult[extractResult.length - 1].endDate,
+      slug: "geral",
     } as GeneralInfo
   );
 };

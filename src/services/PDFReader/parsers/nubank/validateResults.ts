@@ -6,7 +6,6 @@ export const validateResults = (parsedResults: IPDFData[]) => {
   let valid = true;
 
   parsedResults.forEach((pdfResult, index) => {
-
     const totalsByTransactions = pdfResult.transactions.reduce(
       (acc, entry) => {
         if (entry.type === TransactionType.debit) {
@@ -32,6 +31,18 @@ export const validateResults = (parsedResults: IPDFData[]) => {
     if (pdfResult.totalDebit !== totalsByTransactions.totalDebit) {
       console.log(
         `ERROR total DEBIT. Got ${totalsByTransactions.totalDebit}, expected ${pdfResult.totalDebit}`
+      );
+      valid = false;
+    }
+
+    const lastTrans = pdfResult.transactions[pdfResult.transactions.length - 1];
+    const lastTransUpdatedValue = lastTrans?.updatedBalance ?? 0;
+    const finalBalance = currency(lastTransUpdatedValue).add(
+      pdfResult.income
+    ).value;
+    if (pdfResult.finalBalance !== finalBalance) {
+      console.log(
+        `ERROR updated balance. Got ${lastTransUpdatedValue}, expected ${pdfResult.finalBalance}`
       );
       valid = false;
     }

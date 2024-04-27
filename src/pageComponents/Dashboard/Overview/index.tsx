@@ -12,13 +12,53 @@ import {
 } from "./utils/getDashboardOverviewData";
 import ExpensesChart from "./components/ExpensesChart";
 import { getGoalsCards } from "./utils/getGoalsCards";
+import { TransactionReport } from "@/server/models/TransactionReport/schema";
+import { listTransactionReportsBy } from "@/server/models/TransactionReport/read/listTransactionReportBy";
+import { startOfMonth, sub } from "date-fns";
+
+const getLast3Reports = async ({
+  bankAccountId,
+  type,
+}: {
+  bankAccountId: string;
+  type: TransactionReport["type"];
+}) => {
+  const today = new Date();
+  const start = startOfMonth(sub(today, { months: 2 }));
+  const response = await listTransactionReportsBy({
+    bankAccountId: bankAccountId,
+    type: type,
+    filters: [{ field: "date", operator: ">=", value: start }],
+  });
+  const reports = response.data || [];
+  return reports;
+};
 
 export const DashboardOverView = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const [overviewData, setOverviewData] =
     useState<null | DashboardOverviewData>(null);
+  const [last3MonthReports, setLast3MonthReports] = useState<
+    TransactionReport[]
+  >([]);
 
   const bankAccountId = currentBankAccount?.id || "";
+
+  // --------------------------
+  // LAST REPORTS
+  // --------------------------
+
+  //3895
+
+  useEffect(() => {
+    getLast3Reports({ bankAccountId, type: "day" }).then((data) => {
+      console.log("data", data);
+      setLast3MonthReports(data);
+    });
+  }, []);
+
+  const lastReport = last3MonthReports[last3MonthReports.length - 1] || null;
+  const balance = lastReport?.finalBalance || 0;
 
   // --------------------------
   // SUMMARY / EXPENSES
@@ -58,7 +98,7 @@ export const DashboardOverView = () => {
     <SectionContainer>
       <Section sectionTitle={{ en: "Overview", pt: "Geral" }}>
         <div className="flex gap-3 flex-wrap">
-          <BalanceCard />
+          <BalanceCard balance={balance} />
           {expensesCards.map((card, index) => {
             return <ExpensesCard key={`${card.title.en}-${index}`} {...card} />;
           })}

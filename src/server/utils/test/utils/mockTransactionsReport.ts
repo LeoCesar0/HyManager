@@ -1,24 +1,17 @@
-import { TransactionReport } from "@/server/models/TransactionReport/schema";
-import { makeTransactionReportFields } from "../../../models/TransactionReport/utils/makeTransactionReportFields";
 import { Transaction } from "@/server/models/Transaction/schema";
+import { makeTransactionReports } from "@/server/models/TransactionReport/utils/makeTransactionReports";
 
 export const mockTransactionsReport = ({
   transactions,
 }: {
   transactions: Transaction[];
 }) => {
-  const transactionsReport: TransactionReport[] = [];
+  const bankAccountId = transactions[0].bankAccountId;
 
-  transactions.forEach((transaction) => {
-    {
-      const report = makeTransactionReportFields(transaction, "day");
-      transactionsReport.push(report);
-    }
-    {
-      const report = makeTransactionReportFields(transaction, "month");
-      transactionsReport.push(report);
-    }
+  const reports = makeTransactionReports({
+    bankAccountId,
+    transactions,
   });
 
-  return transactionsReport;
+  return reports;
 };

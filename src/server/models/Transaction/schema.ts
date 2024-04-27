@@ -15,6 +15,7 @@ export const transactionSchema = z.object({
   idFromBank: z.string().optional(),
   bankAccountId: z.string(),
   amount: z.number(),
+  updatedBalance: z.number(),
   type: z.enum([TransactionType.deposit, TransactionType.debit]),
   file: fileInfoSchema.optional(),
   creditor: z.string().optional(),
@@ -49,28 +50,31 @@ export const createTransactionSchema = z.object({
     required_error: "This field is required!",
   }),
   amount: z.number(),
+  updatedBalance: z.number(),
 });
 
-export const createTransactionSchemaPT: typeof createTransactionSchema = z.object({
-  slug: z.string().optional(),
-  idFromBank: z.string().optional(),
-  bankAccountId: z.string().optional(),
-  type: z.enum([TransactionType.deposit, TransactionType.debit]),
-  file: z
-    .object({
-      id: z.string(),
-      name: z.string(),
-      url: z.string(),
-    })
-    .optional(),
-  creditor: z.string().min(1),
-  description: z.string(),
-  date: z.date({
-    invalid_type_error: "Insira uma data",
-    required_error: "Campo obrigatório",
-  }),
-  amount: z.number(),
-});
+export const createTransactionSchemaPT: typeof createTransactionSchema =
+  z.object({
+    slug: z.string().optional(),
+    idFromBank: z.string().optional(),
+    bankAccountId: z.string().optional(),
+    type: z.enum([TransactionType.deposit, TransactionType.debit]),
+    file: z
+      .object({
+        id: z.string(),
+        name: z.string(),
+        url: z.string(),
+      })
+      .optional(),
+    creditor: z.string().min(1),
+    description: z.string(),
+    date: z.date({
+      invalid_type_error: "Insira uma data",
+      required_error: "Campo obrigatório",
+    }),
+    amount: z.number(),
+    updatedBalance: z.number(),
+  });
 
 export const createTransactionFromPDFSchema = z.object({
   slug: z.string().optional(),
@@ -88,6 +92,7 @@ export const createTransactionFromPDFSchema = z.object({
   description: z.string(),
   date: z.date().or(z.string()),
   amount: z.number(),
+  updatedBalance: z.number(),
 });
 
 export type Transaction = z.infer<typeof transactionSchema>;
