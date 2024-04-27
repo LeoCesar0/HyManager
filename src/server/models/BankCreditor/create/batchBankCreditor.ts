@@ -20,7 +20,7 @@ export const batchBankCreditor = async ({
 }: IBatchBankCreditor) => {
   const item = createBankCreditorSchema.parse(values);
 
-  item.creditorSlug = slugify(item.creditorSlug);
+  item.creditorSlug = slugify(item.creditor);
 
   const id = makeBankCreditorId({
     bankAccountId: item.bankAccountId,

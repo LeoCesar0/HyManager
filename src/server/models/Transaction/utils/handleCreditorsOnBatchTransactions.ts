@@ -21,7 +21,7 @@ export const handleCreditorsOnBatchTransactions = async ({
   // --------------------------
   const incomingCreditors = transactionsOnCreate.reduce((acc, entry) => {
     if (entry.creditor) {
-      acc.add(slugify(entry.creditor));
+      acc.add(entry.creditor);
     }
     return acc;
   }, new Set<string>());
@@ -29,17 +29,22 @@ export const handleCreditorsOnBatchTransactions = async ({
   const existingCreditors =
     (await listBankCreditors({ bankAccountId })).data || [];
 
+  const existingCreditorsMap = existingCreditors.reduce((acc, item) => {
+    acc.set(item.creditorSlug, item);
+    return acc;
+  }, new Map());
+
   incomingCreditors.forEach((incomingCreditor) => {
-    const existingCreditor = existingCreditors.find(
-      (item) => item.creditorSlug === incomingCreditor
-    );
+    const creditorSlug = slugify(incomingCreditor);
+    const existingCreditor = existingCreditorsMap.has(creditorSlug);
     if (!existingCreditor) {
       batchBankCreditor({
         batch,
         values: {
           bankAccountId,
           categorySlug: DEFAULT_CATEGORY["other-default"].slug,
-          creditorSlug: incomingCreditor,
+          creditorSlug: creditorSlug,
+          creditor: incomingCreditor,
         },
       });
     }

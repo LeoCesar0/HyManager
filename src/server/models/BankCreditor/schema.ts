@@ -5,12 +5,14 @@ export const bankCreditorSchema = z.object({
     categorySlug: z.string().min(1),
     bankAccountId: z.string().min(1),
     creditorSlug: z.string().min(1),
+    creditor: z.string().min(1),
 })
 
 export const createBankCreditorSchema = z.object({
     categorySlug: z.string().min(1),
     bankAccountId: z.string().min(1),
     creditorSlug: z.string().min(1),
+    creditor: z.string().min(1),
 })
 
 
