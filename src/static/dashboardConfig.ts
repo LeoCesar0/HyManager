@@ -23,14 +23,14 @@ const menuItems: MenuItem[] = [
     icon: MdDashboard,
     link: "/dashboard",
   },
-  {
-    label: {
-      pt: "Gráficos",
-      en: "Charts",
-    },
-    icon: MdStackedBarChart,
-    link: "/dashboard/charts",
-  },
+  // {
+  //   label: {
+  //     pt: "Gráficos",
+  //     en: "Charts",
+  //   },
+  //   icon: MdStackedBarChart,
+  //   link: "/dashboard/charts",
+  // },
   {
     label: {
       pt: "Transações",
