@@ -20,7 +20,6 @@ export const createBankAccount = async ({
     id: uuid(),
     createdAt: Timestamp.fromDate(new Date()),
     updatedAt: Timestamp.fromDate(new Date()),
-    balance: 0,
   };
   if (!item.categories) {
     item.categories = DEFAULT_CATEGORIES.map((item) => {

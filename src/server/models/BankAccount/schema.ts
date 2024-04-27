@@ -20,7 +20,6 @@ export const bankAccountSchema = z.object({
   users: bankAccountUsersSchema,
   createdAt: timestampSchema,
   updatedAt: timestampSchema,
-  balance: z.number(),
   categories: z.array(bankCategorySchema),
   userLanguage: z.nativeEnum(Locale),
 });
