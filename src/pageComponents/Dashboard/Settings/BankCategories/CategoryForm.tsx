@@ -1,47 +1,39 @@
 import { FormFields } from "@/components/FormFields";
-import { Section, SectionContainer } from "@/components/Section/Section";
 import { Button } from "@/components/ui/button";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 import { useToastPromise } from "@/hooks/useToastPromise";
 import {
-  CreateBankAccount,
-  createBankAccountSchema,
-  createBankAccountSchemaPT,
+  BankCategory,
+  createBankCategorySchema,
+  createBankCategorySchemaPT,
 } from "@/server/models/BankAccount/schema";
-import { updateBankAccount } from "@/server/models/BankAccount/update/updateBankAccount";
 import selectT from "@/utils/selectT";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { useGetFormFields } from "./useGetFormFields";
 import { Form } from "@/components/ui/form";
-import { imagesToFileInfo } from "@/utils/imagesToFileInfo";
+import { useGetFormFields } from "./useGetFormFields";
 
-export const GeneralSettings = () => {
+export const CategoryForm = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
-
   const { currentLanguage } = useGlobalContext();
 
   const { handleToast, isLoading } = useToastPromise();
 
   const formSchema = useMemo(() => {
     return selectT(currentLanguage, {
-      en: createBankAccountSchema,
-      pt: createBankAccountSchemaPT,
+      en: createBankCategorySchema,
+      pt: createBankCategorySchemaPT,
     });
   }, [currentLanguage]);
 
-  const formFields = useGetFormFields(currentLanguage);
-
-  const defaultValues: CreateBankAccount = {
-    description: currentBankAccount?.description || "",
-    image: currentBankAccount?.image || null,
-    name: currentBankAccount?.name || "",
-    users: currentBankAccount?.users || [],
-    categories: currentBankAccount?.categories || [],
-    userLanguage: currentLanguage,
+  const defaultValues: BankCategory = {
+    color: "",
+    isDefault: false,
+    name: "",
+    slug: "",
   };
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,28 +43,9 @@ export const GeneralSettings = () => {
     reValidateMode: "onChange",
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const _values = await imagesToFileInfo<CreateBankAccount>({
-      formFields: formFields,
-      bankAccountId: currentBankAccount!.id,
-      formValues: values,
-      imageFields: [
-        {
-          multiple: false,
-          name: "image",
-        },
-      ],
-    });
+  async function onSubmit(values: z.infer<typeof formSchema>) {}
 
-    const promise = updateBankAccount({
-      id: currentBankAccount!.id,
-      values: {
-        ..._values,
-      },
-    });
-
-    handleToast(promise, "updateMessages");
-  }
+  const formFields = useGetFormFields(currentLanguage);
 
   const saveText = selectT(currentLanguage, {
     en: "Save",

@@ -1,53 +1,47 @@
-import { Section, SectionContainer } from "@/components/Section/Section";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
-import { useToastPromise } from "@/hooks/useToastPromise";
-import {
-  CreateBankAccount,
-  createBankAccountSchema,
-  createBankAccountSchemaPT,
-} from "@/server/models/BankAccount/schema";
+import { BankCategory } from "@/server/models/BankAccount/schema";
 import selectT from "@/utils/selectT";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { DEFAULT_CATEGORIES } from "@/server/models/BankAccount/static";
 
 export const BankCategories = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
-
   const { currentLanguage } = useGlobalContext();
 
-  const { handleToast, isLoading } = useToastPromise();
-
-  const formSchema = useMemo(() => {
-    return selectT(currentLanguage, {
-      en: createBankAccountSchema,
-      pt: createBankAccountSchemaPT,
-    });
-  }, [currentLanguage]);
-
-  const defaultValues: CreateBankAccount = {
-    description: currentBankAccount?.description || "",
-    image: currentBankAccount?.image || null,
-    name: currentBankAccount?.name || "",
-    users: currentBankAccount?.users || [],
-    categories: currentBankAccount?.categories || [],
-    userLanguage: currentLanguage,
-  };
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: defaultValues,
-    mode: "onChange",
-    reValidateMode: "onChange",
-  });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {}
+  const categories = useMemo(() => {
+    const _categories = currentBankAccount?.categories || [];
+    const defaultCategories: BankCategory[] = DEFAULT_CATEGORIES.map(
+      (category) => {
+        return {
+          color: category.color,
+          name: selectT(currentLanguage, category.name),
+          slug: category.slug,
+          isDefault: true,
+        };
+      }
+    );
+    return _categories.concat(defaultCategories);
+  }, [currentBankAccount?.categories, currentLanguage]);
 
   return (
     <>
-      <div></div>
+      <ul className="grid grid-cols-1 w-full">
+        {categories.map((category) => {
+          return (
+            <li
+              key={category.slug}
+              className="w-full p-4 border-border border-b flex items-center gap-4"
+            >
+              <div
+                className="rounded-full w-6 h-6 "
+                style={{ backgroundColor: category.color }}
+              ></div>
+              <div className="">{category.name}</div>
+            </li>
+          );
+        })}
+      </ul>
     </>
   );
 };

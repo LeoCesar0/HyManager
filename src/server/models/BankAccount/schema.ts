@@ -3,6 +3,18 @@ import { fileInfoSchema } from "@/@types/File";
 import { timestampSchema } from "@server/firebase";
 import { z } from "zod";
 
+export const createBankCategorySchema = z.object({
+  name: z.string(),
+  slug: z.string(),
+  color: z.string(),
+});
+
+export const createBankCategorySchemaPT = z.object({
+  name: z.string(),
+  slug: z.string(),
+  color: z.string(),
+});
+
 export const bankCategorySchema = z.object({
   name: z.string(),
   slug: z.string(),

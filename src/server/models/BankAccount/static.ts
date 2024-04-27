@@ -28,6 +28,15 @@ export const DEFAULT_CATEGORY = {
     },
     slug: "fun-default",
   },
+  "investment-default": {
+    color: "#FFa037",
+    isDefault: true,
+    name: {
+      en: "Investment",
+      pt: "Investimento",
+    },
+    slug: "investment-default",
+  },
   "other-default": {
     color: "#a0c7f1",
     isDefault: true,
