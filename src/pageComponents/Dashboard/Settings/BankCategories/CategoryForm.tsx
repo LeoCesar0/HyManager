@@ -19,12 +19,14 @@ import { useGetFormFields } from "./useGetFormFields";
 import { slugify } from "@/utils/app";
 import { updateBankAccount } from "@/server/models/BankAccount/update/updateBankAccount";
 import { v4 as uuid } from "uuid";
+import cloneDeep from "lodash.clonedeep";
 
 type IProps = {
   initialValues?: BankCategory;
+  closeForm: () => void;
 };
 
-export const CategoryForm = ({ initialValues }: IProps) => {
+export const CategoryForm = ({ initialValues, closeForm }: IProps) => {
   const { currentLanguage } = useGlobalContext();
   const { currentBankAccount } = useGlobalDashboardStore();
   const { handleToast, isLoading } = useToastPromise();
@@ -51,8 +53,8 @@ export const CategoryForm = ({ initialValues }: IProps) => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const bankCategories = currentBankAccount!.categories || [];
-    const item: BankCategory = {
+    const bankCategories = cloneDeep(currentBankAccount!.categories || []);
+    const category: BankCategory = {
       ...values,
       slug: slugify(values.name),
       id: initialValues?.id || uuid(),
@@ -60,24 +62,27 @@ export const CategoryForm = ({ initialValues }: IProps) => {
     };
 
     const existingIndex = bankCategories.findIndex(
-      (item) => item.slug !== item.slug
+      (item) => item.id === category.id
     );
 
-    const updatedCategories = [...bankCategories];
-
     if (existingIndex <= -1) {
-      updatedCategories.push(item);
+      bankCategories.push(category);
     } else {
-      updatedCategories[existingIndex] = item;
+      bankCategories.splice(existingIndex, 1, category);
     }
+
     const promise = updateBankAccount({
       id: currentBankAccount!.id,
       values: {
-        categories: updatedCategories,
+        categories: bankCategories,
       },
     });
 
-    handleToast(promise, "createMessages");
+    const response = await handleToast(promise, "createMessages");
+
+    if (response.done) {
+      closeForm();
+    }
   }
 
   const formFields = useGetFormFields(currentLanguage);

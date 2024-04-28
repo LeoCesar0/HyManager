@@ -2,15 +2,17 @@ import { useGlobalContext } from "@/contexts/GlobalContext";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 import { BankCategory } from "@/server/models/BankAccount/schema";
 import selectT from "@/utils/selectT";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DEFAULT_CATEGORIES } from "@/server/models/BankAccount/static";
 import { Button } from "@/components/ui/button";
 import { CategoryForm } from "./CategoryForm";
+import { MdEdit } from "react-icons/md";
 
 export const BankCategories = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const { currentLanguage } = useGlobalContext();
-  const [forIsOpen, setFormIsOpen] = useState(false);
+  const [formIsOpen, setFormIsOpen] = useState(false);
+  const [itemOnEdit, setItemOnEdit] = useState<BankCategory | null>(null);
 
   const categories = useMemo(() => {
     const _categories = currentBankAccount?.categories || [];
@@ -34,31 +36,59 @@ export const BankCategories = () => {
     pt: "Cancelar",
   });
 
+  useEffect(() => {
+    if (!formIsOpen) {
+      setItemOnEdit(null);
+    }
+  }, [formIsOpen]);
+
+  useEffect(() => {
+    if (itemOnEdit) {
+      setFormIsOpen(true);
+    }
+  }, [itemOnEdit]);
+
   return (
     <>
       <div className="grid grid-cols-1 gap-4">
         <header className="py-4">
           <Button
-            onClick={() => setFormIsOpen(!forIsOpen)}
+            onClick={() => setFormIsOpen(!formIsOpen)}
             variant={"secondary"}
           >
-            {forIsOpen ? cancelText : newCategoryText}
+            {formIsOpen ? cancelText : newCategoryText}
           </Button>
         </header>
-        {forIsOpen && <CategoryForm />}
-        {!forIsOpen && (
+        {formIsOpen && (
+          <CategoryForm
+            initialValues={itemOnEdit ?? undefined}
+            closeForm={() => setFormIsOpen(false)}
+          />
+        )}
+        {!formIsOpen && (
           <ul className="grid grid-cols-1 w-full">
             {categories.map((category) => {
               return (
                 <li
                   key={category.slug}
-                  className="w-full p-4 border-border border-b flex items-center gap-4"
+                  className="w-full p-4 border-border border-b flex items-center gap-4 justify-between"
                 >
-                  <div
-                    className="rounded-full w-6 h-6 "
-                    style={{ backgroundColor: category.color }}
-                  ></div>
-                  <div className="">{category.name}</div>
+                  <div className="flex items-center gap-4">
+                    <span
+                      className="rounded-full w-6 h-6 "
+                      style={{ backgroundColor: category.color }}
+                    ></span>
+                    <span className="">{category.name}</span>
+                  </div>
+                  <Button
+                    size={"iconSm"}
+                    variant={"secondary"}
+                    onClick={() => {
+                      setItemOnEdit(category);
+                    }}
+                  >
+                    <MdEdit />
+                  </Button>
                 </li>
               );
             })}
