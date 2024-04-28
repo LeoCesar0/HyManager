@@ -3,51 +3,38 @@ import { MakeFormFields } from "@/components/FormFields/@types";
 import selectT from "@/utils/selectT";
 import { useState } from "react";
 import { TempImage } from "@/@types/File";
-import { CreateBankAccount } from "@/server/models/BankAccount/schema";
+import { CreateBankCategory } from "@/server/models/BankAccount/schema";
 
-export const useGetFormFields = (currentLanguage: Locale): MakeFormFields<CreateBankAccount> => {
-  const [tempImages, setTempImages] = useState<TempImage[]>([]);
-
-  const descriptionPlaceholder = selectT(currentLanguage, {
-    en: "My personal account",
-    pt: "Minha conta pessoal",
+export const useGetFormFields = (
+  currentLanguage: Locale
+): MakeFormFields<CreateBankCategory> => {
+  const namePlaceholder = selectT(currentLanguage, {
+    en: "Beer",
+    pt: "Cerveja",
   });
 
   return [
     {
       name: "name",
       label: {
-        en: "Bank account name",
-        pt: "Nome da conta",
+        en: "Name",
+        pt: "Nome",
       },
       inputType: "input",
       props: {
-        placeholder: "Nubank",
+        placeholder: namePlaceholder,
       },
     },
     {
-      name: "description",
+      name: "color",
       label: {
-        en: "Description",
-        pt: "Descrição",
+        en: "Color",
+        pt: "Cor",
       },
-      inputType: "textarea",
+      inputType: "input",
       props: {
-        placeholder: descriptionPlaceholder,
+        type: "color",
       },
-    },
-    {
-      name: "image",
-      label: {
-        en: "Image",
-        pt: "Imagem",
-      },
-      inputType: "imageInput",
-      props: {
-        type: "file",
-      },
-      tempImages: tempImages,
-      setTempImages: setTempImages,
     },
   ];
 };

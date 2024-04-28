@@ -2,13 +2,14 @@ import { FirebaseCollection } from "@server/firebase";
 import { firebaseUpdate } from "@server/firebase/firebaseUpdate";
 import { AppModelResponse } from "@/@types/index";
 import { debugDev } from "@/utils/dev";
-import { BankAccount } from "../schema";
-import { DEFAULT_CATEGORIES } from "../static";
-
-type PartialItem = Partial<BankAccount>;
+import {
+  BankAccount,
+  UpdateBankAccount,
+  updateBankAccountSchema,
+} from "../schema";
 
 interface IUpdateBankAccount {
-  values: PartialItem;
+  values: UpdateBankAccount;
   id: string;
 }
 
@@ -18,9 +19,11 @@ export const updateBankAccount = async ({
 }: IUpdateBankAccount): Promise<AppModelResponse<BankAccount>> => {
   const funcName = "updateBankAccount";
   try {
+    const parsedValues = updateBankAccountSchema.parse(values);
+
     const result = await firebaseUpdate<BankAccount>({
       collection: FirebaseCollection.bankAccounts,
-      data: values,
+      data: parsedValues,
       id: id,
     });
 

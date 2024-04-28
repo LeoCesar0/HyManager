@@ -20,8 +20,22 @@ const defaultMessages = {
       en: "Updating",
     },
     successMessage: {
-      pt: "Salvo com Sucesso!",
-      en: "Saved Successfully",
+      pt: "Salvo com sucesso!",
+      en: "Saved successfully",
+    },
+  },
+  createMessages: {
+    defaultErrorMessage: {
+      pt: "Erro ao criar",
+      en: "Error on creating",
+    },
+    loadingMessage: {
+      pt: "Criando",
+      en: "Atualizando",
+    },
+    successMessage: {
+      pt: "Criado com sucesso!",
+      en: "Created successfully",
     },
   },
 } as const;

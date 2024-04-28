@@ -6,7 +6,7 @@ import { BankCreditor } from "../schema";
 
 interface IUpdateBankCreditor {
   values: {
-    categorySlug: BankCreditor["categorySlug"];
+    categoryId: BankCreditor["categoryId"];
   };
   id: string;
 }

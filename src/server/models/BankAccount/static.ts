@@ -9,6 +9,7 @@ export const DEFAULT_CATEGORY = {
       pt: "Contas de Casa",
     },
     slug: "home-bills-default",
+    id: "home-bills-default",
   },
   "grocery-default": {
     color: "#c7f1a0",
@@ -18,6 +19,7 @@ export const DEFAULT_CATEGORY = {
       pt: "Mercado",
     },
     slug: "grocery-default",
+    id: "grocery-default",
   },
   "fun-default": {
     color: "#c7a0f1",
@@ -27,6 +29,7 @@ export const DEFAULT_CATEGORY = {
       pt: "Entretenimento",
     },
     slug: "fun-default",
+    id: "fun-default",
   },
   "investment-default": {
     color: "#FFa037",
@@ -36,6 +39,7 @@ export const DEFAULT_CATEGORY = {
       pt: "Investimento",
     },
     slug: "investment-default",
+    id: "investment-default",
   },
   "other-default": {
     color: "#a0c7f1",
@@ -45,6 +49,7 @@ export const DEFAULT_CATEGORY = {
       pt: "Outro",
     },
     slug: "other-default",
+    id: "other-default",
   },
 } as const;
 
