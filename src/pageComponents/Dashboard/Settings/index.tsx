@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GeneralSettings } from "./GeneralSettings";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import selectT from "@/utils/selectT";
-import { BankCategories } from "./BankCategories";
+import { Categories } from "./Categories";
 
 export const DashboardSettings = () => {
   const { currentLanguage } = useGlobalContext();
@@ -52,6 +52,6 @@ const tabs = [
       en: "Categories",
       pt: "Categorias",
     },
-    component: BankCategories,
+    component: Categories,
   },
 ];

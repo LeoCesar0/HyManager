@@ -15,9 +15,9 @@ export interface IModalProps {
   autoToggle?: boolean;
 }
 
- interface IModal extends IModalProps {
+interface IModal extends IModalProps {
   setIsOpen: (isOpen: boolean) => void;
-} 
+}
 
 function Modal({
   isOpen,

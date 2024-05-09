@@ -14,16 +14,7 @@ import { DASHBOARD_CONFIG } from "@/static/dashboardConfig";
 import Link from "next/link";
 import { cx } from "@/utils/misc";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
-import useSwr from "swr";
-import {
-  ListBankAccountByUserIdReturnType,
-  listBankAccountByUserId,
-} from "@/server/models/BankAccount/read/listBankAccountByUserId";
-import { useGlobalAuth } from "@/contexts/GlobalAuth";
-import { FirebaseCollection } from "@/server/firebase/index";
-import { useGlobalModal } from "@/contexts/GlobalModal";
-import { CreateBankAccountForm } from "@/pageComponents/Dashboard/CreateBankAccountForm/index";
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import selectT from "@/utils/selectT";
 import useT from "@/hooks/useT";
 
@@ -31,47 +22,14 @@ const { menuItems } = DASHBOARD_CONFIG;
 
 const Component = () => {
   const { currentLanguage } = useGlobalContext();
-  const { currentUser } = useGlobalAuth();
-  const { menuIsOpen, toggleMenu, currentBankAccount, setCurrentBankAccount } =
-    useGlobalDashboardStore();
-  const { setModalProps } = useGlobalModal();
+  const {
+    menuIsOpen,
+    toggleMenu,
+    currentBankAccount,
+    setCurrentBankAccount,
+    bankAccounts,
+  } = useGlobalDashboardStore();
 
-  const bankAccountsKey = useMemo(() => {
-    return currentUser?.id
-      ? [FirebaseCollection.bankAccounts, currentUser.id]
-      : null;
-  }, [currentUser?.id]);
-
-  const bankAccountsFetch = useSwr<
-    ListBankAccountByUserIdReturnType,
-    any,
-    string[] | null
-  >(bankAccountsKey, ([_, id]) => {
-    return listBankAccountByUserId({ id: id }).then((data) => {
-      if (data.data && data.data.length > 0) {
-        setCurrentBankAccount(data.data[0]);
-      }
-      const shouldCreateBankAccount = !data.data || data.data.length > 0;
-
-      const formTitle = selectT(currentLanguage, {
-        en: "Create Bank Account",
-        pt: "Crie sua conta bancária",
-      });
-
-      if (!shouldCreateBankAccount) {
-        setModalProps({
-          isOpen: true,
-          children: <CreateBankAccountForm />,
-          title: formTitle,
-          autoToggle: false,
-        });
-      }
-
-      return data;
-    });
-  });
-
-  const bankAccounts = bankAccountsFetch.data?.data ?? [];
 
   const selectLabel = useT({
     en: "Bank Account",

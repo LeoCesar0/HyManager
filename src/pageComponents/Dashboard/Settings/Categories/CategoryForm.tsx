@@ -20,6 +20,7 @@ import { slugify } from "@/utils/app";
 import { updateBankAccount } from "@/server/models/BankAccount/update/updateBankAccount";
 import { v4 as uuid } from "uuid";
 import cloneDeep from "lodash.clonedeep";
+import { useGlobalAuth } from "@/contexts/GlobalAuth";
 
 type IProps = {
   initialValues?: BankCategory;
@@ -28,7 +29,9 @@ type IProps = {
 
 export const CategoryForm = ({ initialValues, closeForm }: IProps) => {
   const { currentLanguage } = useGlobalContext();
-  const { currentBankAccount } = useGlobalDashboardStore();
+  const { currentUser } = useGlobalAuth();
+  const { currentBankAccount, fetchBankAccounts, bankAccounts } =
+    useGlobalDashboardStore();
   const { handleToast, isLoading } = useToastPromise();
 
   const isCreating = !initialValues;
@@ -80,7 +83,16 @@ export const CategoryForm = ({ initialValues, closeForm }: IProps) => {
 
     const response = await handleToast(promise, "createMessages");
 
-    if (response.done) {
+    if (response.done && currentBankAccount) {
+      const updatedBankAccounts = cloneDeep(bankAccounts);
+      const updatedBankAccount = cloneDeep(currentBankAccount);
+      updatedBankAccount.categories = bankCategories;
+      const indexOfBankAccount = updatedBankAccounts.findIndex(
+        (item) => item.id === updatedBankAccount.id
+      );
+      updatedBankAccounts.splice(indexOfBankAccount, 1, updatedBankAccount);
+
+      fetchBankAccounts(updatedBankAccounts);
       closeForm();
     }
   }

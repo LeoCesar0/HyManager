@@ -12,6 +12,7 @@ import { appWithTranslation } from "next-i18next";
 import { ToastContainer } from "react-toastify";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import ContextProviders from "@/contexts/ContextProviders";
+import { SWRConfig } from "swr";
 
 import { Inter } from "next/font/google";
 
@@ -58,13 +59,17 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         pauseOnHover
         theme="dark"
       />
-      <ContextProviders>
-        {getLayout(
-          <div className={inter.className}>
-            <Component {...pageProps} />
-          </div>
-        )}
-      </ContextProviders>
+      <SWRConfig
+        value={{ provider: () => new Map(), revalidateOnFocus: false }}
+      >
+        <ContextProviders>
+          {getLayout(
+            <div className={inter.className}>
+              <Component {...pageProps} />
+            </div>
+          )}
+        </ContextProviders>
+      </SWRConfig>
     </>
   );
 }

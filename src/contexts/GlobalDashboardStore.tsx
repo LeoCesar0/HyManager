@@ -1,16 +1,28 @@
 import { ReactNode } from "@/@types";
 import { BankAccount } from "@/server/models/BankAccount/schema";
-import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useGlobalAuth } from "./GlobalAuth";
+import { listBankAccountByUserId } from "@/server/models/BankAccount/read/listBankAccountByUserId";
+import { useRouter } from "next/navigation";
 
 interface IState {
   menuIsOpen: boolean;
   currentBankAccount: BankAccount | null;
+  bankAccounts: BankAccount[];
 }
 
 interface IActions {
   toggleMenu: () => void;
   setCurrentBankAccount: (bank: BankAccount | null) => void;
   setState: Dispatch<SetStateAction<IState>>;
+  fetchBankAccounts: (data?: BankAccount[]) => Promise<void>;
 }
 
 interface IGlobalDashboardStore extends IState, IActions {}
@@ -18,6 +30,7 @@ interface IGlobalDashboardStore extends IState, IActions {}
 const initialValues: IState = {
   menuIsOpen: true,
   currentBankAccount: null,
+  bankAccounts: [],
 };
 
 const Context = createContext<IGlobalDashboardStore>(
@@ -26,6 +39,8 @@ const Context = createContext<IGlobalDashboardStore>(
 
 export const GlobalDashboardStore: ReactNode = ({ children }) => {
   const [state, setState] = useState<IState>(initialValues);
+  const { currentUser } = useGlobalAuth();
+  const router = useRouter();
 
   const toggleMenu = () => {
     setState((prev) => ({ ...prev, menuIsOpen: !prev.menuIsOpen }));
@@ -35,6 +50,53 @@ export const GlobalDashboardStore: ReactNode = ({ children }) => {
     setState((prev) => ({ ...prev, currentBankAccount: bankAccount }));
   };
 
+  // --------------------------
+  // FETCH BANK ACCOUNTS
+  // --------------------------
+
+  const fetchBankAccounts = async (data?: BankAccount[]) => {
+    if (data) {
+      const current = data.find(
+        (item) => item.id === state.currentBankAccount?.id
+      );
+      setState((prev) => ({
+        ...prev,
+        bankAccounts: data,
+        currentBankAccount: current ?? null,
+      }));
+      return;
+    }
+
+    const id = currentUser?.id;
+    if (!id) return;
+    await listBankAccountByUserId({ id: id }).then((data) => {
+      const list = data.data || [];
+      const current = list.find(
+        (item) => item.id === state.currentBankAccount?.id
+      );
+      setState((prev) => ({
+        ...prev,
+        bankAccounts: list,
+        currentBankAccount: current ?? list[0] ?? null,
+      }));
+
+      const shouldCreateBankAccount = !list || list.length > 0;
+
+      if (!shouldCreateBankAccount) {
+        router.push("/dashboard/createBankAccount");
+      }
+
+      return data;
+    });
+  };
+
+  useEffect(() => {
+    if (currentUser?.id) {
+      fetchBankAccounts();
+    }
+  }, [currentUser?.id]);
+  // --------------------------
+
   return (
     <Context.Provider
       value={{
@@ -42,6 +104,7 @@ export const GlobalDashboardStore: ReactNode = ({ children }) => {
         toggleMenu,
         setState,
         setCurrentBankAccount,
+        fetchBankAccounts,
       }}
     >
       {children}

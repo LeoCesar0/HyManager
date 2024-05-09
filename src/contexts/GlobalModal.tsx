@@ -14,6 +14,7 @@ type State = {
 type Actions = {
   setState: Dispatch<SetStateAction<State>>;
   setModalProps: (values: IModalProps) => void;
+  closeModal: () => void;
 };
 
 type GlobalModalProps = State & Actions;
@@ -47,12 +48,25 @@ export const GlobalModalProvider: React.FC<{ children: React.ReactNode }> = ({
     setState((prev) => ({ ...prev, modalProps: values }));
   };
 
+  const closeModal = () => {
+    setState((prev) => ({
+      ...prev,
+      modalProps: {
+        isOpen: false,
+        children: null,
+        description: "",
+        title: "",
+      },
+    }));
+  };
+
   return (
     <GlobalModal.Provider
       value={{
         ...state,
         setState,
         setModalProps,
+        closeModal,
       }}
     >
       {children}

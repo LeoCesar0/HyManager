@@ -6,13 +6,16 @@ import { useEffect, useMemo, useState } from "react";
 import { DEFAULT_CATEGORIES } from "@/server/models/BankAccount/static";
 import { Button } from "@/components/ui/button";
 import { CategoryForm } from "./CategoryForm";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdDelete } from "react-icons/md";
+import { useGlobalModal } from "@/contexts/GlobalModal";
+import { DeleteModal } from "./DeleteModal";
 
-export const BankCategories = () => {
+export const Categories = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const { currentLanguage } = useGlobalContext();
   const [formIsOpen, setFormIsOpen] = useState(false);
   const [itemOnEdit, setItemOnEdit] = useState<BankCategory | null>(null);
+  const { setModalProps } = useGlobalModal();
 
   const categories = useMemo(() => {
     const _categories = currentBankAccount?.categories || [];
@@ -80,15 +83,39 @@ export const BankCategories = () => {
                     ></span>
                     <span className="">{category.name}</span>
                   </div>
-                  <Button
-                    size={"iconSm"}
-                    variant={"secondary"}
-                    onClick={() => {
-                      setItemOnEdit(category);
-                    }}
-                  >
-                    <MdEdit />
-                  </Button>
+                  {!category.isDefault && (
+                    <div className="flex items-center gap-4">
+                      <Button
+                        size={"iconSm"}
+                        variant={"secondary"}
+                        onClick={() => {
+                          setModalProps({
+                            isOpen: true,
+                            title: selectT(currentLanguage, {
+                              en: "Delete Category " + category.name,
+                              pt: "Deletar Categoria " + category.name,
+                            }),
+                            description: selectT(currentLanguage, {
+                              en: "Are you sure you want to delete the category ?",
+                              pt: "Você tem certeza que deseja deletar a categoria ?",
+                            }),
+                            children: <DeleteModal category={category} />,
+                          });
+                        }}
+                      >
+                        <MdDelete />
+                      </Button>
+                      <Button
+                        size={"iconSm"}
+                        variant={"secondary"}
+                        onClick={() => {
+                          setItemOnEdit(category);
+                        }}
+                      >
+                        <MdEdit />
+                      </Button>
+                    </div>
+                  )}
                 </li>
               );
             })}
