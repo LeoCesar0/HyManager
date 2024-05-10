@@ -19,7 +19,6 @@ export const listBankAccountByUserId = async ({
   id,
 }: IListBankAccountByUserId): Promise<ListBankAccountByUserIdReturnType> => {
   const funcName = "listBankAccountByUserId";
-  console.log("listBankAccountByUserId", id);
 
   try {
     const list = await firebaseList<BankAccount>({
@@ -28,7 +27,6 @@ export const listBankAccountByUserId = async ({
         { field: "users", operator: "array-contains", value: { id: id } },
       ],
     });
-    console.log("list", list);
     return {
       data: list,
       done: true,

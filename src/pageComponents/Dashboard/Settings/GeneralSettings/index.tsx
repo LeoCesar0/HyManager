@@ -5,6 +5,7 @@ import { useGlobalContext } from "@/contexts/GlobalContext";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 import { useToastPromise } from "@/hooks/useToastPromise";
 import {
+  BankAccount,
   CreateBankAccount,
   createBankAccountSchema,
   createBankAccountSchemaPT,
@@ -18,9 +19,11 @@ import { z } from "zod";
 import { useGetFormFields } from "./useGetFormFields";
 import { Form } from "@/components/ui/form";
 import { imagesToFileInfo } from "@/utils/imagesToFileInfo";
+import { replaceItemOfArray } from "@/utils/replaceItemOfArray";
 
 export const GeneralSettings = () => {
-  const { currentBankAccount } = useGlobalDashboardStore();
+  const { currentBankAccount, fetchBankAccounts, bankAccounts } =
+    useGlobalDashboardStore();
 
   const { currentLanguage } = useGlobalContext();
 
@@ -71,7 +74,16 @@ export const GeneralSettings = () => {
       },
     });
 
-    handleToast(promise, "updateMessages");
+    const res = await handleToast(promise, "updateMessages");
+
+    if (res.done) {
+      const updated = replaceItemOfArray<BankAccount>({
+        array: bankAccounts,
+        item: { ...currentBankAccount!, ..._values },
+        key: "id",
+      });
+      fetchBankAccounts(updated);
+    }
   }
 
   const saveText = selectT(currentLanguage, {
