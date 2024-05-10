@@ -32,7 +32,7 @@
     /* --border: 240 5.9% 90%; */
     --border: hsl(240 5.9% 90%);
     --input: var(--border);
-    --ring: var(--primary);
+    --ring: rgba(225, 29, 72, 0.75);
     --radius: 0.5rem;
   }
 
@@ -59,7 +59,7 @@
     --destructive-foreground: hsl(0 85.7% 97.3%);
     --border: theme(colors.zinc.600/0.5);
     --input: var(--border);
-    --ring: hsl(346.8 75% 48%);
+    --ring: rgba(225, 29, 72, 0.75);
   }
 }
 

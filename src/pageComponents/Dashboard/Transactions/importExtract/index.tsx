@@ -93,7 +93,11 @@ export const DashboardTransactionsImportExtract = () => {
           actions={
             <>
               <Button
-                disabled={!extractResponse?.data || loadedFiles.length === 0}
+                disabled={
+                  !extractResponse?.data ||
+                  loadedFiles.length === 0 ||
+                  isLoading
+                }
                 onClick={() => submitTransactions()}
               >
                 <UploadIcon />
@@ -103,13 +107,13 @@ export const DashboardTransactionsImportExtract = () => {
                 })}
               </Button>
               <Button
-                disabled={!extractResponse?.data}
+                disabled={!extractResponse?.data || isLoading}
                 onClick={() => setExtractResponse(null)}
                 variant="outline"
               >
                 {selectT(currentLanguage, {
-                  en: "Redo",
-                  pt: "Refazer",
+                  en: "Cancel",
+                  pt: "Cancelar",
                 })}
               </Button>
             </>
