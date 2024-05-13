@@ -88,7 +88,11 @@ const TableBody = React.forwardRef<
       {...props}
     >
       <>
-        {hasNoItems && <h2 className="p-4 text-lg">{hasNoItemsText}</h2>}
+        {hasNoItems && (
+          <tr>
+            <td className="p-4 text-lg">{hasNoItemsText}</td>
+          </tr>
+        )}
         {children}
       </>
     </tbody>
