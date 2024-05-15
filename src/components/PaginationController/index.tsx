@@ -25,11 +25,11 @@ export const PaginationController = ({
   const currentPage = paginationResult.currentPage;
 
   const { pages } = useMemo(() => {
-    const allPages: (number | string)[] = new Array(paginationResult.pages)
+    const allPages: number[] = new Array(paginationResult.pages)
       .fill(undefined)
       .map((_, index) => index + 1);
 
-    const pages = allPages.filter((item) => {
+    const pages: (number | string)[] = allPages.filter((item) => {
       return item >= currentPage - offset && item <= currentPage + offset;
     });
     if (allPages[currentPage - 1 - offset]) pages.unshift("...");

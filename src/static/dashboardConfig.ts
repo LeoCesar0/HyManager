@@ -4,6 +4,7 @@ import {
   MdDashboard,
   MdSettings,
   MdCompareArrows,
+  MdPeople,
 } from "react-icons/md";
 
 interface MenuItem {
@@ -31,6 +32,7 @@ const menuItems: MenuItem[] = [
   //   icon: MdStackedBarChart,
   //   link: "/dashboard/charts",
   // },
+
   {
     label: {
       pt: "Transações",
@@ -38,6 +40,14 @@ const menuItems: MenuItem[] = [
     },
     icon: MdCompareArrows,
     link: "/dashboard/transactions",
+  },
+  {
+    label: {
+      pt: "Beneficiários",
+      en: "Beneficiaries",
+    },
+    icon: MdPeople,
+    link: "/dashboard/creditors",
   },
   {
     label: {

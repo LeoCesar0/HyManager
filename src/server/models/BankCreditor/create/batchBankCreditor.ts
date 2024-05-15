@@ -14,10 +14,7 @@ export type IBatchBankCreditor = {
   batch: WriteBatch;
 };
 
-export const batchBankCreditor = async ({
-  values,
-  batch,
-}: IBatchBankCreditor) => {
+export const batchBankCreditor = ({ values, batch }: IBatchBankCreditor) => {
   const item = createBankCreditorSchema.parse(values);
 
   item.creditorSlug = slugify(item.creditor);
@@ -38,4 +35,6 @@ export const batchBankCreditor = async ({
   });
 
   batch.set(docRef, data, { merge: true });
+
+  return data;
 };

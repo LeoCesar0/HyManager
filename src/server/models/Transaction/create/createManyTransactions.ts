@@ -8,6 +8,7 @@ import { batchManyTransactionReports } from "@models/TransactionReport/create/ba
 import { createDocRef } from "@/server/utils/createDocRef";
 import { makeTransactionFields } from "../utils/makeTransactionFields";
 import { handleCreditorsOnBatchTransactions } from "../utils/handleCreditorsOnBatchTransactions";
+import { ALGOLIA_CLIENT, ALGOLIA_CREDITORS_INDEX } from "@/services/algolia";
 
 interface ICreateManyTransactions {
   transactions: CreateTransaction[];
@@ -51,7 +52,7 @@ export const createManyTransactions = async ({
       transactionsOnCreate,
     });
 
-    await handleCreditorsOnBatchTransactions({
+    const createdCreditors = await handleCreditorsOnBatchTransactions({
       bankAccountId,
       batch,
       transactionsOnCreate,
@@ -63,6 +64,19 @@ export const createManyTransactions = async ({
       id: item.id,
     }));
 
+    // --------------------------
+    // INDEX CREDITORS
+    // --------------------------
+
+    if (createdCreditors.length >= 0) {
+      const objects = createdCreditors.map((item) => ({
+        ...item,
+        objectID: item.id,
+      }));
+      ALGOLIA_CREDITORS_INDEX.saveObjects(objects).catch((error) => {
+        console.error("Error indexing creditors", error);
+      });
+    }
 
     return {
       data: createdTransactionsIds,
