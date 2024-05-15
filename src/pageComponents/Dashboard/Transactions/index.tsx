@@ -39,26 +39,28 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
   const page = router.query.page ? Number(router.query.page) : 1;
   const limit = router.query.limit ? Number(router.query.limit) : 10;
 
-  const argsKey:[string, string, number, number] = ["transactions-table", currentBankAccount?.id || '', page, limit]
-  const listKey = currentBankAccount ? argsKey  : null
+  const argsKey: [string, string, number, number] = [
+    "transactions-table",
+    currentBankAccount?.id || "",
+    page,
+    limit,
+  ];
+  const listKey = currentBankAccount ? argsKey : null;
 
-  const { data: pagination } = useSwr(
-    listKey,
-    (args) => {
-      const [_, id, page, limit] = args as typeof argsKey
-      return listTransactionsByBankId({
-        id: id,
-        pagination: {
-          limit: limit,
-          page: page,
-          orderBy: {
-            direction: "desc",
-            field: 'date'
-          },
+  const { data: pagination, isLoading } = useSwr(listKey, (args) => {
+    const [_, id, page, limit] = args as typeof argsKey;
+    return listTransactionsByBankId({
+      id: id,
+      pagination: {
+        limit: limit,
+        page: page,
+        orderBy: {
+          direction: "desc",
+          field: "date",
         },
-      });
-    }
-  );
+      },
+    });
+  });
 
   const columns: ITableColumn<Transaction>[] = getColumns({ currentLanguage });
 
@@ -124,7 +126,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
         >
           <>
             <TableContainer pagination={paginationControl}>
-              <Table>
+              <Table isLoading={isLoading}>
                 <TableHeader>
                   <TableRow>
                     {columns.map((columns) => {
@@ -134,14 +136,11 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                     })}
                   </TableRow>
                 </TableHeader>
-                <TableBody
-                hasNoItems={!pagination?.data?.list.length}
-                >
+                <TableBody hasNoItems={!pagination?.data?.list.length}>
                   {pagination?.data?.list?.map((transaction) => {
                     return (
                       <TableRow key={transaction.id}>
                         {columns.map((column) => {
-
                           if (transaction[column.key] instanceof Timestamp) {
                             const value = transaction[column.key] as Timestamp;
                             const label = formatTimestamp(value);
@@ -150,8 +149,10 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                             );
                           }
 
-                          if (column.key === 'creditor') {
-                            const label = transaction.creditor ? transaction.creditor : transaction.description
+                          if (column.key === "creditor") {
+                            const label = transaction.creditor
+                              ? transaction.creditor
+                              : transaction.description;
                             return (
                               <TableCell key={column.key}>{label}</TableCell>
                             );

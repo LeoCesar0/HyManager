@@ -133,7 +133,7 @@ export const DashboardCreditors = () => {
               }
               pagination={paginationControl}
             >
-              <Table>
+              <Table isLoading={isLoading}>
                 <TableHeader>
                   <TableRow>
                     {columns.map((columns) => {
@@ -145,7 +145,6 @@ export const DashboardCreditors = () => {
                 </TableHeader>
                 <TableBody
                   hasNoItems={!paginationResult?.list.length && !isLoading}
-                  isLoading={isLoading}
                 >
                   {paginationResult?.list?.map((transaction) => {
                     return (
