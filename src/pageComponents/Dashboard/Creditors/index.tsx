@@ -165,8 +165,22 @@ export const DashboardCreditors = () => {
                             const label =
                               categories.get(transaction.categoryId)?.name ||
                               "";
+                            const color =
+                              categories.get(transaction.categoryId)?.color ||
+                              "#000";
                             return (
-                              <TableCell key={column.key}>{label}</TableCell>
+                              <TableCell
+                                key={column.key}
+                                className="flex items-center gap-2"
+                              >
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{
+                                    backgroundColor: color,
+                                  }}
+                                ></div>
+                                <span>{label}</span>
+                              </TableCell>
                             );
                           }
                           return (
