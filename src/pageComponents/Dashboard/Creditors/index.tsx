@@ -216,22 +216,31 @@ export const DashboardCreditors = () => {
                 <TableBody
                   hasNoItems={!paginationResult?.list.length && !isLoading}
                 >
-                  {paginationResult?.list?.map((transaction) => {
+                  {paginationResult?.list?.map((creditor) => {
                     return (
-                      <TableRow key={transaction.id}>
+                      <TableRow
+                        key={creditor.id}
+                        onClick={() => {
+                          router.push(
+                            `/dashboard/creditors/${creditor.id}`,
+                            undefined,
+                            { shallow: true }
+                          );
+                        }}
+                        className="cursor-pointer"
+                      >
                         {columns.map((column) => {
                           if (column.key === "creditor") {
-                            const label = transaction.creditor;
+                            const label = creditor.creditor;
                             return (
                               <TableCell key={column.key}>{label}</TableCell>
                             );
                           }
                           if (column.key === "categoryId") {
                             const label =
-                              categories.get(transaction.categoryId)?.name ||
-                              "";
+                              categories.get(creditor.categoryId)?.name || "";
                             const color =
-                              categories.get(transaction.categoryId)?.color ||
+                              categories.get(creditor.categoryId)?.color ||
                               "#000";
                             return (
                               <TableCell
@@ -250,7 +259,7 @@ export const DashboardCreditors = () => {
                           }
                           return (
                             <TableCell key={column.key}>
-                              {transaction[column.key] as string}
+                              {creditor[column.key] as string}
                             </TableCell>
                           );
                         })}
