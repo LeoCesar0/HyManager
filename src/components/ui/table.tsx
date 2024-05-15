@@ -31,7 +31,7 @@ const TableContainer = React.forwardRef<HTMLDivElement, ITableContainer>(
       >
         <>
           {actions && (
-            <header className="p-4 flex items-center">{actions}</header>
+            <header className="p-4 flex items-center gap-4">{actions}</header>
           )}
           {children}
           {paginationResult && (

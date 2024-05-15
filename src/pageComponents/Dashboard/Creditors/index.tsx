@@ -20,8 +20,18 @@ import { PaginationResult } from "@/@types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useT from "@/hooks/useT";
-import { BankCategory } from "@/server/models/BankAccount/schema";
 import { getCurrentBankCategories } from "@/utils/getCurrentBankCategories";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { BankCategory } from "@/server/models/BankAccount/schema";
+import selectT from "@/utils/selectT";
+
+const ALL_CATEGORY_ID = "SELECT_ALL";
 
 export const DashboardCreditors = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -30,6 +40,7 @@ export const DashboardCreditors = () => {
     useState<PaginationResult<BankCreditor> | null>(null);
   const [search, setSearch] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [categoryId, setCategoryId] = useState<string>("");
 
   const router = useRouter();
 
@@ -43,6 +54,26 @@ export const DashboardCreditors = () => {
     });
   }, [currentBankAccount, currentLanguage]);
 
+  const categoriesOptions: BankCategory[] = [
+    {
+      id: ALL_CATEGORY_ID,
+      slug: ALL_CATEGORY_ID,
+      color: "#fff",
+      isDefault: true,
+      name: selectT(currentLanguage, {
+        en: "All",
+        pt: "Todas",
+      }),
+    },
+    ...Array.from(categories.values()),
+  ];
+
+  useEffect(() => {
+    if (categoriesOptions[0]) {
+      setCategoryId(categoriesOptions[0].id);
+    }
+  }, [categoriesOptions.length]);
+
   useEffect(() => {
     setIsLoading(true);
     const timeout = setTimeout(() => {
@@ -54,8 +85,13 @@ export const DashboardCreditors = () => {
       algoliaIndex
         .search(search, {
           page: page - 1,
+          filters:
+            !categoryId || categoryId === ALL_CATEGORY_ID
+              ? undefined
+              : `categoryId:${categoryId}`,
         })
         .then((res) => {
+          console.log("res", res);
           setPaginationResult({
             count: res.nbHits,
             currentPage: res.page + 1,
@@ -80,7 +116,7 @@ export const DashboardCreditors = () => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [search, page, limit]);
+  }, [search, page, limit, categoryId]);
 
   const columns: ITableColumn<BankCreditor>[] = getColumns({ currentLanguage });
 
@@ -107,11 +143,14 @@ export const DashboardCreditors = () => {
     en: "Search",
     pt: "Buscar",
   });
-  const placeHolder = useT({
+  const searchPlaceholder = useT({
     en: "Gas Station",
     pt: "Posto de Gasolina",
   });
-
+  const categoryFilterLabel = useT({
+    en: "Category",
+    pt: "Categoria",
+  });
   return (
     <>
       <SectionContainer>
@@ -125,14 +164,34 @@ export const DashboardCreditors = () => {
             <TableContainer
               actions={
                 <>
-                  <div className="max-w-xs gird grid-cols-1">
+                  <div className="">
                     <Label>{searchLabel}</Label>
                     <Input
                       name="search"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      placeholder={placeHolder}
+                      placeholder={searchPlaceholder}
                     />
+                  </div>
+                  <div className="">
+                    <Label>{categoryFilterLabel}</Label>
+                    <Select
+                      onValueChange={(value) => setCategoryId(value)}
+                      value={categoryId}
+                    >
+                      <SelectTrigger className="">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categoriesOptions.map((category) => {
+                          return (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.name}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </>
               }
