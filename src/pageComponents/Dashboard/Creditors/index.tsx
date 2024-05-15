@@ -17,12 +17,16 @@ import { getColumns } from "./getColumns";
 import { useEffect, useState } from "react";
 import { ALGOLIA_CLIENT, ALGOLIA_INDEXES } from "@/services/algolia";
 import { PaginationResult } from "@/@types";
+import { Input } from "@/components/ui/input";
+import { FormLabel } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 
 export const DashboardCreditors = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const { currentLanguage } = useGlobalContext();
   const [paginationResult, setPaginationResult] =
     useState<PaginationResult<BankCreditor> | null>(null);
+  const [search, setSearch] = useState<string>("");
 
   const router = useRouter();
 
@@ -30,34 +34,40 @@ export const DashboardCreditors = () => {
   const limit = router.query.limit ? Number(router.query.limit) : 10;
 
   useEffect(() => {
-    const algoliaIndex = ALGOLIA_CLIENT.initIndex(ALGOLIA_INDEXES.CREDITORS);
-    algoliaIndex.setSettings({
-      searchableAttributes: ["creditor"],
-      hitsPerPage: limit,
-    });
-    algoliaIndex
-      .search("", {
-        page: page - 1,
-      })
-      .then((res) => {
-        console.log("res", res);
-        setPaginationResult({
-          count: res.nbHits,
-          currentPage: res.page + 1,
-          list: res.hits.map((item) => {
-            const _item = item as unknown as BankCreditor;
-            return {
-              bankAccountId: _item.bankAccountId!,
-              creditor: _item.creditor!,
-              id: _item.id!,
-              categoryId: _item.categoryId,
-              creditorSlug: _item.creditorSlug,
-            };
-          }),
-          pages: res.nbPages,
-        });
+    const timeout = setTimeout(() => {
+      const algoliaIndex = ALGOLIA_CLIENT.initIndex(ALGOLIA_INDEXES.CREDITORS);
+      algoliaIndex.setSettings({
+        searchableAttributes: ["creditor"],
+        hitsPerPage: limit,
       });
-  }, [page, limit]);
+      algoliaIndex
+        .search(search, {
+          page: page - 1,
+        })
+        .then((res) => {
+          console.log("res", res);
+          setPaginationResult({
+            count: res.nbHits,
+            currentPage: res.page + 1,
+            list: res.hits.map((item) => {
+              const _item = item as unknown as BankCreditor;
+              return {
+                bankAccountId: _item.bankAccountId!,
+                creditor: _item.creditor!,
+                id: _item.id!,
+                categoryId: _item.categoryId,
+                creditorSlug: _item.creditorSlug,
+              };
+            }),
+            pages: res.nbPages,
+          });
+        });
+    }, 500);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [search, page, limit]);
 
   const columns: ITableColumn<BankCreditor>[] = getColumns({ currentLanguage });
 
@@ -90,7 +100,22 @@ export const DashboardCreditors = () => {
           }}
         >
           <>
-            <TableContainer pagination={paginationControl}>
+            <TableContainer
+              actions={
+                <>
+                  <div className="max-w-xs gird grid-cols-1">
+                    <Label>Buscar</Label>
+                    <Input
+                      name="search"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="Posto de gasolina"
+                    />
+                  </div>
+                </>
+              }
+              pagination={paginationControl}
+            >
               <Table>
                 <TableHeader>
                   <TableRow>

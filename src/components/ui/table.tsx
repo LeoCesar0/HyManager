@@ -11,10 +11,11 @@ const rowHeight = "45xp";
 
 type ITableContainer = {
   pagination?: PaginationControllerProps;
+  actions?: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const TableContainer = React.forwardRef<HTMLDivElement, ITableContainer>(
-  ({ className, children, pagination, ...props }, ref) => {
+  ({ className, children, pagination, actions, ...props }, ref) => {
     const paginationResult = pagination?.paginationResult;
 
     return (
@@ -28,6 +29,9 @@ const TableContainer = React.forwardRef<HTMLDivElement, ITableContainer>(
         {...props}
       >
         <>
+          {actions && (
+            <header className="p-4 flex items-center">{actions}</header>
+          )}
           {children}
           {paginationResult && (
             <div className="p-2 w-full">
