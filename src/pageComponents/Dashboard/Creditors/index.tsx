@@ -186,7 +186,13 @@ export const DashboardCreditors = () => {
                         {categoriesOptions.map((category) => {
                           return (
                             <SelectItem key={category.id} value={category.id}>
-                              {category.name}
+                              {category.id !== ALL_CATEGORY_ID && (
+                                <div
+                                  className="h-3 w-3 rounded-full "
+                                  style={{ backgroundColor: category.color }}
+                                ></div>
+                              )}
+                              <span>{category.name}</span>
                             </SelectItem>
                           );
                         })}
