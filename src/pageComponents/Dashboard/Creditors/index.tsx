@@ -14,16 +14,14 @@ import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
 import { useRouter } from "next/router";
 import { getColumns } from "./getColumns";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ALGOLIA_CLIENT, ALGOLIA_INDEXES } from "@/services/algolia";
 import { PaginationResult } from "@/@types";
 import { Input } from "@/components/ui/input";
-import { FormLabel } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import selectT from "@/utils/selectT";
 import useT from "@/hooks/useT";
-import { Skeleton } from "@/components/ui/skeleton";
-import { TableSkeleton } from "@/components/TableSkeleton";
+import { BankCategory } from "@/server/models/BankAccount/schema";
+import { getCurrentBankCategories } from "@/utils/getCurrentBankCategories";
 
 export const DashboardCreditors = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -37,6 +35,13 @@ export const DashboardCreditors = () => {
 
   const page = router.query.page ? Number(router.query.page) : 1;
   const limit = router.query.limit ? Number(router.query.limit) : 10;
+
+  const categories = useMemo(() => {
+    return getCurrentBankCategories({
+      currentBankAccount,
+      currentLanguage,
+    });
+  }, [currentBankAccount, currentLanguage]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -152,6 +157,14 @@ export const DashboardCreditors = () => {
                         {columns.map((column) => {
                           if (column.key === "creditor") {
                             const label = transaction.creditor;
+                            return (
+                              <TableCell key={column.key}>{label}</TableCell>
+                            );
+                          }
+                          if (column.key === "categoryId") {
+                            const label =
+                              categories.get(transaction.categoryId)?.name ||
+                              "";
                             return (
                               <TableCell key={column.key}>{label}</TableCell>
                             );

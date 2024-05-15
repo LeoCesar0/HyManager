@@ -16,6 +16,13 @@ export const getColumns = ({
         pt: "Beneficiário",
       }),
     },
+    {
+      key: "categoryId",
+      label: selectT(currentLanguage, {
+        en: "Category",
+        pt: "Categoria",
+      }),
+    },
   ];
   return columns;
 };
