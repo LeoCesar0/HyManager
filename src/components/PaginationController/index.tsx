@@ -29,16 +29,21 @@ export const PaginationController = ({
       .fill(undefined)
       .map((_, index) => index + 1);
 
-    const pages: (number | string)[] = allPages.filter((item) => {
+    let pages: (number | string)[] = allPages.filter((item) => {
       return item >= currentPage - offset && item <= currentPage + offset;
     });
     if (allPages[currentPage - 1 - offset]) pages.unshift("...");
     if (allPages[currentPage - 1 + offset]) pages.push("...");
-    if (pages[0] !== 1) pages.unshift(1);
+
+    if (pages[0] !== 1) {
+      pages = pages.filter((item) => item !== 1);
+      pages.unshift(1);
+    }
     if (
       pages[pages.length - 1] !== paginationResult.pages &&
       paginationResult.pages > 1
     ) {
+      pages = pages.filter((item) => item !== paginationResult.pages);
       pages.push(paginationResult.pages);
     }
 
