@@ -20,6 +20,10 @@ import { PaginationResult } from "@/@types";
 import { Input } from "@/components/ui/input";
 import { FormLabel } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
+import selectT from "@/utils/selectT";
+import useT from "@/hooks/useT";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TableSkeleton } from "@/components/TableSkeleton";
 
 export const DashboardCreditors = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -27,6 +31,7 @@ export const DashboardCreditors = () => {
   const [paginationResult, setPaginationResult] =
     useState<PaginationResult<BankCreditor> | null>(null);
   const [search, setSearch] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -34,6 +39,7 @@ export const DashboardCreditors = () => {
   const limit = router.query.limit ? Number(router.query.limit) : 10;
 
   useEffect(() => {
+    setIsLoading(true);
     const timeout = setTimeout(() => {
       const algoliaIndex = ALGOLIA_CLIENT.initIndex(ALGOLIA_INDEXES.CREDITORS);
       algoliaIndex.setSettings({
@@ -45,7 +51,6 @@ export const DashboardCreditors = () => {
           page: page - 1,
         })
         .then((res) => {
-          console.log("res", res);
           setPaginationResult({
             count: res.nbHits,
             currentPage: res.page + 1,
@@ -61,6 +66,9 @@ export const DashboardCreditors = () => {
             }),
             pages: res.nbPages,
           });
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }, 500);
 
@@ -90,6 +98,15 @@ export const DashboardCreditors = () => {
       }
     : undefined;
 
+  const searchLabel = useT({
+    en: "Search",
+    pt: "Buscar",
+  });
+  const placeHolder = useT({
+    en: "Gas Station",
+    pt: "Posto de Gasolina",
+  });
+
   return (
     <>
       <SectionContainer>
@@ -104,12 +121,12 @@ export const DashboardCreditors = () => {
               actions={
                 <>
                   <div className="max-w-xs gird grid-cols-1">
-                    <Label>Buscar</Label>
+                    <Label>{searchLabel}</Label>
                     <Input
                       name="search"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      placeholder="Posto de gasolina"
+                      placeholder={placeHolder}
                     />
                   </div>
                 </>
@@ -126,7 +143,10 @@ export const DashboardCreditors = () => {
                     })}
                   </TableRow>
                 </TableHeader>
-                <TableBody hasNoItems={!paginationResult?.list.length}>
+                <TableBody
+                  hasNoItems={!paginationResult?.list.length && !isLoading}
+                  isLoading={isLoading}
+                >
                   {paginationResult?.list?.map((transaction) => {
                     return (
                       <TableRow key={transaction.id}>

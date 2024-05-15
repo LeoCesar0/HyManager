@@ -6,6 +6,7 @@ import {
 } from "../PaginationController";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import selectT from "@/utils/selectT";
+import { TableSkeleton } from "../TableSkeleton";
 
 const rowHeight = "45xp";
 
@@ -52,7 +53,7 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="min-h-[492px] block p-2">
+  <div className="min-h-[492px] block p-4">
     <table
       ref={ref}
       className={cn("caption-bottom text-sm w-full", className)}
@@ -72,36 +73,44 @@ TableHeader.displayName = "TableHeader";
 
 type TableBodyProps = {
   hasNoItems: boolean;
+  isLoading: boolean;
+  nItems?: number;
 };
 
 const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement> & TableBodyProps
->(({ className, children, hasNoItems, ...props }, ref) => {
-  const { currentLanguage } = useGlobalContext();
+>(
+  (
+    { className, children, hasNoItems, isLoading, nItems = 10, ...props },
+    ref
+  ) => {
+    const { currentLanguage } = useGlobalContext();
 
-  const hasNoItemsText = selectT(currentLanguage, {
-    en: "No items found",
-    pt: "Nenhum item encontrado",
-  });
+    const hasNoItemsText = selectT(currentLanguage, {
+      en: "No items found",
+      pt: "Nenhum item encontrado",
+    });
 
-  return (
-    <tbody
-      ref={ref}
-      className={cn("[&_tr:last-child]:border-0 w-full", className)}
-      {...props}
-    >
-      <>
-        {hasNoItems && (
-          <tr>
-            <td className="p-4 text-lg">{hasNoItemsText}</td>
-          </tr>
-        )}
-        {children}
-      </>
-    </tbody>
-  );
-});
+    return (
+      <tbody
+        ref={ref}
+        className={cn("[&_tr:last-child]:border-0 w-full", className)}
+        {...props}
+      >
+        <>
+          {hasNoItems && !isLoading && (
+            <tr>
+              <td className="p-4 text-lg">{hasNoItemsText}</td>
+            </tr>
+          )}
+          {isLoading && <TableSkeleton nItems={nItems} />}
+          {!isLoading && !hasNoItems && children}
+        </>
+      </tbody>
+    );
+  }
+);
 TableBody.displayName = "TableBody";
 
 const TableFooter = React.forwardRef<
