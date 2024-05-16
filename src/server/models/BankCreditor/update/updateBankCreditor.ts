@@ -4,7 +4,6 @@ import { AppModelResponse } from "@/@types/index";
 import { debugDev } from "@/utils/dev";
 import { BankCreditor } from "../schema";
 import { ALGOLIA_CLIENT, ALGOLIA_INDEXES } from "@/services/algolia";
-import { object } from "zod";
 
 interface IUpdateBankCreditor {
   values: {
@@ -25,7 +24,8 @@ export const updateBankCreditor = async ({
       id: id,
     });
     if (result.done) {
-      const index = ALGOLIA_CLIENT.initIndex(ALGOLIA_INDEXES.CREDITORS);
+      const client = ALGOLIA_CLIENT();
+      const index = client.initIndex(ALGOLIA_INDEXES.CREDITORS);
       index.partialUpdateObject(
         {
           objectID: id,

@@ -73,7 +73,8 @@ export const createManyTransactions = async ({
         ...item,
         objectID: item.id,
       }));
-      const algoliaIndex = ALGOLIA_CLIENT.initIndex(ALGOLIA_INDEXES.CREDITORS);
+      const client = ALGOLIA_CLIENT();
+      const algoliaIndex = client.initIndex(ALGOLIA_INDEXES.CREDITORS);
       algoliaIndex.saveObjects(objects).catch((error) => {
         console.error("Error indexing creditors", error);
       });

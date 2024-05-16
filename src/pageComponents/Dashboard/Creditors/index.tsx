@@ -24,6 +24,7 @@ import { getCurrentBankCategories } from "@/utils/getCurrentBankCategories";
 import { BankCategory } from "@/server/models/BankAccount/schema";
 import selectT from "@/utils/selectT";
 import { CategorySelect } from "../components/CategorySelect";
+import algoliasearch from "algoliasearch";
 
 const ALL_CATEGORY_ID = "SELECT_ALL";
 
@@ -51,7 +52,8 @@ export const DashboardCreditors = () => {
   useEffect(() => {
     setIsLoading(true);
     const timeout = setTimeout(() => {
-      const algoliaIndex = ALGOLIA_CLIENT.initIndex(ALGOLIA_INDEXES.CREDITORS);
+      const client = ALGOLIA_CLIENT();
+      const algoliaIndex = client.initIndex(ALGOLIA_INDEXES.CREDITORS);
       algoliaIndex.setSettings({
         searchableAttributes: ["creditor"],
         hitsPerPage: limit,
