@@ -5,6 +5,7 @@ import { useGlobalContext } from "../../contexts/GlobalContext";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/router";
 
 interface IProps {
   sectionTitle?: LocalizedText;
@@ -14,7 +15,7 @@ interface IProps {
   actions?: React.ReactNode;
   rightActions?: React.ReactNode;
   headerBorder?: boolean;
-  goBackLink?: string;
+  goBackLink?: string | true;
 }
 
 export const Section: React.FC<IProps> = ({
@@ -28,6 +29,7 @@ export const Section: React.FC<IProps> = ({
   goBackLink,
 }) => {
   const { currentLanguage } = useGlobalContext();
+  const router = useRouter();
   return (
     <section className={cn("w-full", className)}>
       <header
@@ -36,12 +38,19 @@ export const Section: React.FC<IProps> = ({
           ["border-b pb-4", headerBorder],
         ])}
       >
-        {goBackLink && (
+        {goBackLink && typeof goBackLink === "string" && (
           <Link href={goBackLink}>
-            <Button size={"iconLg"} variant={"outline"}>
-              <ArrowLeftIcon />
-            </Button>
+            <BackButton />
           </Link>
+        )}
+        {goBackLink === true && (
+          <BackButton
+            onClick={() => {
+              if (goBackLink === true) {
+                router.back();
+              }
+            }}
+          />
         )}
         {sectionTitle && (
           <h3 className="text-2xl font-bold">
@@ -67,4 +76,12 @@ export const SectionContainer = ({
   children: React.ReactNode;
 }) => {
   return <div className="mx-auto space-y-4">{children}</div>;
+};
+
+const BackButton = ({ ...rest }) => {
+  return (
+    <Button size={"iconLg"} variant={"outline"} {...rest}>
+      <ArrowLeftIcon />
+    </Button>
+  );
 };

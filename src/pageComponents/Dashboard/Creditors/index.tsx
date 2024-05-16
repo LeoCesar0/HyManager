@@ -38,7 +38,6 @@ export const DashboardCreditors = () => {
   const { currentLanguage } = useGlobalContext();
   const [paginationResult, setPaginationResult] =
     useState<PaginationResult<BankCreditor> | null>(null);
-  const [search, setSearch] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [categoryId, setCategoryId] = useState<string>("");
 
@@ -46,6 +45,7 @@ export const DashboardCreditors = () => {
 
   const page = router.query.page ? Number(router.query.page) : 1;
   const limit = router.query.limit ? Number(router.query.limit) : 10;
+  const search = router.query.search ? (router.query.search as string) : "";
 
   const categories = useMemo(() => {
     return getCurrentBankCategories({
@@ -91,7 +91,6 @@ export const DashboardCreditors = () => {
               : `categoryId:${categoryId}`,
         })
         .then((res) => {
-          console.log("res", res);
           setPaginationResult({
             count: res.nbHits,
             currentPage: res.page + 1,
@@ -118,19 +117,46 @@ export const DashboardCreditors = () => {
     };
   }, [search, page, limit, categoryId]);
 
-  const columns: ITableColumn<BankCreditor>[] = getColumns({ currentLanguage });
-
-  const onPageSelected = (_page: number, _limit: number = limit) => {
-    router.push(
-      `/dashboard/creditors?page=${_page}&limit=${_limit}`,
-      undefined,
-      { shallow: true }
-    );
-  };
-
   useEffect(() => {
     onPageSelected(page, limit);
   }, [page, limit]);
+
+  const onPageSelected = (_page: number, _limit: number = limit) => {
+    // router.push(
+    //   `/dashboard/creditors?page=${_page}&limit=${_limit}&search=${search}`,
+    //   undefined,
+    //   { shallow: true }
+    // );
+    router.replace({
+      query: {
+        page: _page,
+        limit: _limit,
+        search: search,
+      },
+    });
+  };
+
+  const setSearch = (value: string) => {
+    // router.push(
+    //   `/dashboard/creditors?page=${1}&limit=${limit}&search=${value}`,
+    //   undefined,
+    //   { shallow: true }
+    // );
+    router.replace({
+      query: {
+        page: 1,
+        limit: limit,
+        search: value,
+      },
+    });
+  };
+
+  const onCategorySelected = (value: string) => {
+    onPageSelected(1, limit);
+    setCategoryId(value);
+  };
+
+  const columns: ITableColumn<BankCreditor>[] = getColumns({ currentLanguage });
 
   const paginationControl = paginationResult
     ? {
@@ -176,7 +202,7 @@ export const DashboardCreditors = () => {
                   <div className="">
                     <Label>{categoryFilterLabel}</Label>
                     <Select
-                      onValueChange={(value) => setCategoryId(value)}
+                      onValueChange={(value) => onCategorySelected(value)}
                       value={categoryId}
                     >
                       <SelectTrigger className="">
@@ -222,7 +248,7 @@ export const DashboardCreditors = () => {
                         key={creditor.id}
                         onClick={() => {
                           router.push(
-                            `/dashboard/creditors/${creditor.id}`,
+                            `/dashboard/creditors/${creditor.creditorSlug}`,
                             undefined,
                             { shallow: true }
                           );
