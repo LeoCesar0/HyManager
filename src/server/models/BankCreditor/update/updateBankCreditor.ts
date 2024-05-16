@@ -26,7 +26,7 @@ export const updateBankCreditor = async ({
     if (result.done) {
       const client = ALGOLIA_CLIENT();
       const index = client.initIndex(ALGOLIA_INDEXES.CREDITORS);
-      index.partialUpdateObject(
+      await index.partialUpdateObject(
         {
           objectID: id,
           ...values,
