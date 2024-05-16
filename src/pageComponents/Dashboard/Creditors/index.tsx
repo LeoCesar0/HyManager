@@ -21,15 +21,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useT from "@/hooks/useT";
 import { getCurrentBankCategories } from "@/utils/getCurrentBankCategories";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { BankCategory } from "@/server/models/BankAccount/schema";
 import selectT from "@/utils/selectT";
+import { CategorySelect } from "../components/CategorySelect";
 
 const ALL_CATEGORY_ID = "SELECT_ALL";
 
@@ -39,7 +33,7 @@ export const DashboardCreditors = () => {
   const [paginationResult, setPaginationResult] =
     useState<PaginationResult<BankCreditor> | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [categoryId, setCategoryId] = useState<string>("");
+  const [categoryId, setCategoryId] = useState<string>(ALL_CATEGORY_ID);
 
   const router = useRouter();
 
@@ -53,26 +47,6 @@ export const DashboardCreditors = () => {
       currentLanguage,
     });
   }, [currentBankAccount, currentLanguage]);
-
-  const categoriesOptions: BankCategory[] = [
-    {
-      id: ALL_CATEGORY_ID,
-      slug: ALL_CATEGORY_ID,
-      color: "#fff",
-      isDefault: true,
-      name: selectT(currentLanguage, {
-        en: "All",
-        pt: "Todas",
-      }),
-    },
-    ...Array.from(categories.values()),
-  ];
-
-  useEffect(() => {
-    if (categoriesOptions[0]) {
-      setCategoryId(categoriesOptions[0].id);
-    }
-  }, [categoriesOptions.length]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -122,11 +96,6 @@ export const DashboardCreditors = () => {
   }, [page, limit]);
 
   const onPageSelected = (_page: number, _limit: number = limit) => {
-    // router.push(
-    //   `/dashboard/creditors?page=${_page}&limit=${_limit}&search=${search}`,
-    //   undefined,
-    //   { shallow: true }
-    // );
     router.replace({
       query: {
         page: _page,
@@ -137,11 +106,6 @@ export const DashboardCreditors = () => {
   };
 
   const setSearch = (value: string) => {
-    // router.push(
-    //   `/dashboard/creditors?page=${1}&limit=${limit}&search=${value}`,
-    //   undefined,
-    //   { shallow: true }
-    // );
     router.replace({
       query: {
         page: 1,
@@ -173,10 +137,6 @@ export const DashboardCreditors = () => {
     en: "Gas Station",
     pt: "Posto de Gasolina",
   });
-  const categoryFilterLabel = useT({
-    en: "Category",
-    pt: "Categoria",
-  });
   return (
     <>
       <SectionContainer>
@@ -199,32 +159,20 @@ export const DashboardCreditors = () => {
                       placeholder={searchPlaceholder}
                     />
                   </div>
-                  <div className="">
-                    <Label>{categoryFilterLabel}</Label>
-                    <Select
-                      onValueChange={(value) => onCategorySelected(value)}
-                      value={categoryId}
-                    >
-                      <SelectTrigger className="">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categoriesOptions.map((category) => {
-                          return (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.id !== ALL_CATEGORY_ID && (
-                                <div
-                                  className="h-3 w-3 rounded-full "
-                                  style={{ backgroundColor: category.color }}
-                                ></div>
-                              )}
-                              <span>{category.name}</span>
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <CategorySelect
+                    value={categoryId}
+                    onChange={onCategorySelected}
+                    defaultOption={{
+                      id: ALL_CATEGORY_ID,
+                      slug: ALL_CATEGORY_ID,
+                      color: "#fff",
+                      isDefault: true,
+                      name: selectT(currentLanguage, {
+                        en: "All",
+                        pt: "Todas",
+                      }),
+                    }}
+                  />
                 </>
               }
               pagination={paginationControl}

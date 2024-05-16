@@ -3,6 +3,8 @@ import { firebaseUpdate } from "@server/firebase/firebaseUpdate";
 import { AppModelResponse } from "@/@types/index";
 import { debugDev } from "@/utils/dev";
 import { BankCreditor } from "../schema";
+import { ALGOLIA_CLIENT, ALGOLIA_INDEXES } from "@/services/algolia";
+import { object } from "zod";
 
 interface IUpdateBankCreditor {
   values: {
@@ -22,6 +24,18 @@ export const updateBankCreditor = async ({
       data: values,
       id: id,
     });
+    if (result.done) {
+      const index = ALGOLIA_CLIENT.initIndex(ALGOLIA_INDEXES.CREDITORS);
+      index.partialUpdateObject(
+        {
+          objectID: id,
+          ...values,
+        },
+        {
+          createIfNotExists: true,
+        }
+      );
+    }
     return result;
   } catch (error) {
     const errorMessage = debugDev({

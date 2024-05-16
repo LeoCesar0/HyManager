@@ -4,7 +4,6 @@ import { listBankCreditors } from "../../BankCreditor/read/listBankCreditors";
 import { WriteBatch } from "firebase/firestore";
 import { batchBankCreditor } from "../../BankCreditor/create/batchBankCreditor";
 import { DEFAULT_CATEGORY } from "../../BankAccount/static";
-import { ALGOLIA_CREDITORS_INDEX } from "@/services/algolia";
 import { BankCreditor } from "../../BankCreditor/schema";
 
 type IProps = {

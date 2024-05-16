@@ -95,7 +95,7 @@ const SelectItem = React.forwardRef<
       </SelectPrimitive.ItemIndicator>
     </span>
     <SelectPrimitive.ItemText>
-      <div className="flex items-center gap-2" >{children}</div>
+      <div className="flex items-center gap-2">{children}</div>
     </SelectPrimitive.ItemText>
   </SelectPrimitive.Item>
 ));

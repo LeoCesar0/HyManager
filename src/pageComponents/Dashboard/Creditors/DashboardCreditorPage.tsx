@@ -1,8 +1,16 @@
 import { Section, SectionContainer } from "@/components/Section/Section";
 import { SimpleTableCell } from "@/components/SimpleTable/SimpleTableCell";
 import { SimpleTableRow } from "@/components/SimpleTable/SimpleTableRow";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
+import useT from "@/hooks/useT";
 import { getBankCreditor } from "@/server/models/BankCreditor/read/getBankCreditor";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
 import { listTransactionsByBankId } from "@/server/models/Transaction/read/listTransactionsByBankId";
@@ -13,18 +21,24 @@ import selectT from "@/utils/selectT";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { If, Then } from "react-if";
+import { CategorySelect } from "../components/CategorySelect";
+import { Button } from "@/components/ui/button";
+import { useToastPromise } from "@/hooks/useToastPromise";
+import { updateBankCreditor } from "@/server/models/BankCreditor/update/updateBankCreditor";
 
 export const DashboardCreditorPage = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const { currentLanguage } = useGlobalContext();
-  // const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [transactionsByMonth, setTransactionsByMonth] = useState<
     Map<string, Transaction[]>
   >(new Map());
   const [creditor, setCreditor] = useState<BankCreditor | null>(null);
+  const [changingCategory, setChangingCategory] = useState(false);
   const router = useRouter();
 
   const creditorSlug = (router.query.slug || "") as string;
+
+  const { handleToast, isLoading } = useToastPromise();
 
   useEffect(() => {
     if (currentBankAccount && creditorSlug) {
@@ -94,7 +108,27 @@ export const DashboardCreditorPage = () => {
     );
   }, [transactionsByMonth]);
 
-  const months = new Set<string>();
+  const saveCategory = async (newCategoryId: string) => {
+    if (!creditor) {
+      return;
+    }
+
+    const promise = updateBankCreditor({
+      id: creditor?.id,
+      values: {
+        categoryId: newCategoryId,
+      },
+    });
+
+    const res = await handleToast(promise, "updateMessages");
+    if (res.done) {
+      setCreditor({
+        ...creditor,
+        categoryId: newCategoryId,
+      });
+    }
+    setChangingCategory(false);
+  };
 
   return (
     <SectionContainer>
@@ -104,6 +138,34 @@ export const DashboardCreditorPage = () => {
           pt: creditor?.creditor ?? "Beneficiário",
         }}
         goBackLink={true}
+        rightActions={
+          <>
+            <div className="flex items-end gap-2">
+              <Button
+                variant={changingCategory ? "default" : "secondary"}
+                onClick={() => {
+                  setChangingCategory(!changingCategory);
+                }}
+                disabled={isLoading}
+              >
+                {changingCategory
+                  ? selectT(currentLanguage, {
+                      en: "Cancel",
+                      pt: "Cancelar",
+                    })
+                  : selectT(currentLanguage, {
+                      en: "Change",
+                      pt: "Mudar",
+                    })}
+              </Button>
+              <CategorySelect
+                disabled={!changingCategory || isLoading}
+                value={creditor?.categoryId ?? ""}
+                onChange={saveCategory}
+              />
+            </div>
+          </>
+        }
       >
         <div className="grid grid-cols-1 gap-6 py-6">
           <If condition={!!creditor}>
