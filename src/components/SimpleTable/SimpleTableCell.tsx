@@ -21,7 +21,7 @@ export const SimpleTableCell = ({
   return (
     <div
       className={cx([
-        `px-2 py-1 rounded-sm line-clamp-2 flex items-start justify-start gap-2 text-sm`,
+        `px-2 py-1 rounded-sm line-clamp-2 flex items-start justify-start gap-2 text-sm text-ellipsis`,
         ["text-deposit", transactionType === TransactionType.deposit],
         ["text-debit", transactionType === TransactionType.debit],
         className,
