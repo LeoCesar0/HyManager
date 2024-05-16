@@ -219,6 +219,26 @@ export const DashboardCreditorPage = () => {
                           >
                             {formatAnyDate(transaction.date)}
                           </SimpleTableCell>
+                          {transaction.file && (
+                            <SimpleTableCell
+                              label={selectT(currentLanguage, {
+                                en: "File",
+                                pt: "Arquivo",
+                              })}
+                            >
+                              <a
+                                className="underline"
+                                href={transaction.file.url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {selectT(currentLanguage, {
+                                  en: "Open",
+                                  pt: "Abrir",
+                                })}
+                              </a>
+                            </SimpleTableCell>
+                          )}
                           <SimpleTableCell
                             label={selectT(currentLanguage, {
                               en: "Balance after",
