@@ -25,8 +25,8 @@ export const DEFAULT_CATEGORY = {
     color: "#c7a0f1",
     isDefault: true,
     name: {
-      en: "Entertaining",
-      pt: "Entretenimento",
+      en: "Leisure",
+      pt: "Lazer",
     },
     slug: "fun-default",
     id: "fun-default",
