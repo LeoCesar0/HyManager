@@ -11,11 +11,19 @@ import {
 import { useGlobalAuth } from "./GlobalAuth";
 import { listBankAccountByUserId } from "@/server/models/BankAccount/read/listBankAccountByUserId";
 import { useRouter } from "next/navigation";
+import { DateBreakPoint } from "@/server/utils/calculateDashboardSummary";
+import { getDateBreakPoints } from "@/pageComponents/Dashboard/Overview/utils/getDateBreakPoints";
+
+export type DashboardOverviewConfig = {
+  dateBreakPoints: DateBreakPoint[];
+  earliestBreakPoint: DateBreakPoint;
+};
 
 interface IState {
   menuIsOpen: boolean;
   currentBankAccount: BankAccount | null;
   bankAccounts: BankAccount[];
+  overviewConfig: DashboardOverviewConfig;
 }
 
 interface IActions {
@@ -27,10 +35,15 @@ interface IActions {
 
 interface IGlobalDashboardStore extends IState, IActions {}
 
+const overviewConfigInit = getDateBreakPoints();
 const initialValues: IState = {
   menuIsOpen: true,
   currentBankAccount: null,
   bankAccounts: [],
+  overviewConfig: {
+    dateBreakPoints: overviewConfigInit.breakPoints,
+    earliestBreakPoint: overviewConfigInit.earliestBreakPoint,
+  },
 };
 
 const Context = createContext<IGlobalDashboardStore>(
@@ -96,6 +109,17 @@ export const GlobalDashboardStore: ReactNode = ({ children }) => {
     }
   }, [currentUser?.id]);
   // --------------------------
+
+  useEffect(() => {
+    const { breakPoints, earliestBreakPoint } = getDateBreakPoints();
+    setState((prev) => ({
+      ...prev,
+      overviewConfig: {
+        dateBreakPoints: breakPoints,
+        earliestBreakPoint,
+      },
+    }));
+  }, []);
 
   return (
     <Context.Provider

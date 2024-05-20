@@ -1,3 +1,4 @@
+import { DashboardOverviewConfig } from "@/contexts/GlobalDashboardStore";
 import { listTransactionReportsBy } from "@/server/models/TransactionReport/read/listTransactionReportBy";
 import { TransactionReport } from "@/server/models/TransactionReport/schema";
 import {
@@ -7,8 +8,8 @@ import {
 } from "@/server/utils/calculateDashboardSummary";
 
 type IGetDashboardOverviewData = {
-  dateBreakPoints: DateBreakPoint[];
   bankAccountId: string;
+  overviewConfig: DashboardOverviewConfig;
 };
 
 export type DashboardOverviewData = {
@@ -17,13 +18,10 @@ export type DashboardOverviewData = {
 };
 
 export const getDashboardOverviewData = async ({
-  dateBreakPoints,
+  overviewConfig,
   bankAccountId,
 }: IGetDashboardOverviewData): Promise<DashboardOverviewData> => {
-  const earliestBreakPoint = dateBreakPoints.reduce((acc, entry) => {
-    if (entry.start.getTime() < acc.start.getTime()) acc = entry;
-    return acc;
-  }, dateBreakPoints[0]);
+  const { dateBreakPoints, earliestBreakPoint } = overviewConfig;
 
   const response = await listTransactionReportsBy({
     bankAccountId: bankAccountId,

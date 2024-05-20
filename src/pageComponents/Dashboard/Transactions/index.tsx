@@ -58,7 +58,23 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
           direction: "desc",
           field: "date",
         },
+        // orderBy: {
+        //   direction: "desc",
+        //   field: "amount",
+        // },
       },
+      // filters: [
+      //   {
+      //     field: "amount",
+      //     operator: "<",
+      //     value: -120,
+      //   },
+      //   {
+      //     field: "amount",
+      //     operator: ">",
+      //     value: -200,
+      //   },
+      // ],
     });
   });
 
@@ -160,7 +176,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
 
                           if (column.key === "amount") {
                             const value = transaction.amount;
-                            const label = valueToCurrency(value);
+                            const label = valueToCurrency(Math.abs(value));
                             const isDeposit = value > 0;
                             return (
                               <TableCell key={column.key}>

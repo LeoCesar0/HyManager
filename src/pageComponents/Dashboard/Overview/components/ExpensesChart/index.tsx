@@ -5,21 +5,22 @@ import { TransactionReport } from "@/server/models/TransactionReport/schema";
 import useT from "@/hooks/useT";
 import { sub } from "date-fns";
 import { capitalizeString } from "@/utils/capitalizeString";
+import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 
 interface IExpensesChart {
   transactionReports: TransactionReport[];
 }
 
 const ExpensesChart: React.FC<IExpensesChart> = ({ transactionReports }) => {
-  const now = new Date()
-  const startDate = sub(now, { months: 1 });
+  const { overviewConfig } = useGlobalDashboardStore();
+  const startDate = overviewConfig.earliestBreakPoint.start;
 
   const enMonth = startDate.toLocaleString("en", { month: "long" });
   const ptMonth = startDate.toLocaleString("pt", { month: "long" });
 
   const title = useT({
     en: `Expenses since last ${capitalizeString(enMonth)}`,
-    pt: `Gastos desde ${capitalizeString(ptMonth)}`
+    pt: `Gastos desde ${capitalizeString(ptMonth)}`,
   });
 
   const { series, options } = useMemo(() => {

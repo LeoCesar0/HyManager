@@ -12,12 +12,16 @@ import {
 } from "./utils/getDashboardOverviewData";
 import ExpensesChart from "./components/ExpensesChart";
 import { getGoalsCards } from "./utils/getGoalsCards";
+import { CategoriesChart } from "./components/CategoriesChart";
+import { BankCreditor } from "@/server/models/BankCreditor/schema";
+import { listBankCreditors } from "@/server/models/BankCreditor/read/listBankCreditors";
 
 export const DashboardOverView = () => {
-  const { currentBankAccount } = useGlobalDashboardStore();
+  const { currentBankAccount, overviewConfig } = useGlobalDashboardStore();
   const [overviewData, setOverviewData] =
     useState<null | DashboardOverviewData>(null);
   const bankAccountId = currentBankAccount?.id || "";
+  const [creditors, setCreditors] = useState<BankCreditor[]>([]);
 
   // --------------------------
   // LAST REPORTS
@@ -34,34 +38,41 @@ export const DashboardOverView = () => {
   // SUMMARY / EXPENSES
   // --------------------------
 
-  const breakPoints = useMemo(() => getDateBreakPoints(), []);
+  const { dateBreakPoints, earliestBreakPoint } = overviewConfig;
 
   useEffect(() => {
-    if (bankAccountId && breakPoints.length > 0) {
+    if (bankAccountId && dateBreakPoints.length > 0) {
       getDashboardOverviewData({
         bankAccountId: bankAccountId,
-        dateBreakPoints: breakPoints,
+        overviewConfig: {
+          dateBreakPoints,
+          earliestBreakPoint,
+        },
       }).then((result) => {
         setOverviewData(result);
       });
     }
-  }, [bankAccountId, breakPoints]);
+  }, [bankAccountId, dateBreakPoints, earliestBreakPoint]);
 
   const summary = overviewData?.dashboardSummary || null;
 
   const expensesCards = getExpensesCards(summary);
 
-  // --------------------------
-  // TRANSACTIONS REPORT
-  // --------------------------
-
-  // TODO change maxExpenses
+  // TODO change maxExpenses GOAL
   const goalCards = getGoalsCards({
     goals: {
       maxExpenses: 4900,
     },
     summary: summary,
   });
+
+  useEffect(() => {
+    listBankCreditors({
+      bankAccountId,
+    }).then((res) => {
+      setCreditors(res.data ?? []);
+    });
+  }, [bankAccountId]);
 
   return (
     <SectionContainer>
@@ -77,9 +88,18 @@ export const DashboardOverView = () => {
         </div>
       </Section>
       <Section sectionTitle={{ en: "Charts", pt: "Gráficos" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          {overviewData && creditors.length > 0 && (
+            <CategoriesChart
+              transactionReports={overviewData.transactionReports}
+              creditors={creditors}
+            />
+          )}
+        </div>
         {overviewData && (
           <ExpensesChart transactionReports={overviewData.transactionReports} />
         )}
+
         {/* <BalanceChart bankAccountId={currentBankAccount!.id} /> */}
       </Section>
     </SectionContainer>

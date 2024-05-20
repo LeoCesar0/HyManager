@@ -41,6 +41,16 @@ export const DEFAULT_CATEGORY = {
     slug: "investment-default",
     id: "investment-default",
   },
+  "invoice-default": {
+    color: "#FF1050",
+    isDefault: true,
+    name: {
+      en: "Invoicing Card",
+      pt: "Fatura de Cartão",
+    },
+    slug: "invoice-default",
+    id: "invoice-default",
+  },
   "other-default": {
     color: "#a0c7f1",
     isDefault: true,

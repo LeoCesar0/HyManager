@@ -12,10 +12,6 @@ export const getExpensesCards = (summary: DashboardSummary | null) => {
   const { enLastMonth, enThisMonth, ptLastMonth, ptThisMonth } =
     getMonthLabels();
 
-  // const last7 = valueToCurrency(summary?.["last-7"]?.totalExpenses || 0);
-  // const last30 = valueToCurrency(summary?.["last-30"]?.totalExpenses || 0);
-  // const last60 = valueToCurrency(summary?.["last-60"]?.totalExpenses || 0);
-
   const expensesCards: ExpensesCardProps[] = [
     {
       title: {
