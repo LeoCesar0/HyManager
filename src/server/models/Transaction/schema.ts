@@ -29,6 +29,7 @@ export const transactionSchema = z.object({
   dateMonth: z.string(),
   dateYear: z.string(),
   dateWeek: z.string(),
+  categories: z.array(z.string()),
 });
 /** @deprecated */
 export const createTransactionSchema = z.object({
@@ -53,29 +54,6 @@ export const createTransactionSchema = z.object({
   updatedBalance: z.number(),
 });
 
-export const createTransactionSchemaPT: typeof createTransactionSchema =
-  z.object({
-    slug: z.string().optional(),
-    idFromBank: z.string().optional(),
-    bankAccountId: z.string().optional(),
-    type: z.enum([TransactionType.deposit, TransactionType.debit]),
-    file: z
-      .object({
-        id: z.string(),
-        name: z.string(),
-        url: z.string(),
-      })
-      .optional(),
-    creditor: z.string().min(1),
-    description: z.string(),
-    date: z.date({
-      invalid_type_error: "Insira uma data",
-      required_error: "Campo obrigatório",
-    }),
-    amount: z.number(),
-    updatedBalance: z.number(),
-  });
-
 export const createTransactionFromPDFSchema = z.object({
   slug: z.string().optional(),
   idFromBank: z.string().optional(),
@@ -93,6 +71,7 @@ export const createTransactionFromPDFSchema = z.object({
   date: z.date().or(z.string()),
   amount: z.number(),
   updatedBalance: z.number(),
+  categories: z.array(z.string()),
 });
 
 export type Transaction = z.infer<typeof transactionSchema>;

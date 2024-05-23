@@ -45,7 +45,7 @@ export const handleCreditorsOnBatchTransactions = async ({
         batch,
         values: {
           bankAccountId,
-          categoryId: DEFAULT_CATEGORY["other-default"].slug,
+          categories: [DEFAULT_CATEGORY["other-default"].id],
           creditorSlug: creditorSlug,
           creditor: incomingCreditor,
         },

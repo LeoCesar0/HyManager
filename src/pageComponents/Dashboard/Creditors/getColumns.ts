@@ -17,7 +17,7 @@ export const getColumns = ({
       }),
     },
     {
-      key: "categoryId",
+      key: "categories",
       label: selectT(currentLanguage, {
         en: "Category",
         pt: "Categoria",

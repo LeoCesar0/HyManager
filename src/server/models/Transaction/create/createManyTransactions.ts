@@ -3,7 +3,7 @@ import { debugDev } from "@/utils/dev";
 import { writeBatch } from "firebase/firestore";
 import { firebaseDB } from "@/services/firebase";
 import { FirebaseCollection } from "@server/firebase";
-import { CreateTransaction, Transaction } from "../schema";
+import { CreateTransactionFromPDF, Transaction } from "../schema";
 import { batchManyTransactionReports } from "@models/TransactionReport/create/batchManyTransactionsReport";
 import { createDocRef } from "@/server/utils/createDocRef";
 import { makeTransactionFields } from "../utils/makeTransactionFields";
@@ -11,7 +11,7 @@ import { handleCreditorsOnBatchTransactions } from "../utils/handleCreditorsOnBa
 import { ALGOLIA_CLIENT, ALGOLIA_INDEXES } from "@/services/algolia";
 
 interface ICreateManyTransactions {
-  transactions: CreateTransaction[];
+  transactions: CreateTransactionFromPDF[];
   bankAccountId: string;
 }
 

@@ -219,6 +219,7 @@ export function parse(
           date: date,
           idFromBank: "pdf",
           updatedBalance: currency(prevTransBalance).add(amount).value,
+          categories: [],
         };
         currentPDFTransactions.push(transaction);
         if (Texts[textIndex + 1]) {

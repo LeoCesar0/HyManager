@@ -22,7 +22,6 @@ const _listTransactionReportsBy = async (filePathList: string[]) => {
             ...transactionInputs,
             date: new Date(transactionInputs.date),
           },
-          
         })
       );
     })
@@ -41,12 +40,12 @@ describe("Test calculateDashboardSummary", () => {
 
     const breakPoints: DateBreakPoint[] = [
       {
-        key: "last-7",
+        key: "thisWeek",
         start: sub(endDate, { days: 7 }),
         end: endDate,
       },
       {
-        key: "last-30",
+        key: "thisMonth",
         start: sub(endDate, { days: 30 }),
         end: endDate,
       },
@@ -62,18 +61,17 @@ describe("Test calculateDashboardSummary", () => {
       reports,
     });
 
-    expect(result["last-7"]).toBeTruthy();
-    expect(result["last-30"]).toBeTruthy();
-    expect(result["21"]).toBeFalsy();
+    expect(result["thisWeek"]).toBeTruthy();
+    expect(result["thisMonth"]).toBeTruthy();
 
-    expect(result["last-7"].biggestDebit?.amount).toBe(-2100);
-    expect(result["last-7"].biggestDeposit).toBe(null);
-    expect(result["last-7"].totalDeposits).toBe(0);
-    expect(result["last-7"].totalExpenses).toBe(-6521.5);
+    expect(result["thisWeek"]?.biggestDebit?.amount).toBe(-2100);
+    expect(result["thisWeek"]?.biggestDeposit).toBe(null);
+    expect(result["thisWeek"]?.totalDeposits).toBe(0);
+    expect(result["thisWeek"]?.totalExpenses).toBe(-6521.5);
 
-    expect(result["last-30"].biggestDebit?.amount).toBe(-2100);
-    expect(result["last-30"].biggestDeposit?.amount).toBe(5000);
-    expect(result["last-30"].totalDeposits).toBe(5203.75);
-    expect(result["last-30"].totalExpenses).toBe(-9713.52);
+    expect(result["thisMonth"]?.biggestDebit?.amount).toBe(-2100);
+    expect(result["thisMonth"]?.biggestDeposit?.amount).toBe(5000);
+    expect(result["thisMonth"]?.totalDeposits).toBe(5203.75);
+    expect(result["thisMonth"]?.totalExpenses).toBe(-9713.52);
   });
 });

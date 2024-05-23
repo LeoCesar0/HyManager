@@ -7,7 +7,7 @@ import { ALGOLIA_CLIENT, ALGOLIA_INDEXES } from "@/services/algolia";
 
 interface IUpdateBankCreditor {
   values: {
-    categoryId: BankCreditor["categoryId"];
+    categories: BankCreditor["categories"];
   };
   id: string;
 }

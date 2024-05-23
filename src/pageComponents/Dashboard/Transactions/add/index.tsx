@@ -18,8 +18,8 @@ import { UploadIcon } from "@radix-ui/react-icons";
 import useT from "@/hooks/useT";
 import Link from "next/link";
 import selectT from "@/utils/selectT";
-import { useGlobalContext } from '@/contexts/GlobalContext';
-import { createManyTransactions } from '@/server/models/Transaction/create/createManyTransactions';
+import { useGlobalContext } from "@/contexts/GlobalContext";
+import { createManyTransactions } from "@/server/models/Transaction/create/createManyTransactions";
 
 const formSchema = createTransactionSchema;
 
@@ -27,7 +27,7 @@ export const DashboardTransactionsAdd = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const { t } = useTranslation();
 
-  const {currentLanguage} = useGlobalContext()
+  const { currentLanguage } = useGlobalContext();
 
   const { handleToast, isLoading } = useToastPromise();
 
@@ -47,11 +47,10 @@ export const DashboardTransactionsAdd = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-
     const promise = createManyTransactions({
       bankAccountId: currentBankAccount!.id,
-      transactions: [values]
-    })
+      transactions: [values],
+    });
 
     handleToast(promise, {
       defaultErrorMessage: {
@@ -62,10 +61,10 @@ export const DashboardTransactionsAdd = () => {
         pt: "Adicionando transação",
         en: "Adding transaction",
       },
-      successMessage:{
+      successMessage: {
         pt: "Transação adicionada",
         en: "Transaction added",
-      }
+      },
     });
   }
 
@@ -81,11 +80,9 @@ export const DashboardTransactionsAdd = () => {
           actions={
             <>
               <Link href={`/dashboard/transactions/import-extract`}>
-                <Button disabled={isLoading}
-                  variant={'secondary'}
-                >
+                <Button disabled={isLoading} variant={"secondary"}>
                   <UploadIcon />
-                  {selectT(currentLanguage,{
+                  {selectT(currentLanguage, {
                     en: "Import PDF",
                     pt: "Importar PDF",
                   })}

@@ -2,13 +2,17 @@ import { makeTransactionSlug } from "@/server/utils/makeTransactionSlug";
 import { slugify } from "@/utils/app";
 import { makeDateFields } from "@/utils/date/makeDateFields";
 import { Timestamp } from "firebase/firestore";
-import { CreateTransaction, Transaction, transactionSchema } from "../schema";
+import {
+  CreateTransactionFromPDF,
+  Transaction,
+  transactionSchema,
+} from "../schema";
 
 export const makeTransactionFields = ({
   transactionInputs,
   bankAccountId,
 }: {
-  transactionInputs: CreateTransaction;
+  transactionInputs: CreateTransactionFromPDF;
   bankAccountId: string;
 }) => {
   const date = new Date(transactionInputs.date);
@@ -29,12 +33,10 @@ export const makeTransactionFields = ({
     createdAt: Timestamp.fromDate(now),
     updatedAt: Timestamp.fromDate(now),
     ...makeDateFields(date),
+    creditorSlug: transactionInputs.creditor ? slugify(transactionInputs.creditor) : "",
   };
-  if (transaction.creditor) {
-    transaction.creditorSlug = slugify(transaction.creditor);
-  }
 
   transactionSchema.parse(transaction);
 
-  return transaction
+  return transaction;
 };

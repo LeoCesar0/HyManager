@@ -76,7 +76,7 @@ export const DashboardCreditors = () => {
                 bankAccountId: _item.bankAccountId!,
                 creditor: _item.creditor!,
                 id: _item.id!,
-                categoryId: _item.categoryId,
+                categories: _item.categories,
                 creditorSlug: _item.creditorSlug,
               };
             }),
@@ -212,24 +212,25 @@ export const DashboardCreditors = () => {
                               <TableCell key={column.key}>{label}</TableCell>
                             );
                           }
-                          if (column.key === "categoryId") {
-                            const label =
-                              categories.get(creditor.categoryId)?.name || "";
-                            const color =
-                              categories.get(creditor.categoryId)?.color ||
-                              "#000";
+                          if (column.key === "categories") {
+                            // const label =
+                            //   categories.get(creditor.categories)?.name || "";
+                            // const color =
+                            //   categories.get(creditor.categories)?.color ||
+                            //   "#000";
+                            //TODO
                             return (
                               <TableCell
                                 key={column.key}
                                 className="flex items-center gap-2"
                               >
-                                <div
+                                {/* <div
                                   className="w-4 h-4 rounded-full"
                                   style={{
                                     backgroundColor: color,
                                   }}
                                 ></div>
-                                <span>{label}</span>
+                                <span>{label}</span> */}
                               </TableCell>
                             );
                           }

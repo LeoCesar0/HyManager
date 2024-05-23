@@ -1,6 +1,6 @@
 import { FileInfo } from "@/@types/File";
 import { createManyTransactions } from "@models/Transaction/create/createManyTransactions";
-import { CreateTransaction } from "@models/Transaction/schema";
+import { CreateTransactionFromPDF } from "@models/Transaction/schema";
 import { IPDFData } from "@/services/PDFReader/interfaces";
 
 interface ICreateTransactionsFromPDFResult {
@@ -14,7 +14,7 @@ export const createTransactionsFromPDFResult = async ({
   uploadedFiles,
   bankAccountId,
 }: ICreateTransactionsFromPDFResult) => {
-  const transactionsToCreate: CreateTransaction[] = [];
+  const transactionsToCreate: CreateTransactionFromPDF[] = [];
 
   pdfReadResult.forEach(async (pdfResult, index) => {
     if (uploadedFiles) {

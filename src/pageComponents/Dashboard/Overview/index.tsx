@@ -3,9 +3,8 @@ import { useGlobalDashboardStore } from "../../../contexts/GlobalDashboardStore"
 import { BalanceCard } from "./components/Cards/BalanceCard";
 import { GoalCard } from "./components/Cards/GoalCard";
 import { ExpensesCard } from "./components/Cards/ExpensesCard";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getExpensesCards } from "./utils/getExpensesCards";
-import { getDateBreakPoints } from "./utils/getDateBreakPoints";
 import {
   DashboardOverviewData,
   getDashboardOverviewData,
@@ -88,14 +87,15 @@ export const DashboardOverView = () => {
         </div>
       </Section>
       <Section sectionTitle={{ en: "Charts", pt: "Gráficos" }}>
-        <div className="grid grid-cols-1 lg:grid-cols-2">
+        {/* TODO */}
+        {/* <div className="grid grid-cols-1 lg:grid-cols-2">
           {overviewData && creditors.length > 0 && (
             <CategoriesChart
               transactionReports={overviewData.transactionReports}
               creditors={creditors}
             />
           )}
-        </div>
+        </div> */}
         {overviewData && (
           <ExpensesChart transactionReports={overviewData.transactionReports} />
         )}
