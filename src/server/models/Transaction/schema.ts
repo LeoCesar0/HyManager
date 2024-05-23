@@ -30,7 +30,7 @@ export const transactionSchema = z.object({
   dateYear: z.string(),
   dateWeek: z.string(),
 });
-
+/** @deprecated */
 export const createTransactionSchema = z.object({
   slug: z.string().optional(),
   idFromBank: z.string().optional(),
