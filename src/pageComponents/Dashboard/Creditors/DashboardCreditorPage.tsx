@@ -25,6 +25,8 @@ import { CategorySelect } from "../components/CategorySelect";
 import { Button } from "@/components/ui/button";
 import { useToastPromise } from "@/hooks/useToastPromise";
 import { updateBankCreditor } from "@/server/models/BankCreditor/update/updateBankCreditor";
+import { CategoryLabel } from "@/components/CategoryLabel";
+import { getCurrentBankCategories } from "@/utils/getCurrentBankCategories";
 
 export const DashboardCreditorPage = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -34,6 +36,7 @@ export const DashboardCreditorPage = () => {
   >(new Map());
   const [creditor, setCreditor] = useState<BankCreditor | null>(null);
   const [changingCategory, setChangingCategory] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
   const router = useRouter();
 
   const creditorSlug = (router.query.slug || "") as string;
@@ -46,6 +49,7 @@ export const DashboardCreditorPage = () => {
         bankAccountId: currentBankAccount?.id || "",
         creditorSlug: creditorSlug,
       }).then((res) => {
+        setCategories(res.data?.categories ?? []);
         setCreditor(res.data);
       });
     }
@@ -108,7 +112,7 @@ export const DashboardCreditorPage = () => {
     );
   }, [transactionsByMonth]);
 
-  const saveCategory = async (newCategoryId: string) => {
+  const saveCategory = async () => {
     if (!creditor) {
       return;
     }
@@ -116,7 +120,7 @@ export const DashboardCreditorPage = () => {
     const promise = updateBankCreditor({
       id: creditor?.id,
       values: {
-        categoryId: newCategoryId,
+        categories: categories,
       },
     });
 
@@ -124,11 +128,18 @@ export const DashboardCreditorPage = () => {
     if (res.done) {
       setCreditor({
         ...creditor,
-        categoryId: newCategoryId,
+        categories: categories,
       });
     }
     setChangingCategory(false);
   };
+
+  const categoriesMap = useMemo(() => {
+    return getCurrentBankCategories({
+      currentBankAccount,
+      currentLanguage,
+    });
+  }, [currentBankAccount, currentLanguage]);
 
   return (
     <SectionContainer>
@@ -141,10 +152,27 @@ export const DashboardCreditorPage = () => {
         rightActions={
           <>
             <div className="flex items-end gap-2">
+              {changingCategory && (
+                <Button
+                  variant="default"
+                  onClick={saveCategory}
+                  disabled={isLoading}
+                >
+                  {selectT(currentLanguage, {
+                    en: "Save",
+                    pt: "Salvar",
+                  })}
+                </Button>
+              )}
               <Button
-                variant={changingCategory ? "default" : "secondary"}
+                variant={changingCategory ? "secondary" : "secondary"}
                 onClick={() => {
-                  setChangingCategory(!changingCategory);
+                  if (changingCategory) {
+                    setCategories(creditor?.categories ?? []);
+                    setChangingCategory(false);
+                  } else {
+                    setChangingCategory(true);
+                  }
                 }}
                 disabled={isLoading}
               >
@@ -160,8 +188,11 @@ export const DashboardCreditorPage = () => {
               </Button>
               <CategorySelect
                 disabled={!changingCategory || isLoading}
-                value={creditor?.categoryId ?? ""}
-                onChange={saveCategory}
+                value={categories}
+                onChange={(value) => {
+                  console.log("value", value);
+                  setCategories(value);
+                }}
               />
             </div>
           </>
@@ -170,6 +201,20 @@ export const DashboardCreditorPage = () => {
         <div className="grid grid-cols-1 gap-6 py-6">
           <If condition={!!creditor}>
             <Then>
+              <ul className="flex flex-wrap items-center gap-2 ">
+                {creditor?.categories.map((category) => {
+                  return (
+                    <li key={category}
+                      className="px-2 py-1 bg-card rounded-sm"
+                    >
+                      <CategoryLabel
+                        categoryId={category}
+                        label={categoriesMap.get(category)?.name ?? "category"}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
               <div className="grid grid-cols-[minmax(100px,200px)_1fr]">
                 <div className="border-border border-r grid grid-cols-1 gap-2 [&>*]:text-muted-foreground [&>*]:text-sm">
                   <p>

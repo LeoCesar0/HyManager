@@ -1,3 +1,6 @@
+import { ISelectOption } from "@/@types/Select";
+import { CategoryLabel } from "@/components/CategoryLabel";
+import { MultipleSelect } from "@/components/MultipleSelect/MultipleSelect";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -14,13 +17,11 @@ import selectT from "@/utils/selectT";
 import { useMemo } from "react";
 
 export type CategorySelectProps = {
-  value: string;
-  onChange: (value: string) => void;
+  value: string[];
+  onChange: (value: string[]) => void;
   defaultOption?: BankCategory;
   disabled?: boolean;
 };
-
-const ALL_CATEGORY_ID = "SELECT_ALL";
 
 export const CategorySelect = ({
   value,
@@ -38,10 +39,18 @@ export const CategorySelect = ({
     });
   }, [currentBankAccount, currentLanguage]);
 
-  const categoriesOptions: BankCategory[] = [
+  const categoriesOptions: ISelectOption[] = [
     ...(defaultOption ? [defaultOption] : []),
     ...Array.from(categories.values()),
-  ];
+  ].map((category) => {
+    return {
+      label: {
+        en: category.name,
+        pt: category.name,
+      },
+      value: category.id,
+    };
+  });
 
   const categoryFilterLabel = selectT(currentLanguage, {
     en: "Category",
@@ -50,35 +59,20 @@ export const CategorySelect = ({
 
   return (
     <>
-      <div className="">
-        <Label className={disabled ? "opacity-50" : ""}>
-          {categoryFilterLabel}
-        </Label>
-        <Select
-          onValueChange={(value) => onChange(value)}
-          value={value}
-          disabled={disabled}
-        >
-          <SelectTrigger className="min-w-[200px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {categoriesOptions.map((category) => {
-              return (
-                <SelectItem key={category.id} value={category.id}>
-                  {category.id !== ALL_CATEGORY_ID && (
-                    <div
-                      className="h-3 w-3 rounded-full "
-                      style={{ backgroundColor: category.color }}
-                    ></div>
-                  )}
-                  <span>{category.name}</span>
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
-      </div>
+      <MultipleSelect
+        label={categoryFilterLabel}
+        options={categoriesOptions}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        CustomLabel={({ option }) => {
+          return (
+            <>
+              <CategoryLabel categoryId={option.value} label={option.label} />
+            </>
+          );
+        }}
+      />
     </>
   );
 };

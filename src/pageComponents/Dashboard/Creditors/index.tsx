@@ -25,8 +25,7 @@ import { BankCategory } from "@/server/models/BankAccount/schema";
 import selectT from "@/utils/selectT";
 import { CategorySelect } from "../components/CategorySelect";
 import algoliasearch from "algoliasearch";
-
-const ALL_CATEGORY_ID = "SELECT_ALL";
+import { CategoryLabel } from "@/components/CategoryLabel";
 
 export const DashboardCreditors = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -34,7 +33,7 @@ export const DashboardCreditors = () => {
   const [paginationResult, setPaginationResult] =
     useState<PaginationResult<BankCreditor> | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [categoryId, setCategoryId] = useState<string>(ALL_CATEGORY_ID);
+  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
   const router = useRouter();
 
@@ -62,9 +61,9 @@ export const DashboardCreditors = () => {
         .search(search, {
           page: page - 1,
           filters:
-            !categoryId || categoryId === ALL_CATEGORY_ID
+            categoryFilter.length === 0
               ? undefined
-              : `categoryId:${categoryId}`,
+              : `categories:${categoryFilter[0]}`,
         })
         .then((res) => {
           setPaginationResult({
@@ -91,7 +90,7 @@ export const DashboardCreditors = () => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [search, page, limit, categoryId]);
+  }, [search, page, limit, categoryFilter.length]);
 
   useEffect(() => {
     onPageSelected(page, limit);
@@ -117,9 +116,9 @@ export const DashboardCreditors = () => {
     });
   };
 
-  const onCategorySelected = (value: string) => {
+  const onCategorySelected = (value: string[]) => {
     onPageSelected(1, limit);
-    setCategoryId(value);
+    setCategoryFilter(value);
   };
 
   const columns: ITableColumn<BankCreditor>[] = getColumns({ currentLanguage });
@@ -152,7 +151,7 @@ export const DashboardCreditors = () => {
             <TableContainer
               actions={
                 <>
-                  <div className="">
+                  <div className="w-[250px]">
                     <Label>{searchLabel}</Label>
                     <Input
                       name="search"
@@ -162,18 +161,8 @@ export const DashboardCreditors = () => {
                     />
                   </div>
                   <CategorySelect
-                    value={categoryId}
+                    value={categoryFilter}
                     onChange={onCategorySelected}
-                    defaultOption={{
-                      id: ALL_CATEGORY_ID,
-                      slug: ALL_CATEGORY_ID,
-                      color: "#fff",
-                      isDefault: true,
-                      name: selectT(currentLanguage, {
-                        en: "All",
-                        pt: "Todas",
-                      }),
-                    }}
                   />
                 </>
               }
@@ -213,24 +202,22 @@ export const DashboardCreditors = () => {
                             );
                           }
                           if (column.key === "categories") {
-                            // const label =
-                            //   categories.get(creditor.categories)?.name || "";
-                            // const color =
-                            //   categories.get(creditor.categories)?.color ||
-                            //   "#000";
-                            //TODO
                             return (
                               <TableCell
                                 key={column.key}
-                                className="flex items-center gap-2"
+                                className="flex items-center gap-2 truncate"
                               >
-                                {/* <div
-                                  className="w-4 h-4 rounded-full"
-                                  style={{
-                                    backgroundColor: color,
-                                  }}
-                                ></div>
-                                <span>{label}</span> */}
+                                {creditor.categories?.map((category) => {
+                                  const category_ = categories.get(category);
+                                  if (!category_) return null;
+                                  return (
+                                    <CategoryLabel
+                                      key={category_.id}
+                                      categoryId={category_.id}
+                                      label={category_.name}
+                                    />
+                                  );
+                                })}
                               </TableCell>
                             );
                           }
