@@ -3,7 +3,7 @@ import { SectionContainer } from "../../../components/Section/Section";
 import { Transaction } from "@/server/models/Transaction/schema";
 import useSwr from "swr";
 import { useGlobalDashboardStore } from "../../../contexts/GlobalDashboardStore";
-import { listTransactionsByBankId } from "../../../server/models/Transaction/read/listTransactionsByBankId";
+import { paginateTransactionsByBankId } from "../../../server/models/Transaction/read/paginateTransactionsByBankId";
 import { useRouter } from "next/router";
 import {
   Table,
@@ -49,7 +49,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
 
   const { data: pagination, isLoading } = useSwr(listKey, (args) => {
     const [_, id, page, limit] = args as typeof argsKey;
-    return listTransactionsByBankId({
+    return paginateTransactionsByBankId({
       id: id,
       pagination: {
         limit: limit,

@@ -14,6 +14,8 @@ import { getGoalsCards } from "./utils/getGoalsCards";
 import { CategoriesChart } from "./components/CategoriesChart";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
 import { listBankCreditors } from "@/server/models/BankCreditor/read/listBankCreditors";
+import { Transaction } from "@/server/models/Transaction/schema";
+import { paginateTransactionsByBankId } from "@/server/models/Transaction/read/listTransactionsByBankId";
 
 export const DashboardOverView = () => {
   const { currentBankAccount, overviewConfig } = useGlobalDashboardStore();
@@ -21,6 +23,7 @@ export const DashboardOverView = () => {
     useState<null | DashboardOverviewData>(null);
   const bankAccountId = currentBankAccount?.id || "";
   const [creditors, setCreditors] = useState<BankCreditor[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   // --------------------------
   // LAST REPORTS
@@ -48,6 +51,11 @@ export const DashboardOverView = () => {
           earliestBreakPoint,
         },
       }).then((result) => {
+        setOverviewData(result);
+      });
+    }
+    if (bankAccountId && dateBreakPoints.length > 0) {
+      paginateTransactionsByBankId({}).then((result) => {
         setOverviewData(result);
       });
     }
@@ -87,15 +95,14 @@ export const DashboardOverView = () => {
         </div>
       </Section>
       <Section sectionTitle={{ en: "Charts", pt: "Gráficos" }}>
-        {/* TODO */}
-        {/* <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
           {overviewData && creditors.length > 0 && (
             <CategoriesChart
               transactionReports={overviewData.transactionReports}
               creditors={creditors}
             />
           )}
-        </div> */}
+        </div>
         {overviewData && (
           <ExpensesChart transactionReports={overviewData.transactionReports} />
         )}

@@ -13,7 +13,7 @@ import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 import useT from "@/hooks/useT";
 import { getBankCreditor } from "@/server/models/BankCreditor/read/getBankCreditor";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
-import { listTransactionsByBankId } from "@/server/models/Transaction/read/listTransactionsByBankId";
+import { paginateTransactionsByBankId } from "@/server/models/Transaction/read/listTransactionsByBankId";
 import { Transaction } from "@/server/models/Transaction/schema";
 import { formatAnyDate } from "@/utils/date/formatAnyDate";
 import { valueToCurrency } from "@/utils/misc";
@@ -57,7 +57,7 @@ export const DashboardCreditorPage = () => {
 
   useEffect(() => {
     if (currentBankAccount && creditorSlug) {
-      listTransactionsByBankId({
+      paginateTransactionsByBankId({
         id: currentBankAccount.id,
         filters: [
           {
@@ -204,9 +204,7 @@ export const DashboardCreditorPage = () => {
               <ul className="flex flex-wrap items-center gap-2 ">
                 {creditor?.categories.map((category) => {
                   return (
-                    <li key={category}
-                      className="px-2 py-1 bg-card rounded-sm"
-                    >
+                    <li key={category} className="px-2 py-1 bg-card rounded-sm">
                       <CategoryLabel
                         categoryId={category}
                         label={categoriesMap.get(category)?.name ?? "category"}
