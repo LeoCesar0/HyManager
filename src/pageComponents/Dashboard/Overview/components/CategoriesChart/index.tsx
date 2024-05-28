@@ -1,22 +1,20 @@
 import { useMemo } from "react";
 import { makeCategoriesChart } from "./controller";
-import { TransactionReport } from "@/server/models/TransactionReport/schema";
 import useT from "@/hooks/useT";
-import { sub } from "date-fns";
-import { capitalizeString } from "@/utils/capitalizeString";
 import { PieChart } from "@/components/Charts/PieChart";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 import { getCurrentBankCategories } from "@/utils/getCurrentBankCategories";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
+import { Transaction } from "@/server/models/Transaction/schema";
 
 type Props = {
-  transactionReports: TransactionReport[];
+  transactions: Transaction[];
   creditors: BankCreditor[];
 };
 
 export const CategoriesChart: React.FC<Props> = ({
-  transactionReports,
+  transactions,
   creditors,
 }) => {
   const { overviewConfig, currentBankAccount } = useGlobalDashboardStore();
@@ -40,12 +38,12 @@ export const CategoriesChart: React.FC<Props> = ({
 
   const { series, options } = useMemo(() => {
     return makeCategoriesChart({
-      transactionReports,
+      transactions,
       title,
       categories,
       creditors,
     });
-  }, [categories, title, transactionReports, creditors]);
+  }, [categories, title, transactions, creditors]);
 
   return (
     <div className="bg-surface shadow-md rounded-md p-6 mt-4 mb-4 text-on-surface">

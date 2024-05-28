@@ -15,7 +15,7 @@ import { CategoriesChart } from "./components/CategoriesChart";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
 import { listBankCreditors } from "@/server/models/BankCreditor/read/listBankCreditors";
 import { Transaction } from "@/server/models/Transaction/schema";
-import { paginateTransactionsByBankId } from "@/server/models/Transaction/read/listTransactionsByBankId";
+import { listTransactionsByBankId } from "@/server/models/Transaction/read/listTransactionsByBankId";
 
 export const DashboardOverView = () => {
   const { currentBankAccount, overviewConfig } = useGlobalDashboardStore();
@@ -55,8 +55,15 @@ export const DashboardOverView = () => {
       });
     }
     if (bankAccountId && dateBreakPoints.length > 0) {
-      paginateTransactionsByBankId({}).then((result) => {
-        setOverviewData(result);
+      listTransactionsByBankId({
+        id: bankAccountId,
+        filters: [
+          { field: "date", operator: ">=", value: earliestBreakPoint.start },
+        ],
+      }).then((result) => {
+        if (result.data) {
+          setTransactions(result.data);
+        }
       });
     }
   }, [bankAccountId, dateBreakPoints, earliestBreakPoint]);
@@ -98,7 +105,7 @@ export const DashboardOverView = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2">
           {overviewData && creditors.length > 0 && (
             <CategoriesChart
-              transactionReports={overviewData.transactionReports}
+              transactions={transactions}
               creditors={creditors}
             />
           )}

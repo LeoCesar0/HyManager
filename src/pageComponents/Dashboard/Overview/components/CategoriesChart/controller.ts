@@ -1,10 +1,10 @@
-import { TransactionReport } from "@/server/models/TransactionReport/schema";
 import { ApexOptions } from "apexcharts";
-import { APP_CONFIG, COLORS, PRIMARY_COLORS } from "@/static/appConfig";
-import { valueToCurrency } from "@/utils/misc";
+import { PRIMARY_COLORS } from "@/static/appConfig";
 import { APEX_LOCALES } from "@/static/apexConfig";
-import { formatAnyDate } from "@/utils/date/formatAnyDate";
-import { TransactionType } from "@/server/models/Transaction/schema";
+import {
+  Transaction,
+  TransactionType,
+} from "@/server/models/Transaction/schema";
 import { BankCategory } from "@/server/models/BankAccount/schema";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
 import {
@@ -14,7 +14,7 @@ import {
 import { makeChartTooltip } from "@/utils/makeChartTooltip";
 
 export interface IMakeCategoriesChartData {
-  transactionReports: TransactionReport[];
+  transactions: Transaction[];
   title: string;
   type?: TransactionType;
   categories: Map<string, BankCategory>;
@@ -22,7 +22,7 @@ export interface IMakeCategoriesChartData {
 }
 
 export const makeCategoriesChart = ({
-  transactionReports,
+  transactions,
   title,
   type = TransactionType.debit,
   categories,
@@ -30,62 +30,71 @@ export const makeCategoriesChart = ({
 }: IMakeCategoriesChartData) => {
   const dateFormat = "dd/MM";
 
-  const allTransactions = transactionReports
-    .map((item) => item.transactions)
-    .flat();
-
   const creditorsMap: Map<string, BankCreditor> = new Map();
 
-  const seriesData = allTransactions.reduce<Map<string, number>>(
-    (acc, entry) => {
-      if (type && type !== entry.type) {
-        return acc;
-      }
-      // TODO
-      const creditorSlug = entry?.creditorSlug;
+  const seriesData = transactions.reduce<Map<string, number>>((acc, entry) => {
+    if (entry.creditorSlug?.includes("icaro")) {
+      console.log("Found icaro");
+      console.log("icaro categories", entry.categories);
+    }
 
-      if (!creditorSlug) {
-        const category = DEFAULT_CATEGORY["investment-default"];
-        const prev = acc.get(category.id) || 0;
-        acc.set(category.id, prev + entry.amount);
-        console.log("investment");
-        console.log("entry", entry);
-        console.log("-----------------");
-        return acc;
-      }
-
-      const creditor =
-        creditorsMap.get(creditorSlug) ||
-        creditors.find((item) => item.creditorSlug === creditorSlug);
-
-      if (!creditor) {
-        console.error("Creditor not found");
-        console.log("creditorSlug", creditorSlug);
-        console.log("creditors", creditors);
-        console.log("creditorsMap", creditorsMap);
-        console.log("--------------------------");
-        return acc;
-      }
-
-      if (!creditorsMap.has(creditorSlug))
-        creditorsMap.set(creditorSlug, creditor);
-
-      const category = categories.get(creditor.categoryId);
-
-      if (!category) {
-        console.error("Category not found");
-        console.log("creditor", creditor);
-        console.log("---------------");
-        return acc;
-      }
-
-      const prev = acc.get(category.id) || 0;
-      acc.set(category.id, prev + entry.amount);
-
+    if (type && type !== entry.type) {
       return acc;
-    },
-    new Map()
-  );
+    }
+
+    entry.categories.forEach((categoryId) => {
+      const prev = acc.get(categoryId) || 0;
+      acc.set(categoryId, prev + entry.amount);
+    });
+
+    return acc;
+  }, new Map());
+
+  console.log("categories", categories);
+  console.log("seriesData", seriesData);
+
+  // const seriesData = transactions.reduce<Map<string, number>>((acc, entry) => {
+  //   if (type && type !== entry.type) {
+  //     return acc;
+  //   }
+  //   // TODO
+  //   const creditorSlug = entry?.creditorSlug;
+
+  //   if (!creditorSlug) {
+  //     const category = DEFAULT_CATEGORY["investment-default"];
+  //     const prev = acc.get(category.id) || 0;
+  //     acc.set(category.id, prev + entry.amount);
+  //     console.log("investment");
+  //     console.log("entry", entry);
+  //     console.log("-----------------");
+  //     return acc;
+  //   }
+
+  //   const creditor =
+  //     creditorsMap.get(creditorSlug) ||
+  //     creditors.find((item) => item.creditorSlug === creditorSlug);
+
+  //   if (!creditor) {
+  //     return acc;
+  //   }
+
+  //   if (!creditorsMap.has(creditorSlug))
+  //     creditorsMap.set(creditorSlug, creditor);
+
+  //   const category = categories.get(creditor.categoryId);
+
+  //   if (!category) {
+  //     console.error("Category not found");
+  //     console.log("creditor", creditor);
+  //     console.log("---------------");
+  //     return acc;
+  //   }
+
+  //   const prev = acc.get(category.id) || 0;
+  //   acc.set(category.id, prev + entry.amount);
+
+  //   return acc;
+  // }, new Map());
 
   const labels: string[] = [];
   const series: number[] = [];
@@ -105,7 +114,7 @@ export const makeCategoriesChart = ({
   console.log("labels", labels);
   console.log("series", series);
 
-  // const seriesData = transactionReports.reduce<{
+  // const seriesData = transactions.reduce<{
   //   series: number[];
   //   labels: string[];
   // }>((acc, entry) => {
