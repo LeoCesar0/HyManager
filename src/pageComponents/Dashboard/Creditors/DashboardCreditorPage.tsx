@@ -13,7 +13,7 @@ import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
 import useT from "@/hooks/useT";
 import { getBankCreditor } from "@/server/models/BankCreditor/read/getBankCreditor";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
-import { paginateTransactionsByBankId } from "@/server/models/Transaction/read/listTransactionsByBankId";
+import { paginateTransactionsByBankId } from "@/server/models/Transaction/read/paginateTransactionsByBankId";
 import { Transaction } from "@/server/models/Transaction/schema";
 import { formatAnyDate } from "@/utils/date/formatAnyDate";
 import { valueToCurrency } from "@/utils/misc";
