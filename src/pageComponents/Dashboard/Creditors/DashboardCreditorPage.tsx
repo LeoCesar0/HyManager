@@ -27,6 +27,7 @@ import { useToastPromise } from "@/hooks/useToastPromise";
 import { updateBankCreditor } from "@/server/models/BankCreditor/update/updateBankCreditor";
 import { CategoryLabel } from "@/components/CategoryLabel";
 import { getCurrentBankCategories } from "@/utils/getCurrentBankCategories";
+import { updateTransactionsCategories } from "@/utils/updateTransactionsCategores";
 
 export const DashboardCreditorPage = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -134,6 +135,18 @@ export const DashboardCreditorPage = () => {
     setChangingCategory(false);
   };
 
+  const updateTransactions = () => {
+    if (currentBankAccount && creditor) {
+      const promise = updateTransactionsCategories({
+        bankAccountId: currentBankAccount.id,
+        creditorSlug: creditorSlug,
+        categories: creditor.categories,
+      });
+
+      handleToast(promise, "updateMessages");
+    }
+  };
+
   const categoriesMap = useMemo(() => {
     return getCurrentBankCategories({
       currentBankAccount,
@@ -190,7 +203,6 @@ export const DashboardCreditorPage = () => {
                 disabled={!changingCategory || isLoading}
                 value={categories}
                 onChange={(value) => {
-                  console.log("value", value);
                   setCategories(value);
                 }}
               />
@@ -201,18 +213,38 @@ export const DashboardCreditorPage = () => {
         <div className="grid grid-cols-1 gap-6 py-6">
           <If condition={!!creditor}>
             <Then>
-              <ul className="flex flex-wrap items-center gap-2 ">
-                {creditor?.categories.map((category) => {
-                  return (
-                    <li key={category} className="px-2 py-1 bg-card rounded-sm">
-                      <CategoryLabel
-                        categoryId={category}
-                        label={categoriesMap.get(category)?.name ?? "category"}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>
+              <div className="flex gap-4 justify-between items-center">
+                <ul className="flex flex-wrap items-center gap-2 ">
+                  {creditor?.categories.map((category) => {
+                    return (
+                      <li
+                        key={category}
+                        className="px-2 py-1 bg-card rounded-sm"
+                      >
+                        <CategoryLabel
+                          categoryId={category}
+                          label={
+                            categoriesMap.get(category)?.name ?? "category"
+                          }
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+                <Button
+                  variant={"secondary"}
+                  onClick={() => {
+                    updateTransactions();
+                  }}
+                  disabled={isLoading}
+                >
+                  {selectT(currentLanguage, {
+                    en: "Update transactions",
+                    pt: "Atualizar transações",
+                  })}
+                </Button>
+              </div>
+
               <div className="grid grid-cols-[minmax(100px,200px)_1fr]">
                 <div className="border-border border-r grid grid-cols-1 gap-2 [&>*]:text-muted-foreground [&>*]:text-sm">
                   <p>
