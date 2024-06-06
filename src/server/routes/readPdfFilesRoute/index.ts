@@ -92,7 +92,12 @@ export const readPdfFilesRoute = async (
           if (transaction.creditor && creditor) {
             transaction.categories = creditor.categories;
           } else {
-            transaction.categories = [DEFAULT_CATEGORY["other-default"].id];
+            if (
+              !transaction.categories ||
+              transaction.categories.length === 0
+            ) {
+              transaction.categories = [DEFAULT_CATEGORY["other-default"].id];
+            }
           }
           return transaction;
         });

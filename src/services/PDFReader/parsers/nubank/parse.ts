@@ -10,6 +10,7 @@ import { decodeText } from "./decodeText";
 import { parseBrazilianDate } from "@/utils/date/parseBrazilianDate";
 import { makePDFSlug } from "../../makePDFSlug";
 import currency from "currency.js";
+import { getTransactionCategory } from "../getTransactionCategory";
 
 const headerMapping = {
   initialBalance: [20.921, 9.97],
@@ -221,6 +222,12 @@ export function parse(
           updatedBalance: currency(prevTransBalance).add(amount).value,
           categories: [],
         };
+
+        transaction.categories = getTransactionCategory({
+          creditor: transaction.creditor,
+          description: transaction.description,
+        });
+
         currentPDFTransactions.push(transaction);
         if (Texts[textIndex + 1]) {
           if (!afterTransXValues.includes(Texts[textIndex + 1].x)) {

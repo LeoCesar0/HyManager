@@ -12,6 +12,8 @@ type IProps = {
   bankAccountId: string;
 };
 
+const defaultCat = [DEFAULT_CATEGORY["other-default"].id];
+
 export const handleCreditorsOnBatchTransactions = async ({
   transactionsOnCreate,
   bankAccountId,
@@ -20,6 +22,17 @@ export const handleCreditorsOnBatchTransactions = async ({
   // --------------------------
   // Handle Creditors
   // --------------------------
+  const categoryByCreditor = transactionsOnCreate.reduce((acc, entry) => {
+    const categories =
+      entry.categories.length > 0 ? entry.categories : defaultCat;
+    if (entry.creditor) {
+      acc.set(entry.creditor, categories);
+    }
+    return acc;
+  }, new Map<string, string[]>());
+
+  console.log("categoryByCreditor", categoryByCreditor);
+
   const incomingCreditors = transactionsOnCreate.reduce((acc, entry) => {
     if (entry.creditor) {
       acc.add(entry.creditor);
@@ -45,7 +58,7 @@ export const handleCreditorsOnBatchTransactions = async ({
         batch,
         values: {
           bankAccountId,
-          categories: [DEFAULT_CATEGORY["other-default"].id],
+          categories: categoryByCreditor.get(incomingCreditor) || defaultCat,
           creditorSlug: creditorSlug,
           creditor: incomingCreditor,
         },
