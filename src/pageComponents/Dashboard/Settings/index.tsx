@@ -10,7 +10,7 @@ export const DashboardSettings = () => {
 
   return (
     <SectionContainer>
-      <Tabs defaultValue="general" className="w-[400px]">
+      <Tabs defaultValue="general" className="w-[800px]">
         <Section
           sectionTitle={{
             pt: "Configurações",

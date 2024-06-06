@@ -21,6 +21,16 @@ export const DEFAULT_CATEGORY = {
     slug: "grocery-default",
     id: "grocery-default",
   },
+  "health-default": {
+    color: "#0fffaf",
+    isDefault: true,
+    name: {
+      pt: "Saúde",
+      en: "Health",
+    },
+    slug: "health-default",
+    id: "health-default",
+  },
   "fun-default": {
     color: "#c7a0f1",
     isDefault: true,

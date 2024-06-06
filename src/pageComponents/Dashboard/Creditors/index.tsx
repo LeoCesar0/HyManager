@@ -26,6 +26,7 @@ import selectT from "@/utils/selectT";
 import { CategorySelect } from "../components/CategorySelect";
 import algoliasearch from "algoliasearch";
 import { CategoryLabel } from "@/components/CategoryLabel";
+import { makeAlgoliaFilter } from "@/utils/makeAlgoliaFilter";
 
 export const DashboardCreditors = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -48,7 +49,10 @@ export const DashboardCreditors = () => {
     });
   }, [currentBankAccount, currentLanguage]);
 
+  const bankAccountId = currentBankAccount?.id;
+
   useEffect(() => {
+    if (!bankAccountId) return;
     setIsLoading(true);
     const timeout = setTimeout(() => {
       const client = ALGOLIA_CLIENT();
@@ -56,14 +60,16 @@ export const DashboardCreditors = () => {
       algoliaIndex.setSettings({
         searchableAttributes: ["creditor"],
         hitsPerPage: limit,
+        attributesForFaceting: ["categories", "bankAccountId"],
       });
+
       algoliaIndex
         .search(search, {
           page: page - 1,
-          filters:
-            categoryFilter.length === 0
-              ? undefined
-              : `categories:${categoryFilter[0]}`,
+          filters: makeAlgoliaFilter({
+            bankAccountId,
+            categoryFilter,
+          }),
         })
         .then((res) => {
           setPaginationResult({
@@ -90,7 +96,7 @@ export const DashboardCreditors = () => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [search, page, limit, categoryFilter.length]);
+  }, [search, page, limit, categoryFilter.length, bankAccountId]);
 
   useEffect(() => {
     onPageSelected(page, limit);

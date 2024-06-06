@@ -9,6 +9,8 @@ import { CategoryForm } from "./CategoryForm";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { useGlobalModal } from "@/contexts/GlobalModal";
 import { DeleteModal } from "./DeleteModal";
+import { updateAllTransactionCategories } from "@/utils/updateAllTransactionCategories";
+import { useToastPromise } from "@/hooks/useToastPromise";
 
 export const Categories = () => {
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -16,6 +18,8 @@ export const Categories = () => {
   const [formIsOpen, setFormIsOpen] = useState(false);
   const [itemOnEdit, setItemOnEdit] = useState<BankCategory | null>(null);
   const { setModalProps } = useGlobalModal();
+
+  const { handleToast, isLoading } = useToastPromise();
 
   const categories = useMemo(() => {
     const _categories = currentBankAccount?.categories || [];
@@ -51,16 +55,38 @@ export const Categories = () => {
     }
   }, [itemOnEdit]);
 
+  const updateAllTransactions = () => {
+    if (!currentBankAccount) return;
+
+    const promise = updateAllTransactionCategories({
+      bankAccountId: currentBankAccount.id,
+    });
+    handleToast(promise, "updateMessages");
+  };
+
   return (
     <>
       <div className="grid grid-cols-1 gap-4">
-        <header className="py-4">
+        <header className="py-4 gap-4 flex flex-wrap items-center justify-between">
           <Button
             onClick={() => setFormIsOpen(!formIsOpen)}
             variant={"secondary"}
           >
             {formIsOpen ? cancelText : newCategoryText}
           </Button>
+          {currentBankAccount && (
+            <Button
+              onClick={() => {
+                updateAllTransactions();
+              }}
+              variant={"destructive"}
+            >
+              {selectT(currentLanguage, {
+                en: "Update transactions",
+                pt: "Atualizar transações",
+              })}
+            </Button>
+          )}
         </header>
         {formIsOpen && (
           <CategoryForm

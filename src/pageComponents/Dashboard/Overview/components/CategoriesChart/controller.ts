@@ -7,10 +7,6 @@ import {
 } from "@/server/models/Transaction/schema";
 import { BankCategory } from "@/server/models/BankAccount/schema";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
-import {
-  DEFAULT_CATEGORIES,
-  DEFAULT_CATEGORY,
-} from "@/server/models/BankAccount/static";
 import { makeChartTooltip } from "@/utils/makeChartTooltip";
 
 export interface IMakeCategoriesChartData {
