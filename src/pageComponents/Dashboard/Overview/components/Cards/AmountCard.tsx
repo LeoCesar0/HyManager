@@ -2,22 +2,29 @@ import { LocalizedText } from "@/@types";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { CardRoot } from "./CardRoot";
 import { HiTrendingDown } from "react-icons/hi";
+import clsx from "clsx";
 
-export type ExpensesCardProps = {
+export type AmountCardProps = {
   title: LocalizedText;
   values: {
     value: string;
     title: LocalizedText;
   }[];
+  type: "expenses" | "deposits";
 };
 
-export const ExpensesCard = (card: ExpensesCardProps) => {
+export const AmountCard = (card: AmountCardProps) => {
   const { currentLanguage } = useGlobalContext();
 
   return (
     <>
-      <CardRoot Icon={HiTrendingDown} title={card.title}
-        className={"bg-gradient-to-r from-card from-25% to-debit"}
+      <CardRoot
+        Icon={HiTrendingDown}
+        title={card.title}
+        className={clsx("bg-gradient-to-r from-card from-25%", {
+          "to-debit": card.type === "expenses",
+          "to-deposit": card.type === "deposits",
+        })}
       >
         <div className="flex flex-row justify-between gap-2">
           {card.values.map((value, index) => {

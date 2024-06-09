@@ -42,7 +42,11 @@ export const calculateDashboardSummary = ({
   const result: DashboardSummary = reports.reduce((acc, report) => {
     const reportDate = report.date.toDate();
 
-    // console.log('report', report)
+    // if (reportDate.getMonth() === 4) {
+    //   console.log("report", report);
+    //   console.log("report totalExpenses", report.summary.totalExpenses);
+    //   console.log('------')
+    // }
 
     dateBreakPoints.forEach((breakPoint) => {
       const key = breakPoint.key;

@@ -19,7 +19,11 @@ export const getDateBreakPoints = () => {
       start: startLastMonth,
       end: endOfMonth(startLastMonth),
     },
-    { key: "prevLastMonth", start: startPrevLastMonth },
+    {
+      key: "prevLastMonth",
+      start: startPrevLastMonth,
+      end: endOfMonth(startPrevLastMonth),
+    },
   ];
 
   const earliestBreakPoint = breakPoints.reduce((acc, entry) => {

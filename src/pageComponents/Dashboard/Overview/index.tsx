@@ -2,9 +2,9 @@ import { Section, SectionContainer } from "../../../components/Section/Section";
 import { useGlobalDashboardStore } from "../../../contexts/GlobalDashboardStore";
 import { BalanceCard } from "./components/Cards/BalanceCard";
 import { GoalCard } from "./components/Cards/GoalCard";
-import { ExpensesCard } from "./components/Cards/ExpensesCard";
+import { AmountCard } from "./components/Cards/AmountCard";
 import { useEffect, useState } from "react";
-import { getExpensesCards } from "./utils/getExpensesCards";
+import { getAmountCards } from "./utils/getAmountCards";
 import {
   DashboardOverviewData,
   getDashboardOverviewData,
@@ -70,7 +70,7 @@ export const DashboardOverView = () => {
 
   const summary = overviewData?.dashboardSummary || null;
 
-  const expensesCards = getExpensesCards(summary);
+  const amountCards = getAmountCards(summary);
 
   // TODO change maxExpenses GOAL
   const goalCards = getGoalsCards({
@@ -93,8 +93,8 @@ export const DashboardOverView = () => {
       <Section sectionTitle={{ en: "Overview", pt: "Geral" }}>
         <div className="flex gap-3 flex-wrap">
           <BalanceCard balance={balance} />
-          {expensesCards.map((card, index) => {
-            return <ExpensesCard key={`${card.title.en}-${index}`} {...card} />;
+          {amountCards.map((card, index) => {
+            return <AmountCard key={`${card.title.en}-${index}`} {...card} />;
           })}
           {goalCards.map((card, index) => {
             return <GoalCard key={`${card.title.en}-${index}`} {...card} />;
