@@ -14,7 +14,10 @@ import { getGoalsCards } from "./utils/getGoalsCards";
 import { CategoriesChart } from "./components/CategoriesChart";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
 import { listBankCreditors } from "@/server/models/BankCreditor/read/listBankCreditors";
-import { Transaction } from "@/server/models/Transaction/schema";
+import {
+  Transaction,
+  TransactionType,
+} from "@/server/models/Transaction/schema";
 import { listTransactionsByBankId } from "@/server/models/Transaction/read/listTransactionsByBankId";
 
 export const DashboardOverView = () => {
@@ -97,11 +100,17 @@ export const DashboardOverView = () => {
         </div>
       </Section>
       <Section sectionTitle={{ en: "Charts", pt: "Gráficos" }}>
-        <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {overviewData && creditors.length > 0 && (
             <CategoriesChart
               transactions={transactions}
-              creditors={creditors}
+              type={TransactionType.debit}
+            />
+          )}
+          {overviewData && creditors.length > 0 && (
+            <CategoriesChart
+              transactions={transactions}
+              type={TransactionType.deposit}
             />
           )}
         </div>
