@@ -1,4 +1,3 @@
-import { TransactionReport } from "@/server/models/TransactionReport/schema";
 import { ApexOptions } from "apexcharts";
 import { APP_CONFIG, COLORS, PRIMARY_COLORS } from "@/static/appConfig";
 import { valueToCurrency } from "@/utils/misc";
@@ -6,35 +5,33 @@ import { APEX_LOCALES } from "@/static/apexConfig";
 import { formatAnyDate } from "@/utils/date/formatAnyDate";
 import { ChartSerie, ChartSerieData } from "@/@types/Chart";
 import { format } from "date-fns";
+import { Transaction } from "@/server/models/Transaction/schema";
 
 export interface IMakeExpensesChartData {
-  transactionReports: TransactionReport[];
+  transactions: Transaction[];
   title: string;
 }
 
 export const makeExpensesChartData = ({
-  transactionReports,
+  transactions,
   title,
 }: IMakeExpensesChartData) => {
   const dateFormat = "dd/MM";
   const chartBy = "yyyy-MM-dd";
 
-  const seriesData = transactionReports.reduce<ChartSerieData[]>(
-    (acc, entry) => {
-      if (entry.amount >= 0) return acc;
-      const date = entry.date.toDate();
-      const dateKey = format(date, chartBy);
-      const prev = acc.find((item) => item.x === dateKey);
-      const amount = Math.abs(entry.amount);
-      if (prev) {
-        prev.y += amount;
-      } else {
-        acc.push({ x: dateKey, y: amount });
-      }
-      return acc;
-    },
-    []
-  );
+  const seriesData = transactions.reduce<ChartSerieData[]>((acc, entry) => {
+    if (entry.amount >= 0) return acc;
+    const date = entry.date.toDate();
+    const dateKey = format(date, chartBy);
+    const prev = acc.find((item) => item.x === dateKey);
+    const amount = Math.abs(entry.amount);
+    if (prev) {
+      prev.y += amount;
+    } else {
+      acc.push({ x: dateKey, y: amount });
+    }
+    return acc;
+  }, []);
 
   const series: ChartSerie[] = [
     {

@@ -1,17 +1,16 @@
 import { useMemo } from "react";
 import { makeExpensesChartData } from "./controller";
 import { BarChart } from "@/components/Charts/BarChart/index";
-import { TransactionReport } from "@/server/models/TransactionReport/schema";
 import useT from "@/hooks/useT";
-import { sub } from "date-fns";
 import { capitalizeString } from "@/utils/capitalizeString";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
+import { Transaction } from "@/server/models/Transaction/schema";
 
 interface IExpensesChart {
-  transactionReports: TransactionReport[];
+  transactions: Transaction[];
 }
 
-const ExpensesChart: React.FC<IExpensesChart> = ({ transactionReports }) => {
+const ExpensesChart: React.FC<IExpensesChart> = ({ transactions }) => {
   const { overviewConfig } = useGlobalDashboardStore();
   const startDate = overviewConfig.earliestBreakPoint.start;
 
@@ -25,7 +24,7 @@ const ExpensesChart: React.FC<IExpensesChart> = ({ transactionReports }) => {
 
   const { series, options } = useMemo(() => {
     return makeExpensesChartData({
-      transactionReports,
+      transactions,
       title,
     });
   }, []);

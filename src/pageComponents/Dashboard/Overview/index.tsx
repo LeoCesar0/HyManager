@@ -25,16 +25,9 @@ export const DashboardOverView = () => {
   const [creditors, setCreditors] = useState<BankCreditor[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  // --------------------------
-  // LAST REPORTS
-  // --------------------------
-
-  const lastReport = overviewData?.transactionReports
-    ? overviewData.transactionReports[
-        overviewData.transactionReports.length - 1
-      ]
-    : null;
-  const balance = lastReport?.finalBalance || 0;
+  const lastTransaction =
+    transactions.length > 0 ? transactions[transactions.length - 1] : null;
+  const balance = lastTransaction?.updatedBalance || 0;
 
   // --------------------------
   // SUMMARY / EXPENSES
@@ -44,26 +37,28 @@ export const DashboardOverView = () => {
 
   useEffect(() => {
     if (bankAccountId && dateBreakPoints.length > 0) {
-      getDashboardOverviewData({
-        bankAccountId: bankAccountId,
-        overviewConfig: {
-          dateBreakPoints,
-          earliestBreakPoint,
-        },
-      }).then((result) => {
-        setOverviewData(result);
-      });
-    }
-    if (bankAccountId && dateBreakPoints.length > 0) {
       listTransactionsByBankId({
         id: bankAccountId,
         filters: [
           { field: "date", operator: ">=", value: earliestBreakPoint.start },
         ],
       }).then((result) => {
-        if (result.data) {
-          setTransactions(result.data);
-        }
+        const trans = result.data || [];
+        trans.sort((a, b) => a.date.seconds - b.date.seconds);
+        setTransactions(trans);
+        // --------------------------
+        // OVERVIEW DATA
+        // --------------------------
+        getDashboardOverviewData({
+          bankAccountId: bankAccountId,
+          overviewConfig: {
+            dateBreakPoints,
+            earliestBreakPoint,
+          },
+          transactions: trans,
+        }).then((result) => {
+          setOverviewData(result);
+        });
       });
     }
   }, [bankAccountId, dateBreakPoints, earliestBreakPoint]);
@@ -110,10 +105,7 @@ export const DashboardOverView = () => {
             />
           )}
         </div>
-        {overviewData && (
-          <ExpensesChart transactionReports={overviewData.transactionReports} />
-        )}
-
+        {overviewData && <ExpensesChart transactions={transactions} />}
         {/* <BalanceChart bankAccountId={currentBankAccount!.id} /> */}
       </Section>
     </SectionContainer>

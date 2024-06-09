@@ -1,7 +1,9 @@
 import { isWithinInterval } from "date-fns";
-import { TransactionsSummary } from "../models/TransactionReport/schema";
+import {
+  TransactionReport,
+  TransactionsSummary,
+} from "../models/TransactionReport/schema";
 import currency from "currency.js";
-import { Transaction, TransactionType } from "../models/Transaction/schema";
 
 export type SummaryBreakPointKey = "thisMonth" | "lastMonth" | "prevLastMonth";
 
@@ -20,7 +22,7 @@ export type DateBreakPoint = {
 type ICalculateDashboardSummary = {
   bankAccountId: string;
   dateBreakPoints: DateBreakPoint[];
-  transactions: Transaction[];
+  reports: TransactionReport[];
 };
 
 export type DashboardSummary = {
@@ -33,12 +35,12 @@ const getBreakPointEnd = (breakPoint: DateBreakPoint, now: Date) => {
 
 export const calculateDashboardSummary = ({
   dateBreakPoints,
-  transactions,
+  reports,
 }: ICalculateDashboardSummary) => {
   const now = new Date();
 
-  const result: DashboardSummary = transactions.reduce((acc, transaction) => {
-    const transactionDate = transaction.date.toDate();
+  const result: DashboardSummary = reports.reduce((acc, report) => {
+    const reportDate = report.date.toDate();
 
     dateBreakPoints.forEach((breakPoint) => {
       const key = breakPoint.key;
@@ -57,7 +59,7 @@ export const calculateDashboardSummary = ({
       const breakPointStart = breakPoint.start;
       const breakPointEnd = getBreakPointEnd(breakPoint, now);
 
-      const isBetweenIntervals = isWithinInterval(transactionDate, {
+      const isBetweenIntervals = isWithinInterval(reportDate, {
         end: breakPointEnd,
         start: breakPointStart,
       });
@@ -67,43 +69,28 @@ export const calculateDashboardSummary = ({
         // Check for biggestDebit and biggestDeposit
         // --------------------------
         if (
-          transaction.type === TransactionType.debit &&
-          Math.abs(transaction.amount) >
+          report.summary.biggestDebit &&
+          Math.abs(report.summary.biggestDebit.amount) >
             Math.abs(entry.biggestDebit?.amount || 0)
         ) {
-          entry.biggestDebit = {
-            amount: transaction.amount,
-            id: transaction.id,
-            creditor: transaction.creditor,
-            creditorSlug: transaction.creditorSlug,
-            type: transaction.type,
-          };
+          entry.biggestDebit = report.summary.biggestDebit;
         }
 
         if (
-          transaction.type === TransactionType.deposit &&
-          Math.abs(transaction.amount) > (entry.biggestDeposit?.amount || 0)
+          report.summary.biggestDeposit &&
+          report.summary.biggestDeposit.amount >
+            (entry.biggestDeposit?.amount || 0)
         ) {
-          entry.biggestDeposit = {
-            amount: transaction.amount,
-            id: transaction.id,
-            creditor: transaction.creditor,
-            creditorSlug: transaction.creditorSlug,
-            type: transaction.type,
-          };
+          entry.biggestDeposit = report.summary.biggestDeposit;
         }
 
-        if (transaction.type === TransactionType.debit) {
-          entry.totalExpenses = currency(entry.totalExpenses).add(
-            transaction.amount
-          ).value;
-        }
+        entry.totalDeposits = currency(entry.totalDeposits).add(
+          report.summary.totalDeposits
+        ).value;
 
-        if (transaction.type === TransactionType.deposit) {
-          entry.totalDeposits = currency(entry.totalDeposits).add(
-            transaction.amount
-          ).value;
-        }
+        entry.totalExpenses = currency(entry.totalExpenses).add(
+          report.summary.totalExpenses
+        ).value;
       }
     });
 

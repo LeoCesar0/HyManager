@@ -1,4 +1,5 @@
 import { DashboardOverviewConfig } from "@/contexts/GlobalDashboardStore";
+import { Transaction } from "@/server/models/Transaction/schema";
 import { listTransactionReportsBy } from "@/server/models/TransactionReport/read/listTransactionReportBy";
 import { TransactionReport } from "@/server/models/TransactionReport/schema";
 import {
@@ -10,38 +11,27 @@ import {
 type IGetDashboardOverviewData = {
   bankAccountId: string;
   overviewConfig: DashboardOverviewConfig;
+  transactions: Transaction[];
 };
 
 export type DashboardOverviewData = {
-  transactionReports: TransactionReport[];
   dashboardSummary: DashboardSummary;
 };
 
 export const getDashboardOverviewData = async ({
   overviewConfig,
   bankAccountId,
+  transactions,
 }: IGetDashboardOverviewData): Promise<DashboardOverviewData> => {
-  const { dateBreakPoints, earliestBreakPoint } = overviewConfig;
-
-  const response = await listTransactionReportsBy({
-    bankAccountId: bankAccountId,
-    type: "day",
-    filters: [
-      { field: "date", operator: ">=", value: earliestBreakPoint.start },
-    ],
-  });
-
-  let transactionReports = response.data || [];
-  transactionReports.sort((a, b) => a.date.seconds - b.date.seconds);
+  const { dateBreakPoints } = overviewConfig;
 
   const dashboardSummary = calculateDashboardSummary({
     bankAccountId: bankAccountId,
     dateBreakPoints: dateBreakPoints,
-    reports: transactionReports,
+    transactions: transactions,
   });
 
   return {
-    transactionReports,
     dashboardSummary,
   };
 };
