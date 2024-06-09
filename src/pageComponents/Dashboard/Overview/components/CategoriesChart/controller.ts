@@ -6,15 +6,14 @@ import {
   TransactionType,
 } from "@/server/models/Transaction/schema";
 import { BankCategory } from "@/server/models/BankAccount/schema";
-import { BankCreditor } from "@/server/models/BankCreditor/schema";
 import { makeChartTooltip } from "@/utils/makeChartTooltip";
+import { valueToCurrency } from "@/utils/misc";
 
 export interface IMakeCategoriesChartData {
   transactions: Transaction[];
   title: string;
   type?: TransactionType;
   categories: Map<string, BankCategory>;
-  creditors: BankCreditor[];
 }
 
 export const makeCategoriesChart = ({
@@ -22,18 +21,8 @@ export const makeCategoriesChart = ({
   title,
   type = TransactionType.debit,
   categories,
-  creditors,
 }: IMakeCategoriesChartData) => {
-  const dateFormat = "dd/MM";
-
-  const creditorsMap: Map<string, BankCreditor> = new Map();
-
   const seriesData = transactions.reduce<Map<string, number>>((acc, entry) => {
-    if (entry.creditorSlug?.includes("icaro")) {
-      console.log("Found icaro");
-      console.log("icaro categories", entry.categories);
-    }
-
     if (type && type !== entry.type) {
       return acc;
     }
@@ -45,52 +34,6 @@ export const makeCategoriesChart = ({
 
     return acc;
   }, new Map());
-
-  console.log("categories", categories);
-  console.log("seriesData", seriesData);
-
-  // const seriesData = transactions.reduce<Map<string, number>>((acc, entry) => {
-  //   if (type && type !== entry.type) {
-  //     return acc;
-  //   }
-  //   // TODO
-  //   const creditorSlug = entry?.creditorSlug;
-
-  //   if (!creditorSlug) {
-  //     const category = DEFAULT_CATEGORY["investment-default"];
-  //     const prev = acc.get(category.id) || 0;
-  //     acc.set(category.id, prev + entry.amount);
-  //     console.log("investment");
-  //     console.log("entry", entry);
-  //     console.log("-----------------");
-  //     return acc;
-  //   }
-
-  //   const creditor =
-  //     creditorsMap.get(creditorSlug) ||
-  //     creditors.find((item) => item.creditorSlug === creditorSlug);
-
-  //   if (!creditor) {
-  //     return acc;
-  //   }
-
-  //   if (!creditorsMap.has(creditorSlug))
-  //     creditorsMap.set(creditorSlug, creditor);
-
-  //   const category = categories.get(creditor.categoryId);
-
-  //   if (!category) {
-  //     console.error("Category not found");
-  //     console.log("creditor", creditor);
-  //     console.log("---------------");
-  //     return acc;
-  //   }
-
-  //   const prev = acc.get(category.id) || 0;
-  //   acc.set(category.id, prev + entry.amount);
-
-  //   return acc;
-  // }, new Map());
 
   const labels: string[] = [];
   const series: number[] = [];
@@ -106,20 +49,6 @@ export const makeCategoriesChart = ({
       console.log("Category Pie mismatch!");
     }
   });
-
-  console.log("labels", labels);
-  console.log("series", series);
-
-  // const seriesData = transactions.reduce<{
-  //   series: number[];
-  //   labels: string[];
-  // }>((acc, entry) => {
-
-  //   return acc
-  // }, {
-  //   series: [],
-  //   labels: [],
-  // });
 
   const options_: ApexOptions = {
     labels: labels,
@@ -182,7 +111,10 @@ export const makeCategoriesChart = ({
     tooltip: {
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         const labels = w.config.labels;
-        return makeChartTooltip({ content: labels[seriesIndex] });
+        const label = labels[seriesIndex];
+        const value = series[seriesIndex];
+        const content = `${label}: ${valueToCurrency(value)}`;
+        return makeChartTooltip({ content: content });
       },
     },
   };
