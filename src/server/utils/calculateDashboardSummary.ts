@@ -5,12 +5,12 @@ import {
 } from "../models/TransactionReport/schema";
 import currency from "currency.js";
 
-export type SummaryBreakPointKey = "thisMonth" | "lastMonth" | "thisWeek";
+export type SummaryBreakPointKey = "thisMonth" | "lastMonth" | "prevLastMonth";
 
 export const SUMMARY_BREAK_POINTS: SummaryBreakPointKey[] = [
   "thisMonth",
   "lastMonth",
-  "thisWeek",
+  "prevLastMonth",
 ];
 
 export type DateBreakPoint = {
@@ -27,10 +27,6 @@ type ICalculateDashboardSummary = {
 
 export type DashboardSummary = {
   [key in SummaryBreakPointKey]?: TransactionsSummary;
-  // thisMonth: TransactionsSummary;
-  // lastMonth: TransactionsSummary;
-  // prevLastMonth: TransactionsSummary;
-  // thisWeek: TransactionsSummary;
 };
 
 const getBreakPointEnd = (breakPoint: DateBreakPoint, now: Date) => {

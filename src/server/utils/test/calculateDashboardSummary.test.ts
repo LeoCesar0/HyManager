@@ -40,11 +40,6 @@ describe("Test calculateDashboardSummary", () => {
 
     const breakPoints: DateBreakPoint[] = [
       {
-        key: "thisWeek",
-        start: sub(endDate, { days: 7 }),
-        end: endDate,
-      },
-      {
         key: "thisMonth",
         start: sub(endDate, { days: 30 }),
         end: endDate,
@@ -61,13 +56,13 @@ describe("Test calculateDashboardSummary", () => {
       reports,
     });
 
-    expect(result["thisWeek"]).toBeTruthy();
+    // expect(result["thisWeek"]).toBeTruthy();
     expect(result["thisMonth"]).toBeTruthy();
 
-    expect(result["thisWeek"]?.biggestDebit?.amount).toBe(-2100);
-    expect(result["thisWeek"]?.biggestDeposit).toBe(null);
-    expect(result["thisWeek"]?.totalDeposits).toBe(0);
-    expect(result["thisWeek"]?.totalExpenses).toBe(-6521.5);
+    // expect(result["thisWeek"]?.biggestDebit?.amount).toBe(-2100);
+    // expect(result["thisWeek"]?.biggestDeposit).toBe(null);
+    // expect(result["thisWeek"]?.totalDeposits).toBe(0);
+    // expect(result["thisWeek"]?.totalExpenses).toBe(-6521.5);
 
     expect(result["thisMonth"]?.biggestDebit?.amount).toBe(-2100);
     expect(result["thisMonth"]?.biggestDeposit?.amount).toBe(5000);
