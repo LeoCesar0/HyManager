@@ -45,7 +45,7 @@ export const CategorySelect = ({
       onChange(Array.from(_categories.values()).map((item) => item.id));
     }
     return _categories;
-  }, [currentBankAccount, currentLanguage]);
+  }, [currentBankAccount?.id, currentLanguage]);
 
   const categoriesOptions: ISelectOption[] = [
     ...(defaultOption ? [defaultOption] : []),

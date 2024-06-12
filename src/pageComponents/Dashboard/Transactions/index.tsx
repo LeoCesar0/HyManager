@@ -173,6 +173,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
           }
         >
           <>
+            <p>test: {minValue}</p>
             <TableContainer
               pagination={paginationControl}
               actions={
@@ -189,6 +190,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                       value={minValue}
                       onValueChange={setMinValue}
                       currency="BRL"
+                      enableUndefined
                     />
                   </div>
                   <div className="w-[200px]">
@@ -203,6 +205,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                       value={maxValue}
                       onValueChange={setMaxValue}
                       currency="BRL"
+                      enableUndefined
                     />
                   </div>
                   <CategorySelect

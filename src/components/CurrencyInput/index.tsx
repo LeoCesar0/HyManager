@@ -93,11 +93,12 @@ export const CurrencyInput = React.forwardRef<
       event
     ) => {
       let stringValue = event.target.value;
+      setLocalValue(stringValue);
+
       if (enableUndefined && !stringValue) {
         onValueChange(undefined);
         return;
       }
-      setLocalValue(stringValue);
 
       stringValue = stringValue
         .replace(options.prefix || "", "")
