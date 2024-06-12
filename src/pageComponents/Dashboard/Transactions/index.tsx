@@ -173,7 +173,6 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
           }
         >
           <>
-            <p>test: {minValue}</p>
             <TableContainer
               pagination={paginationControl}
               actions={
