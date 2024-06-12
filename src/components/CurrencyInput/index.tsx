@@ -22,7 +22,8 @@ export interface MaskOptions {
 interface CurrencyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   currency: "BRL" | "USD" | "CUSTOM";
   maskOptions?: MaskOptions;
-  onValueChange: (value: number) => void;
+  onValueChange: (value: number | undefined) => void;
+  enableUndefined?: boolean;
 }
 
 const defaultBRLMask: MaskOptions = {
@@ -47,18 +48,31 @@ const defaultUSDMask: MaskOptions = {
   allowLeadingZeroes: false,
 };
 
-export const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputProps>(
+export const CurrencyInput = React.forwardRef<
+  HTMLInputElement,
+  CurrencyInputProps
+>(
   (
-    { maskOptions, className, currency, onValueChange, value, ...inputProps },
+    {
+      maskOptions,
+      className,
+      currency,
+      onValueChange,
+      enableUndefined = false,
+      value,
+      ...inputProps
+    },
     ref
   ) => {
-    const [localValue, setLocalValue] = React.useState<string>(value === 0
-      ? ""
-      : typeof value === "string"
-      ? value
-      : typeof value === "number"
-      ? value.toString()
-      : "");
+    const [localValue, setLocalValue] = React.useState<string>(
+      value === 0
+        ? ""
+        : typeof value === "string"
+        ? value
+        : typeof value === "number"
+        ? value.toString()
+        : ""
+    );
 
     const defaultOptions =
       currency === "BRL"
@@ -79,7 +93,11 @@ export const CurrencyInput = React.forwardRef<HTMLInputElement, CurrencyInputPro
       event
     ) => {
       let stringValue = event.target.value;
-      setLocalValue(stringValue)
+      if (enableUndefined && !stringValue) {
+        onValueChange(undefined);
+        return;
+      }
+      setLocalValue(stringValue);
 
       stringValue = stringValue
         .replace(options.prefix || "", "")
