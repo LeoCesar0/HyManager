@@ -54,10 +54,21 @@ export const firebasePaginatedList = async <T>({
     direction: "desc",
   };
 
+  const orderByParams = [orderBy(orderByValues.field, orderByValues.direction)];
+
+  const differentFilter = filters.find((filter) => filter.operator != "==");
+
+  if (differentFilter) {
+    orderByParams.unshift(
+      orderBy(differentFilter.field as string, orderByValues.direction)
+    );
+  }
+
   firebaseQuery = query(
     ref,
     ...whereList,
-    orderBy(orderByValues.field, orderByValues.direction)
+    ...orderByParams
+    // orderBy(orderByValues.field, orderByValues.direction)
   );
 
   snapShot = await getDocs(firebaseQuery);
