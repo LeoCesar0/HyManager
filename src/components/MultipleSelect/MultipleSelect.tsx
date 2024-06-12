@@ -24,6 +24,7 @@ export type MultipleSelectProps = {
   CustomLabel?: CustomItem;
   onChange(value: string[]): void;
   disabled?: boolean;
+  width?: number;
 };
 
 export const MultipleSelect = ({
@@ -34,6 +35,7 @@ export const MultipleSelect = ({
   onChange,
   markAllOption,
   CustomLabel,
+  width = 250,
   ...rest
 }: MultipleSelectProps) => {
   const { currentLanguage } = useGlobalContext();
@@ -49,7 +51,7 @@ export const MultipleSelect = ({
     <div className="">
       {label && <Label className={disabled ? "opacity-50" : ""}>{label}</Label>}
       <Select {...rest} disabled={disabled}>
-        <SelectTrigger className="w-[250px]">
+        <SelectTrigger className={`w-[${width}px]`}>
           <span className="truncate pr-1">{selectedOptionsLabels}</span>
         </SelectTrigger>
         <SelectContent>

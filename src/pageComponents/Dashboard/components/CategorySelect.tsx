@@ -21,6 +21,8 @@ export type CategorySelectProps = {
   onChange: (value: string[]) => void;
   defaultOption?: BankCategory;
   disabled?: boolean;
+  width?: number;
+  allEnabled?: boolean;
 };
 
 export const CategorySelect = ({
@@ -28,15 +30,21 @@ export const CategorySelect = ({
   onChange,
   defaultOption,
   disabled,
+  width,
+  allEnabled = false,
 }: CategorySelectProps) => {
   const { currentLanguage } = useGlobalContext();
   const { currentBankAccount } = useGlobalDashboardStore();
 
   const categories = useMemo(() => {
-    return getCurrentBankCategories({
+    const _categories = getCurrentBankCategories({
       currentBankAccount,
       currentLanguage,
     });
+    if (allEnabled) {
+      onChange(Array.from(_categories.values()).map((item) => item.id));
+    }
+    return _categories;
   }, [currentBankAccount, currentLanguage]);
 
   const categoriesOptions: ISelectOption[] = [
@@ -65,6 +73,7 @@ export const CategorySelect = ({
         value={value}
         onChange={onChange}
         disabled={disabled}
+        width={width}
         CustomLabel={({ option }) => {
           return (
             <>

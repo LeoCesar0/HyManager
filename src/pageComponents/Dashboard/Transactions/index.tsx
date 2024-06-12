@@ -30,6 +30,8 @@ import { Input } from "@/components/ui/input";
 import { CurrencyInput } from "@/components/CurrencyInput";
 import { Label } from "@/components/ui/label";
 import { FirebaseFilterFor, PaginationResult } from "@/@types";
+import { MultipleSelect } from "@/components/MultipleSelect/MultipleSelect";
+import { CategorySelect } from "../components/CategorySelect";
 
 interface IProps {}
 
@@ -41,6 +43,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
   const [pagination, setPagination] =
     useState<PaginationResult<Transaction> | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
   const router = useRouter();
 
@@ -64,6 +67,13 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
           field: "absAmount",
           operator: "<=",
           value: maxValue,
+        });
+      }
+      if (categoryFilter.length > 0) {
+        filters.push({
+          field: "categories",
+          operator: "array-contains-any",
+          value: categoryFilter,
         });
       }
       if (currentBankAccount && !isLoading) {
@@ -92,7 +102,14 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [currentBankAccount?.id, page, limit, minValue, maxValue]);
+  }, [
+    currentBankAccount?.id,
+    page,
+    limit,
+    minValue,
+    maxValue,
+    categoryFilter.join(),
+  ]);
 
   const columns: ITableColumn<Transaction>[] = getColumns({ currentLanguage });
 
@@ -189,6 +206,32 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                       currency="BRL"
                     />
                   </div>
+                  <CategorySelect
+                    value={categoryFilter}
+                    onChange={setCategoryFilter}
+                    width={200}
+                    allEnabled
+                  />
+                  {/* <div className="w-[200px]" >
+                  <MultipleSelect
+        label={selectT(currentLanguage, {
+          en: 'Category',
+          pt: 'Categoria',
+        })}
+        options={categoriesOptions}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        CustomLabel={({ option }) => {
+          return (
+            <>
+              <CategoryLabel categoryId={option.value} label={option.label} />
+            </>
+          );
+        }}
+      />
+    </>
+                  </div> */}
                 </>
               }
             >
