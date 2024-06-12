@@ -1,7 +1,6 @@
 import { Section } from "@/components/Section/Section";
 import { SectionContainer } from "../../../components/Section/Section";
 import { Transaction } from "@/server/models/Transaction/schema";
-import useSwr from "swr";
 import { useGlobalDashboardStore } from "../../../contexts/GlobalDashboardStore";
 import { paginateTransactionsByBankId } from "../../../server/models/Transaction/read/paginateTransactionsByBankId";
 import { useRouter } from "next/router";
@@ -25,63 +24,133 @@ import { ArrowUpIcon, UploadIcon, ArrowDownIcon } from "@radix-ui/react-icons";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import selectT from "@/utils/selectT";
 import { getColumns } from "./getColumns";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { CurrencyInput } from "@/components/CurrencyInput";
+import { Label } from "@/components/ui/label";
+import { FirebaseFilterFor, PaginationResult } from "@/@types";
 
 interface IProps {}
 
 export const DashboardTransactions: React.FC<IProps> = ({}) => {
   const { currentBankAccount } = useGlobalDashboardStore();
   const { currentLanguage } = useGlobalContext();
+  const [minValue, setMinValue] = useState<number | undefined>(undefined);
+  const [maxValue, setMaxValue] = useState<number | undefined>(undefined);
+  const [pagination, setPagination] =
+    useState<PaginationResult<Transaction> | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
   const page = router.query.page ? Number(router.query.page) : 1;
   const limit = router.query.limit ? Number(router.query.limit) : 10;
 
-  const argsKey: [string, string, number, number] = [
+  const argsKey: [
+    string,
+    string,
+    number,
+    number,
+    typeof minValue,
+    typeof maxValue
+  ] = [
     "transactions-table",
     currentBankAccount?.id || "",
     page,
     limit,
+    minValue,
+    maxValue,
   ];
   const listKey = currentBankAccount ? argsKey : null;
 
-  const { data: pagination, isLoading } = useSwr(listKey, (args) => {
-    const [_, id, page, limit] = args as typeof argsKey;
-    return paginateTransactionsByBankId({
-      id: id,
-      pagination: {
-        limit: limit,
-        page: page,
-        orderBy: {
-          direction: "desc",
-          field: "date",
-        },
-        // orderBy: {
-        //   direction: "desc",
-        //   field: "amount",
-        // },
-      },
-      // filters: [
-      //   {
-      //     field: "amount",
-      //     operator: "<",
-      //     value: -120,
-      //   },
-      //   {
-      //     field: "amount",
-      //     operator: ">",
-      //     value: -200,
-      //   },
-      // ],
-    });
-  });
+  // const { data: pagination, isLoading } = useSwr(listKey, (args) => {
+  //   const [_, id, page, limit, minValue, maxValue] = args as typeof argsKey;
+  //   const filters: FirebaseFilterFor<Transaction>[] = [];
+  //   if (typeof minValue === "number") {
+  //     filters.push({
+  //       field: "amount",
+  //       operator: ">=",
+  //       value: minValue,
+  //     });
+  //   }
+  //   if (typeof maxValue === "number") {
+  //     filters.push({
+  //       field: "amount",
+  //       operator: "<=",
+  //       value: maxValue,
+  //     });
+  //   }
+  //   return paginateTransactionsByBankId({
+  //     id: id,
+  //     pagination: {
+  //       limit: limit,
+  //       page: page,
+  //       orderBy: {
+  //         direction: "desc",
+  //         field: "date",
+  //       },
+  //       // orderBy: {
+  //       //   direction: "desc",
+  //       //   field: "amount",
+  //       // },
+  //     },
+  //     filters: filters,
+  //   });
+  // });
+
+  useEffect(() => {
+    const timeout = 500;
+    if (!currentBankAccount || isLoading) return;
+    const timer = setTimeout(() => {
+      const filters: FirebaseFilterFor<Transaction>[] = [];
+      if (typeof minValue === "number") {
+        filters.push({
+          field: "absAmount",
+          operator: ">=",
+          value: minValue,
+        });
+      }
+      if (typeof maxValue === "number") {
+        filters.push({
+          field: "absAmount",
+          operator: "<=",
+          value: maxValue,
+        });
+      }
+      if (currentBankAccount && !isLoading) {
+        setIsLoading(true);
+        console.log("FETCH DATA");
+        paginateTransactionsByBankId({
+          id: currentBankAccount?.id,
+          pagination: {
+            limit: limit,
+            page: page,
+            orderBy: {
+              direction: "desc",
+              field: "date",
+            },
+          },
+          filters: filters,
+        })
+          .then((data) => {
+            setPagination(data.data);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }
+    }, timeout);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [currentBankAccount?.id, page, limit, minValue, maxValue]);
 
   const columns: ITableColumn<Transaction>[] = getColumns({ currentLanguage });
 
   const total: number =
-    pagination?.data?.list.reduce((acc, entry) => {
+    pagination?.list.reduce((acc, entry) => {
       return acc + entry.amount;
     }, 0) || 0;
 
@@ -97,10 +166,10 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
     onPageSelected(page, limit);
   }, [page, limit]);
 
-  const paginationControl = pagination?.data
+  const paginationControl = pagination
     ? {
         onPageSelected: onPageSelected,
-        paginationResult: pagination?.data,
+        paginationResult: pagination,
       }
     : undefined;
 
@@ -141,7 +210,41 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
           }
         >
           <>
-            <TableContainer pagination={paginationControl}>
+            <TableContainer
+              pagination={paginationControl}
+              actions={
+                <>
+                  <div className="w-[200px]">
+                    <Label>
+                      {selectT(currentLanguage, {
+                        en: "Min Value",
+                        pt: "Valor mínimo",
+                      })}
+                    </Label>
+                    <CurrencyInput
+                      name="min-value"
+                      value={minValue}
+                      onValueChange={setMinValue}
+                      currency="BRL"
+                    />
+                  </div>
+                  <div className="w-[200px]">
+                    <Label>
+                      {selectT(currentLanguage, {
+                        en: "Max Value",
+                        pt: "Valor máximo",
+                      })}
+                    </Label>
+                    <CurrencyInput
+                      name="max-value"
+                      value={maxValue}
+                      onValueChange={setMaxValue}
+                      currency="BRL"
+                    />
+                  </div>
+                </>
+              }
+            >
               <Table isLoading={isLoading}>
                 <TableHeader>
                   <TableRow>
@@ -152,8 +255,8 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                     })}
                   </TableRow>
                 </TableHeader>
-                <TableBody hasNoItems={!pagination?.data?.list.length}>
-                  {pagination?.data?.list?.map((transaction) => {
+                <TableBody hasNoItems={!pagination?.list.length}>
+                  {pagination?.list?.map((transaction) => {
                     return (
                       <TableRow key={transaction.id}>
                         {columns.map((column) => {

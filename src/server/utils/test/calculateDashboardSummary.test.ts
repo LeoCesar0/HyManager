@@ -55,6 +55,7 @@ describe("Test calculateDashboardSummary", () => {
       dateBreakPoints: breakPoints,
       reports,
     });
+    // TODO
 
     // expect(result["thisWeek"]).toBeTruthy();
     expect(result["thisMonth"]).toBeTruthy();
