@@ -7,15 +7,17 @@ export type AppError = {
   message: string;
 } | null;
 
-export type AppModelResponse<T> = {
-  data: null;
-  done: false;
-  error: AppError;
-} | {
-  data: T;
-  done: true;
-  error: null;
-}
+export type AppModelResponse<T> =
+  | {
+      data: null;
+      done: false;
+      error: AppError;
+    }
+  | {
+      data: T;
+      done: true;
+      error: null;
+    };
 
 export type AppBaseDocFields<T> = T & {
   createdAtDay: string;
@@ -24,7 +26,7 @@ export type AppBaseDocFields<T> = T & {
   createdAtWeek: string;
 };
 
-export type ReactNode<T = {}> = React.FC<{children:React.ReactNode} & T>
+export type ReactNode<T = {}> = React.FC<{ children: React.ReactNode } & T>;
 
 export type CSVData = string[][];
 
@@ -37,7 +39,7 @@ export type LocalizedText = {
   [key in Locale]: string;
 };
 
-export type AnyObject = Record<string, any>
+export type AnyObject = Record<string, any>;
 
 export type FirebaseFilterFor<T> = {
   field: keyof T;
@@ -47,7 +49,11 @@ export type FirebaseFilterFor<T> = {
 
 export type RefetchCollection = (collection: FirebaseCollection[]) => void;
 
-export type AppIcon = React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>> | IconType
+export type AppIcon =
+  | React.ForwardRefExoticComponent<
+      IconProps & React.RefAttributes<SVGSVGElement>
+    >
+  | IconType;
 
 export type Pagination = {
   page: number;
@@ -55,11 +61,11 @@ export type Pagination = {
   orderBy?: {
     field: string;
     direction: "asc" | "desc";
-  }
-}
+  };
+};
 export type PaginationResult<T> = {
   count: number;
   pages: number;
   list: T[];
-  currentPage: number
-}
+  currentPage: number;
+};
