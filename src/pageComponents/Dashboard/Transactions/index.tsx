@@ -47,58 +47,6 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
   const page = router.query.page ? Number(router.query.page) : 1;
   const limit = router.query.limit ? Number(router.query.limit) : 10;
 
-  const argsKey: [
-    string,
-    string,
-    number,
-    number,
-    typeof minValue,
-    typeof maxValue
-  ] = [
-    "transactions-table",
-    currentBankAccount?.id || "",
-    page,
-    limit,
-    minValue,
-    maxValue,
-  ];
-  const listKey = currentBankAccount ? argsKey : null;
-
-  // const { data: pagination, isLoading } = useSwr(listKey, (args) => {
-  //   const [_, id, page, limit, minValue, maxValue] = args as typeof argsKey;
-  //   const filters: FirebaseFilterFor<Transaction>[] = [];
-  //   if (typeof minValue === "number") {
-  //     filters.push({
-  //       field: "amount",
-  //       operator: ">=",
-  //       value: minValue,
-  //     });
-  //   }
-  //   if (typeof maxValue === "number") {
-  //     filters.push({
-  //       field: "amount",
-  //       operator: "<=",
-  //       value: maxValue,
-  //     });
-  //   }
-  //   return paginateTransactionsByBankId({
-  //     id: id,
-  //     pagination: {
-  //       limit: limit,
-  //       page: page,
-  //       orderBy: {
-  //         direction: "desc",
-  //         field: "date",
-  //       },
-  //       // orderBy: {
-  //       //   direction: "desc",
-  //       //   field: "amount",
-  //       // },
-  //     },
-  //     filters: filters,
-  //   });
-  // });
-
   useEffect(() => {
     const timeout = 500;
     if (!currentBankAccount || isLoading) return;
