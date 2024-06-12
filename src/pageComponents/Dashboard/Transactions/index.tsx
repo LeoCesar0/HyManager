@@ -68,7 +68,6 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
       }
       if (currentBankAccount && !isLoading) {
         setIsLoading(true);
-        console.log("FETCH DATA");
         paginateTransactionsByBankId({
           id: currentBankAccount?.id,
           pagination: {
