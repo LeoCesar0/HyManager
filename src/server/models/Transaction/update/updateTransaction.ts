@@ -17,6 +17,7 @@ export const updateTransaction = async ({
 }: IUpdateTransaction): Promise<AppModelResponse<Transaction>> => {
   const funcName = "updateTransaction";
   try {
+    if (values.amount) values.absAmount = Math.abs(values.amount);
     const result = await firebaseUpdate<Transaction>({
       collection: FirebaseCollection.transactions,
       data: values,

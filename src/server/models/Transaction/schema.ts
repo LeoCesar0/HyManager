@@ -15,6 +15,7 @@ export const transactionSchema = z.object({
   idFromBank: z.string().optional(),
   bankAccountId: z.string(),
   amount: z.number(),
+  absAmount: z.number(),
   updatedBalance: z.number(),
   type: z.enum([TransactionType.deposit, TransactionType.debit]),
   file: fileInfoSchema.optional(),

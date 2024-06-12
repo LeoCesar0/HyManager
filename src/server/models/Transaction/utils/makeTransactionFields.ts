@@ -33,7 +33,10 @@ export const makeTransactionFields = ({
     createdAt: Timestamp.fromDate(now),
     updatedAt: Timestamp.fromDate(now),
     ...makeDateFields(date),
-    creditorSlug: transactionInputs.creditor ? slugify(transactionInputs.creditor) : "",
+    creditorSlug: transactionInputs.creditor
+      ? slugify(transactionInputs.creditor)
+      : "",
+    absAmount: Math.abs(transactionInputs.amount),
   };
 
   transactionSchema.parse(transaction);

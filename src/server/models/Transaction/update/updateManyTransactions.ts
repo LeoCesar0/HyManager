@@ -21,6 +21,8 @@ export const updateManyTransactions = async ({
         id: transaction.id,
       });
 
+      transaction.absAmount = Math.abs(transaction.amount);
+
       if (transaction.id) {
         batch.set(docRef, transaction, { merge: true });
       }
