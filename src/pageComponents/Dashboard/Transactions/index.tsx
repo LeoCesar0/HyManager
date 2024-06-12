@@ -52,7 +52,6 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
 
   useEffect(() => {
     const timeout = 500;
-    if (!currentBankAccount || isLoading) return;
     const timer = setTimeout(() => {
       const filters: FirebaseFilterFor<Transaction>[] = [];
       if (typeof minValue === "number") {

@@ -81,6 +81,13 @@ export const CategorySelect = ({
             </>
           );
         }}
+        markAllOption={{
+          label: {
+            en: "All",
+            pt: "Todas",
+          },
+          value: "ALL",
+        }}
       />
     </>
   );

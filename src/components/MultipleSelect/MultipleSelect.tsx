@@ -40,12 +40,20 @@ export const MultipleSelect = ({
 }: MultipleSelectProps) => {
   const { currentLanguage } = useGlobalContext();
 
-  const selectedOptionsLabels = value
-    .map((item) => {
-      const option = options.find((option) => option.value === item);
-      return option ? selectT(currentLanguage, option.label) : item;
-    })
-    .join(", ");
+  const allLabel = selectT(currentLanguage, {
+    en: "All",
+    pt: "Todos",
+  });
+
+  const selectedOptionsLabels =
+    value.length === options.length
+      ? allLabel
+      : value
+          .map((item) => {
+            const option = options.find((option) => option.value === item);
+            return option ? selectT(currentLanguage, option.label) : item;
+          })
+          .join(", ");
 
   return (
     <div className="">
