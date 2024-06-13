@@ -68,7 +68,7 @@ export async function handleToastPromise<T extends AppModelResponse<any>>(
 
 export const slugify = (string: string) => {
   if (!string) return "";
-  const newText = string
+  let newText = string
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -76,6 +76,13 @@ export const slugify = (string: string) => {
     .replace(/ /g, "-")
     .replace(/[^\w-]+/g, "")
     .replace(/--+/g, "-");
+
+  if (newText.endsWith("-")) {
+    newText = newText.slice(0, -1);
+  }
+  if (newText.startsWith("-")) {
+    newText = newText.slice(1);
+  }
 
   return newText;
 };
