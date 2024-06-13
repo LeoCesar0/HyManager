@@ -24,8 +24,8 @@ export const formFields: MakeFormFields<CreateTransaction> = [
   {
     name: "creditor",
     label: {
-      en: "Creditor",
-      pt: "Credor",
+      en: "Beneficiary",
+      pt: "Beneficiário",
     },
     inputType: "input",
   },
