@@ -63,7 +63,7 @@ export const CategorySelect = ({
   const categoryFilterLabel = selectT(currentLanguage, {
     en: "Category",
     pt: "Categoria",
-  });
+  })
 
   return (
     <>

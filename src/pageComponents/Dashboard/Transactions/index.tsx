@@ -1,6 +1,8 @@
 import { Section } from "@/components/Section/Section";
 import { SectionContainer } from "../../../components/Section/Section";
-import { Transaction } from "@/server/models/Transaction/schema";
+import {
+  Transaction,
+} from "@/server/models/Transaction/schema";
 import { useGlobalDashboardStore } from "../../../contexts/GlobalDashboardStore";
 import { paginateTransactionsByBankId } from "../../../server/models/Transaction/read/paginateTransactionsByBankId";
 import { useRouter } from "next/router";
@@ -32,6 +34,10 @@ import { Label } from "@/components/ui/label";
 import { FirebaseFilterFor, PaginationResult } from "@/@types";
 import { MultipleSelect } from "@/components/MultipleSelect/MultipleSelect";
 import { CategorySelect } from "../components/CategorySelect";
+import { ISelectOption } from "@/@types/Select";
+import { CategoryLabel } from "@/components/CategoryLabel";
+import { TransactionTypeIcon } from "@/components/TransactionTypeIcon";
+import { TransactionTypeSelect } from "../components/TransactionTypeSelect";
 
 interface IProps {}
 
@@ -44,6 +50,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
     useState<PaginationResult<Transaction> | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+  const [transactionTypes, setTransactionTypes] = useState<string[]>([]);
 
   const router = useRouter();
 
@@ -73,6 +80,13 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
           field: "categories",
           operator: "array-contains-any",
           value: categoryFilter,
+        });
+      }
+      if (transactionTypes.length > 0) {
+        filters.push({
+          field: "type",
+          operator: "in",
+          value: transactionTypes,
         });
       }
       if (currentBankAccount && !isLoading) {
@@ -108,6 +122,7 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
     minValue,
     maxValue,
     categoryFilter.join(),
+    transactionTypes.join(),
   ]);
 
   const columns: ITableColumn<Transaction>[] = getColumns({ currentLanguage });
@@ -213,26 +228,11 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                     width={200}
                     allEnabled
                   />
-                  {/* <div className="w-[200px]" >
-                  <MultipleSelect
-        label={selectT(currentLanguage, {
-          en: 'Category',
-          pt: 'Categoria',
-        })}
-        options={categoriesOptions}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        CustomLabel={({ option }) => {
-          return (
-            <>
-              <CategoryLabel categoryId={option.value} label={option.label} />
-            </>
-          );
-        }}
-      />
-    </>
-                  </div> */}
+                  <TransactionTypeSelect
+                    value={transactionTypes}
+                    onChange={setTransactionTypes}
+                    width={200}
+                  />
                 </>
               }
             >
@@ -271,22 +271,12 @@ export const DashboardTransactions: React.FC<IProps> = ({}) => {
                           if (column.key === "amount") {
                             const value = transaction.amount;
                             const label = valueToCurrency(Math.abs(value));
-                            const isDeposit = value > 0;
                             return (
                               <TableCell key={column.key}>
                                 <div className="flex items-center gap-2">
-                                  <div
-                                    className={cn({
-                                      "text-deposit": isDeposit,
-                                      "text-debit": !isDeposit,
-                                    })}
-                                  >
-                                    {isDeposit ? (
-                                      <ArrowUpIcon className="h-4 w-4" />
-                                    ) : (
-                                      <ArrowDownIcon className="h-4 w-4" />
-                                    )}
-                                  </div>
+                                  <TransactionTypeIcon
+                                    type={transaction.type}
+                                  />
                                   {label}
                                 </div>
                               </TableCell>
