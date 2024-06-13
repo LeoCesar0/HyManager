@@ -9,11 +9,14 @@ import { extractPDFData } from "./extractPDFData";
 import { showErrorToast } from "@/utils/app";
 import { cx } from "@/utils/misc";
 import clsx from "clsx";
+import { FileWithId } from "@/@types/File";
+import { v4 as uuid } from "uuid";
+import { filesToFileWithId } from "@/utils/filesToFilesWithId";
 
 interface ITransactionsFileInput extends InputHTMLAttributes<HTMLInputElement> {
   currentBankId: string;
   userId: string;
-  onFilesLoaded: (files: File[]) => void;
+  onFilesLoaded: (files: FileWithId[]) => void;
   onTransactionsLoaded: (data: AppModelResponse<IPDFData[]>) => void;
 }
 
@@ -43,23 +46,24 @@ const TransactionsFileInput: React.FC<ITransactionsFileInput> = ({
     const loadedFiles = readPDFFiles({
       event,
     });
-
-    await proceedFiles(loadedFiles);
+    if (!loadedFiles) return;
+    const filesWithId = filesToFileWithId(loadedFiles);
+    await proceedFiles(filesWithId);
   };
 
   const onDrop = async (dragEvent: DragEvent) => {
     dragEvent.preventDefault();
-    console.log("ON DROP");
 
     if (dragEvent.dataTransfer) {
       const files = Array.from(dragEvent.dataTransfer.files).filter(
         (file) => file.type === "application/pdf"
       );
-      await proceedFiles(files);
+      const filesWithId = filesToFileWithId(files);
+      await proceedFiles(filesWithId);
     }
   };
 
-  const proceedFiles = async (loadedFiles: File[] | null) => {
+  const proceedFiles = async (loadedFiles: FileWithId[] | null) => {
     if (!loadedFiles) {
       showErrorToast({
         message: "Error loading files!",

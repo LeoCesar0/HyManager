@@ -12,10 +12,15 @@ export const PDFDataSchema = z.object({
   slug: z.string(),
   startDate: z.string(),
   endDate: z.string(),
+  fileId: z.string(),
 });
 
 export type IPDFData = z.infer<typeof PDFDataSchema>;
 
 export interface IPDFDataParser {
-  parse(data: IPDFRawData[], bankAccountId: string): IPDFData[];
+  parse(
+    data: IPDFRawData[],
+    bankAccountId: string,
+    fileIds: string[]
+  ): IPDFData[];
 }

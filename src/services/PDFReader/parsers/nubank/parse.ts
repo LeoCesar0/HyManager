@@ -11,6 +11,7 @@ import { parseBrazilianDate } from "@/utils/date/parseBrazilianDate";
 import { makePDFSlug } from "../../makePDFSlug";
 import currency from "currency.js";
 import { getTransactionCategory } from "../getTransactionCategory";
+import { v4 as uuid } from "uuid";
 
 const headerMapping = {
   initialBalance: [20.921, 9.97],
@@ -30,13 +31,14 @@ Object.entries(headerMapping).forEach(([key, value]) => {
 
 export function parse(
   PDFsRawData: IPDFRawData[],
-  bankAccountId: string
+  bankAccountId: string,
+  fileIds: string[]
 ): IPDFData[] {
   const finalResult: IPDFData[] = [];
 
   let afterTransXValues: number[] = [];
 
-  PDFsRawData.forEach((rawPDFData) => {
+  PDFsRawData.forEach((rawPDFData, fileIndex) => {
     const currentPDFTransactions: CreateTransactionFromPDF[] = [];
 
     let currentPDFData: IPDFData = {
@@ -49,6 +51,7 @@ export function parse(
       transactions: [],
       startDate: "",
       endDate: "",
+      fileId: fileIds[fileIndex],
     };
 
     const { Pages } = rawPDFData;

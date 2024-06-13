@@ -36,9 +36,9 @@ export class PDFReader {
 
     return this.rawData;
   }
-  parse({ bankAccountId }: { bankAccountId: string }) {
+  parse({ bankAccountId, fileIds }: { bankAccountId: string, fileIds:string[] }) {
     if (!this.rawData) return null;
-    const parsedResults = this.parser.parse(this.rawData, bankAccountId);
+    const parsedResults = this.parser.parse(this.rawData, bankAccountId, fileIds);
     this.parsedData = parsedResults;
     return parsedResults;
   }

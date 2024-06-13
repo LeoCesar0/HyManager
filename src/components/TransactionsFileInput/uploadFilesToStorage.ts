@@ -1,19 +1,18 @@
-import { FileInfo } from "@/@types/File";
+import { FileInfo, FileWithId } from "@/@types/File";
 import { getFilePath } from "@utils/getFilePath";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { firebaseStorage } from "@/services/firebase";
 import { v4 as uuid } from "uuid";
 
 interface IUploadFilesToStorage {
-  files: File[];
+  files: File[] | FileWithId[];
   bankAccountId: string;
 }
-
 export const uploadSingleFile = async (
-  file: File,
+  file: File | FileWithId,
   bankAccountId: string
 ): Promise<FileInfo> => {
-  const fileId = uuid();
+  const fileId = (file as any).id ?? uuid();
   const path = getFilePath({
     bankAccountId,
     file,

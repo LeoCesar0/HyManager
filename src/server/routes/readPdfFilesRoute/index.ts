@@ -23,7 +23,12 @@ export const readPdfFilesRoute = async (
 
   const readFilesPromise = new Promise((resolve, reject) => {
     form.parse(req, async (err, fields, { files }) => {
+      if (!Array.isArray(files)) {
+        files = [files];
+      }
+
       const bankAccountId = fields.bankAccountId as string;
+      const fileIds = JSON.parse(fields.fileIds as string) as string[];
 
       // --------------------------
       // Handle Reject Function
@@ -50,9 +55,6 @@ export const readPdfFilesRoute = async (
       if (err) {
         return handleReject("Error reading pdf: formidable err");
       }
-      if (!Array.isArray(files)) {
-        files = [files];
-      }
 
       // --------------------------
       // Read uploaded files
@@ -60,7 +62,7 @@ export const readPdfFilesRoute = async (
 
       await pdfReader.read({ files: files });
 
-      let parsedResults = pdfReader.parse({ bankAccountId });
+      let parsedResults = pdfReader.parse({ bankAccountId, fileIds });
 
       // --------------------------
       // Validation

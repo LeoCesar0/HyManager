@@ -16,9 +16,10 @@ import { useGlobalContext } from "@/contexts/GlobalContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GeneralInfo } from "./@types";
 import { useRouter } from "next/navigation";
+import { FileWithId } from "@/@types/File";
 
 export const DashboardTransactionsImportExtract = () => {
-  const [loadedFiles, setLoadedFiles] = useState<File[]>([]);
+  const [loadedFiles, setLoadedFiles] = useState<FileWithId[]>([]);
   const [extractResponse, setExtractResponse] =
     useState<PDF2JSONResponse | null>(null);
   const { currentBankAccount } = useGlobalDashboardStore();
@@ -71,7 +72,7 @@ export const DashboardTransactionsImportExtract = () => {
     setExtractResponse(result);
   };
 
-  const onFilesLoaded = (files: File[]) => {
+  const onFilesLoaded = (files: FileWithId[]) => {
     setLoadedFiles(files);
   };
 
@@ -205,6 +206,7 @@ const getGeneralInfo = (extractResult: PDF2JSONResponse["data"]) => {
       startDate: extractResult[0].startDate,
       endDate: extractResult[extractResult.length - 1].endDate,
       slug: "geral",
+      fileId: "geral",
     } as GeneralInfo
   );
 };
