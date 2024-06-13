@@ -19,8 +19,8 @@ export const getColumns = ({
     {
       key: "creditor",
       label: selectT(currentLanguage, {
-        en: "Creditor",
-        pt: "Credor",
+        en: "Beneficiary",
+        pt: "Beneficiário",
       }),
     },
     {
