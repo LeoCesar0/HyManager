@@ -11,10 +11,15 @@ interface IUploadFilesToStorage {
 
 export const uploadSingleFile = async (
   file: File,
-  bankAccountId: string,
+  bankAccountId: string
 ): Promise<FileInfo> => {
   const fileId = uuid();
-  const path = getFilePath({ bankAccountId, file, fileId });
+  const path = getFilePath({
+    bankAccountId,
+    file,
+    fileId,
+    baseFolder: "docs",
+  });
 
   const storageRef = ref(firebaseStorage, path);
   await uploadBytes(storageRef, file);
