@@ -20,6 +20,7 @@ export const transactionSchema = z.object({
   type: z.enum([TransactionType.deposit, TransactionType.debit]),
   file: fileInfoSchema.optional(),
   creditor: z.string().optional(),
+  creditorInfo: z.string().optional(),
   creditorSlug: z.string().optional(),
   description: z.string().optional(),
   date: timestampSchema,
@@ -68,6 +69,7 @@ export const createTransactionFromPDFSchema = z.object({
     })
     .optional(),
   creditor: z.string(),
+  creditorInfo: z.string(),
   description: z.string(),
   date: z.date().or(z.string()),
   amount: z.number(),

@@ -2,7 +2,6 @@ import { FileInfo } from "@/@types/File";
 import { createManyTransactions } from "@models/Transaction/create/createManyTransactions";
 import { CreateTransactionFromPDF } from "@models/Transaction/schema";
 import { IPDFData } from "@/services/PDFReader/interfaces";
-import { makeTransactionFields } from "../models/Transaction/utils/makeTransactionFields";
 import { makeTransactionSlug } from "./makeTransactionSlug";
 
 interface ICreateTransactionsFromPDFResult {
@@ -33,6 +32,7 @@ export const createTransactionsFromPDFResult = async ({
             idFromBank: transactionInput.idFromBank,
             creditor: transactionInput.creditor || "",
           });
+          // Check if transaction already exists, if so, add only the transaction which pdfResult has more transactions
           const prevStrength = strengthByTransaction.get(slugId) || -1;
           const currentStrength = pdfResult.transactions.length;
           const canAdd = currentStrength > prevStrength;

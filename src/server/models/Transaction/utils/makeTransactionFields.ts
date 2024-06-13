@@ -26,6 +26,7 @@ export const makeTransactionFields = ({
   });
   const transaction: Transaction = {
     ...transactionInputs,
+    creditorInfo: transactionInputs.creditorInfo || "",
     bankAccountId: bankAccountId,
     id: slugId,
     slug: slugId,

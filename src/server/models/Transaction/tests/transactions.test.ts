@@ -24,6 +24,7 @@ describe("Test transaction CRUD", () => {
       amount: -100.5,
       date: new Date(2020, 0, 25),
       creditor: "test",
+      creditorInfo: "creditorInfo",
       idFromBank: "test",
       type: TransactionType.debit,
       description: "test",

@@ -64,6 +64,7 @@ export function parse(
           date?: Date;
           description?: string;
           creditor?: string;
+          creditorInfo?: string;
           amount?: number;
           type?: "debit" | "deposit";
         } = undefined;
@@ -170,14 +171,22 @@ export function parse(
         let amount = numericStringToNumber(currentText);
 
         if (!tempTransaction.creditor && !amount) {
-          let creditor = currentText;
+          let _creditor = currentText;
           let i = textIndex;
-          const transactionCreditorX = Texts[i].x
+          const transactionCreditorX = Texts[i].x;
           while (Texts[i + 1] && Texts[i + 1].x === transactionCreditorX) {
             const text = decodeText(Texts[i + 1].R[0].T);
 
-            creditor += ` ${text.trim()}`;
+            _creditor += ` ${text.trim()}`;
             i++;
+          }
+
+          const [personName = "", personId = "", ...rest] =
+            _creditor.split(" - ");
+
+          let creditor = personName;
+          if (personId) {
+            creditor = `${personName} - ${personId}`;
           }
 
           tempTransaction = {
@@ -185,6 +194,7 @@ export function parse(
             type: tempTransaction.type,
             description: tempTransaction.description,
             creditor: creditor,
+            creditorInfo: rest.join(" - "),
           };
           // console.log("Step 4 - Found new Creditor");
           // console.log("------------------------------------------------");
@@ -218,6 +228,7 @@ export function parse(
 
         const transaction: CreateTransactionFromPDF = {
           creditor: tempTransaction.creditor || "",
+          creditorInfo: tempTransaction.creditorInfo || "",
           description: tempTransaction.description || "",
           type: tempTransaction.type as TransactionType,
           amount: amount,
