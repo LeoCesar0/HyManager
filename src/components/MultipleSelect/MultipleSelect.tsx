@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Label } from "../ui/label";
 import {
   Select,
@@ -25,6 +25,7 @@ export type MultipleSelectProps = {
   onChange(value: string[]): void;
   disabled?: boolean;
   width?: number;
+  allEnabled?: boolean;
 };
 
 export const MultipleSelect = ({
@@ -36,6 +37,7 @@ export const MultipleSelect = ({
   markAllOption,
   CustomLabel,
   width = 250,
+  allEnabled,
   ...rest
 }: MultipleSelectProps) => {
   const { currentLanguage } = useGlobalContext();
@@ -54,6 +56,12 @@ export const MultipleSelect = ({
             return option ? selectT(currentLanguage, option.label) : item;
           })
           .join(", ");
+
+  useEffect(() => {
+    if (allEnabled) {
+      onChange(options.map((option) => option.value));
+    }
+  }, [allEnabled, options.length]);
 
   return (
     <div className="">
@@ -98,37 +106,7 @@ export const MultipleSelect = ({
                 currentLanguage={currentLanguage}
                 CustomLabel={CustomLabel}
               />
-              // <div
-              //   key={option.value}
-              //   onClick={() => {
-              //     const selectedValue = option.value;
-              //     console.log("onClick", selectedValue);
-              //     const checked = value.some((item) => item === selectedValue);
-              //     console.log("checked", checked);
-              //     if (checked) {
-              //       const val = value.filter((item) => item !== selectedValue);
-              //       console.log("val", val);
-              //       onChange(val);
-              //     } else {
-              //       onChange([...value, selectedValue]);
-              //     }
-              //   }}
-              //   className="cursor-pointer"
-              // >
-              //   <SelectItem
-              //     value={option.value}
-              //     disableIndicator
-              //     className="pointer-events-none"
-              //   >
-              //     <CheckIcon
-              //       className={cn(
-              //         "mr-2 h-4 w-4",
-              //         checked ? "opacity-100" : "opacity-0"
-              //       )}
-              //     />
-              //     <span>{label}</span>
-              //   </SelectItem>
-              // </div>
+            
             );
           })}
         </SelectContent>
