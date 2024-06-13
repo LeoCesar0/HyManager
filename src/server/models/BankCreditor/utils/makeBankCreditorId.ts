@@ -5,5 +5,11 @@ export const makeBankCreditorId = ({
   creditorSlug: string;
   bankAccountId: string;
 }) => {
-  return `${bankAccountId}@@${creditorSlug}`;
+  let firstPart = bankAccountId;
+  if (bankAccountId.length > 10) {
+    const bankIdFirstPart = bankAccountId.slice(0, 5);
+    const bankIdLastPart = bankAccountId.slice(-5);
+    firstPart = `${bankIdFirstPart}-${bankIdLastPart}`;
+  }
+  return `${firstPart}@@${creditorSlug}`;
 };
