@@ -47,16 +47,41 @@ export const ExtractPage = ({ pdfData, pdfKey }: ExtractPageProps) => {
                 <TransactionCell width={150} transactionType={transaction.type}>
                   {amountFormatted}
                 </TransactionCell>
-                <TransactionCell width={150} label="Tipo">
+                <TransactionCell
+                  width={150}
+                  label={selectT(currentLanguage, {
+                    en: "Type",
+                    pt: "Tipo",
+                  })}
+                >
                   {transactionTypeLabel}
                 </TransactionCell>
-                <TransactionCell label="Credor" width={350}>
+                <TransactionCell
+                  label={selectT(currentLanguage, {
+                    en: "Beneficiary",
+                    pt: "Beneficiário",
+                  })}
+                  width={350}
+                >
                   {transaction.creditor}
                 </TransactionCell>
-                <TransactionCell label="Descrição" width={350}>
+                <TransactionCell
+                  label={selectT(currentLanguage, {
+                    en: "Description",
+                    pt: "Descrição",
+                  })}
+                  width={350}
+                >
                   {transaction.description}
                 </TransactionCell>
-                <TransactionCell label="Data">{formattedDate}</TransactionCell>
+                <TransactionCell
+                  label={selectT(currentLanguage, {
+                    en: "Transaction date",
+                    pt: "Data da transação",
+                  })}
+                >
+                  {formattedDate}
+                </TransactionCell>
               </TransactionRow>
             );
           })}
