@@ -13,7 +13,7 @@ const customJestConfig = {
   collectCoverage: true,
   verbose: true,
   clearMocks: true,
-  testTimeout: 10000
+  testTimeout: 10000,
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
