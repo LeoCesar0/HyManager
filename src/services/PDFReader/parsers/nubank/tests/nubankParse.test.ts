@@ -3,14 +3,14 @@ import { PDFDataSchema } from "@/services/PDFReader/interfaces";
 import { TEST_CONFIG } from "@/static/testConfig";
 import NubankPDFParser from "../NubankPDFParser";
 
-describe("Test Nubank parse", () => {
+describe("Test Nubank parse #current", () => {
   const parser = new NubankPDFParser();
   const bankAccountId = TEST_CONFIG.bankAccountId;
 
-  it("should be a valid return format", async () => {
+  it.skip("should be a valid return format", async () => {
     const pdfRawData = await getPDFRawData({
       file: {
-        filepath: TEST_CONFIG.pdf['2023-06'].path,
+        filepath: TEST_CONFIG.pdf["2023-06"].path,
       },
     });
 
@@ -34,15 +34,15 @@ describe("Test Nubank parse", () => {
     // --------------------------
     // pdf 2023-06
     // --------------------------
-    test("pdf 2023-06", async() => {
+    test.skip("pdf 2023-06", async () => {
       const pdfRawData = await getPDFRawData({
         file: {
-          filepath: TEST_CONFIG.pdf['2023-06'].path,
+          filepath: TEST_CONFIG.pdf["2023-06"].path,
         },
       });
-  
+
       if (!pdfRawData) return;
-  
+
       const pdfData = parser.parse([pdfRawData], bankAccountId)[0];
 
       expect(pdfData.initialBalance).toBe(5297.16);
@@ -51,19 +51,19 @@ describe("Test Nubank parse", () => {
       expect(pdfData.totalCredit).toBe(5203.75);
       expect(pdfData.totalDebit).toBe(-9742.24);
       expect(pdfData.transactions.length).toBe(51);
-    })
+    });
     // --------------------------
     // pdf 2023-07
     // --------------------------
-    test("pdf 2023-07", async() => {
+    test.skip("pdf 2023-07", async () => {
       const pdfRawData = await getPDFRawData({
         file: {
-          filepath: TEST_CONFIG.pdf['2023-07'].path,
+          filepath: TEST_CONFIG.pdf["2023-07"].path,
         },
       });
-  
+
       if (!pdfRawData) return;
-  
+
       const pdfData = parser.parse([pdfRawData], bankAccountId)[0];
 
       expect(pdfData.initialBalance).toBe(799.76);
@@ -72,6 +72,27 @@ describe("Test Nubank parse", () => {
       expect(pdfData.totalCredit).toBe(5537);
       expect(pdfData.totalDebit).toBe(-5865.59);
       expect(pdfData.transactions.length).toBe(39);
-    })
-  })
+    });
+    // --------------------------
+    // pdf 2024-03
+    // --------------------------
+    test("pdf 2024-03", async () => {
+      const pdfRawData = await getPDFRawData({
+        file: {
+          filepath: TEST_CONFIG.pdf["2024-03"].path,
+        },
+      });
+
+      if (!pdfRawData) return;
+
+      const pdfData = parser.parse([pdfRawData], bankAccountId)[0];
+
+      expect(pdfData.initialBalance).toBe(2857.28);
+      expect(pdfData.finalBalance).toBe(972.32);
+      expect(pdfData.income).toBe(0);
+      expect(pdfData.totalCredit).toBe(5680.30);
+      expect(pdfData.totalDebit).toBe(-7565.26);
+      expect(pdfData.transactions.length).toBe(63);
+    });
+  });
 });

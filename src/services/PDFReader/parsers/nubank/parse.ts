@@ -169,9 +169,11 @@ export function parse(
         if (!tempTransaction.creditor && !amount) {
           let creditor = currentText;
           let i = textIndex;
-          while (Texts[i + 1] && Texts[i + 1].x === transactionDescriptionX) {
+          const transactionCreditorX = Texts[i].x
+          while (Texts[i + 1] && Texts[i + 1].x === transactionCreditorX) {
             const text = decodeText(Texts[i + 1].R[0].T);
-            creditor += text;
+
+            creditor += ` ${text.trim()}`;
             i++;
           }
 

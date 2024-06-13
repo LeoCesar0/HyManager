@@ -8,5 +8,8 @@ export const TEST_CONFIG = {
     "2023-07": {
       path: "public/test/pdfs/2023-07.pdf",
     },
+    "2024-03": {
+      path: "public/test/pdfs/2024-03.pdf",
+    },
   },
 };

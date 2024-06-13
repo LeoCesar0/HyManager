@@ -33,7 +33,7 @@ const _listTransactionReportsBy = async (filePathList: string[]) => {
   return transactions;
 };
 
-describe("Test calculateDashboardSummary #current", () => {
+describe("Test calculateDashboardSummary", () => {
   test("should calculate dashboard summary", async () => {
     const endDate = new Date(2023, 5, 29);
 
