@@ -72,8 +72,10 @@ export const slugify = (string: string) => {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replaceAll("•", "")
     .replace(/ /g, "-")
-    .replace(/[^\w-]+/g, "");
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-");
 
   return newText;
 };
