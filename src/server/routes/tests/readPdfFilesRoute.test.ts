@@ -6,7 +6,7 @@ import "isomorphic-fetch";
 import "isomorphic-form-data";
 import { z } from "zod";
 
-describe("API Route: read-pdf-files #current", () => {
+describe("API Route: read-pdf-files", () => {
   describe("Test 2023-06 pdf", () => {
     let res: Response;
     let resData: PDF2JSONResponse;

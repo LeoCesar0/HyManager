@@ -2,7 +2,6 @@ import {
   calculateDashboardSummary,
   DateBreakPoint,
 } from "../calculateDashboardSummary";
-import { mockTransactionsReport } from "./utils/mockTransactionsReport";
 import { getTestPDFData } from "./utils/getTestPDFData";
 import { TEST_CONFIG } from "@/static/testConfig";
 import { Transaction } from "@/server/models/Transaction/schema";
@@ -27,14 +26,14 @@ const _listTransactionReportsBy = async (filePathList: string[]) => {
     })
     .flat();
 
-  const reports = mockTransactionsReport({
-    transactions,
-  }).filter((item) => item.type === "day");
+  // const reports = mockTransactionsReport({
+  //   transactions,
+  // }).filter((item) => item.type === "day");
 
-  return reports;
+  return transactions;
 };
 
-describe("Test calculateDashboardSummary", () => {
+describe("Test calculateDashboardSummary #current", () => {
   test("should calculate dashboard summary", async () => {
     const endDate = new Date(2023, 5, 29);
 
@@ -46,24 +45,18 @@ describe("Test calculateDashboardSummary", () => {
       },
     ];
 
-    const reports = await _listTransactionReportsBy([
+    const transactions = await _listTransactionReportsBy([
       TEST_CONFIG.pdf["2023-06"].path,
     ]);
 
     const result = calculateDashboardSummary({
       bankAccountId: "123",
       dateBreakPoints: breakPoints,
-      reports,
+      transactions,
     });
     // TODO
 
-    // expect(result["thisWeek"]).toBeTruthy();
     expect(result["thisMonth"]).toBeTruthy();
-
-    // expect(result["thisWeek"]?.biggestDebit?.amount).toBe(-2100);
-    // expect(result["thisWeek"]?.biggestDeposit).toBe(null);
-    // expect(result["thisWeek"]?.totalDeposits).toBe(0);
-    // expect(result["thisWeek"]?.totalExpenses).toBe(-6521.5);
 
     expect(result["thisMonth"]?.biggestDebit?.amount).toBe(-2100);
     expect(result["thisMonth"]?.biggestDeposit?.amount).toBe(5000);
