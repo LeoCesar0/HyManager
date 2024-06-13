@@ -1,16 +1,8 @@
 import { Section, SectionContainer } from "@/components/Section/Section";
 import { SimpleTableCell } from "@/components/SimpleTable/SimpleTableCell";
 import { SimpleTableRow } from "@/components/SimpleTable/SimpleTableRow";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { useGlobalDashboardStore } from "@/contexts/GlobalDashboardStore";
-import useT from "@/hooks/useT";
 import { getBankCreditor } from "@/server/models/BankCreditor/read/getBankCreditor";
 import { BankCreditor } from "@/server/models/BankCreditor/schema";
 import { paginateTransactionsByBankId } from "@/server/models/Transaction/read/paginateTransactionsByBankId";
