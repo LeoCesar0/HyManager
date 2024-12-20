@@ -1,7 +1,7 @@
 import formidable from "formidable";
 import { IPDFRawData } from "./rawDataTypes";
 import fs from "fs";
-const PDF2JSON = require("pdf2json");
+import PDF2JSON from "pdf2json";
 
 interface IGetPDFRawData {
   file: formidable.File | { filepath: string };

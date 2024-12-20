@@ -3,8 +3,8 @@ import { TEST_CONFIG } from "../../src/static/testConfig";
 import { compareStrings } from "../../src/utils/compareStrings";
 import formidable from "formidable";
 import { IPDFRawData } from "../../src/services/PDFReader/rawDataTypes";
-const PDF2JSON = require("pdf2json");
-const fs = require("fs");
+import PDF2JSON from "pdf2json";
+import fs from "fs";
 
 interface IGetPDFRawData {
   file: formidable.File | { filepath: string };
@@ -81,7 +81,7 @@ const getPDFRawData = async ({ file, timeout = 105000 }: IGetPDFRawData) => {
 
 const getPDFMapping = async () => {
   const rawPDFData = await getPDFRawData({
-    file: { filepath: TEST_CONFIG.pdf['2023-06'].path },
+    file: { filepath: TEST_CONFIG.pdf["2023-06"].path },
   });
 
   if (!rawPDFData) {
@@ -109,12 +109,15 @@ const getPDFMapping = async () => {
   });
 
   const outputData = result.reduce((acc, entry) => {
-    console.log(entry)
+    console.log(entry);
     acc[entry.key] = entry.coords;
-    return acc
+    return acc;
   }, {} as any);
 
-  fs.writeFileSync("./scripts/pdfMapping/output.json", JSON.stringify(outputData, null, 2));
+  fs.writeFileSync(
+    "./scripts/pdfMapping/output.json",
+    JSON.stringify(outputData, null, 2)
+  );
 
   console.table(result);
 };
